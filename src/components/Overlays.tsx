@@ -18,6 +18,8 @@ import { Search } from '../screens/Search';
 import { BoardDesk } from '../screens/BoardDesk';
 import { Portfolio } from '../screens/Portfolio';
 import { ExportSheet } from '../sheets/ExportSheet';
+import { Onboarding } from '../screens/Onboarding';
+import { SignIn } from '../screens/SignIn';
 
 /**
  * Central mount point for the full-screen secondary screens (z 76-96) and the
@@ -49,6 +51,10 @@ export function Overlays() {
       <ViolSheet />
       <PennySheet />
       <ExportSheet />
+
+      {/* Top-level overlays (z 95-97) */}
+      <Onboarding />
+      <SignIn />
     </>
   );
 }
