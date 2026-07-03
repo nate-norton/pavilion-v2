@@ -1,0 +1,44 @@
+import type { CSSProperties } from 'react';
+
+export interface SegmentedOption {
+  key: string;
+  label: string;
+}
+
+export interface SegmentedControlProps {
+  options: SegmentedOption[];
+  value: string;
+  onChange: (key: string) => void;
+  variant?: 'light' | 'dark';
+}
+
+/**
+ * Sand track with active segment styling per variant:
+ * - light (Commons, line 285): active = paper bg, navy text, subtle shadow
+ * - dark (Board, line 855): active = navy bg, cream text, no shadow
+ */
+export function SegmentedControl({ options, value, onChange, variant = 'light' }: SegmentedControlProps) {
+  return (
+    <div className="grid bg-sand rounded-[14px] p-1 gap-1" style={{ gridTemplateColumns: `repeat(${options.length}, 1fr)` }}>
+      {options.map((opt) => {
+        const active = opt.key === value;
+        const style: CSSProperties = active
+          ? variant === 'dark'
+            ? { background: '#1A3352', color: '#F5F0E6' }
+            : { background: '#FFFEFA', color: '#1A3352', boxShadow: '0 2px 6px rgba(26,51,82,0.1)' }
+          : { background: 'transparent', color: '#8A8375' };
+        return (
+          <button
+            key={opt.key}
+            type="button"
+            onClick={() => onChange(opt.key)}
+            className="border-0 rounded-[11px] py-2.5 text-xs font-extrabold font-sans cursor-pointer"
+            style={style}
+          >
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
