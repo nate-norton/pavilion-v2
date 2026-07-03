@@ -1,0 +1,112 @@
+import { useEffect, useRef } from 'react';
+import { PhIcon } from '../components/PhIcon';
+import { usePavStore } from '../store/store';
+import { CHAT_SEED } from '../data';
+
+/** 1:1 chat thread screen — ported from prototype lines 1926-1953. */
+export function Chat() {
+  const state = usePavStore();
+  const { set, sendChatMessage } = state;
+  const listRef = useRef<HTMLDivElement>(null);
+
+  const chatKey = state.chatWith;
+  const thread = chatKey ? state.chats[chatKey] : undefined;
+
+  useEffect(() => {
+    const el = listRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [thread]);
+
+  if (!chatKey) return null;
+  const p = CHAT_SEED[chatKey];
+  if (!p) return null;
+
+  const msgs = [{ me: false, text: p.seed, time: p.time }, ...(state.chats[chatKey] || [])];
+
+  return (
+    <div
+      data-screen-label="Chat"
+      className="absolute inset-0 z-[78] flex flex-col animate-scpop"
+      style={{ background: '#F5F0E6' }}
+    >
+      <div className="flex items-center gap-[11px]" style={{ padding: '58px 18px 12px', borderBottom: '1px solid rgba(26,51,82,0.07)' }}>
+        <button
+          type="button"
+          aria-label="Back to messages"
+          onClick={() => set({ chatWith: null, msgsOpen: true })}
+          className="border-none bg-transparent cursor-pointer p-1 font-sans"
+        >
+          <PhIcon name="ph-bold ph-arrow-left" size={17} color="#1A3352" />
+        </button>
+        <div
+          className="w-[38px] h-[38px] rounded-full flex items-center justify-center text-white font-extrabold text-sm flex-shrink-0"
+          style={{ background: p.color }}
+        >
+          {p.initial}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="m-0 text-[14.5px] font-extrabold text-navy">
+            {p.name}{' '}
+            <span className="font-semibold" style={{ color: '#A39B8B' }}>
+              · {p.unit}
+            </span>
+          </p>
+          <p className="m-0 text-[11px] font-bold" style={{ color: '#8A8375' }}>
+            Neighbor · usually replies fast
+          </p>
+        </div>
+      </div>
+
+      <div ref={listRef} className="pav-scroll flex-1 overflow-y-auto flex flex-col gap-2.5" style={{ padding: '16px 18px' }}>
+        {msgs.map((m, i) => (
+          <div key={i} className="flex flex-col" style={{ alignItems: m.me ? 'flex-end' : 'flex-start' }}>
+            <div
+              style={{
+                maxWidth: '80%',
+                background: m.me ? '#1A3352' : '#FFFEFA',
+                color: m.me ? '#F5F0E6' : '#1A3352',
+                border: m.me ? 'none' : '1px solid rgba(26,51,82,0.08)',
+                borderRadius: m.me ? '18px 18px 6px 18px' : '18px 18px 18px 6px',
+                padding: '10px 13px',
+              }}
+            >
+              <p className="m-0 text-[13.5px] leading-[1.45] font-semibold">{m.text}</p>
+            </div>
+            <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: '#B4AC9C' }}>
+              {m.time || ''}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex gap-[9px] items-center" style={{ padding: '10px 18px 26px' }}>
+        <button
+          type="button"
+          title="Send a photo"
+          className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
+          style={{ border: '1px solid rgba(26,51,82,0.12)', background: '#FFFEFA' }}
+        >
+          <PhIcon name="ph-fill ph-camera" size={18} color="#8A8375" />
+        </button>
+        <input
+          value={state.chatInput}
+          onChange={(e) => set({ chatInput: e.target.value })}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') sendChatMessage();
+          }}
+          placeholder="Message…"
+          className="flex-1 rounded-full text-[13.5px] font-semibold text-navy outline-none font-sans min-w-0"
+          style={{ border: '1px solid rgba(26,51,82,0.12)', background: '#FFFEFA', padding: '12px 16px' }}
+        />
+        <button
+          type="button"
+          aria-label="Send"
+          onClick={sendChatMessage}
+          className="w-11 h-11 border-none rounded-full bg-navy flex items-center justify-center cursor-pointer flex-shrink-0"
+        >
+          <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="#F5F0E6" />
+        </button>
+      </div>
+    </div>
+  );
+}

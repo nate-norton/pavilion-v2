@@ -1,0 +1,136 @@
+import { BackButton } from '../components/BackButton';
+import { PhIcon } from '../components/PhIcon';
+import { usePavStore } from '../store/store';
+import { NOTIFS, NOTIF_CATS } from '../data';
+import type { Notif } from '../data';
+
+/** Notifications / Activity screen — ported from prototype lines 1834-1900. */
+export function Notifications() {
+  const state = usePavStore();
+  const { set } = state;
+
+  if (!state.notifOpen) return null;
+
+  // Prototype routeNotif (line 3123) sets tab:go verbatim; in our typed port
+  // go==='events' opens the Events overlay instead (deviation, see task report).
+  const routeNotif = (go: string) => {
+    if (go === 'events') set({ notifOpen: false, notifsRead: true, eventsOpen: true });
+    else set({ notifOpen: false, notifsRead: true, tab: go });
+  };
+
+  const visible = (when: string) => NOTIFS.filter((nt) => nt.when === when && !state.mutedCats[nt.cat]);
+  const today = visible('today');
+  const earlier = visible('earlier');
+  const allMuted = today.length === 0 && earlier.length === 0;
+
+  const renderRow = (nt: Notif) => (
+    <div
+      key={nt.key}
+      onClick={() => routeNotif(nt.go)}
+      className="flex items-center gap-3 cursor-pointer"
+      style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', borderRadius: 16, padding: '13px 14px' }}
+    >
+      <div className="w-[38px] h-[38px] rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: nt.bg }}>
+        <PhIcon name={nt.icon} size={18} color={nt.color} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="m-0 mb-px text-[13px] font-extrabold text-navy leading-[1.3]">{nt.title}</p>
+        <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+          {nt.sub} · {nt.cat}
+        </p>
+      </div>
+      {nt.unread && !state.notifsRead && (
+        <span data-testid="notif-dot" className="w-[9px] h-[9px] rounded-full flex-shrink-0" style={{ background: '#E06A3E' }} />
+      )}
+      <PhIcon name="ph ph-caret-right" size={13} color="#C9C1B0" className="flex-shrink-0" />
+    </div>
+  );
+
+  return (
+    <div
+      data-screen-label="Notifications"
+      className="pav-scroll absolute inset-0 z-[76] overflow-y-auto animate-scpop"
+      style={{ background: '#F5F0E6', padding: '60px 18px 40px' }}
+    >
+      <div className="flex items-center justify-between mb-3">
+        <BackButton onClick={() => set({ notifOpen: false })} className="" />
+        <button
+          type="button"
+          onClick={() => set({ notifsRead: true })}
+          className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer font-sans p-0"
+          style={{ color: '#4A90E2' }}
+        >
+          Mark all read
+        </button>
+      </div>
+      <h1 className="m-0 mb-4 font-serif font-normal text-[26px] text-navy">Activity</h1>
+
+      {today.length > 0 && (
+        <div>
+          <p className="m-0 mb-[9px] text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
+            Today
+          </p>
+          <div className="flex flex-col gap-[9px] mb-5">{today.map(renderRow)}</div>
+        </div>
+      )}
+
+      {earlier.length > 0 && (
+        <div>
+          <p className="m-0 mb-[9px] text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
+            Earlier
+          </p>
+          <div className="flex flex-col gap-[9px] mb-5">{earlier.map(renderRow)}</div>
+        </div>
+      )}
+
+      {allMuted && (
+        <div className="text-center" style={{ padding: '22px 16px 26px' }}>
+          <PhIcon name="ph ph-bell-slash" size={32} color="#A39B8B" className="inline-block" />
+          <p className="mt-[9px] mb-0.5 text-sm font-extrabold text-navy">Quiet in here</p>
+          <p className="m-0 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
+            Every category is muted. Turn one back on below.
+          </p>
+        </div>
+      )}
+
+      <div
+        style={{
+          background: '#FFFEFA',
+          border: '1px solid rgba(26,51,82,0.08)',
+          borderRadius: 18,
+          padding: '15px 16px',
+          boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)',
+        }}
+      >
+        <p className="m-0 mb-[3px] font-serif text-[15px] text-navy">What reaches you</p>
+        <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+          Tap to mute a category — urgent safety alerts always come through.
+        </p>
+        <div className="flex gap-2 flex-wrap">
+          {NOTIF_CATS.map((c) => {
+            const muted = !!state.mutedCats[c];
+            return (
+              <button
+                key={c}
+                type="button"
+                onClick={() => set({ mutedCats: { ...state.mutedCats, [c]: !state.mutedCats[c] } })}
+                className="inline-flex items-center gap-1.5 border-none rounded-full text-xs font-extrabold cursor-pointer font-sans"
+                style={{
+                  background: muted ? '#EDE6D6' : '#E9F6EE',
+                  color: muted ? '#8A8375' : '#228049',
+                  padding: '8px 13px',
+                }}
+              >
+                <PhIcon name={muted ? 'ph-fill ph-bell-slash' : 'ph-fill ph-bell'} size={13} />
+                {c}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <p className="mt-4 mb-0 text-center text-[11.5px] font-bold" style={{ color: '#A39B8B' }}>
+        The weekly digest reaches every household — even neighbors not on the app.
+      </p>
+    </div>
+  );
+}
