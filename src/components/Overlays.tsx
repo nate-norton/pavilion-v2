@@ -15,6 +15,9 @@ import { CircleDetail } from '../screens/CircleDetail';
 import { Events } from '../screens/Events';
 import { Meeting } from '../screens/Meeting';
 import { Search } from '../screens/Search';
+import { BoardDesk } from '../screens/BoardDesk';
+import { Portfolio } from '../screens/Portfolio';
+import { ExportSheet } from '../sheets/ExportSheet';
 
 /**
  * Central mount point for the full-screen secondary screens (z 76-96) and the
@@ -34,6 +37,8 @@ export function Overlays() {
       <Messages />
       <Chat />
       <Search />
+      <BoardDesk />
+      <Portfolio />
 
       {/* Sheets (z 80+) */}
       <PassSheet />
@@ -43,6 +48,7 @@ export function Overlays() {
       <ReportSheet />
       <ViolSheet />
       <PennySheet />
+      <ExportSheet />
     </>
   );
 }
