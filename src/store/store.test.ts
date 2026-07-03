@@ -20,9 +20,10 @@ it('booking builds summary from amenity, day, slot, duration', () => {
 });
 
 it('ARC flow: submit appears for board, approve flips status', () => {
-  act(() => s().set({ arcType: 'Paint' }));
+  act(() => s().set({ arcType: 'Paint', arcSheetOpen: true }));
   act(() => s().submitArc());
   expect(s().arcSubmitted).toBe(true);
+  expect(s().arcSheetOpen).toBe(false);
   expect(getTriage(s()).left).toBe(3); // streetlight + gate + new ARC
   act(() => s().set({ arcApprovedByBoard: true }));
   expect(getTriage(s()).left).toBe(2);

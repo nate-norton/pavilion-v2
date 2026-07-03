@@ -331,7 +331,7 @@ export const usePavStore = create<PavState>()((set, get) => ({
 
   submitArc: () => {
     if (!get().arcType) return;
-    set({ arcSubmitted: true });
+    set({ arcSubmitted: true, arcSheetOpen: false });
   },
 
   submitReport: () => {
