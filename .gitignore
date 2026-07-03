@@ -1,4 +1,7 @@
 node_modules/
 dist/
+dev-dist/
+playwright-report/
+test-results/
 *.stackdump
 .vercel/
