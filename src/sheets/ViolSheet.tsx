@@ -2,7 +2,7 @@ import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { usePavStore } from '../store/store';
-import type { StatusStep } from '../components/StatusTimeline';
+import { StatusTimeline, type StatusStep } from '../components/StatusTimeline';
 
 const VIOL_STEPS: StatusStep[] = [
   { label: 'Noticed\nJun 27', state: 'active', icon: 'ph-bold ph-eye' },
@@ -49,42 +49,7 @@ export function ViolSheet() {
           </div>
 
           <div className="mb-3.5">
-            <div className="flex items-center gap-0">
-              {VIOL_STEPS.map((step, i) => (
-                <div key={step.label} className="contents">
-                  <div className="flex flex-col items-center gap-1" style={{ flex: 1 }}>
-                    <span
-                      className="rounded-full flex items-center justify-center"
-                      style={{
-                        width: 22,
-                        height: 22,
-                        background:
-                          step.state === 'done' ? '#2A9D5C' : step.state === 'active' ? '#D9A441' : '#D9CFB8',
-                      }}
-                    >
-                      <PhIcon name={step.icon ?? ''} size={11} color="#fff" />
-                    </span>
-                    <span
-                      className="text-[10.5px] font-bold text-center"
-                      style={{ color: '#5B554A' }}
-                    >
-                      {step.label.split('\n').map((line, j) => (
-                        <span key={j}>
-                          {j > 0 && <br />}
-                          {line}
-                        </span>
-                      ))}
-                    </span>
-                  </div>
-                  {i < VIOL_STEPS.length - 1 && (
-                    <div
-                      className="h-0.5"
-                      style={{ background: '#D9CFB8', flex: 1, margin: '0 2px 18px' }}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
+            <StatusTimeline steps={VIOL_STEPS} />
           </div>
 
           <div

@@ -1,5 +1,6 @@
 import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
+import { Chip } from '../components/Chip';
 import { usePavStore } from '../store/store';
 import { ARC_TYPES } from '../data';
 
@@ -25,23 +26,15 @@ export function ArcSheet() {
         Project type
       </p>
       <div className="flex gap-1.5 flex-wrap mb-4">
-        {ARC_TYPES.map((label) => {
-          const on = state.arcType === label;
-          return (
-            <button
-              key={label}
-              onClick={() => set({ arcType: label })}
-              className="rounded-full px-3.5 py-2 text-[12.5px] font-extrabold cursor-pointer font-sans"
-              style={{
-                border: on ? '1px solid #1A3352' : '1px solid rgba(26,51,82,0.12)',
-                background: on ? '#1A3352' : '#FFFEFA',
-                color: on ? '#F5F0E6' : '#5B554A',
-              }}
-            >
-              {label}
-            </button>
-          );
-        })}
+        {ARC_TYPES.map((label) => (
+          <Chip
+            key={label}
+            label={label}
+            active={state.arcType === label}
+            onClick={() => set({ arcType: label })}
+            size="md"
+          />
+        ))}
       </div>
 
       <p

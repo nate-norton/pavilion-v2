@@ -39,7 +39,14 @@ export function StatusTimeline({ steps }: StatusTimelineProps) {
               >
                 <PhIcon name={step.icon ?? DEFAULT_ICON[step.state]} size={11} color="#fff" />
               </span>
-              <span className="text-[10.5px] font-bold text-bark text-center">{step.label}</span>
+              <span className="text-[10.5px] font-bold text-bark text-center">
+                {step.label.split('\n').map((line, j) => (
+                  <span key={j}>
+                    {j > 0 && <br />}
+                    {line}
+                  </span>
+                ))}
+              </span>
             </div>
             {i < steps.length - 1 && (
               <div className="h-0.5 flex-1" data-testid="timeline-segment" style={{ background: segColor, margin: '0 2px 18px' }} />

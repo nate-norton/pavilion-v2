@@ -1,5 +1,6 @@
 import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
+import { Chip } from '../components/Chip';
 import { usePavStore } from '../store/store';
 
 const REPORT_CHIPS = ['Maintenance', 'Safety', 'Violation concern', 'Noise', 'Other'];
@@ -28,23 +29,15 @@ export function ReportSheet() {
             Category
           </p>
           <div className="flex gap-1.5 flex-wrap mb-4">
-            {REPORT_CHIPS.map((label) => {
-              const on = state.reportType === label;
-              return (
-                <button
-                  key={label}
-                  onClick={() => set({ reportType: label })}
-                  className="rounded-full px-3.5 py-2 text-[12.5px] font-extrabold cursor-pointer font-sans"
-                  style={{
-                    border: on ? '1px solid #1A3352' : '1px solid rgba(26,51,82,0.12)',
-                    background: on ? '#1A3352' : '#FFFEFA',
-                    color: on ? '#F5F0E6' : '#5B554A',
-                  }}
-                >
-                  {label}
-                </button>
-              );
-            })}
+            {REPORT_CHIPS.map((label) => (
+              <Chip
+                key={label}
+                label={label}
+                active={state.reportType === label}
+                onClick={() => set({ reportType: label })}
+                size="md"
+              />
+            ))}
           </div>
 
           <p
