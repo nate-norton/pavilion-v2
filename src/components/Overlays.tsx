@@ -1,6 +1,9 @@
 import { PassSheet } from '../sheets/PassSheet';
 import { PaySheet } from '../sheets/PaySheet';
 import { SASheet } from '../sheets/SASheet';
+import { ArcSheet } from '../sheets/ArcSheet';
+import { ReportSheet } from '../sheets/ReportSheet';
+import { ViolSheet } from '../sheets/ViolSheet';
 
 /**
  * Central mount point for sheets/screens that float above the tab content
@@ -13,6 +16,9 @@ export function Overlays() {
       <PassSheet />
       <PaySheet />
       <SASheet />
+      <ArcSheet />
+      <ReportSheet />
+      <ViolSheet />
     </>
   );
 }
