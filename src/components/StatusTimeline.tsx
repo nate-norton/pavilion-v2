@@ -27,7 +27,9 @@ export function StatusTimeline({ steps }: StatusTimelineProps) {
   return (
     <div className="flex items-center gap-0">
       {steps.map((step, i) => {
-        const segColor = step.state === 'pending' ? '#D9CFB8' : '#2A9D5C';
+        // Segment is green only when the next step is 'done'
+        const nextStep = steps[i + 1];
+        const segColor = nextStep && nextStep.state === 'done' ? '#2A9D5C' : '#D9CFB8';
         return (
           <div key={step.label} className="contents">
             <div className="flex flex-col items-center gap-1 flex-1">
@@ -40,7 +42,7 @@ export function StatusTimeline({ steps }: StatusTimelineProps) {
               <span className="text-[10.5px] font-bold text-bark text-center">{step.label}</span>
             </div>
             {i < steps.length - 1 && (
-              <div className="h-0.5 flex-1" style={{ background: segColor, margin: '0 2px 18px' }} />
+              <div className="h-0.5 flex-1" data-testid="timeline-segment" style={{ background: segColor, margin: '0 2px 18px' }} />
             )}
           </div>
         );

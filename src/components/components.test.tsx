@@ -32,3 +32,29 @@ it('Toggle reflects state and fires', () => {
   fireEvent.click(screen.getByRole('switch'));
   expect(fn).toHaveBeenCalled();
 });
+
+it('StatusTimeline segments turn green only when the next step is done', () => {
+  // Test with [done, active, pending] - both segments should be grey
+  const { rerender } = render(<StatusTimeline steps={[
+    { label: 'Submitted', state: 'done' },
+    { label: 'Board review', state: 'active' },
+    { label: 'Decision', state: 'pending' },
+  ]} />);
+
+  const segments = screen.getAllByTestId('timeline-segment');
+  expect(segments).toHaveLength(2);
+  expect(segments[0]).toHaveStyle({ backgroundColor: 'rgb(217, 207, 184)' }); // grey
+  expect(segments[1]).toHaveStyle({ backgroundColor: 'rgb(217, 207, 184)' }); // grey
+
+  // Test with [done, done, done] - both segments should be green
+  rerender(<StatusTimeline steps={[
+    { label: 'Submitted', state: 'done' },
+    { label: 'Board review', state: 'done' },
+    { label: 'Decision', state: 'done' },
+  ]} />);
+
+  const segmentsGreen = screen.getAllByTestId('timeline-segment');
+  expect(segmentsGreen).toHaveLength(2);
+  expect(segmentsGreen[0]).toHaveStyle({ backgroundColor: 'rgb(42, 157, 92)' }); // green
+  expect(segmentsGreen[1]).toHaveStyle({ backgroundColor: 'rgb(42, 157, 92)' }); // green
+});
