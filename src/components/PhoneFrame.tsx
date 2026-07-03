@@ -1,4 +1,5 @@
 import { usePavStore } from '../store/store';
+import { Today } from '../screens/Today';
 import { ErrorBoundary } from './ErrorBoundary';
 import { NavDock } from './NavDock';
 import { Overlays } from './Overlays';
@@ -24,7 +25,11 @@ export function PhoneFrame() {
     >
       <ErrorBoundary>
         <StatusBar />
-        <div data-screen-label={label} className="pav-scroll absolute inset-0 overflow-y-auto animate-scpop" />
+        {tab === 'today' ? (
+          <Today />
+        ) : (
+          <div data-screen-label={label} className="pav-scroll absolute inset-0 overflow-y-auto animate-scpop" />
+        )}
         <Overlays />
         <NavDock />
       </ErrorBoundary>
