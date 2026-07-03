@@ -1,5 +1,6 @@
 import { usePavStore } from '../store/store';
 import { Commons } from '../screens/Commons';
+import { Reserve } from '../screens/Reserve';
 import { Today } from '../screens/Today';
 import { ErrorBoundary } from './ErrorBoundary';
 import { NavDock } from './NavDock';
@@ -30,6 +31,8 @@ export function PhoneFrame() {
           <Today />
         ) : tab === 'commons' ? (
           <Commons />
+        ) : tab === 'reserve' ? (
+          <Reserve />
         ) : (
           <div data-screen-label={label} className="pav-scroll absolute inset-0 overflow-y-auto animate-scpop" />
         )}
