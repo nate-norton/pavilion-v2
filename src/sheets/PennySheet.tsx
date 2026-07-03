@@ -1,0 +1,144 @@
+import { useEffect, useRef } from 'react';
+import { PhIcon } from '../components/PhIcon';
+import { TypingDots } from '../components/TypingDots';
+import { usePavStore } from '../store/store';
+import { QA } from '../data';
+
+/** Penny scripted-assistant sheet — ported from prototype lines 1399-1449. */
+export function PennySheet() {
+  const state = usePavStore();
+  const { set, msgs, typing, pennyInput, askPennyChip, sendPennyMessage } = state;
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = listRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [msgs, typing]);
+
+  if (!state.pennyOpen) return null;
+
+  const close = () => set({ pennyOpen: false });
+  const openCite = () => set({ pennyOpen: false, docsOpen: true, docReader: true });
+  const askTheBoard = () => set({ pennyOpen: false, reportOpen: true, reportType: 'Other' });
+  const send = () => sendPennyMessage(pennyInput);
+
+  return (
+    <div className="absolute inset-0 z-[85]">
+      <div
+        data-testid="penny-scrim"
+        onClick={close}
+        className="absolute inset-0"
+        style={{ background: 'rgba(26,30,20,0.4)' }}
+      />
+      <div
+        className="absolute left-0 right-0 bottom-0 bg-parchment rounded-t-[28px] flex flex-col animate-sheetup"
+        style={{ height: '78%', boxShadow: '0 -18px 50px rgba(26,30,20,0.25)' }}
+      >
+        <div
+          className="flex items-center gap-[11px] px-[18px] pt-4 pb-3"
+          style={{ borderBottom: '1px solid rgba(26,51,82,0.07)' }}
+        >
+          <div
+            className="w-[38px] h-[38px] rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ background: 'linear-gradient(150deg,#E06A3E,#C75A31)' }}
+          >
+            <PhIcon name="ph-fill ph-sparkle" size={18} color="#fff" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="m-0 text-[15px] font-extrabold text-navy">Penny</p>
+            <p className="m-0 text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
+              Answers cite Juniper Ridge&apos;s actual documents
+            </p>
+          </div>
+          <button
+            onClick={close}
+            className="border-none w-[30px] h-[30px] rounded-full flex items-center justify-center flex-shrink-0 bg-sand cursor-pointer"
+          >
+            <PhIcon name="ph-bold ph-x" size={13} color="#5B554A" />
+          </button>
+        </div>
+
+        <div
+          ref={listRef}
+          data-penny-scroll
+          className="pav-scroll flex-1 overflow-y-auto px-[18px] py-4 flex flex-col gap-2.5"
+        >
+          {msgs.map((m, i) => (
+            <div key={i} className="flex" style={{ justifyContent: m.me ? 'flex-end' : 'flex-start' }}>
+              <div
+                className="max-w-[82%] animate-fadeup"
+                style={{
+                  background: m.me ? '#1A3352' : '#FFFEFA',
+                  color: m.me ? '#F5F0E6' : '#1A3352',
+                  border: m.me ? 'none' : '1px solid rgba(26,51,82,0.08)',
+                  borderRadius: m.me ? '18px 18px 6px 18px' : '18px 18px 18px 6px',
+                  padding: '11px 14px',
+                }}
+              >
+                <p className="m-0 text-[13.5px] leading-[1.5] font-semibold">{m.text}</p>
+                {m.cite && (
+                  <button
+                    onClick={openCite}
+                    className="inline-flex items-center gap-[5px] mt-[9px] rounded-lg px-[9px] py-[5px] cursor-pointer font-sans"
+                    style={{ background: '#F5F0E6', border: '1px solid rgba(26,51,82,0.14)' }}
+                  >
+                    <PhIcon name="ph-fill ph-file-text" size={12} color="#C75A31" />
+                    <span className="text-[11px] font-extrabold" style={{ color: '#5B554A' }}>
+                      {m.cite}
+                    </span>
+                    <PhIcon name="ph-bold ph-arrow-up-right" size={10} color="#A39B8B" />
+                  </button>
+                )}
+                {m.askBoard && (
+                  <button
+                    onClick={askTheBoard}
+                    className="flex items-center gap-[7px] mt-2.5 w-full justify-center border-none rounded-[11px] py-2.5 cursor-pointer font-sans"
+                    style={{ background: '#1A3352' }}
+                  >
+                    <PhIcon name="ph-fill ph-paper-plane-tilt" size={14} color="#E8A788" />
+                    <span className="text-[12.5px] font-extrabold" style={{ color: '#F5F0E6' }}>
+                      Pass this to the board
+                    </span>
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+          {typing && <TypingDots />}
+        </div>
+
+        <div className="px-[18px] pb-2 flex gap-[7px] flex-wrap">
+          {Object.entries(QA).map(([key, qa]) => (
+            <button
+              key={key}
+              onClick={() => askPennyChip(key)}
+              className="rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer font-sans text-navy"
+              style={{ border: '1px solid rgba(26,51,82,0.14)', background: '#FFFEFA' }}
+            >
+              {qa.q}
+            </button>
+          ))}
+        </div>
+        <div className="px-[18px] pb-5 pt-2 flex gap-[9px]">
+          <input
+            value={pennyInput}
+            onChange={(e) => set({ pennyInput: e.target.value })}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') send();
+            }}
+            placeholder="Ask about rules, dues, amenities…"
+            className="flex-1 rounded-full px-4 py-3 text-[13.5px] font-semibold text-navy outline-none font-sans"
+            style={{ border: '1px solid rgba(26,51,82,0.12)', background: '#FFFEFA' }}
+          />
+          <button
+            onClick={send}
+            className="w-11 h-11 border-none rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
+            style={{ background: '#1A3352' }}
+          >
+            <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="#F5F0E6" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

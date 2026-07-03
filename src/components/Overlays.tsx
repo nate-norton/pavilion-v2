@@ -4,6 +4,7 @@ import { SASheet } from '../sheets/SASheet';
 import { ArcSheet } from '../sheets/ArcSheet';
 import { ReportSheet } from '../sheets/ReportSheet';
 import { ViolSheet } from '../sheets/ViolSheet';
+import { PennySheet } from '../sheets/PennySheet';
 
 /**
  * Central mount point for sheets/screens that float above the tab content
@@ -19,6 +20,7 @@ export function Overlays() {
       <ArcSheet />
       <ReportSheet />
       <ViolSheet />
+      <PennySheet />
     </>
   );
 }
