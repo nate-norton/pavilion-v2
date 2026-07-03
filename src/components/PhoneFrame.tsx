@@ -1,4 +1,5 @@
 import { usePavStore } from '../store/store';
+import { Commons } from '../screens/Commons';
 import { Today } from '../screens/Today';
 import { ErrorBoundary } from './ErrorBoundary';
 import { NavDock } from './NavDock';
@@ -27,6 +28,8 @@ export function PhoneFrame() {
         <StatusBar />
         {tab === 'today' ? (
           <Today />
+        ) : tab === 'commons' ? (
+          <Commons />
         ) : (
           <div data-screen-label={label} className="pav-scroll absolute inset-0 overflow-y-auto animate-scpop" />
         )}

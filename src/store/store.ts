@@ -168,6 +168,7 @@ export interface PavActions {
   askPennyDocsSummary: () => void;
   sendChatMessage: () => void;
   pickRole: (role: string) => void;
+  addComment: () => void;
 }
 
 export type PavState = PavData & PavActions;
@@ -426,6 +427,15 @@ export const usePavStore = create<PavState>()((set, get) => ({
 
   pickRole: (role: string) => {
     set({ role, boardMode: false, myPlaceOpen: false, portfolioOpen: false, tab: 'today' });
+  },
+
+  addComment: () => {
+    const t = get().commentInput.trim();
+    if (!t) return;
+    set((s) => ({
+      comments: [...s.comments, { who: 'Alex R.', color: '#1A3352', text: t }],
+      commentInput: '',
+    }));
   },
 }));
 
