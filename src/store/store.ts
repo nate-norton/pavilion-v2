@@ -433,7 +433,7 @@ export const usePavStore = create<PavState>()((set, get) => ({
     const t = get().commentInput.trim();
     if (!t) return;
     set((s) => ({
-      comments: [...s.comments, { who: 'Alex R.', color: '#1A3352', text: t }],
+      comments: [...s.comments, { who: 'You', color: '#1A3352', text: t }],
       commentInput: '',
     }));
   },

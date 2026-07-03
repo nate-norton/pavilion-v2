@@ -392,9 +392,9 @@ export function Commons() {
                       {d.tags.join(' · ')}
                     </span>
                     <button
-                      onClick={() => set({ dirWaved: { ...state.dirWaved, [d.key]: !waved } })}
+                      onClick={() => set({ dirWaved: { ...state.dirWaved, [d.key]: true } })}
                       className="border-none rounded-full px-3 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"
-                      style={waved ? { background: '#E9F6EE', color: '#228049' } : { background: '#EDE6D6', color: '#1A3352' }}
+                      style={waved ? { background: '#E9F6EE', color: '#228049' } : { background: '#1A3352', color: '#F5F0E6' }}
                     >
                       {waved ? 'Waved ✓' : 'Wave'}
                     </button>
@@ -437,7 +437,7 @@ export function Commons() {
                       {claimed ? `Pick up: porch · ${f.giver}` : f.giver}
                     </p>
                     <button
-                      onClick={() => set({ claimed: { ...state.claimed, [f.key]: !claimed } })}
+                      onClick={() => set({ claimed: { ...state.claimed, [f.key]: true } })}
                       className="w-full border-none rounded-[10px] py-2 text-xs font-extrabold cursor-pointer"
                       style={claimed ? { background: '#E9F6EE', color: '#228049' } : { background: '#1A3352', color: '#F5F0E6' }}
                     >

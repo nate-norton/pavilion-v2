@@ -18,6 +18,25 @@ it('comment can be added', () => {
   fireEvent.change(screen.getByPlaceholderText(/add a comment/i), { target: { value: 'Way to go Tom' } });
   fireEvent.keyDown(screen.getByPlaceholderText(/add a comment/i), { key: 'Enter' });
   expect(screen.getByText('Way to go Tom')).toBeInTheDocument();
+  expect(screen.getAllByText('You').length).toBeGreaterThan(0);
+});
+
+it('wave and claim are one-directional (no un-wave/un-claim)', () => {
+  render(<Commons />);
+
+  fireEvent.click(screen.getByRole('button', { name: /^people$/i }));
+  const waveBtn = screen.getAllByRole('button', { name: /^wave$/i })[0];
+  fireEvent.click(waveBtn);
+  expect(screen.getByText(/waved ✓/i)).toBeInTheDocument();
+  fireEvent.click(screen.getByText(/waved ✓/i));
+  expect(screen.getByText(/waved ✓/i)).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', { name: /^free$/i }));
+  const claimBtn = screen.getAllByRole('button', { name: /^claim$/i })[0];
+  fireEvent.click(claimBtn);
+  expect(screen.getByText(/claimed ✓/i)).toBeInTheDocument();
+  fireEvent.click(screen.getByText(/claimed ✓/i));
+  expect(screen.getByText(/claimed ✓/i)).toBeInTheDocument();
 });
 
 it('free table claim flips button state', () => {
