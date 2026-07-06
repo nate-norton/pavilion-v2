@@ -37,6 +37,7 @@ export interface CirclesState {
 }
 
 export interface PavData {
+  epoch: number;
   tab: string;
   role: string;
   voted: 'yes' | 'no' | null;
@@ -174,6 +175,7 @@ export interface PavActions {
 export type PavState = PavData & PavActions;
 
 const dataDefaults: PavData = {
+  epoch: 0,
   tab: 'today',
   role: 'owner',
   voted: null,
@@ -356,8 +358,10 @@ export const usePavStore = create<PavState>()((set, get) => ({
   sendPennyMessage: (text: string) => {
     const t = text.trim();
     if (!t) return;
+    const epoch = get().epoch;
     set((s) => ({ msgs: [...s.msgs, { me: true, text: t, cite: null }], pennyInput: '', typing: true }));
     setTimeout(() => {
+      if (get().epoch !== epoch) return;
       set((s) => ({
         msgs: [
           ...s.msgs,
@@ -376,13 +380,16 @@ export const usePavStore = create<PavState>()((set, get) => ({
   askPennyChip: (key: string) => {
     const qa = QA[key];
     if (!qa) return;
+    const epoch = get().epoch;
     set((s) => ({ msgs: [...s.msgs, { me: true, text: qa.q, cite: null }], typing: true }));
     setTimeout(() => {
+      if (get().epoch !== epoch) return;
       set((s) => ({ msgs: [...s.msgs, { me: false, text: qa.a, cite: qa.cite }], typing: false }));
     }, 1100);
   },
 
   askPennyDocsSummary: () => {
+    const epoch = get().epoch;
     set((s) => ({
       docsOpen: false,
       docReader: false,
@@ -391,6 +398,7 @@ export const usePavStore = create<PavState>()((set, get) => ({
       msgs: [...s.msgs, { me: true, text: 'Summarize the CC&Rs for me', cite: null }],
     }));
     setTimeout(() => {
+      if (get().epoch !== epoch) return;
       set((s) => ({
         typing: false,
         msgs: [
@@ -411,11 +419,13 @@ export const usePavStore = create<PavState>()((set, get) => ({
     const k = st.chatWith;
     if (!t || !k) return;
     const tm = now();
+    const epoch = st.epoch;
     set((s) => ({
       chats: { ...s.chats, [k]: [...(s.chats[k] || []), { me: true, text: t, time: tm }] },
       chatInput: '',
     }));
     setTimeout(() => {
+      if (get().epoch !== epoch) return;
       set((s) => ({
         chats: {
           ...s.chats,
@@ -426,7 +436,14 @@ export const usePavStore = create<PavState>()((set, get) => ({
   },
 
   pickRole: (role: string) => {
-    set({ role, boardMode: false, myPlaceOpen: false, portfolioOpen: false, tab: 'today' });
+    set((s) => ({
+      role,
+      boardMode: false,
+      myPlaceOpen: false,
+      portfolioOpen: false,
+      tab: 'today',
+      epoch: s.epoch + 1,
+    }));
   },
 
   addComment: () => {

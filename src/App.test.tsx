@@ -18,6 +18,8 @@ it('nav dock switches tabs', () => {
 
 it('role chips switch role and reset to today', () => {
   render(<App />);
+  act(() => usePavStore.getState().set({ tab: 'commons' }));
   fireEvent.click(screen.getByRole('button', { name: /tenant/i }));
   expect(usePavStore.getState().role).toBe('tenant');
+  expect(usePavStore.getState().tab).toBe('today');
 });

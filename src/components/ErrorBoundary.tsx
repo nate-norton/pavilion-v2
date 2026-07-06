@@ -18,7 +18,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   handleRestart = () => {
-    usePavStore.setState(initialState, true);
+    const next = usePavStore.getState().epoch + 1;
+    usePavStore.setState({ ...initialState, epoch: next }, true);
     this.setState({ hasError: false });
   };
 

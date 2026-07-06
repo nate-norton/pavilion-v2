@@ -40,3 +40,12 @@ it('delinquent scenario computes from flags', () => {
   expect(getQuorum(s()).count).toBe(87);
   expect(s().paid).toBe(false);
 });
+
+it('scripted Penny reply no-ops after a store reset mid-flight (epoch guard)', async () => {
+  act(() => s().askPennyChip('fence'));
+  const bumpedEpoch = usePavStore.getState().epoch + 1;
+  act(() => usePavStore.setState({ ...initialState, epoch: bumpedEpoch }, true));
+  await new Promise((resolve) => setTimeout(resolve, 1200));
+  const msgs = usePavStore.getState().msgs;
+  expect(msgs.some((m) => m.text.includes('Approved fence colors'))).toBe(false);
+});
