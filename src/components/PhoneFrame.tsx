@@ -6,7 +6,6 @@ import { Today } from '../screens/Today';
 import { ErrorBoundary } from './ErrorBoundary';
 import { NavDock } from './NavDock';
 import { Overlays } from './Overlays';
-import { StatusBar } from './StatusBar';
 
 const SCREEN_LABELS: Record<string, string> = {
   today: 'Today',
@@ -27,7 +26,6 @@ export function PhoneFrame() {
       style={{ boxShadow: '0 40px 90px -30px rgba(50,42,26,0.5), 0 0 0 1px rgba(26,51,82,0.05)' }}
     >
       <ErrorBoundary>
-        <StatusBar />
         {tab === 'today' ? (
           <Today />
         ) : tab === 'commons' ? (

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { margin: 0; padding: 0; }
+html, body { margin: 0; padding: 0; background: #F5F0E6; }
 body { font-family: 'Nunito Sans', system-ui, sans-serif; }
 .pav-scroll::-webkit-scrollbar { display: none; }
 .pav-scroll { -ms-overflow-style: none; scrollbar-width: none; }

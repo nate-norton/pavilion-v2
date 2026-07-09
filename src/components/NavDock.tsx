@@ -38,7 +38,10 @@ export function NavDock() {
   };
 
   return (
-    <div className="absolute left-3.5 right-3.5 bottom-3.5 z-[70]">
+    <div
+      className="absolute left-3.5 right-3.5 z-[70]"
+      style={{ bottom: 'calc(14px + env(safe-area-inset-bottom, 0px))' }}
+    >
       <div
         className="bg-navy rounded-[26px] h-[66px] grid items-center px-1.5"
         style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', boxShadow: '0 18px 40px -14px rgba(26,51,82,0.55)' }}

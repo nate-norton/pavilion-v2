@@ -12,7 +12,7 @@ export default defineConfig({
       manifest: {
         name: 'Pavilion',
         short_name: 'Pavilion',
-        theme_color: '#1A3352',
+        theme_color: '#F5F0E6',
         background_color: '#F5F0E6',
         display: 'standalone',
         icons: [{ src: '/pavilion-icon.svg', sizes: 'any', type: 'image/svg+xml' }],
