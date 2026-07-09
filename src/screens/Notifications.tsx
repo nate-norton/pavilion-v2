@@ -99,7 +99,7 @@ export function Notifications() {
           border: '1px solid rgba(26,51,82,0.08)',
           borderRadius: 18,
           padding: '15px 16px',
-          boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)',
+          
         }}
       >
         <p className="m-0 mb-[3px] font-serif text-[15px] text-navy">What reaches you</p>

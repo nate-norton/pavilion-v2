@@ -12,7 +12,7 @@ const CARD: CSSProperties = {
   borderRadius: 18,
   padding: 16,
   marginBottom: 12,
-  boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)',
+  
 };
 
 function Row({ children, divider }: { children: ReactNode; divider?: boolean }) {

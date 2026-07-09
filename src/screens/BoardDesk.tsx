@@ -109,7 +109,7 @@ export function BoardDesk() {
           </p>
           <div className="flex flex-col gap-2.5 mb-[22px]">
             {/* Streetlight */}
-            <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+            <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: '#FBEDE4' }}>
                   <PhIcon name="ph-fill ph-siren" size={20} color="#C75A31" />
@@ -140,7 +140,7 @@ export function BoardDesk() {
 
             {/* Dynamic #M-89 */}
             {state.reportSubmitted && (
-              <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+              <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: '#FBEDE4' }}>
                     <PhIcon name="ph-fill ph-wrench" size={20} color="#C75A31" />
@@ -172,7 +172,7 @@ export function BoardDesk() {
 
             {/* Dynamic ARC #A-121 */}
             {state.arcSubmitted && (
-              <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+              <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
                 <div className="flex items-center gap-3 mb-2.5">
                   <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: '#EAF3FD' }}>
                     <PhIcon name="ph-fill ph-pencil-ruler" size={20} color="#3A73B5" />
@@ -221,7 +221,7 @@ export function BoardDesk() {
             )}
 
             {/* Pool gate */}
-            <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+            <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: '#E9F6EE' }}>
                   <PhIcon name="ph-fill ph-wrench" size={20} color="#2A9D5C" />
@@ -291,7 +291,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             ARC queue
           </p>
-          <div className="bg-paper rounded-[18px] px-4 mb-5" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[18px] px-4 mb-5" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             {arcAwaitingBoard && (
               <div className="flex items-center gap-[11px] py-[11px]" style={{ borderBottom: '1px solid rgba(26,51,82,0.07)' }}>
                 <PhIcon name="ph-fill ph-pencil-ruler" size={17} color="#3A73B5" className="flex-shrink-0" />
@@ -338,7 +338,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Maintenance
           </p>
-          <div className="bg-paper rounded-[18px] px-4 mb-5" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[18px] px-4 mb-5" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             {state.reportSubmitted && (
               <div className="flex items-center gap-[11px] py-[11px]" style={{ borderBottom: '1px solid rgba(26,51,82,0.07)' }}>
                 <PhIcon name="ph-fill ph-wrench" size={17} color="#C75A31" className="flex-shrink-0" />
@@ -405,7 +405,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Violations · courtesy-first
           </p>
-          <div className="bg-paper rounded-[18px] p-4" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[18px] p-4" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             <div className="flex items-center gap-[11px] pb-3 mb-3" style={{ borderBottom: '1px solid rgba(26,51,82,0.07)' }}>
               <PhIcon name="ph-fill ph-trash" size={17} color="#D9A441" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
@@ -429,7 +429,7 @@ export function BoardDesk() {
           <p className="mt-5 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Vendors
           </p>
-          <div className="bg-paper rounded-[18px] px-4" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[18px] px-4" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             {VENDORS.map((v, i) => {
               const insLabel = v.ins ? 'COI on file ✓' : 'COI expires Aug 1';
               const insBg = v.ins ? '#E9F6EE' : '#FBF3E0';
@@ -464,7 +464,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             July collections
           </p>
-          <div className="bg-paper rounded-[20px] p-[18px] mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[20px] p-[18px] mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             <div className="flex items-baseline justify-between gap-2.5 mb-2.5">
               <p className="m-0 font-serif text-[22px] text-navy">96% collected</p>
               <p className="m-0 text-xs font-bold" style={{ color: '#8A8375' }}>
@@ -482,7 +482,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Late — courtesy first
           </p>
-          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             <div className="flex items-center gap-[11px] pb-2.5 mb-2.5" style={{ borderBottom: '1px solid rgba(26,51,82,0.07)' }}>
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#9 · 30 days</p>
               <span className="text-[12.5px] font-extrabold" style={{ color: '#C75A31' }}>
@@ -523,7 +523,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Budget vs. actual · 50% through the year
           </p>
-          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             <div className="mb-3">
               <div className="flex justify-between mb-[5px]">
                 <span className="text-[12.5px] font-extrabold text-navy">Landscaping</span>
@@ -567,7 +567,7 @@ export function BoardDesk() {
               <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
                 Special assessment · roof reserve
               </p>
-              <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+              <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
                 <div className="flex items-baseline justify-between gap-2.5 mb-2.5">
                   <p className="m-0 font-serif text-xl text-navy">$42.7K of $61.2K</p>
                   <p className="m-0 text-xs font-bold" style={{ color: '#8A8375' }}>
@@ -587,7 +587,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Aging report
           </p>
-          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             {AGING.map((a) => (
               <div key={a.bucket} className="mb-[11px]">
                 <div className="flex justify-between items-baseline mb-[5px]">
@@ -612,7 +612,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Approvals
           </p>
-          <div className="bg-paper rounded-[20px] p-4" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[20px] p-4" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: '#EAF3FD' }}>
                 <PhIcon name="ph-fill ph-invoice" size={19} color="#3A73B5" />
@@ -648,7 +648,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Broadcast
           </p>
-          <div className="bg-paper rounded-[20px] p-4" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[20px] p-4" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             {!state.broadcastSent && (
               <div>
                 <textarea
@@ -687,7 +687,7 @@ export function BoardDesk() {
           <p className="mt-[22px] mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Put it to a vote
           </p>
-          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             {!state.votePosted && (
               <div>
                 {state.voteDraftOpen && (
@@ -778,7 +778,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Friday digest · drafted by Penny
           </p>
-          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             <div className="flex flex-col gap-2 mb-3">
               <div className="flex gap-2.5 items-start">
                 <PhIcon name="ph-fill ph-check-square" size={14} color="#C75A31" className="mt-0.5 flex-shrink-0" />
@@ -816,7 +816,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Annual meeting prep · Jul 15
           </p>
-          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             <div className="flex flex-col gap-[9px] mb-3">
               <div className="flex gap-2.5 items-center">
                 <PhIcon name="ph ph-dots-six-vertical" size={14} color="#C9C1B0" />
@@ -853,7 +853,7 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Minutes
           </p>
-          <div className="bg-paper rounded-[20px] p-4" style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}>
+          <div className="bg-paper rounded-[20px] p-4" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: '#FBEDE4' }}>
                 <PhIcon name="ph-fill ph-sparkle" size={19} color="#C75A31" />

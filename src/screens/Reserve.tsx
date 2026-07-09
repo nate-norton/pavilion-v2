@@ -254,7 +254,7 @@ export function Reserve() {
               key={a.name}
               onClick={() => openAmen(i)}
               className="bg-paper rounded-[18px] px-4 py-[15px] flex items-center gap-3.5 cursor-pointer"
-              style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+              style={{ border: '1px solid rgba(26,51,82,0.08)' }}
             >
               <div className="w-11 h-11 rounded-[14px] flex items-center justify-center flex-shrink-0 bg-sand">
                 <PhIcon name={a.icon} size={22} color="#1A3352" />

@@ -64,7 +64,7 @@ export function Meeting() {
           borderRadius: 18,
           padding: 16,
           marginBottom: 14,
-          boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)',
+          
         }}
       >
         <p className="m-0 mb-[11px] font-serif text-base text-navy">Agenda</p>

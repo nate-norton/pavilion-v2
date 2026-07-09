@@ -99,7 +99,7 @@ export function Events() {
           borderRadius: 18,
           padding: 14,
           marginBottom: 16,
-          boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)',
+          
         }}
       >
         <div className="grid grid-cols-7 gap-0.5 mb-1">

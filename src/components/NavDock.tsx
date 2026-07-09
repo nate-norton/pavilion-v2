@@ -49,7 +49,7 @@ export function NavDock() {
             type="button"
             aria-label="Penny"
             onClick={() => set({ pennyOpen: true })}
-            className="w-[54px] h-[54px] rounded-full flex items-center justify-center cursor-pointer animate-orbglow"
+            className="w-[54px] h-[54px] rounded-full flex items-center justify-center cursor-pointer"
             style={{
               border: '3px solid #F5F0E6',
               background: 'linear-gradient(150deg,#F97B4B,#C75A31)',

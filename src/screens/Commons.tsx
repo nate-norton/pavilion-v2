@@ -83,7 +83,7 @@ export function Commons() {
             {vShout && (
               <div
                 className="bg-paper rounded-[18px] p-4"
-                style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+                style={{ border: '1px solid rgba(26,51,82,0.08)' }}
               >
                 <div className="flex items-center gap-2.5 mb-2.5">
                   <Avatar initial="M" color="#C75A31" size={36} />
@@ -156,7 +156,7 @@ export function Commons() {
             {vHelp && (
               <div
                 className="bg-paper rounded-[18px] p-4"
-                style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+                style={{ border: '1px solid rgba(26,51,82,0.08)' }}
               >
                 <div className="flex items-center gap-2.5 mb-2.5">
                   <Avatar initial="D" color="#4A90E2" size={36} />
@@ -192,7 +192,7 @@ export function Commons() {
             {vEvents && (
               <div
                 className="bg-paper rounded-[18px] overflow-hidden"
-                style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+                style={{ border: '1px solid rgba(26,51,82,0.08)' }}
               >
                 <PhotoPlaceholder label="event photo — movie night" height={96} />
                 <div className="px-4 py-3.5">
@@ -231,7 +231,7 @@ export function Commons() {
             {vShout && (
               <div
                 className="bg-paper rounded-[18px] p-4"
-                style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+                style={{ border: '1px solid rgba(26,51,82,0.08)' }}
               >
                 <div className="flex items-center gap-2.5 mb-2.5">
                   <Avatar initial="G" color="#2A9D5C" size={36} />
@@ -266,7 +266,7 @@ export function Commons() {
             <div
               onClick={() => set({ circleOpen: true })}
               className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
-              style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+              style={{ border: '1px solid rgba(26,51,82,0.08)' }}
             >
               <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: '#E9F6EE' }}>
                 <PhIcon name="ph-fill ph-plant" size={20} color="#2A9D5C" />
@@ -281,7 +281,7 @@ export function Commons() {
             </div>
             <div
               className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3"
-              style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+              style={{ border: '1px solid rgba(26,51,82,0.08)' }}
             >
               <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: '#EAF3FD' }}>
                 <PhIcon name="ph-fill ph-tennis-ball" size={20} color="#3A73B5" />
@@ -306,7 +306,7 @@ export function Commons() {
                 <div
                   key={c.key}
                   className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3"
-                  style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+                  style={{ border: '1px solid rgba(26,51,82,0.08)' }}
                 >
                   <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: c.bg }}>
                     <PhIcon name={c.icon} size={20} color={c.color} />
@@ -373,7 +373,7 @@ export function Commons() {
                 <div
                   key={d.key}
                   className="bg-paper rounded-[18px] px-4 py-3.5"
-                  style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+                  style={{ border: '1px solid rgba(26,51,82,0.08)' }}
                 >
                   <div className="flex items-center gap-2.5 mb-2.5">
                     <Avatar initial={d.initial} color={d.color} size={40} />
@@ -428,7 +428,7 @@ export function Commons() {
                 <div
                   key={f.key}
                   className="bg-paper rounded-[18px] overflow-hidden"
-                  style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+                  style={{ border: '1px solid rgba(26,51,82,0.08)' }}
                 >
                   <PhotoPlaceholder label={f.ph} height={74} />
                   <div className="px-3 pt-2.5 pb-3">

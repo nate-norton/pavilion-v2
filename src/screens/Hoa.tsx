@@ -158,7 +158,7 @@ export function Hoa() {
       <div
         onClick={() => set({ meetingOpen: true })}
         className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
-        style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+        style={{ border: '1px solid rgba(26,51,82,0.08)' }}
       >
         <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-goldpale">
           <PhIcon name="ph-fill ph-users-four" size={21} color="#D9A441" />
@@ -177,7 +177,7 @@ export function Hoa() {
       {/* Where dues go */}
       <div
         className="bg-paper rounded-[20px] p-[18px] mb-3.5"
-        style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+        style={{ border: '1px solid rgba(26,51,82,0.08)' }}
       >
         <p className="m-0 mb-0.5 font-serif text-[17px] text-navy">Your $285, itemized</p>
         <p className="m-0 mb-3.5 text-xs font-semibold" style={{ color: '#8A8375' }}>
@@ -253,7 +253,7 @@ export function Hoa() {
       {/* ARC */}
       <div
         className="bg-paper rounded-[20px] p-[18px] mb-3.5"
-        style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+        style={{ border: '1px solid rgba(26,51,82,0.08)' }}
       >
         <div className="flex items-center justify-between gap-2.5 mb-3">
           <p className="m-0 font-serif text-[17px] text-navy">Architectural requests</p>
@@ -298,7 +298,7 @@ export function Hoa() {
       {/* Known issues */}
       <div
         className="bg-paper rounded-[20px] p-[18px] mb-3.5"
-        style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+        style={{ border: '1px solid rgba(26,51,82,0.08)' }}
       >
         <p className="m-0 mb-[3px] font-serif text-[17px] text-navy">Known issues</p>
         <p className="m-0 mb-3 text-xs font-semibold" style={{ color: '#8A8375' }}>
@@ -353,7 +353,7 @@ export function Hoa() {
       {/* Decisions log */}
       <div
         className="bg-paper rounded-[20px] p-[18px] mb-3.5"
-        style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+        style={{ border: '1px solid rgba(26,51,82,0.08)' }}
       >
         <p className="m-0 mb-[3px] font-serif text-[17px] text-navy">Decisions log</p>
         <p className="m-0 mb-3 text-xs font-semibold" style={{ color: '#8A8375' }}>

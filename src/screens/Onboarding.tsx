@@ -8,7 +8,7 @@ const CARD: CSSProperties = {
   background: '#FFFEFA',
   border: '1px solid rgba(26,51,82,0.08)',
   borderRadius: 18,
-  boxShadow: '0 4px 14px -8px rgba(26,51,82,0.14)',
+  
 };
 
 /** Onboarding flow — ported from prototype lines 1451-1549 / JS 3376-3395. */
@@ -203,7 +203,7 @@ export function Onboarding() {
         {step === 4 && (
           <div className="animate-fadeup">
             <div
-              className="w-[62px] h-[62px] rounded-full flex items-center justify-center mb-4 animate-orbglow"
+              className="w-[62px] h-[62px] rounded-full flex items-center justify-center mb-4"
               style={{ background: 'linear-gradient(150deg,#F97B4B,#C75A31)' }}
             >
               <PhIcon name="ph-fill ph-sparkle" size={28} color="#fff" />

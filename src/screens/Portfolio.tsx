@@ -67,7 +67,7 @@ export function Portfolio() {
               key={c.name}
               onClick={() => set({ activeCommunity: i, portfolioOpen: false, boardMode: true })}
               className="bg-paper rounded-[18px] p-4 cursor-pointer"
-              style={{ border: '1px solid rgba(26,51,82,0.08)', boxShadow: '0 4px 14px -8px rgba(26,51,82,0.12)' }}
+              style={{ border: '1px solid rgba(26,51,82,0.08)' }}
             >
               <div className="flex items-center gap-2.5 mb-[11px]">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-sand">

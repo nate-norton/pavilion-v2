@@ -22,7 +22,6 @@ export default {
         fadeup: 'scFadeUp 0.3s ease both',
         sheetup: 'sheetUp 0.35s cubic-bezier(0.22,1,0.36,1) both',
         heartpop: 'heartPop 0.35s ease',
-        orbglow: 'orbGlow 3.2s ease-in-out infinite',
       },
     },
   },
