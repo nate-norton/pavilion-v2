@@ -1,4 +1,4 @@
-import type { KeyboardEvent } from 'react';
+import { type KeyboardEvent, useState } from 'react';
 import { Avatar } from '../components/Avatar';
 import { Chip } from '../components/Chip';
 import { PhIcon } from '../components/PhIcon';
@@ -25,6 +25,7 @@ const FILTER_OPTIONS = [
 export function Commons() {
   const state = usePavStore();
   const { set, addComment } = state;
+  const [circleStarted, setCircleStarted] = useState(false);
 
   const vShout = state.filter === 'all' || state.filter === 'shout';
   const vHelp = state.filter === 'all' || state.filter === 'help';
@@ -53,7 +54,8 @@ export function Commons() {
       {state.commonsView === 'feed' && (
         <div>
           <div
-            className="bg-paper rounded-2xl px-3.5 py-3 mb-2 flex items-center gap-2.5"
+            onClick={() => set({ composeOpen: true })}
+            className="bg-paper rounded-2xl px-3.5 py-3 mb-2 flex items-center gap-2.5 cursor-pointer"
             style={{ border: '1px solid rgba(26,51,82,0.08)' }}
           >
             <Avatar initial="A" color="#1A3352" size={32} />
@@ -280,7 +282,8 @@ export function Commons() {
               </span>
             </div>
             <div
-              className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3"
+              onClick={() => set({ circleOpen: true })}
+              className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
               style={{ border: '1px solid rgba(26,51,82,0.08)' }}
             >
               <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: '#EAF3FD' }}>
@@ -326,16 +329,25 @@ export function Commons() {
               );
             })}
             <div
+              onClick={() => setCircleStarted(true)}
               className="rounded-[18px] p-4 flex items-center gap-3 cursor-pointer"
               style={{ border: '1.5px dashed rgba(26,51,82,0.2)' }}
             >
               <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-sand">
-                <PhIcon name="ph-bold ph-plus" size={18} color="#8A8375" />
+                {circleStarted
+                  ? <PhIcon name="ph-fill ph-check-circle" size={20} color="#2A9D5C" />
+                  : <PhIcon name="ph-bold ph-plus" size={18} color="#8A8375" />
+                }
               </div>
               <div className="flex-1">
-                <p className="m-0 mb-px text-sm font-extrabold text-bark">Start a circle</p>
+                <p className="m-0 mb-px text-sm font-extrabold text-bark">
+                  {circleStarted ? 'Circle request sent!' : 'Start a circle'}
+                </p>
                 <p className="m-0 text-[11.5px] text-stonelight font-semibold">
-                  Any interest counts — 5 neighbors makes it official
+                  {circleStarted
+                    ? 'The board will review and invite neighbors nearby.'
+                    : 'Any interest counts — 5 neighbors makes it official'
+                  }
                 </p>
               </div>
             </div>
@@ -375,7 +387,7 @@ export function Commons() {
                   className="bg-paper rounded-[18px] px-4 py-3.5"
                   style={{ border: '1px solid rgba(26,51,82,0.08)' }}
                 >
-                  <div className="flex items-center gap-2.5 mb-2.5">
+                  <div onClick={() => set({ chatWith: d.key })} className="flex items-center gap-2.5 mb-2.5 cursor-pointer">
                     <Avatar initial={d.initial} color={d.color} size={40} />
                     <div className="flex-1 min-w-0">
                       <p className="m-0 text-sm font-extrabold text-navy">

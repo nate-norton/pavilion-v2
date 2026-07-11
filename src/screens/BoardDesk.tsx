@@ -194,10 +194,11 @@ export function BoardDesk() {
                       Approve
                     </button>
                     <button
+                      onClick={() => set({ arcNeedsInfo: true })}
                       className="flex-1 rounded-[11px] py-2.5 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
                       style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
                     >
-                      Needs info
+                      {state.arcNeedsInfo ? 'Info requested ✓' : 'Needs info'}
                     </button>
                   </div>
                 )}
@@ -806,10 +807,14 @@ export function BoardDesk() {
               </p>
             </div>
             <button
+              onClick={() => set({ digestScheduled: true })}
               className="w-full rounded-xl py-[11px] text-[13px] font-extrabold cursor-pointer bg-transparent text-navy"
-              style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
+              style={{
+                border: '1.5px solid rgba(26,51,82,0.15)',
+                ...(state.digestScheduled ? { background: '#E9F6EE', borderColor: '#2A9D5C', color: '#228049' } : {}),
+              }}
             >
-              Edit &amp; schedule for Friday 8 AM
+              {state.digestScheduled ? 'Scheduled for Friday 8 AM ✓' : 'Edit & schedule for Friday 8 AM'}
             </button>
           </div>
 
