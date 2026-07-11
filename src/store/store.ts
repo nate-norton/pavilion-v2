@@ -159,6 +159,7 @@ export interface PavData {
   petAdded: boolean;
   arcNeedsInfo: boolean;
   digestScheduled: boolean;
+  langOpen: boolean;
   // scenario flags
   showDelinquent: boolean;
   showSpecialAssessment: boolean;
@@ -316,6 +317,7 @@ export const dataDefaults: PavData = {
   petAdded: false,
   arcNeedsInfo: false,
   digestScheduled: false,
+  langOpen: false,
   // scenario flags
   showDelinquent: false,
   showSpecialAssessment: false,

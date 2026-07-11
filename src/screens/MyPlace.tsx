@@ -524,17 +524,36 @@ export function MyPlace() {
           <Toggle on={state.largeType} onToggle={() => set({ largeType: !state.largeType })} />
         </div>
         <div
-          className="flex items-center gap-2.5"
+          className="flex flex-col"
           style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
         >
-          <PhIcon name="ph-fill ph-translate" size={17} color="#1A3352" className="flex-shrink-0" />
-          <p className="m-0 flex-1 text-[13px] font-bold text-navy">
-            Language{' '}
-            <span className="font-semibold" style={{ color: '#A39B8B' }}>
-              · English
-            </span>
-          </p>
-          <PhIcon name="ph ph-caret-right" size={14} color="#A39B8B" />
+          <div
+            onClick={() => set({ langOpen: !state.langOpen })}
+            className="flex items-center gap-2.5 cursor-pointer"
+          >
+            <PhIcon name="ph-fill ph-translate" size={17} color="#1A3352" className="flex-shrink-0" />
+            <p className="m-0 flex-1 text-[13px] font-bold text-navy">
+              Language{' '}
+              <span className="font-semibold" style={{ color: '#A39B8B' }}>
+                · English
+              </span>
+            </p>
+            <PhIcon name={state.langOpen ? 'ph ph-caret-up' : 'ph ph-caret-right'} size={14} color="#A39B8B" />
+          </div>
+          {state.langOpen && (
+            <div className="mt-2.5 ml-[29px] flex flex-col gap-1.5 animate-fadeup">
+              {['English', 'Español', '中文'].map((lang) => (
+                <div key={lang} className="flex items-center gap-2 py-1">
+                  <PhIcon
+                    name={lang === 'English' ? 'ph-fill ph-check-circle' : 'ph ph-circle'}
+                    size={16}
+                    color={lang === 'English' ? '#2A9D5C' : '#A39B8B'}
+                  />
+                  <span className="text-[13px] font-semibold text-navy">{lang}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <button type="button" onClick={() => set({ loginOpen: true, myPlaceOpen: false })} className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer font-sans p-0" style={{ color: '#C75A31' }}>
           Sign out
