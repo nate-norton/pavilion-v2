@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusTimeline } from '../components/StatusTimeline';
@@ -35,6 +36,7 @@ export function Hoa() {
   const { set } = state;
   const quorum = getQuorum(state);
   const tally = getTally(state);
+  const [forecastOpen, setForecastOpen] = useState(false);
 
   const notVoted = !state.voted;
   const hasVoted = !!state.voted;
@@ -216,37 +218,47 @@ export function Hoa() {
           </div>
         </div>
         <div className="mt-3.5 pt-[13px]" style={{ borderTop: '1px solid rgba(26,51,82,0.07)' }}>
-          <div className="flex items-center justify-between gap-2 mb-2.5">
+          <div
+            onClick={() => setForecastOpen(!forecastOpen)}
+            className="flex items-center justify-between gap-2 cursor-pointer"
+          >
             <p className="m-0 text-[12.5px] font-extrabold text-navy">Funding forecast</p>
-            <span
-              className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold"
-              style={{ color: '#228049', background: '#E9F6EE' }}
-            >
-              No special assessment projected
-            </span>
-          </div>
-          <div className="relative h-[78px]">
-            <div className="absolute left-0 right-0" style={{ top: 20, borderTop: '1.5px dashed rgba(199,90,49,0.45)' }} />
-            <span
-              className="absolute right-0 bg-paper px-[3px] text-[9.5px] font-extrabold"
-              style={{ top: 6, color: '#C75A31' }}
-            >
-              70% healthy line
-            </span>
-            <div className="absolute inset-0 flex items-end gap-2">
-              {FORECAST_BARS.map((bar) => (
-                <div key={bar.year} className="flex-1 flex flex-col items-center gap-1 justify-end h-full">
-                  <div className="w-full rounded-t-[5px]" style={{ height: bar.height, background: bar.color }} />
-                  <span className="text-[9.5px] font-extrabold" style={{ color: '#A39B8B' }}>
-                    {bar.year}
-                  </span>
-                </div>
-              ))}
+            <div className="flex items-center gap-1.5">
+              <span
+                className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold"
+                style={{ color: '#228049', background: '#E9F6EE' }}
+              >
+                Healthy through 2032
+              </span>
+              <PhIcon name={forecastOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'} size={13} color="#A39B8B" />
             </div>
           </div>
-          <p className="mt-[9px] mb-0 text-[11px] font-semibold" style={{ color: '#8A8375' }}>
-            At current contributions, reserves stay above the healthy line through 2032.
-          </p>
+          {forecastOpen && (
+            <div className="animate-fadeup mt-2.5">
+              <div className="relative h-[78px]">
+                <div className="absolute left-0 right-0" style={{ top: 20, borderTop: '1.5px dashed rgba(199,90,49,0.45)' }} />
+                <span
+                  className="absolute right-0 bg-paper px-[3px] text-[9.5px] font-extrabold"
+                  style={{ top: 6, color: '#C75A31' }}
+                >
+                  70% healthy line
+                </span>
+                <div className="absolute inset-0 flex items-end gap-2">
+                  {FORECAST_BARS.map((bar) => (
+                    <div key={bar.year} className="flex-1 flex flex-col items-center gap-1 justify-end h-full">
+                      <div className="w-full rounded-t-[5px]" style={{ height: bar.height, background: bar.color }} />
+                      <span className="text-[9.5px] font-extrabold" style={{ color: '#A39B8B' }}>
+                        {bar.year}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <p className="mt-[9px] mb-0 text-[11px] font-semibold" style={{ color: '#8A8375' }}>
+                No special assessment projected. Reserves stay above the healthy line through 2032.
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

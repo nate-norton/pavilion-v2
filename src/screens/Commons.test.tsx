@@ -31,7 +31,7 @@ it('wave and claim are one-directional (no un-wave/un-claim)', () => {
   fireEvent.click(screen.getByText(/waved ✓/i));
   expect(screen.getByText(/waved ✓/i)).toBeInTheDocument();
 
-  fireEvent.click(screen.getByRole('button', { name: /^free$/i }));
+  fireEvent.click(screen.getByRole('button', { name: /^free stuff$/i }));
   const claimBtn = screen.getAllByRole('button', { name: /^claim$/i })[0];
   fireEvent.click(claimBtn);
   expect(screen.getByText(/claimed ✓/i)).toBeInTheDocument();
@@ -41,7 +41,7 @@ it('wave and claim are one-directional (no un-wave/un-claim)', () => {
 
 it('free table claim flips button state', () => {
   render(<Commons />);
-  fireEvent.click(screen.getByRole('button', { name: /^free$/i }));
+  fireEvent.click(screen.getByRole('button', { name: /^free stuff$/i }));
   fireEvent.click(screen.getAllByRole('button', { name: /^claim$/i })[0]);
   expect(screen.getByText(/claimed ✓/i)).toBeInTheDocument();
 });

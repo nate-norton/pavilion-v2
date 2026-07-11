@@ -31,7 +31,7 @@ it('broadcast requires text then confirms', () => {
   act(() => usePavStore.getState().set({ boardMode: true, boardTab: 'comms' }));
   render(<BoardDesk />);
   fireEvent.change(screen.getByPlaceholderText(/announce something/i), { target: { value: 'Pool closes early Friday' } });
-  fireEvent.click(screen.getByRole('button', { name: /send broadcast/i }));
+  fireEvent.click(screen.getByRole('button', { name: /send to 136 households/i }));
   expect(screen.getByText(/email digest goes out at 6 pm/i)).toBeInTheDocument();
 });
 

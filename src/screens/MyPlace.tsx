@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
@@ -31,6 +31,8 @@ function Row({ children, divider, onClick }: { children: ReactNode; divider?: bo
 export function MyPlace() {
   const state = usePavStore();
   const { set } = state;
+
+  const [apConfirm, setApConfirm] = useState(false);
 
   if (!state.myPlaceOpen) return null;
 
@@ -144,7 +146,7 @@ export function MyPlace() {
           style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', padding: '12px 10px' }}
         >
           <p className="m-0 mb-[3px] text-[10px] font-extrabold uppercase" style={{ letterSpacing: '0.08em', color: '#8A8375' }}>
-            Circles
+            Groups
           </p>
           <p className="m-0 text-[12.5px] font-extrabold text-navy">{myCirclesCount} joined</p>
         </div>
@@ -273,6 +275,48 @@ export function MyPlace() {
             </div>
           </div>
         </>
+      )}
+
+      {/* Payments (owner only) — above household for easy access */}
+      {isOwner && (
+        <div style={CARD}>
+          <p className="m-0 mb-[11px] font-serif text-base text-navy">Payments</p>
+          <div
+            className="flex items-center gap-2.5"
+            style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
+          >
+            <PhIcon name="ph-fill ph-arrows-clockwise" size={17} color="#1A3352" className="flex-shrink-0" />
+            <div className="flex-1">
+              <p className="m-0 text-[13px] font-extrabold text-navy">{mpApLabel}</p>
+              <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+                Juniper CU ····4821 · free ACH · change bank or date anytime
+              </p>
+            </div>
+            {apConfirm ? (
+              <div className="flex gap-1.5 animate-fadeup">
+                <button
+                  onClick={() => { set({ apPaused: !state.apPaused }); setApConfirm(false); }}
+                  className="border-none rounded-full px-2.5 py-1.5 text-[11px] font-extrabold cursor-pointer"
+                  style={{ background: state.apPaused ? '#E9F6EE' : '#FBEDE4', color: state.apPaused ? '#228049' : '#C75A31' }}
+                >
+                  {state.apPaused ? 'Resume' : 'Pause'}
+                </button>
+                <button
+                  onClick={() => setApConfirm(false)}
+                  className="border-none bg-transparent text-[11px] font-extrabold cursor-pointer text-stone"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <Toggle on={!state.apPaused} onToggle={() => setApConfirm(true)} />
+            )}
+          </div>
+          {payRow('July 2026 · $285', statusPill(mpJulyStatus, mpJulyBg, mpJulyColor), false, 0)}
+          {payRow('June 2026 · $285', statusPill(mpJuneStatus, mpJuneBg, mpJuneColor), false, 1)}
+          {payRow('May 2026 · $285', statusPill('Paid May 3 · #P-2103', '#E9F6EE', '#228049'), false, 2)}
+          {payRow('April 2026 · $285', statusPill('Paid Apr 3 · #P-2041', '#E9F6EE', '#228049'), true, 3)}
+        </div>
       )}
 
       {/* Household */}
@@ -441,33 +485,9 @@ export function MyPlace() {
         </Row>
       </div>
 
-      {/* Payments (owner only) */}
-      {isOwner && (
-        <div style={CARD}>
-          <p className="m-0 mb-[11px] font-serif text-base text-navy">Payments</p>
-          <div
-            className="flex items-center gap-2.5"
-            style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
-          >
-            <PhIcon name="ph-fill ph-arrows-clockwise" size={17} color="#1A3352" className="flex-shrink-0" />
-            <div className="flex-1">
-              <p className="m-0 text-[13px] font-extrabold text-navy">{mpApLabel}</p>
-              <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
-                Juniper CU ····4821 · free ACH · change bank or date anytime
-              </p>
-            </div>
-            <Toggle on={!state.apPaused} onToggle={() => set({ apPaused: !state.apPaused })} />
-          </div>
-          {payRow('July 2026 · $285', statusPill(mpJulyStatus, mpJulyBg, mpJulyColor), false, 0)}
-          {payRow('June 2026 · $285', statusPill(mpJuneStatus, mpJuneBg, mpJuneColor), false, 1)}
-          {payRow('May 2026 · $285', statusPill('Paid May 3 · #P-2103', '#E9F6EE', '#228049'), false, 2)}
-          {payRow('April 2026 · $285', statusPill('Paid Apr 3 · #P-2041', '#E9F6EE', '#228049'), true, 3)}
-        </div>
-      )}
-
-      {/* My circles */}
+      {/* My groups */}
       <div style={CARD}>
-        <p className="m-0 mb-[11px] font-serif text-base text-navy">My circles</p>
+        <p className="m-0 mb-[11px] font-serif text-base text-navy">My groups</p>
         <div className="flex gap-2 flex-wrap">
           <button
             type="button"

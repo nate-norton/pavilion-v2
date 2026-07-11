@@ -50,16 +50,22 @@ export function NavDock() {
         <div className="flex justify-center">
           <button
             type="button"
-            aria-label="Penny"
             onClick={() => set({ pennyOpen: true })}
-            className="w-[54px] h-[54px] rounded-full flex items-center justify-center cursor-pointer"
-            style={{
-              border: '3px solid #F5F0E6',
-              background: 'linear-gradient(150deg,#F97B4B,#C75A31)',
-              transform: 'translateY(-16px)',
-            }}
+            className="flex flex-col items-center cursor-pointer border-0 bg-transparent"
+            style={{ transform: 'translateY(-10px)' }}
           >
-            <PhIcon name="ph-fill ph-sparkle" size={23} color="#fff" />
+            <div
+              className="w-[50px] h-[50px] rounded-full flex items-center justify-center"
+              style={{
+                border: '3px solid #F5F0E6',
+                background: 'linear-gradient(150deg,#F97B4B,#C75A31)',
+              }}
+            >
+              <PhIcon name="ph-fill ph-sparkle" size={22} color="#fff" />
+            </div>
+            <span className="text-[10px] font-extrabold mt-[2px]" style={{ color: ACTIVE }}>
+              Penny
+            </span>
           </button>
         </div>
         {TABS_RIGHT.map(renderTab)}

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
@@ -16,6 +17,8 @@ const BOARD_SEGS = [
 export function BoardDesk() {
   const state = usePavStore();
   const { set } = state;
+
+  const [voteConfirm, setVoteConfirm] = useState(false);
 
   if (!state.boardMode) return null;
 
@@ -671,7 +674,7 @@ export function BoardDesk() {
                   className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold"
                   style={{ background: canBc ? '#E06A3E' : '#DDD5C2', color: canBc ? '#fff' : '#A39B8B', cursor: canBc ? 'pointer' : 'default' }}
                 >
-                  Send broadcast
+                  Send to 136 households
                 </button>
               </div>
             )}
@@ -730,14 +733,33 @@ export function BoardDesk() {
                         Opens to all 136 households · 7-day window · quorum 50%+1 · one ballot each
                       </p>
                     </div>
-                    <button
-                      onClick={postVote}
-                      disabled={!canPostVote}
-                      className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                      style={{ background: canPostVote ? '#E06A3E' : '#DDD5C2', color: canPostVote ? '#fff' : '#A39B8B' }}
-                    >
-                      Open the ballot
-                    </button>
+                    {!voteConfirm ? (
+                      <button
+                        onClick={() => canPostVote && setVoteConfirm(true)}
+                        disabled={!canPostVote}
+                        className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
+                        style={{ background: canPostVote ? '#E06A3E' : '#DDD5C2', color: canPostVote ? '#fff' : '#A39B8B' }}
+                      >
+                        Open the ballot
+                      </button>
+                    ) : (
+                      <div className="flex gap-2 animate-fadeup">
+                        <button
+                          onClick={() => { postVote(); setVoteConfirm(false); }}
+                          className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
+                          style={{ background: '#E06A3E', color: '#fff' }}
+                        >
+                          Confirm — open to 136 households
+                        </button>
+                        <button
+                          onClick={() => setVoteConfirm(false)}
+                          className="rounded-[13px] px-4 py-[13px] text-sm font-extrabold cursor-pointer bg-transparent text-navy"
+                          style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
+                        >
+                          Back
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
                 {!state.voteDraftOpen && (
