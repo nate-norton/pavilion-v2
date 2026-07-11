@@ -174,7 +174,7 @@ export function Today() {
               <p className={ROW_TITLE}>{payCardTitle}</p>
               <p className={ROW_SUB}>{payCardSub}</p>
             </div>
-            <span className="text-[13px] font-extrabold flex-shrink-0" style={{ color: '#C75A31' }}>
+            <span className="rounded-full px-[10px] py-[5px] text-[12px] font-extrabold flex-shrink-0" style={{ background: '#FBEDE4', color: '#C75A31' }}>
               {payCardBtn}
             </span>
           </div>
@@ -232,7 +232,7 @@ export function Today() {
           </p>
           <button
             onClick={() => set({ nudgeDismissed: true })}
-            className="border-none bg-transparent cursor-pointer p-0.5 flex-shrink-0"
+            className="border-none bg-transparent cursor-pointer flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full"
           >
             <PhIcon name="ph-bold ph-x" size={12} color="#C9C0AE" />
           </button>

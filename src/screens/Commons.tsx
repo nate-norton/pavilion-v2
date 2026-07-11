@@ -1,6 +1,5 @@
 import { type KeyboardEvent, useState } from 'react';
 import { Avatar } from '../components/Avatar';
-import { Chip } from '../components/Chip';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
@@ -9,16 +8,9 @@ import { usePavStore } from '../store/store';
 
 const SEG_OPTIONS = [
   { key: 'feed', label: 'Feed' },
-  { key: 'circles', label: 'Circles' },
+  { key: 'circles', label: 'Groups' },
   { key: 'dir', label: 'People' },
-  { key: 'free', label: 'Free' },
-];
-
-const FILTER_OPTIONS = [
-  { key: 'all', label: 'Everything' },
-  { key: 'shout', label: 'Shoutouts' },
-  { key: 'help', label: 'Help & Borrow' },
-  { key: 'events', label: 'Events' },
+  { key: 'free', label: 'Free stuff' },
 ];
 
 /** The Commons screen — ported from prototype lines 279-521. */
@@ -26,10 +18,6 @@ export function Commons() {
   const state = usePavStore();
   const { set, addComment } = state;
   const [circleStarted, setCircleStarted] = useState(false);
-
-  const vShout = state.filter === 'all' || state.filter === 'shout';
-  const vHelp = state.filter === 'all' || state.filter === 'help';
-  const vEvents = state.filter === 'all' || state.filter === 'events';
 
   const likeCount = 14 + (state.liked ? 1 : 0);
   const heartClass = state.liked ? 'ph-fill ph-heart' : 'ph ph-heart';
@@ -75,14 +63,8 @@ export function Commons() {
             </span>
           </button>
 
-          <div className="flex gap-1.5 mb-4 flex-wrap">
-            {FILTER_OPTIONS.map((f) => (
-              <Chip key={f.key} label={f.label} active={f.key === state.filter} onClick={() => set({ filter: f.key })} />
-            ))}
-          </div>
-
           <div className="flex flex-col gap-3">
-            {vShout && (
+            {(
               <div
                 className="bg-paper rounded-[18px] p-4"
                 style={{ border: '1px solid rgba(26,51,82,0.08)' }}
@@ -155,7 +137,7 @@ export function Commons() {
               </div>
             )}
 
-            {vHelp && (
+            {(
               <div
                 className="bg-paper rounded-[18px] p-4"
                 style={{ border: '1px solid rgba(26,51,82,0.08)' }}
@@ -191,7 +173,7 @@ export function Commons() {
               </div>
             )}
 
-            {vEvents && (
+            {(
               <div
                 className="bg-paper rounded-[18px] overflow-hidden"
                 style={{ border: '1px solid rgba(26,51,82,0.08)' }}
@@ -230,7 +212,7 @@ export function Commons() {
               </div>
             )}
 
-            {vShout && (
+            {(
               <div
                 className="bg-paper rounded-[18px] p-4"
                 style={{ border: '1px solid rgba(26,51,82,0.08)' }}

@@ -85,8 +85,8 @@ export function Reserve() {
             >
               Pick a time
             </p>
-            <span className="text-[10.5px] font-bold" style={{ color: '#A39B8B' }}>
-              Taken slot? Tap to join its waitlist
+            <span className="text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
+              Taken? Tap to waitlist
             </span>
           </div>
           <div className="grid grid-cols-2 gap-2.5 mb-[18px]">
