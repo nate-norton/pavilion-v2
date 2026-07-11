@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { AMENS, SLOTS, DAYS, QA } from '../data';
 
 export interface PennyMsg {
@@ -148,6 +149,16 @@ export interface PavData {
   exportOpen: boolean;
   exportDone: string | null;
   activeCommunity: number;
+  // detail sheets
+  arcDetailId: string | null;
+  issueDetailId: string | null;
+  paymentDetailIdx: number | null;
+  decisionDetailIdx: number | null;
+  composeOpen: boolean;
+  vehicleAdded: boolean;
+  petAdded: boolean;
+  arcNeedsInfo: boolean;
+  digestScheduled: boolean;
   // scenario flags
   showDelinquent: boolean;
   showSpecialAssessment: boolean;
@@ -174,7 +185,7 @@ export interface PavActions {
 
 export type PavState = PavData & PavActions;
 
-const dataDefaults: PavData = {
+export const dataDefaults: PavData = {
   epoch: 0,
   tab: 'today',
   role: 'owner',
@@ -295,6 +306,16 @@ const dataDefaults: PavData = {
   exportOpen: false,
   exportDone: null,
   activeCommunity: 0,
+  // detail sheets
+  arcDetailId: null,
+  issueDetailId: null,
+  paymentDetailIdx: null,
+  decisionDetailIdx: null,
+  composeOpen: false,
+  vehicleAdded: false,
+  petAdded: false,
+  arcNeedsInfo: false,
+  digestScheduled: false,
   // scenario flags
   showDelinquent: false,
   showSpecialAssessment: false,
@@ -312,7 +333,7 @@ function now(): string {
   return h + ':' + m + ' ' + ap;
 }
 
-export const usePavStore = create<PavState>()((set, get) => ({
+export const usePavStore = create<PavState>()(persist((set, get) => ({
   ...dataDefaults,
 
   set: (patch) => set(patch),
@@ -453,6 +474,12 @@ export const usePavStore = create<PavState>()((set, get) => ({
       comments: [...s.comments, { who: 'You', color: '#1A3352', text: t }],
       commentInput: '',
     }));
+  },
+}), {
+  name: 'pavilion-demo',
+  partialize: (state) => {
+    const { typing, pennyInput, chatInput, commentInput, searchQ, docQ, bcText, ...rest } = state;
+    return rest;
   },
 }));
 

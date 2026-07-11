@@ -284,7 +284,7 @@ export function Today() {
       {/* Quiet neighborhood list */}
       <div className="bg-paper rounded-[20px]" style={{ border: '1px solid rgba(26,51,82,0.1)', padding: '6px 18px' }}>
         {hasBooking ? (
-          <div className="flex items-center gap-3" style={ROW_PAD}>
+          <div onClick={() => set({ tab: 'reserve' })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
             <PhIcon name="ph-fill ph-calendar-check" size={17} color="#2A9D5C" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">Reserved: {state.bookingSummary}</p>
           </div>

@@ -267,7 +267,7 @@ export function Hoa() {
         </div>
 
         {state.arcSubmitted && (
-          <div className="bg-cream rounded-2xl px-3.5 py-[13px] mb-2.5 animate-fadeup">
+          <div onClick={() => set({ arcDetailId: 'A-121' })} className="bg-cream rounded-2xl px-3.5 py-[13px] mb-2.5 animate-fadeup cursor-pointer">
             <div className="flex items-center justify-between gap-2.5 mb-3">
               <p className="m-0 text-[13.5px] font-extrabold text-navy">{arcNewTitle} · #A-121</p>
               <span
@@ -284,7 +284,7 @@ export function Hoa() {
           </div>
         )}
 
-        <div className="bg-cream rounded-2xl px-3.5 py-[13px]">
+        <div onClick={() => set({ arcDetailId: 'A-118' })} className="bg-cream rounded-2xl px-3.5 py-[13px] cursor-pointer">
           <div className="flex items-center justify-between gap-2.5 mb-3">
             <p className="m-0 text-[13.5px] font-extrabold text-navy">Backyard pergola · #A-118</p>
             <span className="rounded-full px-2.5 py-1 text-[11px] font-extrabold" style={{ background: '#E9F6EE', color: '#228049' }}>
@@ -305,7 +305,8 @@ export function Hoa() {
           Live from the board&apos;s queue — no more &quot;did anyone report this?&quot;
         </p>
         <div
-          className="flex items-center gap-[11px] pb-2.5 mb-2.5"
+          onClick={() => set({ issueDetailId: 'streetlight' })}
+          className="flex items-center gap-[11px] pb-2.5 mb-2.5 cursor-pointer"
           style={{ borderBottom: '1px solid rgba(26,51,82,0.07)' }}
         >
           <PhIcon name="ph-fill ph-lightbulb" size={16} color="#D9A441" className="flex-shrink-0" />
@@ -321,7 +322,8 @@ export function Hoa() {
           </span>
         </div>
         <div
-          className="flex items-center gap-[11px] pb-2.5 mb-2.5"
+          onClick={() => set({ issueDetailId: 'pool-gate' })}
+          className="flex items-center gap-[11px] pb-2.5 mb-2.5 cursor-pointer"
           style={{ borderBottom: '1px solid rgba(26,51,82,0.07)' }}
         >
           <PhIcon name="ph-fill ph-wrench" size={16} color="#C75A31" className="flex-shrink-0" />
@@ -336,7 +338,7 @@ export function Hoa() {
             {state.gateScheduled ? 'AquaFix · Thu Jul 3' : 'Reported · 2×'}
           </span>
         </div>
-        <div className="flex items-center gap-[11px]">
+        <div onClick={() => set({ issueDetailId: 'irrigation' })} className="flex items-center gap-[11px] cursor-pointer">
           <PhIcon name="ph-fill ph-check-circle" size={16} color="#A39B8B" className="flex-shrink-0" />
           <span className="flex-1 text-[13px] font-bold" style={{ color: '#8A8375' }}>
             Irrigation valve · the Green
@@ -363,7 +365,8 @@ export function Hoa() {
           {DECISIONS.map((d, i) => (
             <div
               key={d.text}
-              className="flex items-center gap-[11px] py-2.5"
+              onClick={() => set({ decisionDetailIdx: i })}
+              className="flex items-center gap-[11px] py-2.5 cursor-pointer"
               style={i < DECISIONS.length - 1 ? { borderBottom: '1px solid rgba(26,51,82,0.07)' } : undefined}
             >
               <span className="w-11 flex-shrink-0 text-[11px] font-extrabold" style={{ color: '#A39B8B' }}>

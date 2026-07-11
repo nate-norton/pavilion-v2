@@ -18,6 +18,11 @@ import { Search } from '../screens/Search';
 import { BoardDesk } from '../screens/BoardDesk';
 import { Portfolio } from '../screens/Portfolio';
 import { ExportSheet } from '../sheets/ExportSheet';
+import { ArcDetailSheet } from '../sheets/ArcDetailSheet';
+import { IssueDetailSheet } from '../sheets/IssueDetailSheet';
+import { PaymentDetailSheet } from '../sheets/PaymentDetailSheet';
+import { DecisionDetailSheet } from '../sheets/DecisionDetailSheet';
+import { ComposeSheet } from '../sheets/ComposeSheet';
 import { Onboarding } from '../screens/Onboarding';
 import { SignIn } from '../screens/SignIn';
 
@@ -51,6 +56,11 @@ export function Overlays() {
       <ViolSheet />
       <PennySheet />
       <ExportSheet />
+      <ArcDetailSheet />
+      <IssueDetailSheet />
+      <PaymentDetailSheet />
+      <DecisionDetailSheet />
+      <ComposeSheet />
 
       {/* Top-level overlays (z 95-97) */}
       <Onboarding />

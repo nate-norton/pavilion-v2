@@ -15,10 +15,11 @@ const CARD: CSSProperties = {
   
 };
 
-function Row({ children, divider }: { children: ReactNode; divider?: boolean }) {
+function Row({ children, divider, onClick }: { children: ReactNode; divider?: boolean; onClick?: () => void }) {
   return (
     <div
-      className="flex items-center gap-2.5"
+      onClick={onClick}
+      className={`flex items-center gap-2.5${onClick ? ' cursor-pointer' : ''}`}
       style={divider ? { paddingBottom: 10, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 10 } : undefined}
     >
       {children}
@@ -88,9 +89,10 @@ export function MyPlace() {
     </span>
   );
 
-  const payRow = (label: string, pill: ReactNode, last?: boolean) => (
+  const payRow = (label: string, pill: ReactNode, last?: boolean, idx?: number) => (
     <div
-      className="flex items-center gap-2.5"
+      onClick={idx != null ? () => set({ paymentDetailIdx: idx }) : undefined}
+      className={`flex items-center gap-2.5${idx != null ? ' cursor-pointer' : ''}`}
       style={last ? undefined : { paddingBottom: 10, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 10 }}
     >
       <span className="flex-1 text-[13px] font-bold text-navy">{label}</span>
@@ -120,14 +122,15 @@ export function MyPlace() {
 
       {/* Stat tiles */}
       <div className="grid grid-cols-3 gap-[9px] mb-3.5">
-        <div className="rounded-[15px] text-center" style={{ background: duesBg, padding: '12px 10px' }}>
+        <div onClick={() => set({ paySheetOpen: true })} className="rounded-[15px] text-center cursor-pointer" style={{ background: duesBg, padding: '12px 10px' }}>
           <p className="m-0 mb-[3px] text-[10px] font-extrabold uppercase" style={{ letterSpacing: '0.08em', color: duesColor }}>
             {statOneLabel}
           </p>
           <p className="m-0 text-[12.5px] font-extrabold text-navy">{statOneValue}</p>
         </div>
         <div
-          className="rounded-[15px] text-center"
+          onClick={() => set({ myPlaceOpen: false, tab: 'reserve' })}
+          className="rounded-[15px] text-center cursor-pointer"
           style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', padding: '12px 10px' }}
         >
           <p className="m-0 mb-[3px] text-[10px] font-extrabold uppercase" style={{ letterSpacing: '0.08em', color: '#8A8375' }}>
@@ -136,7 +139,8 @@ export function MyPlace() {
           <p className="m-0 text-[12.5px] font-extrabold text-navy">{myBookings}</p>
         </div>
         <div
-          className="rounded-[15px] text-center"
+          onClick={() => set({ myPlaceOpen: false, tab: 'commons', commonsView: 'circles' })}
+          className="rounded-[15px] text-center cursor-pointer"
           style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', padding: '12px 10px' }}
         >
           <p className="m-0 mb-[3px] text-[10px] font-extrabold uppercase" style={{ letterSpacing: '0.08em', color: '#8A8375' }}>
@@ -371,23 +375,45 @@ export function MyPlace() {
             </p>
           </div>
         </div>
+        {(state.vehicleAdded || state.petAdded) && (
+          <div className="flex flex-col gap-2 mb-2">
+            {state.vehicleAdded && (
+              <div className="flex items-center gap-2.5 animate-fadeup">
+                <PhIcon name="ph-fill ph-check-circle" size={16} color="#2A9D5C" />
+                <span className="text-[13px] font-bold text-navy">Honda Civic · Silver · ABC-1234</span>
+              </div>
+            )}
+            {state.petAdded && (
+              <div className="flex items-center gap-2.5 animate-fadeup">
+                <PhIcon name="ph-fill ph-check-circle" size={16} color="#2A9D5C" />
+                <span className="text-[13px] font-bold text-navy">Luna · Tabby cat</span>
+              </div>
+            )}
+          </div>
+        )}
         <div className="flex gap-2">
-          <button
-            type="button"
-            className="flex-1 bg-transparent rounded-[11px] py-[9px] text-xs font-extrabold text-navy cursor-pointer font-sans flex items-center justify-center gap-[5px]"
-            style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
-          >
-            <PhIcon name="ph-bold ph-plus" size={12} />
-            Vehicle
-          </button>
-          <button
-            type="button"
-            className="flex-1 bg-transparent rounded-[11px] py-[9px] text-xs font-extrabold text-navy cursor-pointer font-sans flex items-center justify-center gap-[5px]"
-            style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
-          >
-            <PhIcon name="ph-bold ph-plus" size={12} />
-            Pet
-          </button>
+          {!state.vehicleAdded && (
+            <button
+              type="button"
+              onClick={() => set({ vehicleAdded: true })}
+              className="flex-1 bg-transparent rounded-[11px] py-[9px] text-xs font-extrabold text-navy cursor-pointer font-sans flex items-center justify-center gap-[5px]"
+              style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
+            >
+              <PhIcon name="ph-bold ph-plus" size={12} />
+              Vehicle
+            </button>
+          )}
+          {!state.petAdded && (
+            <button
+              type="button"
+              onClick={() => set({ petAdded: true })}
+              className="flex-1 bg-transparent rounded-[11px] py-[9px] text-xs font-extrabold text-navy cursor-pointer font-sans flex items-center justify-center gap-[5px]"
+              style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
+            >
+              <PhIcon name="ph-bold ph-plus" size={12} />
+              Pet
+            </button>
+          )}
         </div>
       </div>
 
@@ -395,7 +421,7 @@ export function MyPlace() {
       <div style={CARD}>
         <p className="m-0 mb-[11px] font-serif text-base text-navy">My requests</p>
         {state.arcSubmitted && (
-          <Row divider>
+          <Row divider onClick={() => set({ arcDetailId: 'A-121' })}>
             <PhIcon name="ph-fill ph-pencil-ruler" size={17} color="#3A73B5" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13px] font-bold text-navy">{arcNewTitle} · #A-121</p>
             {statusPill(approved ? 'Approved' : 'In review', approved ? '#E9F6EE' : '#FBEDE4', approved ? '#228049' : '#C75A31')}
@@ -408,7 +434,7 @@ export function MyPlace() {
             {statusPill('In triage', '#FBEDE4', '#C75A31')}
           </Row>
         )}
-        <Row>
+        <Row onClick={() => set({ arcDetailId: 'A-118' })}>
           <PhIcon name="ph-fill ph-seal-check" size={17} color="#2A9D5C" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13px] font-bold text-navy">Backyard pergola · #A-118</p>
           {statusPill('Approved', '#E9F6EE', '#228049')}
@@ -432,10 +458,10 @@ export function MyPlace() {
             </div>
             <Toggle on={!state.apPaused} onToggle={() => set({ apPaused: !state.apPaused })} />
           </div>
-          {payRow('July 2026 · $285', statusPill(mpJulyStatus, mpJulyBg, mpJulyColor))}
-          {payRow('June 2026 · $285', statusPill(mpJuneStatus, mpJuneBg, mpJuneColor))}
-          {payRow('May 2026 · $285', statusPill('Paid May 3 · #P-2103', '#E9F6EE', '#228049'))}
-          {payRow('April 2026 · $285', statusPill('Paid Apr 3 · #P-2041', '#E9F6EE', '#228049'), true)}
+          {payRow('July 2026 · $285', statusPill(mpJulyStatus, mpJulyBg, mpJulyColor), false, 0)}
+          {payRow('June 2026 · $285', statusPill(mpJuneStatus, mpJuneBg, mpJuneColor), false, 1)}
+          {payRow('May 2026 · $285', statusPill('Paid May 3 · #P-2103', '#E9F6EE', '#228049'), false, 2)}
+          {payRow('April 2026 · $285', statusPill('Paid Apr 3 · #P-2041', '#E9F6EE', '#228049'), true, 3)}
         </div>
       )}
 
@@ -452,13 +478,15 @@ export function MyPlace() {
             <PhIcon name="ph-fill ph-plant" size={14} />
             Garden
           </button>
-          <span
-            className="inline-flex items-center gap-1.5 rounded-full text-[12.5px] font-extrabold"
+          <button
+            type="button"
+            onClick={() => set({ circleOpen: true })}
+            className="inline-flex items-center gap-1.5 border-none rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans"
             style={{ background: '#EAF3FD', color: '#3A73B5', padding: '8px 13px' }}
           >
             <PhIcon name="ph-fill ph-tennis-ball" size={14} />
             Pickleball
-          </span>
+          </button>
           <button
             type="button"
             onClick={() => set({ myPlaceOpen: false, tab: 'commons', commonsView: 'circles' })}
@@ -474,7 +502,8 @@ export function MyPlace() {
       <div style={{ ...CARD, marginBottom: 0 }}>
         <p className="m-0 mb-[11px] font-serif text-base text-navy">Settings</p>
         <div
-          className="flex items-center gap-2.5"
+          onClick={() => set({ notifOpen: true, myPlaceOpen: false })}
+          className="flex items-center gap-2.5 cursor-pointer"
           style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
         >
           <PhIcon name="ph-fill ph-bell" size={17} color="#1A3352" className="flex-shrink-0" />
@@ -507,7 +536,7 @@ export function MyPlace() {
           </p>
           <PhIcon name="ph ph-caret-right" size={14} color="#A39B8B" />
         </div>
-        <button type="button" className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer font-sans p-0" style={{ color: '#C75A31' }}>
+        <button type="button" onClick={() => set({ loginOpen: true, myPlaceOpen: false })} className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer font-sans p-0" style={{ color: '#C75A31' }}>
           Sign out
         </button>
       </div>
