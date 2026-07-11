@@ -36,7 +36,7 @@ export function DemoPanel() {
 
   const reset = () => {
     localStorage.removeItem('pavilion-demo');
-    usePavStore.setState({ ...dataDefaults, epoch: usePavStore.getState().epoch + 1 }, true);
+    usePavStore.setState({ ...dataDefaults, epoch: usePavStore.getState().epoch + 1 });
   };
 
   return (
