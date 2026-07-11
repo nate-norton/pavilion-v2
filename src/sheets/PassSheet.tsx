@@ -99,11 +99,12 @@ export function PassSheet() {
           </div>
           <div className="flex gap-2.5">
             <button
+              onClick={() => set({ passTexted: true })}
               className="flex-1 bg-transparent rounded-[13px] py-3 text-[13px] font-extrabold cursor-pointer text-navy flex items-center justify-center gap-1.5"
               style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
             >
               <PhIcon name="ph-fill ph-chat-teardrop-text" size={15} />
-              Text to guest
+              {state.passTexted ? 'Sent ✓' : 'Text to guest'}
             </button>
             <button
               onClick={closePass}

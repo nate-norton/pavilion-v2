@@ -23,6 +23,20 @@ export default function App() {
     >
       <PhoneFrame />
       {showPanel && <DemoPanel />}
+      {!showPanel && (
+        <button
+          type="button"
+          onClick={() => setShowPanel(true)}
+          aria-label="Open demo controls"
+          className="fixed bottom-4 right-4 w-10 h-10 rounded-full border-none cursor-pointer flex items-center justify-center max-[500px]:hidden"
+          style={{ background: 'rgba(26,51,82,0.08)', color: '#A39B8B', fontSize: 18, transition: 'opacity 0.2s' }}
+          onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.5'; }}
+          ref={(el) => { if (el) el.style.opacity = '0.5'; }}
+        >
+          ⚙
+        </button>
+      )}
     </div>
   );
 }

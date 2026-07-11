@@ -1,8 +1,39 @@
-import type { CSSProperties } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 import { DOCS, DOC_SECTIONS } from '../data';
+
+const DOC_CONTENT: Record<string, { sections: { tag: string; name: string; body: string }[] }> = {
+  bylaws: {
+    sections: [
+      { tag: '§2', name: 'Board of Directors', body: 'Five directors elected to staggered two-year terms. Quorum is three. Officers: President, Secretary, Treasurer.' },
+      { tag: '§3', name: 'Meetings', body: 'Annual meeting in October. Special meetings called by the board or 10% of owners. 30-day notice required.' },
+      { tag: '§6', name: 'Elections', body: 'Candidates self-nominate by Sep 1. Electronic ballots open 14 days before the annual meeting. Ties broken by lot.' },
+    ],
+  },
+  budget: {
+    sections: [
+      { tag: 'Revenue', name: 'Assessments', body: 'Monthly dues $285 × 136 homes = $465,120/yr. Late fees and interest projected at $3,200.' },
+      { tag: 'Expense', name: 'Operations', body: 'Landscaping $112K, Insurance $68K, Utilities $41K, Management $54K, Maintenance $38K.' },
+      { tag: 'Reserve', name: 'Contribution', body: '$148K to reserves (32% of revenue). Fully funded through 2032 per reserve study.' },
+    ],
+  },
+  minutes: {
+    sections: [
+      { tag: '1', name: 'Call to order', body: 'President Ruiz called the meeting to order at 7:02 PM. Quorum confirmed (4 of 5 directors present).' },
+      { tag: '2', name: 'Paint palette vote', body: 'Motion to add Sage and Clay to approved exterior colors. Passed 91–22 by homeowner ballot.' },
+      { tag: '3', name: 'Pool gate repair', body: 'Board approved $4,200 from reserves for pool gate replacement. Vendor: Apex Fencing, ETA 3 weeks.' },
+    ],
+  },
+  reserve: {
+    sections: [
+      { tag: 'Summary', name: 'Funding status', body: 'Current reserve balance $1.24M. Percent funded: 78%. Healthy threshold: 70%. No special assessment projected.' },
+      { tag: '5-yr', name: 'Near-term projects', body: '2027: Pool resurface ($85K). 2028: Roof common areas ($62K). 2029: Parking lot seal coat ($28K).' },
+      { tag: '30-yr', name: 'Long-range forecast', body: 'Reserves remain above 70% funded through 2056 at current contribution rate. Annual increase: 2.5%.' },
+    ],
+  },
+};
 
 const SECTION_CARD: CSSProperties = {
   background: '#FFFEFA',
@@ -49,7 +80,7 @@ export function Documents() {
               <div
                 key={d.key}
                 onClick={() => {
-                  if (d.key === 'ccrs') set({ docReader: true, docQ: '', diffOpen: false });
+                  set({ docReader: true, docReaderKey: d.key, docQ: '', diffOpen: false });
                 }}
                 className="flex items-center gap-3 cursor-pointer"
                 style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', borderRadius: 16, padding: 14 }}
@@ -68,7 +99,7 @@ export function Documents() {
             ))}
           </div>
         </div>
-      ) : (
+      ) : state.docReaderKey === 'ccrs' ? (
         <div className="animate-fadeup">
           <BackButton label="All documents" onClick={() => set({ docReader: false })} />
           <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">CC&amp;Rs</h1>
@@ -215,7 +246,37 @@ export function Documents() {
             </div>
           )}
         </div>
+      ) : (
+        <GenericDocReader />
       )}
+    </div>
+  );
+}
+
+function GenericDocReader() {
+  const state = usePavStore();
+  const { set } = state;
+  const doc = DOCS.find((d) => d.key === state.docReaderKey);
+  const content = DOC_CONTENT[state.docReaderKey];
+  if (!doc || !content) return null;
+
+  return (
+    <div className="animate-fadeup">
+      <BackButton label="All documents" onClick={() => set({ docReader: false })} />
+      <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">{doc.title}</h1>
+      <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: '#7A7365' }}>
+        {doc.sub}
+      </p>
+      {content.sections.map((s) => (
+        <div key={s.tag} style={SECTION_CARD}>
+          <p className="m-0 mb-[7px] text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.1em', color: '#C75A31' }}>
+            {s.tag} · {s.name}
+          </p>
+          <p className="m-0 text-[13px] font-semibold" style={{ lineHeight: 1.65, color: '#3E4C63' }}>
+            {s.body}
+          </p>
+        </div>
+      ))}
     </div>
   );
 }

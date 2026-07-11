@@ -105,6 +105,7 @@ export interface PavData {
   msgsOpen: boolean;
   docsOpen: boolean;
   docReader: boolean;
+  docReaderKey: string;
   docQ: string;
   diffOpen: boolean;
   circleOpen: boolean;
@@ -125,6 +126,7 @@ export interface PavData {
   passPlate: string;
   passDur: number;
   passIssued: boolean;
+  passTexted: boolean;
   loginOpen: boolean;
   commentsOpen: boolean;
   comments: Comment[];
@@ -260,6 +262,7 @@ export const dataDefaults: PavData = {
   msgsOpen: false,
   docsOpen: false,
   docReader: false,
+  docReaderKey: 'ccrs',
   docQ: '',
   diffOpen: false,
   circleOpen: false,
@@ -280,6 +283,7 @@ export const dataDefaults: PavData = {
   passPlate: '',
   passDur: 0,
   passIssued: false,
+  passTexted: false,
   loginOpen: false,
   commentsOpen: false,
   comments: [
