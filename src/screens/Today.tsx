@@ -6,7 +6,7 @@ import { getAttention, getDelinquent, getQuorum } from '../store/selectors';
 const ROW = 'flex items-center gap-[13px] cursor-pointer';
 const ROW_PAD = { padding: '14px 0' } as const;
 const DOT = 'w-2 h-2 rounded-full flex-shrink-0';
-const ROW_TITLE = 'm-0 text-sm font-extrabold text-navy leading-[1.3]';
+const ROW_TITLE = 'm-0 text-sm font-bold text-navy leading-[1.3]';
 const ROW_SUB = 'm-0 mt-px text-xs text-stone font-semibold';
 const CARET = <PhIcon name="ph-bold ph-caret-right" size={13} color="#C9C0AE" className="flex-shrink-0" />;
 
@@ -68,7 +68,7 @@ export function Today() {
         <div className="rounded-2xl px-3.5 py-3 flex gap-2.5 items-start mb-[18px] text-white" style={{ background: '#C7402E' }}>
           <PhIcon name="ph-fill ph-warning" size={17} className="mt-px flex-shrink-0" />
           <div className="flex-1">
-            <p className="m-0 mb-px text-[13px] font-extrabold">Water shutoff — Alder Way</p>
+            <p className="m-0 mb-px text-[13px] font-bold">Water shutoff — Alder Way</p>
             <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgba(255,255,255,0.85)' }}>
               Today 1–4 PM · hydrant repair · bottled water at the clubhouse
             </p>
@@ -82,7 +82,7 @@ export function Today() {
         </div>
       )}
 
-      <p className="m-0 mb-1.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.14em', color: '#A39B8B' }}>
+      <p className="m-0 mb-1.5 text-[11px] font-bold uppercase text-stonelight" style={{ letterSpacing: '0.14em' }}>
         Tuesday, July 1 · Juniper Ridge
       </p>
       <div className="flex items-start justify-between gap-3 mb-1.5">
@@ -244,7 +244,7 @@ export function Today() {
         <h2 className="m-0 font-serif font-normal text-[19px] text-navy">Around the neighborhood</h2>
         <button
           onClick={() => set({ eventsOpen: true })}
-          className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer p-0 text-stone"
+          className="border-none bg-transparent text-[12.5px] font-bold cursor-pointer p-0 text-stone"
         >
           Calendar
         </button>
@@ -254,7 +254,7 @@ export function Today() {
       <div className="rounded-[20px] text-cream bg-navy mb-2.5" style={{ padding: '16px 18px' }}>
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="m-0 mb-[3px] text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#E8A788' }}>
+            <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: '#E8A788' }}>
               Today · 5–8 PM
             </p>
             <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.2]">Taco cart at the clubhouse</p>
@@ -306,7 +306,7 @@ export function Today() {
           <PhIcon name="ph ph-hand-waving" size={17} color="#8A8375" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">The Okafors moved into #42</p>
           {state.waved ? (
-            <span className="text-[12.5px] font-extrabold flex-shrink-0" style={{ color: '#2A9D5C' }}>
+            <span className="text-[12.5px] font-bold flex-shrink-0 text-sage">
               Wave sent ✓
             </span>
           ) : (

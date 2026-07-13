@@ -35,8 +35,8 @@ export function Reserve() {
         <div className="animate-fadeup">
           <button
             onClick={backToList}
-            className="border-none bg-transparent flex items-center gap-1.5 text-[13px] font-extrabold cursor-pointer p-0 mb-3.5"
-            style={{ color: '#8A8375' }}
+            className="border-none bg-transparent flex items-center gap-1.5 text-[13px] font-bold cursor-pointer p-0 mb-3.5 text-stone"
+            style={{}}
           >
             <PhIcon name="ph-bold ph-arrow-left" size={14} />
             All amenities
@@ -52,7 +52,7 @@ export function Reserve() {
           </div>
 
           <p
-            className="m-0 mb-[9px] text-[11px] font-extrabold uppercase text-stone"
+            className="m-0 mb-[9px] text-[11px] font-bold uppercase text-stone"
             style={{ letterSpacing: '0.12em' }}
           >
             Pick a day
@@ -80,7 +80,7 @@ export function Reserve() {
 
           <div className="flex items-baseline justify-between mb-[9px]">
             <p
-              className="m-0 text-[11px] font-extrabold uppercase text-stone"
+              className="m-0 text-[11px] font-bold uppercase text-stone"
               style={{ letterSpacing: '0.12em' }}
             >
               Pick a time
@@ -118,7 +118,7 @@ export function Reserve() {
           </div>
 
           <p
-            className="m-0 mb-[9px] text-[11px] font-extrabold uppercase text-stone"
+            className="m-0 mb-[9px] text-[11px] font-bold uppercase text-stone"
             style={{ letterSpacing: '0.12em' }}
           >
             Length
@@ -163,7 +163,7 @@ export function Reserve() {
               <div className="flex items-center gap-3 mb-3">
                 <PhIcon name="ph-fill ph-check-circle" size={28} color="#2A9D5C" className="flex-shrink-0" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[15px] font-extrabold text-navy">Booked!</p>
+                  <p className="m-0 mb-0.5 text-[15px] font-bold text-navy">Booked!</p>
                   <p className="m-0 text-[13px] font-bold" style={{ color: '#5F8A6F' }}>
                     {state.bookingSummary}
                   </p>
@@ -181,7 +181,7 @@ export function Reserve() {
               ) : (
                 <div className="flex items-center justify-center gap-1.5 py-[11px] mb-2.5 animate-fadeup">
                   <PhIcon name="ph-fill ph-check-circle" size={15} color="#2A9D5C" />
-                  <span className="text-[12.5px] font-extrabold" style={{ color: '#228049' }}>
+                  <span className="text-[12.5px] font-bold text-sagedark">
                     On your calendar — reminder an hour before
                   </span>
                 </div>
@@ -216,7 +216,7 @@ export function Reserve() {
         >
           <PhIcon name="ph-fill ph-qr-code" size={22} color="#E8A788" className="flex-shrink-0" />
           <div className="flex-1">
-            <p className="m-0 mb-px text-[13.5px] font-extrabold text-cream">Expecting visitors?</p>
+            <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Expecting visitors?</p>
             <p className="m-0 text-xs font-semibold" style={{ color: 'rgba(245,240,230,0.65)' }}>
               Issue a gate &amp; parking pass in two taps
             </p>
@@ -233,15 +233,15 @@ export function Reserve() {
           >
             <PhIcon name="ph-fill ph-ticket" size={21} color="#2A9D5C" className="flex-shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="m-0 mb-px text-[13.5px] font-extrabold text-navy">{state.bookingSummary}</p>
+              <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{state.bookingSummary}</p>
               <p className="m-0 text-xs font-bold" style={{ color: '#5F8A6F' }}>
                 We&apos;ll remind you an hour before
               </p>
             </div>
             <button
               onClick={cancelBooking}
-              className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer p-1"
-              style={{ color: '#8A8375' }}
+              className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer p-1 text-stone"
+              style={{}}
             >
               Cancel
             </button>
@@ -260,12 +260,12 @@ export function Reserve() {
                 <PhIcon name={a.icon} size={22} color="#1A3352" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="m-0 mb-0.5 text-[15px] font-extrabold text-navy">{a.name}</p>
+                <p className="m-0 mb-0.5 text-[15px] font-bold text-navy">{a.name}</p>
                 <p className="m-0 mb-1 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
                   {a.sub}
                 </p>
                 <p
-                  className="m-0 text-[11.5px] font-extrabold flex items-center gap-1.5"
+                  className="m-0 text-[11.5px] font-bold flex items-center gap-1.5"
                   style={{ color: a.occColor }}
                 >
                   <span
@@ -277,7 +277,7 @@ export function Reserve() {
               </div>
               <div className="flex flex-col items-end gap-1 flex-shrink-0">
                 <span
-                  className="rounded-full px-2.5 py-1 text-[11px] font-extrabold"
+                  className="rounded-full px-2.5 py-1 text-[11px] font-bold"
                   style={{ background: '#E9F6EE', color: '#228049' }}
                 >
                   {a.avail}

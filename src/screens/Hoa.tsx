@@ -60,14 +60,14 @@ export function Hoa() {
   return (
     <div className="absolute inset-0 overflow-y-auto pav-scroll animate-scpop" style={{ padding: '64px 18px 150px' }}>
       <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">The HOA, in the open</h1>
-      <p className="m-0 mb-[18px] text-[13.5px] font-semibold" style={{ color: '#7A7365' }}>
+      <p className="m-0 mb-[18px] text-[13.5px] font-semibold text-taupe">
         Every dollar, vote, and decision — visible to every household.
       </p>
 
       {/* Open vote */}
       <div className="bg-navy rounded-[20px] p-[18px] mb-3.5 text-cream">
         <p
-          className="m-0 mb-1.5 text-[11px] font-extrabold uppercase"
+          className="m-0 mb-1.5 text-[11px] font-bold uppercase"
           style={{ letterSpacing: '0.12em', color: '#E8A788' }}
         >
           Open vote · Closes Thu, Jul 3
@@ -77,10 +77,10 @@ export function Hoa() {
           $18,400 from reserves · 3 bids reviewed · lowest responsible bidder
         </p>
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[11.5px] font-extrabold" style={{ color: 'rgba(245,240,230,0.8)' }}>
+          <span className="text-[11.5px] font-bold" style={{ color: 'rgba(245,240,230,0.8)' }}>
             QUORUM
           </span>
-          <span className="text-[11.5px] font-extrabold" style={{ color: 'rgba(245,240,230,0.8)' }}>
+          <span className="text-[11.5px] font-bold" style={{ color: 'rgba(245,240,230,0.8)' }}>
             {quorum.count} of 136 households
           </span>
         </div>
@@ -121,28 +121,28 @@ export function Hoa() {
             </div>
             <div className="mt-3.5">
               <div className="flex items-center gap-2 mb-[7px]">
-                <span className="w-8 text-[11px] font-extrabold" style={{ color: 'rgba(245,240,230,0.8)' }}>
+                <span className="w-8 text-[11px] font-bold" style={{ color: 'rgba(245,240,230,0.8)' }}>
                   YES
                 </span>
                 <div className="flex-1">
                   <ProgressBar pct={tally.yesPct} height={9} track="rgba(245,240,230,0.12)" gradient />
                 </div>
                 <span
-                  className="w-[62px] text-right text-[11px] font-extrabold"
+                  className="w-[62px] text-right text-[11px] font-bold"
                   style={{ color: 'rgba(245,240,230,0.85)' }}
                 >
                   {tally.yesC} · {tally.yesPct}%
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="w-8 text-[11px] font-extrabold" style={{ color: 'rgba(245,240,230,0.8)' }}>
+                <span className="w-8 text-[11px] font-bold" style={{ color: 'rgba(245,240,230,0.8)' }}>
                   NO
                 </span>
                 <div className="flex-1">
                   <ProgressBar pct={100 - tally.yesPct} height={9} track="rgba(245,240,230,0.12)" color="rgba(245,240,230,0.55)" />
                 </div>
                 <span
-                  className="w-[62px] text-right text-[11px] font-extrabold"
+                  className="w-[62px] text-right text-[11px] font-bold"
                   style={{ color: 'rgba(245,240,230,0.85)' }}
                 >
                   {tally.noC} · {100 - tally.yesPct}%
@@ -166,12 +166,12 @@ export function Hoa() {
           <PhIcon name="ph-fill ph-users-four" size={21} color="#D9A441" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="m-0 mb-0.5 text-sm font-extrabold text-navy">Annual meeting · Tue, Jul 15</p>
-          <p className="m-0 text-xs font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-0.5 text-sm font-bold text-navy">Annual meeting · Tue, Jul 15</p>
+          <p className="m-0 text-xs font-semibold text-stone">
             7 PM · Clubhouse + Zoom · 2 board seats open
           </p>
         </div>
-        <span className="text-[13px] font-extrabold flex-shrink-0" style={{ color: '#C75A31' }}>
+        <span className="text-[13px] font-bold flex-shrink-0" style={{ color: '#C75A31' }}>
           Preview →
         </span>
       </div>
@@ -182,7 +182,7 @@ export function Hoa() {
         style={{ border: '1px solid rgba(26,51,82,0.08)' }}
       >
         <p className="m-0 mb-0.5 font-serif text-[17px] text-navy">Your $285, itemized</p>
-        <p className="m-0 mb-3.5 text-xs font-semibold" style={{ color: '#8A8375' }}>
+        <p className="m-0 mb-3.5 text-xs font-semibold text-stone">
           July 2026 · unchanged from June
         </p>
         <div className="flex h-3.5 rounded-full overflow-hidden mb-3.5">
@@ -196,7 +196,7 @@ export function Hoa() {
           {DUES_LEGEND.map((item) => (
             <div key={item.label} className="flex items-center gap-[7px]">
               <span className="w-[9px] h-[9px] rounded-[3px] flex-shrink-0" style={{ background: item.color }} />
-              <span className="flex-1 text-[12.5px] font-bold" style={{ color: '#5B554A' }}>
+              <span className="flex-1 text-[12.5px] font-bold text-bark">
                 {item.label}
               </span>
               <span className="text-[12.5px] font-extrabold text-navy">{item.amount}</span>
@@ -208,8 +208,8 @@ export function Hoa() {
           style={{ borderTop: '1px solid rgba(26,51,82,0.07)' }}
         >
           <div>
-            <p className="m-0 mb-px text-[12.5px] font-extrabold text-navy">Reserve fund · 82% funded</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+            <p className="m-0 mb-px text-[12.5px] font-bold text-navy">Reserve fund · 82% funded</p>
+            <p className="m-0 text-[11.5px] font-semibold text-stone">
               $414K of $505K recommended · study Jan 2026
             </p>
           </div>
@@ -222,10 +222,10 @@ export function Hoa() {
             onClick={() => setForecastOpen(!forecastOpen)}
             className="flex items-center justify-between gap-2 cursor-pointer"
           >
-            <p className="m-0 text-[12.5px] font-extrabold text-navy">Funding forecast</p>
+            <p className="m-0 text-[12.5px] font-bold text-navy">Funding forecast</p>
             <div className="flex items-center gap-1.5">
               <span
-                className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold"
+                className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold"
                 style={{ color: '#228049', background: '#E9F6EE' }}
               >
                 Healthy through 2032
@@ -247,14 +247,14 @@ export function Hoa() {
                   {FORECAST_BARS.map((bar) => (
                     <div key={bar.year} className="flex-1 flex flex-col items-center gap-1 justify-end h-full">
                       <div className="w-full rounded-t-[5px]" style={{ height: bar.height, background: bar.color }} />
-                      <span className="text-[9.5px] font-extrabold" style={{ color: '#A39B8B' }}>
+                      <span className="text-[9.5px] font-bold text-stonelight">
                         {bar.year}
                       </span>
                     </div>
                   ))}
                 </div>
               </div>
-              <p className="mt-[9px] mb-0 text-[11px] font-semibold" style={{ color: '#8A8375' }}>
+              <p className="mt-[9px] mb-0 text-[11px] font-semibold text-stone">
                 No special assessment projected. Reserves stay above the healthy line through 2032.
               </p>
             </div>
@@ -313,7 +313,7 @@ export function Hoa() {
         style={{ border: '1px solid rgba(26,51,82,0.08)' }}
       >
         <p className="m-0 mb-[3px] font-serif text-[17px] text-navy">Known issues</p>
-        <p className="m-0 mb-3 text-xs font-semibold" style={{ color: '#8A8375' }}>
+        <p className="m-0 mb-3 text-xs font-semibold text-stone">
           Live from the board&apos;s queue — no more &quot;did anyone report this?&quot;
         </p>
         <div
@@ -352,7 +352,7 @@ export function Hoa() {
         </div>
         <div onClick={() => set({ issueDetailId: 'irrigation' })} className="flex items-center gap-[11px] cursor-pointer">
           <PhIcon name="ph-fill ph-check-circle" size={16} color="#A39B8B" className="flex-shrink-0" />
-          <span className="flex-1 text-[13px] font-bold" style={{ color: '#8A8375' }}>
+          <span className="flex-1 text-[13px] font-bold text-stone">
             Irrigation valve · the Green
           </span>
           <span
@@ -370,7 +370,7 @@ export function Hoa() {
         style={{ border: '1px solid rgba(26,51,82,0.08)' }}
       >
         <p className="m-0 mb-[3px] font-serif text-[17px] text-navy">Decisions log</p>
-        <p className="m-0 mb-3 text-xs font-semibold" style={{ color: '#8A8375' }}>
+        <p className="m-0 mb-3 text-xs font-semibold text-stone">
           Every board decision, searchable forever. No more relitigating 2019.
         </p>
         <div className="flex flex-col">
@@ -381,7 +381,7 @@ export function Hoa() {
               className="flex items-center gap-[11px] py-2.5 cursor-pointer"
               style={i < DECISIONS.length - 1 ? { borderBottom: '1px solid rgba(26,51,82,0.07)' } : undefined}
             >
-              <span className="w-11 flex-shrink-0 text-[11px] font-extrabold" style={{ color: '#A39B8B' }}>
+              <span className="w-11 flex-shrink-0 text-[11px] font-bold text-stonelight">
                 {d.date}
               </span>
               <span className="flex-1 text-[13px] font-bold text-navy">{d.text}</span>
@@ -405,7 +405,7 @@ export function Hoa() {
         >
           <PhIcon name="ph-fill ph-files" size={22} color="#1A3352" />
           <p className="mt-[9px] mb-0.5 text-[13.5px] font-extrabold text-navy">Documents</p>
-          <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 text-[11.5px] font-semibold text-stone">
             CC&amp;Rs · Bylaws · Budget · Minutes
           </p>
         </div>

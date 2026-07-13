@@ -72,11 +72,11 @@ export function Commons() {
                 <div className="flex items-center gap-2.5 mb-2.5">
                   <Avatar initial="M" color="#C75A31" size={36} />
                   <div className="flex-1">
-                    <p className="m-0 text-[13.5px] font-extrabold text-navy">
+                    <p className="m-0 text-[13.5px] font-bold text-navy">
                       Maria R. <span className="font-semibold text-stonelight">· #7 · 2h</span>
                     </p>
                   </div>
-                  <span className="rounded-full px-2.5 py-1 text-[11px] font-extrabold" style={{ background: '#FBEDE4', color: '#C75A31' }}>
+                  <span className="rounded-full px-2.5 py-1 text-[11px] font-bold" style={{ background: '#FBEDE4', color: '#C75A31' }}>
                     Shoutout
                   </span>
                 </div>
@@ -91,14 +91,14 @@ export function Commons() {
                     className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
                   >
                     <PhIcon name={heartClass} size={19} color={heartColor} className={state.liked ? 'animate-heartpop' : undefined} />
-                    <span className="text-[13px] font-extrabold text-stone">{likeCount}</span>
+                    <span className="text-[13px] font-bold text-stone">{likeCount}</span>
                   </button>
                   <button
                     onClick={() => set({ commentsOpen: !state.commentsOpen })}
                     className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
                   >
                     <PhIcon name="ph ph-chat-circle" size={19} color="#8A8375" />
-                    <span className="text-[13px] font-extrabold text-stone">{commentCount}</span>
+                    <span className="text-[13px] font-bold text-stone">{commentCount}</span>
                   </button>
                 </div>
                 {state.commentsOpen && (
@@ -108,7 +108,7 @@ export function Commons() {
                         <div key={i} className="flex gap-2.5 items-start">
                           <Avatar initial={cm.who} color={cm.color} size={26} />
                           <div className="bg-cream rounded-xl px-2.5 py-2 flex-1">
-                            <p className="m-0 mb-0.5 text-[11.5px] font-extrabold text-navy">{cm.who}</p>
+                            <p className="m-0 mb-0.5 text-[11.5px] font-bold text-navy">{cm.who}</p>
                             <p className="m-0 text-[12.5px] leading-[1.45] font-semibold" style={{ color: '#3E4C63' }}>
                               {cm.text}
                             </p>
@@ -145,11 +145,11 @@ export function Commons() {
                 <div className="flex items-center gap-2.5 mb-2.5">
                   <Avatar initial="D" color="#4A90E2" size={36} />
                   <div className="flex-1">
-                    <p className="m-0 text-[13.5px] font-extrabold text-navy">
+                    <p className="m-0 text-[13.5px] font-bold text-navy">
                       Dev P. <span className="font-semibold text-stonelight">· #23 · 5h</span>
                     </p>
                   </div>
-                  <span className="rounded-full px-2.5 py-1 text-[11px] font-extrabold" style={{ background: '#EAF3FD', color: '#3A73B5' }}>
+                  <span className="rounded-full px-2.5 py-1 text-[11px] font-bold" style={{ background: '#EAF3FD', color: '#3A73B5' }}>
                     Help &amp; Borrow
                   </span>
                 </div>
@@ -157,7 +157,7 @@ export function Commons() {
                   Anyone have an 8-ft ladder I could borrow Sunday? Painting the trim — ARC-approved, promise.
                 </p>
                 {state.offered ? (
-                  <span className="inline-flex items-center gap-1.5 text-[13px] font-extrabold" style={{ color: '#2A9D5C' }}>
+                  <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-sage">
                     <PhIcon name="ph-fill ph-check-circle" size={16} />
                     You offered yours — Dev will message you
                   </span>
@@ -181,10 +181,10 @@ export function Commons() {
                 <PhotoPlaceholder label="event photo — movie night" height={96} />
                 <div className="px-4 py-3.5">
                   <div className="flex items-center justify-between gap-2.5 mb-1.5">
-                    <p className="m-0 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#C75A31' }}>
+                    <p className="m-0 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: '#C75A31' }}>
                       Sat, Jul 5 · Dusk · The Green
                     </p>
-                    <span className="rounded-full px-2.5 py-1 text-[11px] font-extrabold bg-sand" style={{ color: '#6E6759' }}>
+                    <span className="rounded-full px-2.5 py-1 text-[11px] font-bold bg-sand text-bark">
                       Social Committee
                     </span>
                   </div>
@@ -220,7 +220,7 @@ export function Commons() {
                 <div className="flex items-center gap-2.5 mb-2.5">
                   <Avatar initial="G" color="#2A9D5C" size={36} />
                   <div className="flex-1">
-                    <p className="m-0 text-[13.5px] font-extrabold text-navy">
+                    <p className="m-0 text-[13.5px] font-bold text-navy">
                       Garden Circle <span className="font-semibold text-stonelight">· 1d</span>
                     </p>
                   </div>
@@ -243,7 +243,7 @@ export function Commons() {
 
       {state.commonsView === 'circles' && (
         <div className="animate-fadeup">
-          <p className="m-0 mx-1 mb-2.5 text-[11px] font-extrabold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+          <p className="m-0 mx-1 mb-2.5 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
             Yours
           </p>
           <div className="flex flex-col gap-2.5 mb-5">
@@ -256,10 +256,10 @@ export function Commons() {
                 <PhIcon name="ph-fill ph-plant" size={20} color="#2A9D5C" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="m-0 mb-px text-sm font-extrabold text-navy">Garden Circle</p>
+                <p className="m-0 mb-px text-sm font-bold text-navy">Garden Circle</p>
                 <p className="m-0 text-[11.5px] text-stone font-semibold">24 members · next: Sat work party, 9 AM</p>
               </div>
-              <span className="text-[12.5px] font-extrabold flex-shrink-0" style={{ color: '#C75A31' }}>
+              <span className="text-[12.5px] font-extrabold flex-shrink-0 text-terracotta">
                 Open →
               </span>
             </div>
@@ -272,16 +272,16 @@ export function Commons() {
                 <PhIcon name="ph-fill ph-tennis-ball" size={20} color="#3A73B5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="m-0 mb-px text-sm font-extrabold text-navy">Pickleball</p>
+                <p className="m-0 mb-px text-sm font-bold text-navy">Pickleball</p>
                 <p className="m-0 text-[11.5px] text-stone font-semibold">18 members · league night Thu 6 PM</p>
               </div>
-              <span className="rounded-full px-2.5 py-1 text-[10.5px] font-extrabold flex-shrink-0" style={{ background: '#E9F6EE', color: '#228049' }}>
+              <span className="rounded-full px-2.5 py-1 text-[10.5px] font-bold flex-shrink-0" style={{ background: '#E9F6EE', color: '#228049' }}>
                 Joined ✓
               </span>
             </div>
           </div>
 
-          <p className="m-0 mx-1 mb-2.5 text-[11px] font-extrabold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+          <p className="m-0 mx-1 mb-2.5 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
             Discover
           </p>
           <div className="flex flex-col gap-2.5">
@@ -297,7 +297,7 @@ export function Commons() {
                     <PhIcon name={c.icon} size={20} color={c.color} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="m-0 mb-px text-sm font-extrabold text-navy">{c.name}</p>
+                    <p className="m-0 mb-px text-sm font-bold text-navy">{c.name}</p>
                     <p className="m-0 text-[11.5px] text-stone font-semibold">{c.sub}</p>
                   </div>
                   <button
@@ -322,7 +322,7 @@ export function Commons() {
                 }
               </div>
               <div className="flex-1">
-                <p className="m-0 mb-px text-sm font-extrabold text-bark">
+                <p className="m-0 mb-px text-sm font-bold text-bark">
                   {circleStarted ? 'Circle request sent!' : 'Start a circle'}
                 </p>
                 <p className="m-0 text-[11.5px] text-stonelight font-semibold">
@@ -345,12 +345,12 @@ export function Commons() {
           >
             <PhIcon name="ph-fill ph-chats-circle" size={22} color="#E8A788" className="flex-shrink-0" />
             <div className="flex-1">
-              <p className="m-0 mb-px text-[13.5px] font-extrabold text-cream">Messages</p>
+              <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Messages</p>
               <p className="m-0 text-xs font-semibold" style={{ color: 'rgba(245,240,230,0.65)' }}>
                 3 unread from your neighbors
               </p>
             </div>
-            <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-extrabold text-white flex-shrink-0 bg-ember">
+            <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 bg-ember">
               3
             </span>
           </div>
@@ -372,7 +372,7 @@ export function Commons() {
                   <div onClick={() => set({ chatWith: d.key })} className="flex items-center gap-2.5 mb-2.5 cursor-pointer">
                     <Avatar initial={d.initial} color={d.color} size={40} />
                     <div className="flex-1 min-w-0">
-                      <p className="m-0 text-sm font-extrabold text-navy">
+                      <p className="m-0 text-sm font-bold text-navy">
                         {d.name} <span className="font-semibold text-stonelight">· {d.unit}</span>
                       </p>
                       <p className="m-0 text-[11.5px] text-stone font-semibold">{d.note}</p>
@@ -380,7 +380,7 @@ export function Commons() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span
-                      className="flex-1 text-[11.5px] font-extrabold rounded-lg px-2.5 py-1.5"
+                      className="flex-1 text-[11.5px] font-bold rounded-lg px-2.5 py-1.5"
                       style={{ color: '#3A73B5', background: '#EAF3FD' }}
                     >
                       {d.tags.join(' · ')}
@@ -426,7 +426,7 @@ export function Commons() {
                 >
                   <PhotoPlaceholder label={f.ph} height={74} />
                   <div className="px-3 pt-2.5 pb-3">
-                    <p className="m-0 mb-0.5 text-[13px] font-extrabold text-navy leading-[1.25]">{f.title}</p>
+                    <p className="m-0 mb-0.5 text-[13px] font-bold text-navy leading-[1.25]">{f.title}</p>
                     <p className="m-0 mb-2.5 text-[11px] text-stone font-semibold">
                       {claimed ? `Pick up: porch · ${f.giver}` : f.giver}
                     </p>
