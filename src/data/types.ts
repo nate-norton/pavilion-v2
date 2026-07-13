@@ -131,17 +131,6 @@ export interface ChatSeedEntry {
 
 export type ChatSeed = Record<string, ChatSeedEntry>;
 
-export interface GroupChat {
-  key: string;
-  name: string;
-  icon: string;
-  color: string;
-  members: string[];
-  seed: string;
-  time: string;
-  unread: number;
-}
-
 export interface Doc {
   key: string;
   title: string;

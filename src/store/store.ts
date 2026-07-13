@@ -21,6 +21,49 @@ export interface Comment {
   text: string;
 }
 
+export interface GroupPoll {
+  id: string;
+  question: string;
+  options: string[];
+  votes: Record<string, number>;
+  myVote: string | null;
+  author: string;
+  time: string;
+}
+
+export interface GroupEvent {
+  id: string;
+  title: string;
+  when: string;
+  where: string;
+  going: number;
+  rsvped: boolean;
+}
+
+export interface GroupPin {
+  id: string;
+  text: string;
+  author: string;
+  time: string;
+}
+
+export interface GroupData {
+  key: string;
+  name: string;
+  icon: string;
+  color: string;
+  description: string;
+  memberCount: number;
+  isGroupChat: boolean;
+  members: { name: string; initial: string; color: string }[];
+  messages: ChatMsg[];
+  polls: GroupPoll[];
+  events: GroupEvent[];
+  pins: GroupPin[];
+  joined: boolean;
+  muted: boolean;
+}
+
 export interface HHState {
   partner: boolean;
   kids: boolean;
@@ -174,6 +217,15 @@ export interface PavData {
   circlePostLiked: Record<string, boolean>;
   // new message
   newMsgOpen: boolean;
+  // groups
+  groups: Record<string, GroupData>;
+  activeGroup: string | null;
+  groupChatInput: string;
+  createGroupOpen: boolean;
+  createGroupName: string;
+  createGroupDesc: string;
+  createGroupIcon: string;
+  createGroupColor: string;
   // scenario flags
   showDelinquent: boolean;
   showSpecialAssessment: boolean;
@@ -196,6 +248,12 @@ export interface PavActions {
   sendChatMessage: () => void;
   pickRole: (role: string) => void;
   addComment: () => void;
+  sendGroupMessage: () => void;
+  createGroup: () => void;
+  toggleGroupJoin: (groupKey: string) => void;
+  toggleGroupMute: (groupKey: string) => void;
+  voteGroupPoll: (groupKey: string, pollId: string, option: string) => void;
+  rsvpGroupEvent: (groupKey: string, eventId: string) => void;
 }
 
 export type PavState = PavData & PavActions;
@@ -346,6 +404,137 @@ export const dataDefaults: PavData = {
   circlePostLiked: {},
   // new message
   newMsgOpen: false,
+  // groups
+  groups: {
+    'gc-block-party': {
+      key: 'gc-block-party', name: 'Block Party Planning', icon: 'ph-fill ph-confetti', color: '#C75A31',
+      description: 'Coordinating the annual block party — food, music, and good vibes.',
+      memberCount: 7, isGroupChat: true, joined: true, muted: false,
+      members: [
+        { name: 'Tom B.', initial: 'T', color: '#4A90E2' },
+        { name: 'Rosa M.', initial: 'R', color: '#C75A31' },
+        { name: 'You', initial: 'A', color: '#1A3352' },
+        { name: 'Priya S.', initial: 'P', color: '#2A9D5C' },
+        { name: 'The Okafors', initial: 'O', color: '#D9A441' },
+      ],
+      messages: [
+        { me: false, text: "We need to figure out the speaker situation", time: 'Today 11:20 AM' },
+        { me: false, text: "Who's bringing the speaker?", time: 'Today 11:30 AM' },
+      ],
+      polls: [{
+        id: 'bp-date', question: 'Best date for the block party?', author: 'Rosa M.', time: '2d ago',
+        options: ['July 26', 'Aug 2', 'Aug 9'],
+        votes: { 'July 26': 2, 'Aug 2': 4, 'Aug 9': 1 }, myVote: null,
+      }],
+      events: [{
+        id: 'bp-setup', title: 'Setup day — tables & lights', when: 'Jul 25 · 4 PM', where: 'Clubhouse lawn', going: 5, rsvped: false,
+      }],
+      pins: [{ id: 'bp-budget', text: 'Budget: $400 from HOA + $12/household voluntary', author: 'Rosa M.', time: '5d ago' }],
+    },
+    'gc-trail-crew': {
+      key: 'gc-trail-crew', name: 'Trail Crew', icon: 'ph-fill ph-tree', color: '#2A9D5C',
+      description: 'Sunday morning trail maintenance and hikes. All levels welcome.',
+      memberCount: 9, isGroupChat: true, joined: true, muted: false,
+      members: [
+        { name: 'Priya S.', initial: 'P', color: '#2A9D5C' },
+        { name: 'Tom B.', initial: 'T', color: '#4A90E2' },
+        { name: 'You', initial: 'A', color: '#1A3352' },
+      ],
+      messages: [
+        { me: false, text: 'Sunday 8 AM still on — meet at trailhead', time: 'Yesterday 6:15 PM' },
+      ],
+      polls: [],
+      events: [{
+        id: 'tc-sunday', title: 'Sunday trail run', when: 'Sun · 8 AM', where: 'North trailhead', going: 6, rsvped: false,
+      }],
+      pins: [{ id: 'tc-gear', text: 'Bring gloves and clippers if you have them', author: 'Priya S.', time: '1w ago' }],
+    },
+    'gc-dog-owners': {
+      key: 'gc-dog-owners', name: 'Dog Owners', icon: 'ph-fill ph-dog', color: '#D9A441',
+      description: 'Playdates, vet recs, and keeping the paths clean.',
+      memberCount: 11, isGroupChat: true, joined: true, muted: false,
+      members: [
+        { name: 'The Okafors', initial: 'O', color: '#D9A441' },
+        { name: 'Rosa M.', initial: 'R', color: '#C75A31' },
+        { name: 'You', initial: 'A', color: '#1A3352' },
+      ],
+      messages: [
+        { me: false, text: 'Anyone else see a coyote near lot C?', time: 'Yesterday 2:40 PM' },
+      ],
+      polls: [{
+        id: 'do-park', question: 'Should we ask the board for a dog park?', author: 'The Okafors', time: '3d ago',
+        options: ['Yes!', 'Not now', 'Need more info'],
+        votes: { 'Yes!': 7, 'Not now': 1, 'Need more info': 2 }, myVote: null,
+      }],
+      events: [{
+        id: 'do-play', title: 'Saturday playdate', when: 'Sat · 10 AM', where: 'East field', going: 4, rsvped: false,
+      }],
+      pins: [],
+    },
+    'gr-garden': {
+      key: 'gr-garden', name: 'Garden Club', icon: 'ph-fill ph-plant', color: '#74B992',
+      description: 'Community garden plots, seed swaps, and growing tips.',
+      memberCount: 12, isGroupChat: false, joined: true, muted: false,
+      members: [
+        { name: 'Rosa M.', initial: 'R', color: '#C75A31' },
+        { name: 'Priya S.', initial: 'P', color: '#2A9D5C' },
+        { name: 'You', initial: 'A', color: '#1A3352' },
+      ],
+      messages: [
+        { me: false, text: 'Free tomato starts at plot 4 — first come first served!', time: 'Today 9:00 AM' },
+      ],
+      polls: [{
+        id: 'gr-water', question: 'Preferred watering schedule?', author: 'Rosa M.', time: '1d ago',
+        options: ['Morning only', 'Morning + evening', 'Leave as is'],
+        votes: { 'Morning only': 3, 'Morning + evening': 6, 'Leave as is': 2 }, myVote: null,
+      }],
+      events: [{
+        id: 'gr-swap', title: 'Seed swap & potluck', when: 'Jul 20 · 10 AM', where: 'Garden pavilion', going: 8, rsvped: false,
+      }],
+      pins: [{ id: 'gr-rules', text: 'Plot assignments posted on the shed door. Water your plot or lose it after 2 weeks.', author: 'Rosa M.', time: '2w ago' }],
+    },
+    'gr-parents': {
+      key: 'gr-parents', name: 'Parents & Kids', icon: 'ph-fill ph-baby', color: '#4A90E2',
+      description: 'Playdates, babysitter recs, and kid-friendly events.',
+      memberCount: 18, isGroupChat: false, joined: false, muted: false,
+      members: [
+        { name: 'Rosa M.', initial: 'R', color: '#C75A31' },
+        { name: 'The Okafors', initial: 'O', color: '#D9A441' },
+      ],
+      messages: [
+        { me: false, text: 'Movie night this Friday — Encanto on the lawn', time: 'Mon 3:45 PM' },
+      ],
+      polls: [],
+      events: [{
+        id: 'pk-movie', title: 'Lawn movie night — Encanto', when: 'Fri · 7:30 PM', where: 'Clubhouse lawn', going: 14, rsvped: false,
+      }],
+      pins: [{ id: 'pk-sitters', text: 'Trusted babysitter list pinned — DM Rosa to add yours', author: 'Rosa M.', time: '1w ago' }],
+    },
+    'gr-pickle': {
+      key: 'gr-pickle', name: 'Pickleball', icon: 'ph-fill ph-tennis-ball', color: '#E06A3E',
+      description: 'Casual games, ladder matches, and court reservations.',
+      memberCount: 9, isGroupChat: false, joined: false, muted: false,
+      members: [
+        { name: 'Tom B.', initial: 'T', color: '#4A90E2' },
+        { name: 'Priya S.', initial: 'P', color: '#2A9D5C' },
+      ],
+      messages: [
+        { me: false, text: 'Court 2 open tomorrow 6-8 AM if anyone wants in', time: 'Sun 10:20 AM' },
+      ],
+      polls: [],
+      events: [{
+        id: 'pk-tourney', title: 'Summer tournament signups', when: 'Aug 3 · 9 AM', where: 'Courts 1-2', going: 6, rsvped: false,
+      }],
+      pins: [],
+    },
+  },
+  activeGroup: null,
+  groupChatInput: '',
+  createGroupOpen: false,
+  createGroupName: '',
+  createGroupDesc: '',
+  createGroupIcon: 'ph-fill ph-users-three',
+  createGroupColor: '#1A3352',
   // scenario flags
   showDelinquent: false,
   showSpecialAssessment: false,
@@ -505,10 +694,121 @@ export const usePavStore = create<PavState>()(persist((set, get) => ({
       commentInput: '',
     }));
   },
+
+  sendGroupMessage: () => {
+    const st = get();
+    const t = st.groupChatInput.trim();
+    const k = st.activeGroup;
+    if (!t || !k || !st.groups[k]) return;
+    const tm = now();
+    const epoch = st.epoch;
+    set((s) => ({
+      groups: {
+        ...s.groups,
+        [k]: { ...s.groups[k], messages: [...s.groups[k].messages, { me: true, text: t, time: tm }] },
+      },
+      groupChatInput: '',
+    }));
+    setTimeout(() => {
+      if (get().epoch !== epoch) return;
+      const g = get().groups[k];
+      if (!g) return;
+      const responder = g.members.find((m) => m.name !== 'You');
+      set((s) => ({
+        groups: {
+          ...s.groups,
+          [k]: { ...s.groups[k], messages: [...s.groups[k].messages, { me: false, text: '👍 Sounds good!', time: now() }] },
+        },
+      }));
+      void responder;
+    }, 1200);
+  },
+
+  createGroup: () => {
+    const st = get();
+    const name = st.createGroupName.trim();
+    if (!name) return;
+    const key = 'custom-' + Date.now();
+    const newGroup: GroupData = {
+      key, name, icon: st.createGroupIcon, color: st.createGroupColor,
+      description: st.createGroupDesc.trim() || 'A new community group',
+      memberCount: 1, isGroupChat: false, joined: true, muted: false,
+      members: [{ name: 'You', initial: 'A', color: '#1A3352' }],
+      messages: [], polls: [], events: [], pins: [],
+    };
+    set((s) => ({
+      groups: { ...s.groups, [key]: newGroup },
+      createGroupOpen: false, createGroupName: '', createGroupDesc: '', createGroupIcon: 'ph-fill ph-users-three', createGroupColor: '#1A3352',
+      activeGroup: key,
+    }));
+  },
+
+  toggleGroupJoin: (groupKey: string) => {
+    const g = get().groups[groupKey];
+    if (!g) return;
+    const joining = !g.joined;
+    set((s) => ({
+      groups: {
+        ...s.groups,
+        [groupKey]: {
+          ...g,
+          joined: joining,
+          memberCount: g.memberCount + (joining ? 1 : -1),
+          members: joining
+            ? [...g.members, { name: 'You', initial: 'A', color: '#1A3352' }]
+            : g.members.filter((m) => m.name !== 'You'),
+        },
+      },
+    }));
+  },
+
+  toggleGroupMute: (groupKey: string) => {
+    const g = get().groups[groupKey];
+    if (!g) return;
+    set((s) => ({
+      groups: { ...s.groups, [groupKey]: { ...g, muted: !g.muted } },
+    }));
+  },
+
+  voteGroupPoll: (groupKey: string, pollId: string, option: string) => {
+    const g = get().groups[groupKey];
+    if (!g) return;
+    set((s) => ({
+      groups: {
+        ...s.groups,
+        [groupKey]: {
+          ...g,
+          polls: g.polls.map((p) =>
+            p.id === pollId && !p.myVote
+              ? { ...p, myVote: option, votes: { ...p.votes, [option]: (p.votes[option] || 0) + 1 } }
+              : p
+          ),
+        },
+      },
+    }));
+  },
+
+  rsvpGroupEvent: (groupKey: string, eventId: string) => {
+    const g = get().groups[groupKey];
+    if (!g) return;
+    set((s) => ({
+      groups: {
+        ...s.groups,
+        [groupKey]: {
+          ...g,
+          events: g.events.map((e) =>
+            e.id === eventId
+              ? { ...e, rsvped: !e.rsvped, going: e.going + (e.rsvped ? -1 : 1) }
+              : e
+          ),
+        },
+      },
+    }));
+  },
 }), {
   name: 'pavilion-demo',
   partialize: (state) => {
-    const { typing, aiInput, chatInput, commentInput, searchQ, docQ, bcText, ...rest } = state;
+    const { typing, aiInput, chatInput, groupChatInput, commentInput, searchQ, docQ, bcText, ...rest } = state;
     return rest;
   },
 }));
