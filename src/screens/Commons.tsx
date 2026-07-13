@@ -362,7 +362,6 @@ export function Commons() {
           </div>
           <div className="flex flex-col gap-2.5">
             {DIR.map((d) => {
-              const waved = !!state.dirWaved[d.key];
               return (
                 <div
                   key={d.key}
@@ -386,18 +385,11 @@ export function Commons() {
                       {d.tags.join(' · ')}
                     </span>
                     <button
-                      onClick={() => set({ dirWaved: { ...state.dirWaved, [d.key]: true } })}
-                      className="border-none rounded-full px-3 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"
-                      style={waved ? { background: '#E9F6EE', color: '#228049' } : { background: '#1A3352', color: '#F5F0E6' }}
-                    >
-                      {waved ? 'Waved ✓' : 'Wave'}
-                    </button>
-                    <button
                       onClick={() => set({ chatWith: d.key })}
-                      className="rounded-full bg-transparent px-3 py-[7px] text-xs font-extrabold text-navy cursor-pointer flex-shrink-0"
-                      style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
+                      className="border-none rounded-full px-3 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"
+                      style={{ background: '#1A3352', color: '#F5F0E6' }}
                     >
-                      Message
+                      Send message
                     </button>
                   </div>
                 </div>

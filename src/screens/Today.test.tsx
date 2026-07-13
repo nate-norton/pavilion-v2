@@ -19,8 +19,8 @@ it('tenant sees rent-goes-to-landlord card, no pay card', () => {
   expect(screen.queryByText(/july dues are ready/i)).not.toBeInTheDocument();
 });
 
-it('wave button flips to sent state', () => {
+it('say hi button opens chat with Okafors', () => {
   render(<Today />);
-  fireEvent.click(screen.getByRole('button', { name: /wave/i }));
-  expect(screen.getByText(/wave sent/i)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: /say hi/i }));
+  expect(usePavStore.getState().chatWith).toBe('okafor');
 });

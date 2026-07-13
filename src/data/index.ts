@@ -10,5 +10,5 @@ export { PORTFOLIO } from './portfolio';
 export { AGING } from './aging';
 export { CIRC } from './circles';
 export { NOTIFS, NOTIF_CATS } from './notifications';
-export { CHAT_SEED } from './chats';
+export { CHAT_SEED, GROUP_CHATS, GROUPS } from './chats';
 export { DOCS, DOC_SECTIONS } from './documents';

@@ -305,19 +305,13 @@ export function Today() {
         <div className="flex items-center gap-3" style={ROW_PAD}>
           <PhIcon name="ph ph-hand-waving" size={17} color="#8A8375" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">The Okafors moved into #42</p>
-          {state.waved ? (
-            <span className="text-[12.5px] font-bold flex-shrink-0 text-sage">
-              Wave sent ✓
-            </span>
-          ) : (
-            <button
-              onClick={() => set({ waved: true })}
-              className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer flex-shrink-0"
-              style={{ color: '#C75A31', padding: '2px 4px' }}
-            >
-              Wave
-            </button>
-          )}
+          <button
+            onClick={() => set({ chatWith: 'okafor' })}
+            className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer flex-shrink-0"
+            style={{ color: '#C75A31', padding: '2px 4px' }}
+          >
+            Say hi
+          </button>
         </div>
       </div>
     </div>

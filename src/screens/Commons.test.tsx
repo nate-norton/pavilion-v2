@@ -21,15 +21,16 @@ it('comment can be added', () => {
   expect(screen.getAllByText('You').length).toBeGreaterThan(0);
 });
 
-it('wave and claim are one-directional (no un-wave/un-claim)', () => {
+it('send message button opens chat for directory entry', () => {
   render(<Commons />);
-
   fireEvent.click(screen.getByRole('button', { name: /^people$/i }));
-  const waveBtn = screen.getAllByRole('button', { name: /^wave$/i })[0];
-  fireEvent.click(waveBtn);
-  expect(screen.getByText(/waved ✓/i)).toBeInTheDocument();
-  fireEvent.click(screen.getByText(/waved ✓/i));
-  expect(screen.getByText(/waved ✓/i)).toBeInTheDocument();
+  const msgBtn = screen.getAllByRole('button', { name: /^send message$/i })[0];
+  fireEvent.click(msgBtn);
+  expect(usePavStore.getState().chatWith).toBeTruthy();
+});
+
+it('claim is one-directional (no un-claim)', () => {
+  render(<Commons />);
 
   fireEvent.click(screen.getByRole('button', { name: /^free stuff$/i }));
   const claimBtn = screen.getAllByRole('button', { name: /^claim$/i })[0];

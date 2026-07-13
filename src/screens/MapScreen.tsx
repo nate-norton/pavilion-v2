@@ -25,8 +25,12 @@ export function MapScreen() {
 
   const doPinAction = () => {
     if (!selPinObj) return;
-    if (selPinObj.go === 'wave') set({ waved: true, mapOpen: false, selPin: null, tab: 'today' });
-    else set({ mapOpen: false, selPin: null, tab: selPinObj.go });
+    if (selPinObj.go.startsWith('chat-')) {
+      const chatKey = selPinObj.go.replace('chat-', '');
+      set({ chatWith: chatKey, mapOpen: false, selPin: null });
+    } else {
+      set({ mapOpen: false, selPin: null, tab: selPinObj.go });
+    }
   };
 
   return (
