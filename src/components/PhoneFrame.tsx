@@ -26,7 +26,7 @@ export function PhoneFrame() {
       style={{ boxShadow: '0 40px 90px -30px rgba(50,42,26,0.5), 0 0 0 1px rgba(26,51,82,0.05)' }}
     >
       <ErrorBoundary>
-        <div key={tab} className={slideClass}>
+        <div key={tab} className={`absolute inset-0 ${slideClass}`}>
           {tab === 'today' ? (
             <Today />
           ) : tab === 'commons' ? (
