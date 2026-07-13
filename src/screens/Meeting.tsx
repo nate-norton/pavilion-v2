@@ -27,7 +27,7 @@ export function Meeting() {
       style={{ background: '#F5F0E6', padding: '60px 18px 40px' }}
     >
       <BackButton onClick={() => set({ meetingOpen: false })} />
-      <p className="m-0 mb-1.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.14em', color: '#C75A31' }}>
+      <p className="m-0 mb-1.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.14em', color: '#C75A31' }}>
         Annual meeting · Tue Jul 15 · 7 PM
       </p>
       <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">Juniper Ridge, assembled</h1>
@@ -38,10 +38,10 @@ export function Meeting() {
       {/* Quorum pledged */}
       <div className="bg-navy rounded-[18px] p-4 text-cream mb-3.5">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[11.5px] font-extrabold" style={{ color: 'rgba(245,240,230,0.8)' }}>
+          <span className="text-[11.5px] font-bold" style={{ color: 'rgba(245,240,230,0.8)' }}>
             QUORUM PLEDGED
           </span>
-          <span className="text-[11.5px] font-extrabold" style={{ color: 'rgba(245,240,230,0.8)' }}>
+          <span className="text-[11.5px] font-bold" style={{ color: 'rgba(245,240,230,0.8)' }}>
             {quorum.count} of 136 households
           </span>
         </div>
@@ -97,7 +97,7 @@ export function Meeting() {
           style={{ background: '#E9F6EE', border: '1px solid rgba(42,157,92,0.25)', borderRadius: 16, padding: '14px 16px' }}
         >
           <PhIcon name="ph-fill ph-hand-waving" size={20} color="#2A9D5C" className="flex-shrink-0" />
-          <p className="m-0 text-[13px] font-extrabold" style={{ color: '#228049' }}>
+          <p className="m-0 text-[13px] font-bold" style={{ color: '#228049' }}>
             You&apos;re #3 in the comment queue — we&apos;ll ping you when you&apos;re up.
           </p>
         </div>
@@ -138,7 +138,7 @@ export function Meeting() {
           style={{ background: '#E9F6EE', border: '1px solid rgba(42,157,92,0.25)', borderRadius: 16, padding: '14px 16px' }}
         >
           <PhIcon name="ph-fill ph-seal-check" size={20} color="#2A9D5C" className="flex-shrink-0" />
-          <p className="m-0 flex-1 text-[13px] font-extrabold" style={{ color: '#228049' }}>
+          <p className="m-0 flex-1 text-[13px] font-bold" style={{ color: '#228049' }}>
             {state.proxyPick} holds your proxy for Jul 15
           </p>
           <button

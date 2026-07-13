@@ -238,7 +238,7 @@ export function Hoa() {
               <div className="relative h-[78px]">
                 <div className="absolute left-0 right-0" style={{ top: 20, borderTop: '1.5px dashed rgba(199,90,49,0.45)' }} />
                 <span
-                  className="absolute right-0 bg-paper px-[3px] text-[9.5px] font-extrabold"
+                  className="absolute right-0 bg-paper px-[3px] text-[9.5px] font-bold"
                   style={{ top: 6, color: '#C75A31' }}
                 >
                   70% healthy line
@@ -281,9 +281,9 @@ export function Hoa() {
         {state.arcSubmitted && (
           <div onClick={() => set({ arcDetailId: 'A-121' })} className="bg-cream rounded-2xl px-3.5 py-[13px] mb-2.5 animate-fadeup cursor-pointer">
             <div className="flex items-center justify-between gap-2.5 mb-3">
-              <p className="m-0 text-[13.5px] font-extrabold text-navy">{arcNewTitle} · #A-121</p>
+              <p className="m-0 text-[13.5px] font-bold text-navy">{arcNewTitle} · #A-121</p>
               <span
-                className="rounded-full px-2.5 py-1 text-[11px] font-extrabold"
+                className="rounded-full px-2.5 py-1 text-[11px] font-bold"
                 style={{
                   background: approved ? '#E9F6EE' : '#FBEDE4',
                   color: approved ? '#228049' : '#C75A31',
@@ -298,8 +298,8 @@ export function Hoa() {
 
         <div onClick={() => set({ arcDetailId: 'A-118' })} className="bg-cream rounded-2xl px-3.5 py-[13px] cursor-pointer">
           <div className="flex items-center justify-between gap-2.5 mb-3">
-            <p className="m-0 text-[13.5px] font-extrabold text-navy">Backyard pergola · #A-118</p>
-            <span className="rounded-full px-2.5 py-1 text-[11px] font-extrabold" style={{ background: '#E9F6EE', color: '#228049' }}>
+            <p className="m-0 text-[13.5px] font-bold text-navy">Backyard pergola · #A-118</p>
+            <span className="rounded-full px-2.5 py-1 text-[11px] font-bold" style={{ background: '#E9F6EE', color: '#228049' }}>
               Approved
             </span>
           </div>
@@ -324,7 +324,7 @@ export function Hoa() {
           <PhIcon name="ph-fill ph-lightbulb" size={16} color="#D9A441" className="flex-shrink-0" />
           <span className="flex-1 text-[13px] font-bold text-navy">Streetlight · Alder Way</span>
           <span
-            className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold flex-shrink-0"
+            className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0"
             style={{
               background: state.reportTicketed ? '#E9F6EE' : '#FBF3E0',
               color: state.reportTicketed ? '#228049' : '#A87B1F',
@@ -341,7 +341,7 @@ export function Hoa() {
           <PhIcon name="ph-fill ph-wrench" size={16} color="#C75A31" className="flex-shrink-0" />
           <span className="flex-1 text-[13px] font-bold text-navy">Pool gate latch</span>
           <span
-            className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold flex-shrink-0"
+            className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0"
             style={{
               background: state.gateScheduled ? '#E9F6EE' : '#FBF3E0',
               color: state.gateScheduled ? '#228049' : '#A87B1F',
@@ -356,7 +356,7 @@ export function Hoa() {
             Irrigation valve · the Green
           </span>
           <span
-            className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold flex-shrink-0 bg-sand"
+            className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0 bg-sand"
             style={{ color: '#6E6759' }}
           >
             Fixed Jun 24
@@ -386,7 +386,7 @@ export function Hoa() {
               </span>
               <span className="flex-1 text-[13px] font-bold text-navy">{d.text}</span>
               <span
-                className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold flex-shrink-0"
+                className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0"
                 style={{ background: d.bg, color: d.color }}
               >
                 {d.pill}
@@ -404,7 +404,7 @@ export function Hoa() {
           style={{ border: '1px solid rgba(26,51,82,0.08)' }}
         >
           <PhIcon name="ph-fill ph-files" size={22} color="#1A3352" />
-          <p className="mt-[9px] mb-0.5 text-[13.5px] font-extrabold text-navy">Documents</p>
+          <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold text-navy">Documents</p>
           <p className="m-0 text-[11.5px] font-semibold text-stone">
             CC&amp;Rs · Bylaws · Budget · Minutes
           </p>
@@ -415,7 +415,7 @@ export function Hoa() {
           style={{ background: 'linear-gradient(150deg,#E06A3E,#C75A31)' }}
         >
           <PhIcon name="ph-fill ph-sparkle" size={22} color="#fff" />
-          <p className="mt-[9px] mb-0.5 text-[13.5px] font-extrabold">Ask Penny</p>
+          <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold">Ask Penny</p>
           <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgba(255,255,255,0.85)' }}>
             &quot;Can I paint my fence black?&quot;
           </p>

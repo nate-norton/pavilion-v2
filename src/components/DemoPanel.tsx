@@ -42,7 +42,7 @@ export function DemoPanel() {
   return (
     <div className="hidden lg:flex flex-col gap-5 w-[260px] flex-shrink-0 select-none">
       <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-sm">
-        <p className="text-[11px] font-extrabold text-bark/50 uppercase tracking-wider mb-3">
+        <p className="text-[11px] font-bold text-bark/50 uppercase tracking-wider mb-3">
           Role
         </p>
         <div className="flex gap-1.5">
@@ -63,7 +63,7 @@ export function DemoPanel() {
       </div>
 
       <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-sm">
-        <p className="text-[11px] font-extrabold text-bark/50 uppercase tracking-wider mb-3">
+        <p className="text-[11px] font-bold text-bark/50 uppercase tracking-wider mb-3">
           Scenarios
         </p>
         <div className="flex flex-col gap-3">
@@ -81,7 +81,7 @@ export function DemoPanel() {
       </div>
 
       <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-sm">
-        <p className="text-[11px] font-extrabold text-bark/50 uppercase tracking-wider mb-3">
+        <p className="text-[11px] font-bold text-bark/50 uppercase tracking-wider mb-3">
           State
         </p>
         <div className="flex flex-wrap gap-1.5">
@@ -104,7 +104,7 @@ export function DemoPanel() {
 function StatePill({ label, active }: { label: string; active: boolean }) {
   return (
     <span
-      className="rounded-full px-2.5 py-1 text-[11px] font-extrabold"
+      className="rounded-full px-2.5 py-1 text-[11px] font-bold"
       style={{
         background: active ? 'rgba(42,157,92,0.12)' : 'rgba(26,51,82,0.06)',
         color: active ? '#2A9D5C' : '#8A7F6F',

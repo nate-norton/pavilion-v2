@@ -8,7 +8,7 @@ export interface AvatarProps {
 export function Avatar({ initial, color, size = 32 }: AvatarProps) {
   return (
     <div
-      className="rounded-full flex items-center justify-center flex-shrink-0 font-extrabold text-cream"
+      className="rounded-full flex items-center justify-center flex-shrink-0 font-bold text-cream"
       style={{ width: size, height: size, background: color, fontSize: size * 0.375 }}
     >
       {initial}

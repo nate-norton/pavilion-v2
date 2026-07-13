@@ -60,8 +60,7 @@ export function BoardDesk() {
       <div className="flex items-center justify-between gap-2.5 mb-2.5">
         <button
           onClick={exitBoard}
-          className="border-0 bg-transparent flex items-center gap-[5px] text-[13px] font-extrabold cursor-pointer p-0"
-          style={{ color: '#8A8375' }}
+          className="border-0 bg-transparent flex items-center gap-[5px] text-[13px] font-extrabold cursor-pointer p-0 text-stone"
         >
           <PhIcon name="ph-bold ph-arrow-left" size={14} />
           Resident view

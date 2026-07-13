@@ -59,7 +59,7 @@ function EventIcon({ bg, icon, color }: { bg: string; icon: string; color: strin
 function EventTitle({ title, sub }: { title: string; sub: ReactNode }) {
   return (
     <div className="flex-1 min-w-0">
-      <p className="m-0 mb-px text-[13.5px] font-extrabold text-navy">{title}</p>
+      <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{title}</p>
       <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
         {sub}
       </p>
@@ -140,7 +140,7 @@ export function Events() {
             <EventTitle title="Movie on the lawn · Sat, dusk" sub={`${movieGoing} going · The Green`} />
             <RsvpButton going={state.rsvpMovie} onToggle={() => set({ rsvpMovie: !state.rsvpMovie })} />
           </div>
-          <p className="m-0 mb-[7px] text-[10.5px] font-extrabold uppercase" style={{ letterSpacing: '0.1em', color: '#8A8375' }}>
+          <p className="m-0 mb-[7px] text-[10.5px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: '#8A8375' }}>
             Volunteer slots
           </p>
           <div className="flex flex-col gap-1.5">
@@ -149,7 +149,7 @@ export function Events() {
               <span className="flex-1 text-xs font-bold" style={{ color: '#5B554A' }}>
                 Blankets &amp; chairs
               </span>
-              <span className="text-[11px] font-extrabold" style={{ color: '#A39B8B' }}>
+              <span className="text-[11px] font-bold" style={{ color: '#A39B8B' }}>
                 Filled
               </span>
             </div>
@@ -159,7 +159,7 @@ export function Events() {
                 Popcorn duty · 2 of 3
               </span>
               {state.volPopcorn ? (
-                <span className="text-[11px] font-extrabold" style={{ color: '#2A9D5C' }}>
+                <span className="text-[11px] font-bold" style={{ color: '#2A9D5C' }}>
                   You&apos;re in ✓
                 </span>
               ) : (
@@ -178,7 +178,7 @@ export function Events() {
               <span className="flex-1 text-xs font-bold" style={{ color: '#5B554A' }}>
                 Projector &amp; screen
               </span>
-              <span className="text-[11px] font-extrabold" style={{ color: '#A39B8B' }}>
+              <span className="text-[11px] font-bold" style={{ color: '#A39B8B' }}>
                 Filled
               </span>
             </div>

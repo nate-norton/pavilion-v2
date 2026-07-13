@@ -89,7 +89,7 @@ export function Documents() {
                   <PhIcon name={d.icon} size={19} color="#1A3352" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="m-0 mb-px text-[13.5px] font-extrabold text-navy">{d.title}</p>
+                  <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{d.title}</p>
                   <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
                     {d.sub}
                   </p>
@@ -135,7 +135,7 @@ export function Documents() {
             {DOC_SECTIONS.map((s) => (
               <span
                 key={s.tag}
-                className="inline-flex items-center gap-[5px] rounded-full text-[11.5px] font-extrabold"
+                className="inline-flex items-center gap-[5px] rounded-full text-[11.5px] font-bold"
                 style={{ background: '#EDE6D6', color: '#5B554A', padding: '6px 11px' }}
               >
                 <span style={{ color: '#C75A31' }}>{s.tag}</span>
@@ -157,7 +157,7 @@ export function Documents() {
           {showEx && (
             <div style={SECTION_CARD}>
               <div className="flex items-center justify-between gap-2.5 mb-[7px]">
-                <p className="m-0 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.1em', color: '#C75A31' }}>
+                <p className="m-0 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: '#C75A31' }}>
                   §4 · Exteriors
                 </p>
                 <button
@@ -179,7 +179,7 @@ export function Documents() {
               </p>
               {state.diffOpen && (
                 <div className="animate-fadeup" style={{ marginTop: 11, borderTop: '1px dashed rgba(26,51,82,0.12)', paddingTop: 11 }}>
-                  <p className="m-0 mb-1.5 text-[10.5px] font-extrabold uppercase" style={{ letterSpacing: '0.08em', color: '#8A8375' }}>
+                  <p className="m-0 mb-1.5 text-[10.5px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: '#8A8375' }}>
                     March 2026 revision · §4.2
                   </p>
                   <p className="m-0 mb-[5px] text-[12.5px] font-bold" style={{ lineHeight: 1.55 }}>
@@ -202,7 +202,7 @@ export function Documents() {
 
           {showLiv && (
             <div style={SECTION_CARD}>
-              <p className="m-0 mb-[7px] text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.1em', color: '#8A8375' }}>
+              <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: '#8A8375' }}>
                 §5 · Living
               </p>
               <p className="m-0 text-[13px] font-semibold" style={{ lineHeight: 1.65, color: '#3E4C63' }}>
@@ -214,7 +214,7 @@ export function Documents() {
 
           {showLease && (
             <div style={SECTION_CARD}>
-              <p className="m-0 mb-[7px] text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.1em', color: '#8A8375' }}>
+              <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: '#8A8375' }}>
                 §7 · Leasing
               </p>
               <p className="m-0 text-[13px] font-semibold" style={{ lineHeight: 1.65, color: '#3E4C63' }}>
@@ -226,7 +226,7 @@ export function Documents() {
 
           {showAssess && (
             <div style={{ ...SECTION_CARD, marginBottom: 0 }}>
-              <p className="m-0 mb-[7px] text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.1em', color: '#8A8375' }}>
+              <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: '#8A8375' }}>
                 §9 · Assessments
               </p>
               <p className="m-0 text-[13px] font-semibold" style={{ lineHeight: 1.65, color: '#3E4C63' }}>
@@ -239,7 +239,7 @@ export function Documents() {
           {noMatch && (
             <div className="text-center" style={{ padding: '24px 16px' }}>
               <PhIcon name="ph ph-file-magnifying-glass" size={32} color="#A39B8B" className="inline-block" />
-              <p className="mt-[9px] mb-0.5 text-sm font-extrabold text-navy">No section matches that</p>
+              <p className="mt-[9px] mb-0.5 text-sm font-bold text-navy">No section matches that</p>
               <p className="m-0 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
                 Try &quot;palette&quot;, &quot;quiet&quot;, &quot;lease&quot; — or ask Penny above.
               </p>
@@ -269,7 +269,7 @@ function GenericDocReader() {
       </p>
       {content.sections.map((s) => (
         <div key={s.tag} style={SECTION_CARD}>
-          <p className="m-0 mb-[7px] text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.1em', color: '#C75A31' }}>
+          <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: '#C75A31' }}>
             {s.tag} · {s.name}
           </p>
           <p className="m-0 text-[13px] font-semibold" style={{ lineHeight: 1.65, color: '#3E4C63' }}>

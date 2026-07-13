@@ -357,13 +357,13 @@ export function MyPlace() {
           >
             S
           </div>
-          <p className="m-0 flex-1 text-[13.5px] font-extrabold text-navy">
+          <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
             Sam R.{' '}
-            <span className="font-semibold" style={{ color: '#A39B8B' }}>
+            <span className="font-semibold text-stonelight">
               · Partner
             </span>
           </p>
-          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold" style={{ background: '#EDE6D6', color: '#6E6759' }}>
+          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: '#EDE6D6', color: '#6E6759' }}>
             Member
           </span>
         </div>
@@ -378,7 +378,7 @@ export function MyPlace() {
             >
               <PhIcon name="ph-bold ph-envelope-simple" size={14} />
             </div>
-            <p className="m-0 flex-1 text-[13px] font-bold" style={{ color: '#8A8375' }}>
+            <p className="m-0 flex-1 text-[13px] font-bold text-stone">
               Invite sent — they&apos;ll join once they accept
             </p>
           </div>
@@ -388,7 +388,7 @@ export function MyPlace() {
       {/* Vehicles & pets */}
       <div style={CARD}>
         <p className="m-0 mb-[3px] font-serif text-base text-navy">Vehicles &amp; pets</p>
-        <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+        <p className="m-0 mb-3 text-[11.5px] font-semibold text-stone">
           On file for guest passes, gate logs &amp; the pet registry.
         </p>
         <div
@@ -399,8 +399,8 @@ export function MyPlace() {
             <PhIcon name="ph-fill ph-car" size={17} color="#3A73B5" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="m-0 text-[13px] font-extrabold text-navy">Subaru Outback · Slate</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+            <p className="m-0 text-[13px] font-bold text-navy">Subaru Outback · Slate</p>
+            <p className="m-0 text-[11.5px] font-semibold text-stone">
               Plate 8XR-4471 · resident decal #204
             </p>
           </div>
@@ -413,8 +413,8 @@ export function MyPlace() {
             <PhIcon name="ph-fill ph-dog" size={17} color="#A87B1F" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="m-0 text-[13px] font-extrabold text-navy">Biscuit · Golden mix</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+            <p className="m-0 text-[13px] font-bold text-navy">Biscuit · Golden mix</p>
+            <p className="m-0 text-[11.5px] font-semibold text-stone">
               Registered · licensed &amp; up to date
             </p>
           </div>
@@ -529,7 +529,7 @@ export function MyPlace() {
           <PhIcon name="ph-fill ph-bell" size={17} color="#1A3352" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13px] font-bold text-navy">
             Notifications{' '}
-            <span className="font-semibold" style={{ color: '#A39B8B' }}>
+            <span className="font-semibold text-stonelight">
               · Digest + urgent only
             </span>
           </p>
@@ -554,7 +554,7 @@ export function MyPlace() {
             <PhIcon name="ph-fill ph-translate" size={17} color="#1A3352" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13px] font-bold text-navy">
               Language{' '}
-              <span className="font-semibold" style={{ color: '#A39B8B' }}>
+              <span className="font-semibold text-stonelight">
                 · English
               </span>
             </p>

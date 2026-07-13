@@ -45,7 +45,7 @@ export function Search() {
 
       {sq.length === 0 && (
         <div>
-          <p className="m-0 mb-2.5 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             One box for everything
           </p>
           <p className="m-0 mb-3.5 text-[13px] font-semibold" style={{ lineHeight: 1.55, color: '#7A7365' }}>
@@ -79,13 +79,13 @@ export function Search() {
                 <PhIcon name={r.icon} size={17} color="#1A3352" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="m-0 mb-px text-[13px] font-extrabold text-navy leading-[1.3]">{r.title}</p>
+                <p className="m-0 mb-px text-[13px] font-bold text-navy leading-[1.3]">{r.title}</p>
                 <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
                   {r.sub}
                 </p>
               </div>
               <span
-                className="rounded-full text-[10px] font-extrabold flex-shrink-0"
+                className="rounded-full text-[10px] font-bold flex-shrink-0"
                 style={{ background: '#F5F0E6', color: '#8A8375', padding: '3px 9px' }}
               >
                 {r.cat}
@@ -98,7 +98,7 @@ export function Search() {
       {sq.length > 0 && rows.length === 0 && (
         <div className="text-center" style={{ padding: '34px 16px' }}>
           <PhIcon name="ph ph-binoculars" size={34} color="#A39B8B" className="inline-block" />
-          <p className="mt-2.5 mb-1 text-sm font-extrabold text-navy">Nothing in the Ridge matches that</p>
+          <p className="mt-2.5 mb-1 text-sm font-bold text-navy">Nothing in the Ridge matches that</p>
           <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
             Penny can dig deeper — she&apos;s read every page.
           </p>

@@ -39,7 +39,7 @@ export function CircleDetail() {
       </div>
       <div className="flex items-center justify-between gap-2.5 mb-1">
         <h1 className="m-0 font-serif font-normal text-[26px] text-navy">Garden Circle</h1>
-        <span className="rounded-full text-[11px] font-extrabold" style={{ background: '#E9F6EE', color: '#228049', padding: '5px 12px' }}>
+        <span className="rounded-full text-[11px] font-bold" style={{ background: '#E9F6EE', color: '#228049', padding: '5px 12px' }}>
           Joined ✓
         </span>
       </div>
@@ -67,7 +67,7 @@ export function CircleDetail() {
       <div className="bg-navy rounded-[18px] p-4 text-cream mb-3.5">
         <div className="flex items-center justify-between gap-2.5">
           <div className="min-w-0">
-            <p className="m-0 mb-[3px] text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#E8A788' }}>
+            <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: '#E8A788' }}>
               Next meetup · Sat, 9 AM
             </p>
             <p className="m-0 mb-[3px] font-serif text-base leading-[1.25]">Work party — plot row 3</p>
@@ -99,13 +99,13 @@ export function CircleDetail() {
       </div>
 
       <div style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', borderRadius: 16, padding: 15, marginBottom: 10 }}>
-        <p className="m-0 mb-1 text-[12.5px] font-extrabold text-navy">Tomato starts — free on the bench by plot 4</p>
+        <p className="m-0 mb-1 text-[12.5px] font-bold text-navy">Tomato starts — free on the bench by plot 4</p>
         <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
           Garden Circle · 1d · 9 likes
         </p>
       </div>
       <div style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', borderRadius: 16, padding: 15 }}>
-        <p className="m-0 mb-1 text-[12.5px] font-extrabold text-navy">Compost bin how-to (with photos)</p>
+        <p className="m-0 mb-1 text-[12.5px] font-bold text-navy">Compost bin how-to (with photos)</p>
         <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
           Rosa M. · 4d · 12 likes
         </p>
