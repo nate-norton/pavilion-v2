@@ -199,7 +199,7 @@ export function Hoa() {
               <span className="flex-1 text-[12.5px] font-bold text-bark">
                 {item.label}
               </span>
-              <span className="text-[12.5px] font-extrabold text-navy">{item.amount}</span>
+              <span className="text-[12.5px] font-bold text-navy">{item.amount}</span>
             </div>
           ))}
         </div>
