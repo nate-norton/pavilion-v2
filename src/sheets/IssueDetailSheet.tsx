@@ -108,11 +108,11 @@ export function IssueDetailSheet() {
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
         <div className="flex items-center gap-2.5 mb-2">
           <PhIcon name="ph-fill ph-map-trifold" size={14} color="#8A8375" />
-          <p className="m-0 text-[13px] font-semibold text-navy">{issue.location}</p>
+          <p className="m-0 text-[13px] font-bold text-navy">{issue.location}</p>
         </div>
         <div className="flex items-center gap-2.5">
           <PhIcon name="ph-fill ph-users" size={14} color="#8A8375" />
-          <p className="m-0 text-[13px] font-semibold text-navy">{issue.reporters}</p>
+          <p className="m-0 text-[13px] font-bold text-navy">{issue.reporters}</p>
         </div>
       </div>
 

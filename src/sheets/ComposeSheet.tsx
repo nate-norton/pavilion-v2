@@ -31,7 +31,7 @@ export function ComposeSheet() {
           <Confetti />
           <PhIcon name="ph-fill ph-check-circle" size={40} color="#2A9D5C" />
           <p className="m-0 mt-3 font-serif text-[19px] text-navy">Posted!</p>
-          <p className="m-0 mt-1 text-[13px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mt-1 text-[13px] font-bold" style={{ color: '#8A8375' }}>
             Your neighbors will see this in the feed.
           </p>
         </div>
