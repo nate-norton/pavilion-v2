@@ -27,7 +27,7 @@ export function PennySheet() {
       <div
         data-testid="penny-scrim"
         onClick={close}
-        className="absolute inset-0"
+        className="absolute inset-0 animate-scrimfade"
         style={{ background: 'rgba(26,30,20,0.4)' }}
       />
       <div
@@ -66,7 +66,7 @@ export function PennySheet() {
           {msgs.map((m, i) => (
             <div key={i} className="flex" style={{ justifyContent: m.me ? 'flex-end' : 'flex-start' }}>
               <div
-                className="max-w-[82%] animate-fadeup"
+                className="max-w-[82%] animate-msgbubble"
                 style={{
                   background: m.me ? '#1A3352' : '#FFFEFA',
                   color: m.me ? '#F5F0E6' : '#1A3352',

@@ -40,7 +40,7 @@ export function Toggle({ on, onToggle, size = 'sm' }: ToggleProps) {
           height: knob,
           boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
           transform: on ? `translateX(${travel}px)` : 'translateX(0)',
-          transition: 'transform 0.2s ease',
+          transition: 'transform 0.2s cubic-bezier(0.32,1.2,0.5,1)',
         }}
       />
     </div>

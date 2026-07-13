@@ -115,7 +115,7 @@ export function CircleDetail() {
                 onClick={() => set({ circlePostLiked: { ...state.circlePostLiked, [post.id]: !liked } })}
                 className="border-none bg-transparent flex items-center gap-1 cursor-pointer p-0"
               >
-                <PhIcon name={liked ? 'ph-fill ph-heart' : 'ph ph-heart'} size={14} color={liked ? '#E06A3E' : '#A39B8B'} />
+                <PhIcon name={liked ? 'ph-fill ph-heart' : 'ph ph-heart'} size={14} color={liked ? '#E06A3E' : '#A39B8B'} className={liked ? 'animate-heartpop' : ''} />
                 <span className="text-[11.5px] font-bold" style={{ color: liked ? '#E06A3E' : '#A39B8B' }}>
                   {post.likes + (liked ? 1 : 0)}
                 </span>

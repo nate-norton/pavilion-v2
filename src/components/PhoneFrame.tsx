@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { usePavStore } from '../store/store';
 import { Commons } from '../screens/Commons';
 import { Hoa } from '../screens/Hoa';
@@ -7,17 +8,16 @@ import { ErrorBoundary } from './ErrorBoundary';
 import { NavDock } from './NavDock';
 import { Overlays } from './Overlays';
 
-const SCREEN_LABELS: Record<string, string> = {
-  today: 'Today',
-  commons: 'Commons',
-  reserve: 'Reserve',
-  hoa: 'HOA',
-};
+const TAB_ORDER: Record<string, number> = { today: 0, commons: 1, reserve: 2, hoa: 3 };
 
 /** The 393x830 phone shell: status bar, active tab screen, overlays, nav dock. */
 export function PhoneFrame() {
   const tab = usePavStore((s) => s.tab);
-  const label = SCREEN_LABELS[tab] ?? 'Today';
+  const prevTab = useRef(tab);
+  const goingRight = (TAB_ORDER[tab] ?? 0) >= (TAB_ORDER[prevTab.current] ?? 0);
+  prevTab.current = tab;
+
+  const slideClass = goingRight ? 'animate-slideleft' : 'animate-slideright';
 
   return (
     <div
@@ -26,17 +26,19 @@ export function PhoneFrame() {
       style={{ boxShadow: '0 40px 90px -30px rgba(50,42,26,0.5), 0 0 0 1px rgba(26,51,82,0.05)' }}
     >
       <ErrorBoundary>
-        {tab === 'today' ? (
-          <Today />
-        ) : tab === 'commons' ? (
-          <Commons />
-        ) : tab === 'reserve' ? (
-          <Reserve />
-        ) : tab === 'hoa' ? (
-          <Hoa />
-        ) : (
-          <div data-screen-label={label} className="pav-scroll absolute inset-0 overflow-y-auto animate-scpop" />
-        )}
+        <div key={tab} className={slideClass}>
+          {tab === 'today' ? (
+            <Today />
+          ) : tab === 'commons' ? (
+            <Commons />
+          ) : tab === 'reserve' ? (
+            <Reserve />
+          ) : tab === 'hoa' ? (
+            <Hoa />
+          ) : (
+            <div className="pav-scroll absolute inset-0 overflow-y-auto" />
+          )}
+        </div>
         <Overlays />
         <NavDock />
       </ErrorBoundary>

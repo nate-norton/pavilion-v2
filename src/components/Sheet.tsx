@@ -19,7 +19,7 @@ export function Sheet({ open, onClose, children, maxHeight }: SheetProps) {
       <div
         data-testid="sheet-scrim"
         onClick={onClose}
-        className="absolute inset-0"
+        className="absolute inset-0 animate-scrimfade"
         style={{ background: 'rgba(26,30,20,0.4)' }}
       />
       <div
