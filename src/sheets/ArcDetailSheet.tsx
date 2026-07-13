@@ -63,7 +63,7 @@ export function ArcDetailSheet() {
       <div className="flex items-center justify-between gap-2.5 mb-4">
         <p className="m-0 font-serif text-[19px] text-navy">{item.title}</p>
         <span
-          className="rounded-full px-2.5 py-1 text-[11px] font-extrabold flex-shrink-0"
+          className="rounded-full px-2.5 py-1 text-[11px] font-bold flex-shrink-0"
           style={{
             background: isApproved ? '#E9F6EE' : '#FBEDE4',
             color: isApproved ? '#228049' : '#C75A31',
@@ -73,7 +73,7 @@ export function ArcDetailSheet() {
         </span>
       </div>
 
-      <p className="m-0 text-[11px] font-extrabold uppercase tracking-wider mb-1" style={{ color: '#A39B8B' }}>
+      <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1" style={{ color: '#A39B8B' }}>
         Request #{item.id}
       </p>
 
@@ -82,7 +82,7 @@ export function ArcDetailSheet() {
       </div>
 
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3.5">
-        <p className="m-0 text-[11px] font-extrabold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
           Description
         </p>
         <p className="m-0 text-[13.5px] font-semibold text-navy leading-relaxed">
@@ -92,7 +92,7 @@ export function ArcDetailSheet() {
 
       {item.conditions && (
         <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3.5">
-          <p className="m-0 text-[11px] font-extrabold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
             Conditions
           </p>
           <p className="m-0 text-[13.5px] font-semibold text-navy leading-relaxed">

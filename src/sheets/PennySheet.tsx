@@ -45,7 +45,7 @@ export function PennySheet() {
             <PhIcon name="ph-fill ph-sparkle" size={18} color="#fff" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="m-0 text-[15px] font-extrabold text-navy">Penny</p>
+            <p className="m-0 text-[15px] font-bold text-navy">Penny</p>
             <p className="m-0 text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
               Answers cite Juniper Ridge&apos;s actual documents
             </p>
@@ -75,7 +75,7 @@ export function PennySheet() {
                   padding: '11px 14px',
                 }}
               >
-                <p className="m-0 text-[13.5px] leading-[1.5] font-semibold">{m.text}</p>
+                <p className="m-0 text-[13.5px] leading-[1.5] font-bold">{m.text}</p>
                 {m.cite && (
                   <button
                     onClick={openCite}
@@ -83,7 +83,7 @@ export function PennySheet() {
                     style={{ background: '#F5F0E6', border: '1px solid rgba(26,51,82,0.14)' }}
                   >
                     <PhIcon name="ph-fill ph-file-text" size={12} color="#C75A31" />
-                    <span className="text-[11px] font-extrabold" style={{ color: '#5B554A' }}>
+                    <span className="text-[11px] font-bold" style={{ color: '#5B554A' }}>
                       {m.cite}
                     </span>
                     <PhIcon name="ph-bold ph-arrow-up-right" size={10} color="#A39B8B" />
@@ -127,7 +127,7 @@ export function PennySheet() {
               if (e.key === 'Enter') send();
             }}
             placeholder="Ask about rules, dues, amenities…"
-            className="flex-1 rounded-full px-4 py-3 text-[13.5px] font-semibold text-navy outline-none font-sans"
+            className="flex-1 rounded-full px-4 py-3 text-[13.5px] font-bold text-navy outline-none font-sans"
             style={{ border: '1px solid rgba(26,51,82,0.12)', background: '#FFFEFA' }}
           />
           <button

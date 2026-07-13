@@ -41,7 +41,7 @@ export function Messages() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2">
-                  <p className="m-0 flex-1 text-sm font-extrabold text-navy min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
+                  <p className="m-0 flex-1 text-sm font-bold text-navy min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
                     {p.name}{' '}
                     <span className="font-semibold" style={{ color: '#A39B8B' }}>
                       · {p.unit}

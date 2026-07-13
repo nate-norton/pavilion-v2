@@ -45,7 +45,7 @@ export function Chat() {
           {p.initial}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="m-0 text-[14.5px] font-extrabold text-navy">
+          <p className="m-0 text-[14.5px] font-bold text-navy">
             {p.name}{' '}
             <span className="font-semibold" style={{ color: '#A39B8B' }}>
               · {p.unit}

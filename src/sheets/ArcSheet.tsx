@@ -15,12 +15,12 @@ export function ArcSheet() {
   return (
     <Sheet open={state.arcSheetOpen} onClose={closeArc} maxHeight="86%">
       <p className="m-0 mb-0.5 font-serif text-xl text-navy">New ARC request</p>
-      <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
+      <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: '#8A8375' }}>
         Most requests get a decision within 7 days.
       </p>
 
       <p
-        className="m-0 mb-2 text-[11px] font-extrabold uppercase text-stone"
+        className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
         style={{ letterSpacing: '0.12em' }}
       >
         Project type
@@ -38,7 +38,7 @@ export function ArcSheet() {
       </div>
 
       <p
-        className="m-0 mb-2 text-[11px] font-extrabold uppercase text-stone"
+        className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
         style={{ letterSpacing: '0.12em' }}
       >
         Describe the change
@@ -47,12 +47,12 @@ export function ArcSheet() {
         value={state.arcDesc}
         onChange={(e) => set({ arcDesc: e.target.value })}
         placeholder="e.g. Repaint front door in Sage, per the approved palette"
-        className="w-full bg-[#FFFEFA] rounded-[13px] px-3.5 py-3 text-[13.5px] font-semibold text-navy outline-none font-sans resize-none mb-4"
+        className="w-full bg-[#FFFEFA] rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans resize-none mb-4"
         style={{ minHeight: 72, border: '1px solid rgba(26,51,82,0.12)' }}
       />
 
       <p
-        className="m-0 mb-2 text-[11px] font-extrabold uppercase text-stone"
+        className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
         style={{ letterSpacing: '0.12em' }}
       >
         Photos

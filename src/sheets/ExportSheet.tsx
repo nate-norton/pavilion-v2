@@ -31,7 +31,7 @@ export function ExportSheet() {
               <PhIcon name="ph-fill ph-arrows-clockwise" size={18} color="#2A9D5C" />
             </div>
             <div className="flex-1">
-              <p className="m-0 mb-px text-sm font-extrabold text-navy">Sync to QuickBooks</p>
+              <p className="m-0 mb-px text-sm font-bold text-navy">Sync to QuickBooks</p>
               <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
                 Online · connected as treasurer@juniperridge.org
               </p>
@@ -47,7 +47,7 @@ export function ExportSheet() {
               <PhIcon name="ph-fill ph-file-csv" size={18} color="#5B554A" />
             </div>
             <div className="flex-1">
-              <p className="m-0 mb-px text-sm font-extrabold text-navy">Download CSV</p>
+              <p className="m-0 mb-px text-sm font-bold text-navy">Download CSV</p>
               <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
                 For Excel, Xero, or your accountant
               </p>

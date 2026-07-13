@@ -91,7 +91,7 @@ export function IssueDetailSheet() {
           <p className="m-0 font-serif text-[19px] text-navy">{issue.title}</p>
         </div>
         <span
-          className="rounded-full px-2.5 py-1 text-[11px] font-extrabold flex-shrink-0"
+          className="rounded-full px-2.5 py-1 text-[11px] font-bold flex-shrink-0"
           style={{
             background: isResolved ? '#E9F6EE' : '#FBF3E0',
             color: isResolved ? '#228049' : '#A87B1F',
@@ -118,7 +118,7 @@ export function IssueDetailSheet() {
 
       {issue.vendor && (
         <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-          <p className="m-0 text-[11px] font-extrabold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
             Vendor
           </p>
           <p className="m-0 text-[13.5px] font-bold text-navy">{issue.vendor}</p>

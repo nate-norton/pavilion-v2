@@ -70,7 +70,7 @@ export function BoardDesk() {
         </span>
       </div>
       <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">Board desk</h1>
-      <p className="m-0 mb-3.5 text-[13.5px] font-semibold" style={{ color: '#7A7365' }}>
+      <p className="m-0 mb-3.5 text-[13.5px] font-semibold text-taupe">
         {triage.summary}
       </p>
 
@@ -118,7 +118,7 @@ export function BoardDesk() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">Streetlight out on Alder Way</p>
-                  <p className="m-0 text-xs font-semibold" style={{ color: '#8A8375' }}>
+                  <p className="m-0 text-xs font-semibold text-stone">
                     Reported privately by #31 · 2h ago
                   </p>
                 </div>
@@ -149,7 +149,7 @@ export function BoardDesk() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">{reportTypeLabel} · #M-89</p>
-                    <p className="m-0 text-xs font-semibold" style={{ color: '#8A8375' }}>
+                    <p className="m-0 text-xs font-semibold text-stone">
                       Reported privately by #27 · just now
                     </p>
                   </div>
@@ -181,7 +181,7 @@ export function BoardDesk() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">ARC #A-121 · {arcNewTitle}</p>
-                    <p className="m-0 text-xs font-semibold" style={{ color: '#8A8375' }}>
+                    <p className="m-0 text-xs font-semibold text-stone">
                       #27 Alder Way · submitted today · {arcDescSnippet}
                     </p>
                   </div>
@@ -207,7 +207,7 @@ export function BoardDesk() {
                 {state.arcApprovedByBoard && (
                   <div className="rounded-[11px] px-3 py-2.5 flex items-center gap-2 animate-fadeup" style={{ background: '#E9F6EE' }}>
                     <PhIcon name="ph-fill ph-seal-check" size={16} color="#2A9D5C" />
-                    <span className="text-[12.5px] font-bold" style={{ color: '#228049' }}>
+                    <span className="text-[12.5px] font-bold text-sagedark">
                       Approved — resident notified, decisions log updated
                     </span>
                   </div>
@@ -217,7 +217,7 @@ export function BoardDesk() {
             {!state.arcSubmitted && (
               <div className="rounded-[18px] px-4 py-[13px] flex items-center gap-2.5 bg-sand">
                 <PhIcon name="ph-fill ph-pencil-ruler" size={17} color="#8A8375" />
-                <p className="m-0 text-[12.5px] font-bold" style={{ color: '#8A8375' }}>
+                <p className="m-0 text-[12.5px] font-bold text-stone">
                   ARC queue is clear — new requests land here instantly
                 </p>
               </div>
@@ -231,7 +231,7 @@ export function BoardDesk() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">Pool gate latch sticking</p>
-                  <p className="m-0 text-xs font-semibold" style={{ color: '#8A8375' }}>
+                  <p className="m-0 text-xs font-semibold text-stone">
                     2 reports this week · non-urgent
                   </p>
                 </div>
@@ -300,7 +300,7 @@ export function BoardDesk() {
                 <PhIcon name="ph-fill ph-pencil-ruler" size={17} color="#3A73B5" className="flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="m-0 text-[13px] font-bold text-navy">#A-121 · {arcNewTitle} · #27</p>
-                  <p className="m-0 text-[11px] font-semibold" style={{ color: '#8A8375' }}>
+                  <p className="m-0 text-[11px] font-semibold text-stone">
                     Submitted today · pre-approved palette
                   </p>
                 </div>
@@ -347,7 +347,7 @@ export function BoardDesk() {
                 <PhIcon name="ph-fill ph-wrench" size={17} color="#C75A31" className="flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="m-0 text-[13px] font-bold text-navy">#M-89 · {reportTypeLabel} · #27</p>
-                  <p className="m-0 text-[11px] font-semibold" style={{ color: '#8A8375' }}>
+                  <p className="m-0 text-[11px] font-semibold text-stone">
                     Private report · today
                   </p>
                 </div>
@@ -370,7 +370,7 @@ export function BoardDesk() {
               <PhIcon name="ph-fill ph-wrench" size={17} color="#2A9D5C" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="m-0 text-[13px] font-bold text-navy">Pool gate latch · 2 reports</p>
-                <p className="m-0 text-[11px] font-semibold" style={{ color: '#8A8375' }}>
+                <p className="m-0 text-[11px] font-semibold text-stone">
                   Non-urgent
                 </p>
               </div>
@@ -399,7 +399,7 @@ export function BoardDesk() {
             )}
             <div className="flex items-center gap-[11px] py-[11px]">
               <PhIcon name="ph-fill ph-check-circle" size={17} color="#A39B8B" className="flex-shrink-0" />
-              <p className="m-0 flex-1 text-[13px] font-bold" style={{ color: '#8A8375' }}>
+              <p className="m-0 flex-1 text-[13px] font-bold text-stone">
                 #M-86 · Irrigation valve · closed Jun 24
               </p>
             </div>
@@ -413,7 +413,7 @@ export function BoardDesk() {
               <PhIcon name="ph-fill ph-trash" size={17} color="#D9A441" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="m-0 text-[13px] font-bold text-navy">Trash bins visible from street · #14</p>
-                <p className="m-0 text-[11px] font-semibold" style={{ color: '#8A8375' }}>
+                <p className="m-0 text-[11px] font-semibold text-stone">
                   Courtesy notice sent Jun 27 · auto-closes if fixed by Jul 8
                 </p>
               </div>
@@ -421,8 +421,8 @@ export function BoardDesk() {
                 No fee
               </span>
             </div>
-            <p className="m-0 text-xs font-semibold" style={{ color: '#8A8375' }}>
-              <span className="font-bold" style={{ color: '#228049' }}>
+            <p className="m-0 text-xs font-semibold text-stone">
+              <span className="font-bold text-sagedark">
                 2 self-cured this month
               </span>{' '}
               · zero fines issued in 2026 · every notice cites the exact CC&amp;R section
@@ -448,7 +448,7 @@ export function BoardDesk() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="m-0 text-[13px] font-bold text-navy">{v.name}</p>
-                    <p className="m-0 text-[11px] font-semibold" style={{ color: '#8A8375' }}>
+                    <p className="m-0 text-[11px] font-semibold text-stone">
                       {v.sub} · last: {v.last}
                     </p>
                   </div>
@@ -470,14 +470,14 @@ export function BoardDesk() {
           <div className="bg-paper rounded-[20px] p-[18px] mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             <div className="flex items-baseline justify-between gap-2.5 mb-2.5">
               <p className="m-0 font-serif text-[22px] text-navy">96% collected</p>
-              <p className="m-0 text-xs font-bold" style={{ color: '#8A8375' }}>
+              <p className="m-0 text-xs font-bold text-stone">
                 $38.9K of $40.5K
               </p>
             </div>
             <div className="mb-3">
               <ProgressBar pct={96} height={10} color="#2A9D5C" track="#EDE6D6" />
             </div>
-            <p className="m-0 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
+            <p className="m-0 text-[12.5px] font-semibold text-stone">
               4 households late · courtesy reminders sent Jun 28 · no late fees yet
             </p>
           </div>
@@ -516,7 +516,7 @@ export function BoardDesk() {
             {state.courtesySent && (
               <div className="rounded-xl px-3.5 py-[11px] flex items-center gap-[9px] animate-fadeup" style={{ background: '#E9F6EE' }}>
                 <PhIcon name="ph-fill ph-paper-plane-tilt" size={16} color="#2A9D5C" />
-                <span className="text-[12.5px] font-bold" style={{ color: '#228049' }}>
+                <span className="text-[12.5px] font-bold text-sagedark">
                   4 gentle reminders queued — a payment plan link included
                 </span>
               </div>
@@ -530,7 +530,7 @@ export function BoardDesk() {
             <div className="mb-3">
               <div className="flex justify-between mb-[5px]">
                 <span className="text-[12.5px] font-bold text-navy">Landscaping</span>
-                <span className="text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
+                <span className="text-[11.5px] font-bold text-stone">
                   52% of $75.6K
                 </span>
               </div>
@@ -539,7 +539,7 @@ export function BoardDesk() {
             <div className="mb-3">
               <div className="flex justify-between mb-[5px]">
                 <span className="text-[12.5px] font-bold text-navy">Utilities</span>
-                <span className="text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
+                <span className="text-[11.5px] font-bold text-stone">
                   48% of $46.7K
                 </span>
               </div>
@@ -548,7 +548,7 @@ export function BoardDesk() {
             <div className="mb-3">
               <div className="flex justify-between mb-[5px]">
                 <span className="text-[12.5px] font-bold text-navy">Insurance</span>
-                <span className="text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
+                <span className="text-[11.5px] font-bold text-stone">
                   50% of $52.4K
                 </span>
               </div>
@@ -573,14 +573,14 @@ export function BoardDesk() {
               <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
                 <div className="flex items-baseline justify-between gap-2.5 mb-2.5">
                   <p className="m-0 font-serif text-xl text-navy">$42.7K of $61.2K</p>
-                  <p className="m-0 text-xs font-bold" style={{ color: '#8A8375' }}>
+                  <p className="m-0 text-xs font-bold text-stone">
                     70% pledged
                   </p>
                 </div>
                 <div className="mb-3">
                   <ProgressBar pct={70} height={10} color="#C75A31" track="#EDE6D6" />
                 </div>
-                <p className="m-0 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
+                <p className="m-0 text-[12.5px] font-semibold text-stone">
                   96 paid in full · 22 on installments · 18 not started · due Aug 1
                 </p>
               </div>
@@ -595,7 +595,7 @@ export function BoardDesk() {
               <div key={a.bucket} className="mb-[11px]">
                 <div className="flex justify-between items-baseline mb-[5px]">
                   <span className="text-[12.5px] font-bold text-navy">{a.bucket}</span>
-                  <span className="text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
+                  <span className="text-[11.5px] font-bold text-stone">
                     {a.amt} · {a.n}
                   </span>
                 </div>
@@ -622,7 +622,7 @@ export function BoardDesk() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-px text-[13.5px] font-bold text-navy">AquaFix · $340.00</p>
-                <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+                <p className="m-0 text-[11.5px] font-semibold text-stone">
                   Pool gate latch · needs 2 of 3 board signatures · 1 signed
                 </p>
               </div>
@@ -663,7 +663,7 @@ export function BoardDesk() {
                 />
                 <div className="flex items-center gap-2 my-2.5 mb-3">
                   <PhIcon name="ph-fill ph-broadcast" size={14} color="#8A8375" className="flex-shrink-0" />
-                  <p className="m-0 text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
+                  <p className="m-0 text-[11.5px] font-bold text-stone">
                     Posts to the Commons + email digest — reaches all 136 households, including the 41% not on the app
                   </p>
                 </div>
@@ -680,7 +680,7 @@ export function BoardDesk() {
             {state.broadcastSent && (
               <div className="rounded-[13px] p-3.5 flex items-center gap-2.5 animate-fadeup" style={{ background: '#E9F6EE' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="#2A9D5C" className="flex-shrink-0" />
-                <span className="text-[13px] font-bold" style={{ color: '#228049' }}>
+                <span className="text-[13px] font-bold text-sagedark">
                   Sent — live in the Commons, email digest goes out at 6 PM
                 </span>
               </div>
@@ -728,7 +728,7 @@ export function BoardDesk() {
                     </div>
                     <div className="flex items-center gap-2 mb-3">
                       <PhIcon name="ph-fill ph-users-three" size={14} color="#8A8375" className="flex-shrink-0" />
-                      <p className="m-0 text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
+                      <p className="m-0 text-[11.5px] font-bold text-stone">
                         Opens to all 136 households · 7-day window · quorum 50%+1 · one ballot each
                       </p>
                     </div>
@@ -768,7 +768,7 @@ export function BoardDesk() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="m-0 mb-px text-[13.5px] font-bold text-navy">Draft a community vote</p>
-                      <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+                      <p className="m-0 text-[11.5px] font-semibold text-stone">
                         Ask a yes/no or A/B question — results tally live
                       </p>
                     </div>
@@ -786,7 +786,7 @@ export function BoardDesk() {
               <div className="rounded-[13px] p-3.5 flex items-start gap-2.5 animate-fadeup" style={{ background: '#E9F6EE' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="#2A9D5C" className="flex-shrink-0 mt-px" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[13px] font-bold" style={{ color: '#228049' }}>
+                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedark">
                     Ballot is open — &quot;{voteQPreview}&quot;
                   </p>
                   <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#5F8A6F' }}>
@@ -804,26 +804,26 @@ export function BoardDesk() {
             <div className="flex flex-col gap-2 mb-3">
               <div className="flex gap-2.5 items-start">
                 <PhIcon name="ph-fill ph-check-square" size={14} color="#C75A31" className="mt-0.5 flex-shrink-0" />
-                <p className="m-0 text-[12.5px] font-bold" style={{ color: '#3E4C63' }}>
+                <p className="m-0 text-[12.5px] font-bold text-ink">
                   Pool furniture vote closes Thursday — 61 in so far
                 </p>
               </div>
               <div className="flex gap-2.5 items-start">
                 <PhIcon name="ph-fill ph-popcorn" size={14} color="#D9A441" className="mt-0.5 flex-shrink-0" />
-                <p className="m-0 text-[12.5px] font-bold" style={{ color: '#3E4C63' }}>
+                <p className="m-0 text-[12.5px] font-bold text-ink">
                   Movie on the lawn Saturday at dusk — popcorn volunteers needed
                 </p>
               </div>
               <div className="flex gap-2.5 items-start">
                 <PhIcon name="ph-fill ph-wrench" size={14} color="#2A9D5C" className="mt-0.5 flex-shrink-0" />
-                <p className="m-0 text-[12.5px] font-bold" style={{ color: '#3E4C63' }}>
+                <p className="m-0 text-[12.5px] font-bold text-ink">
                   Pool gate repair Thursday morning — brief closure
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2 mb-3">
               <PhIcon name="ph-fill ph-broadcast" size={13} color="#8A8375" className="flex-shrink-0" />
-              <p className="m-0 text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
+              <p className="m-0 text-[11.5px] font-bold text-stone">
                 Reaches all 136 households: 80 app · 44 email · 12 print
               </p>
             </div>
@@ -886,7 +886,7 @@ export function BoardDesk() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-px text-[13.5px] font-bold text-navy">June 18 minutes — drafted by Penny</p>
-                <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+                <p className="m-0 text-[11.5px] font-semibold text-stone">
                   From the meeting recording · 4 pp · needs your review
                 </p>
               </div>

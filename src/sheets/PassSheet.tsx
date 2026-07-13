@@ -17,25 +17,25 @@ export function PassSheet() {
       {!state.passIssued ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">Guest pass</p>
-          <p className="m-0 mb-4 text-xs font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-4 text-xs font-bold" style={{ color: '#8A8375' }}>
             Gate + Lot B parking · the camera reads the plate, no paper needed.
           </p>
           <input
             value={state.passName}
             onChange={(e) => set({ passName: e.target.value })}
             placeholder="Guest name"
-            className="w-full bg-paper rounded-[13px] px-3.5 py-3 text-[13.5px] font-semibold text-navy outline-none font-sans mb-2.5"
+            className="w-full bg-paper rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans mb-2.5"
             style={{ border: '1px solid rgba(26,51,82,0.12)' }}
           />
           <input
             value={state.passPlate}
             onChange={(e) => set({ passPlate: e.target.value })}
             placeholder="License plate"
-            className="w-full bg-paper rounded-[13px] px-3.5 py-3 text-[13.5px] font-semibold text-navy outline-none font-sans mb-3.5"
+            className="w-full bg-paper rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans mb-3.5"
             style={{ border: '1px solid rgba(26,51,82,0.12)' }}
           />
           <p
-            className="m-0 mb-2 text-[11px] font-extrabold uppercase text-stone"
+            className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
             style={{ letterSpacing: '0.12em' }}
           >
             How long?
@@ -84,7 +84,7 @@ export function PassSheet() {
             </div>
             <div className="min-w-0">
               <p
-                className="m-0 mb-[3px] text-[11px] font-extrabold uppercase"
+                className="m-0 mb-[3px] text-[11px] font-bold uppercase"
                 style={{ letterSpacing: '0.12em', color: '#E8A788' }}
               >
                 Pass JR-0142
@@ -92,7 +92,7 @@ export function PassSheet() {
               <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.25]">
                 {state.passName} · {state.passPlate}
               </p>
-              <p className="m-0 text-xs font-semibold" style={{ color: 'rgba(245,240,230,0.65)' }}>
+              <p className="m-0 text-xs font-bold" style={{ color: 'rgba(245,240,230,0.65)' }}>
                 {PASS_DURS[state.passDur]} · Lot B · expires automatically
               </p>
             </div>
