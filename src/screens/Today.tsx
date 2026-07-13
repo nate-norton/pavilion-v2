@@ -222,12 +222,12 @@ export function Today() {
         )}
       </div>
 
-      {/* Penny nudge: one quiet line */}
+      {/* AI nudge: one quiet line */}
       {showNudge && (
         <div className="flex gap-[9px] items-start" style={{ padding: '14px 6px 0' }}>
           <PhIcon name="ph-fill ph-sparkle" size={13} color="#C75A31" className="mt-[3px] flex-shrink-0" />
           <p className="m-0 flex-1 text-xs leading-[1.5] font-semibold text-stone">
-            Penny: fireworks aren&apos;t allowed in the Ridge (§5.9) — the east lot has the best view of Saturday&apos;s
+            AI: fireworks aren&apos;t allowed in the Ridge (§5.9) — the east lot has the best view of Saturday&apos;s
             city show.
           </p>
           <button

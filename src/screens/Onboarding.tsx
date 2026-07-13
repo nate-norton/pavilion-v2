@@ -209,10 +209,10 @@ export function Onboarding() {
               <PhIcon name="ph-fill ph-sparkle" size={28} color="#fff" />
             </div>
             <h1 className="m-0 mb-2.5 font-serif font-normal text-[28px] leading-[1.2]" style={{ color: '#1A3352' }}>
-              Meet Penny.
+              Meet your AI assistant.
             </h1>
             <p className="m-0 mb-5 text-[14px] leading-[1.55] font-semibold" style={{ color: '#7A7365' }}>
-              She's read the CC&Rs so you don't have to. Every answer cites the actual document — no folklore, no
+              It's read the CC&Rs so you don't have to. Every answer cites the actual document — no folklore, no
               guessing.
             </p>
             <div

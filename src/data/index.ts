@@ -2,7 +2,7 @@ export * from './types';
 export { AMENS } from './amenities';
 export { SEARCH } from './searchIndex';
 export { VENDORS, SLOTS, DAYS, ARC_TYPES, HH, ONBOARD_CIRCLES } from './vendors';
-export { QA_DATA as QA } from './pennyQA';
+export { QA_DATA as QA } from './aiQA';
 export { DIR } from './directory';
 export { FREE } from './freeTable';
 export { PINS, MAP_LAYERS } from './mapPins';

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { AMENS, SLOTS, DAYS, QA } from '../data';
 
-export interface PennyMsg {
+export interface AiMsg {
   me: boolean;
   text: string;
   cite: string | null;
@@ -56,10 +56,10 @@ export interface PavData {
   dayIdx: number;
   durIdx: number;
   waitlisted: Record<string, boolean>;
-  pennyOpen: boolean;
+  aiOpen: boolean;
   typing: boolean;
-  pennyInput: string;
-  msgs: PennyMsg[];
+  aiInput: string;
+  msgs: AiMsg[];
   paySheetOpen: boolean;
   paid: boolean;
   autopay: boolean;
@@ -190,9 +190,9 @@ export interface PavActions {
   issuePass: () => void;
   sendBroadcast: () => void;
   postVote: () => void;
-  sendPennyMessage: (text: string) => void;
-  askPennyChip: (key: string) => void;
-  askPennyDocsSummary: () => void;
+  sendAiMessage: (text: string) => void;
+  askAiChip: (key: string) => void;
+  askAiDocsSummary: () => void;
   sendChatMessage: () => void;
   pickRole: (role: string) => void;
   addComment: () => void;
@@ -219,9 +219,9 @@ export const dataDefaults: PavData = {
   dayIdx: 0,
   durIdx: 1,
   waitlisted: {},
-  pennyOpen: false,
+  aiOpen: false,
   typing: false,
-  pennyInput: '',
+  aiInput: '',
   msgs: [
     {
       me: false,
@@ -406,11 +406,11 @@ export const usePavStore = create<PavState>()(persist((set, get) => ({
     if (get().voteQ.trim()) set({ votePosted: true });
   },
 
-  sendPennyMessage: (text: string) => {
+  sendAiMessage: (text: string) => {
     const t = text.trim();
     if (!t) return;
     const epoch = get().epoch;
-    set((s) => ({ msgs: [...s.msgs, { me: true, text: t, cite: null }], pennyInput: '', typing: true }));
+    set((s) => ({ msgs: [...s.msgs, { me: true, text: t, cite: null }], aiInput: '', typing: true }));
     setTimeout(() => {
       if (get().epoch !== epoch) return;
       set((s) => ({
@@ -428,7 +428,7 @@ export const usePavStore = create<PavState>()(persist((set, get) => ({
     }, 1000);
   },
 
-  askPennyChip: (key: string) => {
+  askAiChip: (key: string) => {
     const qa = QA[key];
     if (!qa) return;
     const epoch = get().epoch;
@@ -439,12 +439,12 @@ export const usePavStore = create<PavState>()(persist((set, get) => ({
     }, 1100);
   },
 
-  askPennyDocsSummary: () => {
+  askAiDocsSummary: () => {
     const epoch = get().epoch;
     set((s) => ({
       docsOpen: false,
       docReader: false,
-      pennyOpen: true,
+      aiOpen: true,
       typing: true,
       msgs: [...s.msgs, { me: true, text: 'Summarize the CC&Rs for me', cite: null }],
     }));
@@ -508,7 +508,7 @@ export const usePavStore = create<PavState>()(persist((set, get) => ({
 }), {
   name: 'pavilion-demo',
   partialize: (state) => {
-    const { typing, pennyInput, chatInput, commentInput, searchQ, docQ, bcText, ...rest } = state;
+    const { typing, aiInput, chatInput, commentInput, searchQ, docQ, bcText, ...rest } = state;
     return rest;
   },
 }));

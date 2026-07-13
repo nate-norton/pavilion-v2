@@ -14,7 +14,7 @@ const TABS_RIGHT: { key: string; icon: string; label: string }[] = [
   { key: 'hoa', icon: 'ph-fill ph-scales', label: 'HOA' },
 ];
 
-/** Bottom navy nav dock with center Penny orb (prototype lines 2537-2562). */
+/** Bottom navy nav dock with center Ask AI orb (prototype lines 2537-2562). */
 export function NavDock() {
   const tab = usePavStore((s) => s.tab);
   const set = usePavStore((s) => s.set);
@@ -50,7 +50,7 @@ export function NavDock() {
         <div className="flex justify-center">
           <button
             type="button"
-            onClick={() => set({ pennyOpen: true })}
+            onClick={() => set({ aiOpen: true })}
             className="flex flex-col items-center cursor-pointer border-0 bg-transparent"
             style={{ transform: 'translateY(-10px)' }}
           >
@@ -64,7 +64,7 @@ export function NavDock() {
               <PhIcon name="ph-fill ph-sparkle" size={22} color="#fff" />
             </div>
             <span className="text-[10px] font-extrabold mt-[2px]" style={{ color: ACTIVE }}>
-              Penny
+              Ask AI
             </span>
           </button>
         </div>

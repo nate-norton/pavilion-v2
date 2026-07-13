@@ -100,16 +100,16 @@ export function Search() {
           <PhIcon name="ph ph-binoculars" size={34} color="#A39B8B" className="inline-block" />
           <p className="mt-2.5 mb-1 text-sm font-bold text-navy">Nothing in the Ridge matches that</p>
           <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
-            Penny can dig deeper — she&apos;s read every page.
+            AI can dig deeper — it&apos;s read every page.
           </p>
           <button
             type="button"
-            onClick={() => set({ searchOpen: false, pennyOpen: true })}
+            onClick={() => set({ searchOpen: false, aiOpen: true })}
             className="border-none text-white rounded-full text-[13px] font-extrabold cursor-pointer font-sans inline-flex items-center gap-[7px]"
             style={{ background: 'linear-gradient(150deg,#E06A3E,#C75A31)', padding: '11px 18px' }}
           >
             <PhIcon name="ph-fill ph-sparkle" size={14} />
-            Ask Penny instead
+            Ask AI instead
           </button>
         </div>
       )}

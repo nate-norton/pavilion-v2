@@ -41,8 +41,8 @@ it('delinquent scenario computes from flags', () => {
   expect(s().paid).toBe(false);
 });
 
-it('scripted Penny reply no-ops after a store reset mid-flight (epoch guard)', async () => {
-  act(() => s().askPennyChip('fence'));
+it('scripted AI reply no-ops after a store reset mid-flight (epoch guard)', async () => {
+  act(() => s().askAiChip('fence'));
   const bumpedEpoch = usePavStore.getState().epoch + 1;
   act(() => usePavStore.setState({ ...initialState, epoch: bumpedEpoch }, true));
   await new Promise((resolve) => setTimeout(resolve, 1200));

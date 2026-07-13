@@ -4,7 +4,7 @@ import { SASheet } from '../sheets/SASheet';
 import { ArcSheet } from '../sheets/ArcSheet';
 import { ReportSheet } from '../sheets/ReportSheet';
 import { ViolSheet } from '../sheets/ViolSheet';
-import { PennySheet } from '../sheets/PennySheet';
+import { AiSheet } from '../sheets/AiSheet';
 import { MyPlace } from '../screens/MyPlace';
 import { MapScreen } from '../screens/MapScreen';
 import { Notifications } from '../screens/Notifications';
@@ -54,7 +54,7 @@ export function Overlays() {
       <ArcSheet />
       <ReportSheet />
       <ViolSheet />
-      <PennySheet />
+      <AiSheet />
       <ExportSheet />
       <ArcDetailSheet />
       <IssueDetailSheet />

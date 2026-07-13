@@ -4,10 +4,10 @@ import { TypingDots } from '../components/TypingDots';
 import { usePavStore } from '../store/store';
 import { QA } from '../data';
 
-/** Penny scripted-assistant sheet — ported from prototype lines 1399-1449. */
-export function PennySheet() {
+/** AI scripted-assistant sheet — ported from prototype lines 1399-1449. */
+export function AiSheet() {
   const state = usePavStore();
-  const { set, msgs, typing, pennyInput, askPennyChip, sendPennyMessage } = state;
+  const { set, msgs, typing, aiInput, askAiChip, sendAiMessage } = state;
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -15,17 +15,17 @@ export function PennySheet() {
     if (el) el.scrollTop = el.scrollHeight;
   }, [msgs, typing]);
 
-  if (!state.pennyOpen) return null;
+  if (!state.aiOpen) return null;
 
-  const close = () => set({ pennyOpen: false });
-  const openCite = () => set({ pennyOpen: false, docsOpen: true, docReader: true });
-  const askTheBoard = () => set({ pennyOpen: false, reportOpen: true, reportType: 'Other' });
-  const send = () => sendPennyMessage(pennyInput);
+  const close = () => set({ aiOpen: false });
+  const openCite = () => set({ aiOpen: false, docsOpen: true, docReader: true });
+  const askTheBoard = () => set({ aiOpen: false, reportOpen: true, reportType: 'Other' });
+  const send = () => sendAiMessage(aiInput);
 
   return (
     <div className="absolute inset-0 z-[85]">
       <div
-        data-testid="penny-scrim"
+        data-testid="ai-scrim"
         onClick={close}
         className="absolute inset-0 animate-scrimfade"
         style={{ background: 'rgba(26,30,20,0.4)' }}
@@ -45,7 +45,7 @@ export function PennySheet() {
             <PhIcon name="ph-fill ph-sparkle" size={18} color="#fff" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="m-0 text-[15px] font-bold text-navy">Penny</p>
+            <p className="m-0 text-[15px] font-bold text-navy">AI</p>
             <p className="m-0 text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
               Answers cite Juniper Ridge&apos;s actual documents
             </p>
@@ -60,7 +60,7 @@ export function PennySheet() {
 
         <div
           ref={listRef}
-          data-penny-scroll
+          data-ai-scroll
           className="pav-scroll flex-1 overflow-y-auto px-[18px] py-4 flex flex-col gap-2.5"
         >
           {msgs.map((m, i) => (
@@ -111,7 +111,7 @@ export function PennySheet() {
           {Object.entries(QA).map(([key, qa]) => (
             <button
               key={key}
-              onClick={() => askPennyChip(key)}
+              onClick={() => askAiChip(key)}
               className="rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer font-sans text-navy"
               style={{ border: '1px solid rgba(26,51,82,0.14)', background: '#FFFEFA' }}
             >
@@ -121,8 +121,8 @@ export function PennySheet() {
         </div>
         <div className="px-[18px] pb-5 pt-2 flex gap-[9px]">
           <input
-            value={pennyInput}
-            onChange={(e) => set({ pennyInput: e.target.value })}
+            value={aiInput}
+            onChange={(e) => set({ aiInput: e.target.value })}
             onKeyDown={(e) => {
               if (e.key === 'Enter') send();
             }}

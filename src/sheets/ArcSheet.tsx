@@ -98,7 +98,7 @@ export function ArcSheet() {
       >
         <PhIcon name="ph-fill ph-sparkle" size={15} color="#C75A31" className="mt-px flex-shrink-0" />
         <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: '#8A5138' }}>
-          Penny: Sage &amp; Clay are pre-approved paint colors (CC&amp;Rs §4.2) — those requests are
+          AI: Sage &amp; Clay are pre-approved paint colors (CC&amp;Rs §4.2) — those requests are
           usually fast-tracked.
         </p>
       </div>

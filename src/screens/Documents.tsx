@@ -46,7 +46,7 @@ const SECTION_CARD: CSSProperties = {
 /** Documents list + CC&Rs reader — ported from prototype lines 1955-2041. */
 export function Documents() {
   const state = usePavStore();
-  const { set, askPennyDocsSummary } = state;
+  const { set, askAiDocsSummary } = state;
 
   if (!state.docsOpen) return null;
 
@@ -73,7 +73,7 @@ export function Documents() {
           <BackButton onClick={() => set({ docsOpen: false })} />
           <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">Documents</h1>
           <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: '#7A7365' }}>
-            Every governing document, searchable. Penny has read them all.
+            Every governing document, searchable. Your AI has read them all.
           </p>
           <div className="flex flex-col gap-[9px]">
             {DOCS.map((d) => (
@@ -146,12 +146,12 @@ export function Documents() {
 
           <button
             type="button"
-            onClick={askPennyDocsSummary}
+            onClick={askAiDocsSummary}
             className="w-full border-none text-white rounded-[14px] text-[13.5px] font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3.5"
             style={{ background: 'linear-gradient(150deg,#E06A3E,#C75A31)', padding: '13px 0' }}
           >
             <PhIcon name="ph-fill ph-sparkle" size={15} />
-            Ask Penny to summarize
+            Ask AI to summarize
           </button>
 
           {showEx && (
@@ -241,7 +241,7 @@ export function Documents() {
               <PhIcon name="ph ph-file-magnifying-glass" size={32} color="#A39B8B" className="inline-block" />
               <p className="mt-[9px] mb-0.5 text-sm font-bold text-navy">No section matches that</p>
               <p className="m-0 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
-                Try &quot;palette&quot;, &quot;quiet&quot;, &quot;lease&quot; — or ask Penny above.
+                Try &quot;palette&quot;, &quot;quiet&quot;, &quot;lease&quot; — or ask AI above.
               </p>
             </div>
           )}

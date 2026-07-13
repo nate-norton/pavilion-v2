@@ -8,7 +8,7 @@ export interface SheetProps {
 }
 
 /**
- * Bottom sheet chrome shared across pay/ARC/report/violation/Penny sheets.
+ * Bottom sheet chrome shared across pay/ARC/report/violation/AI sheets.
  * Prototype reference: pay-sheet lines 1282-1285.
  */
 export function Sheet({ open, onClose, children, maxHeight }: SheetProps) {

@@ -1,4 +1,4 @@
-/** Three bouncing dots shown while Penny is "typing" (lines 1429-1433). */
+/** Three bouncing dots shown while AI is "typing" (lines 1429-1433). */
 export function TypingDots() {
   return (
     <div className="flex justify-start">

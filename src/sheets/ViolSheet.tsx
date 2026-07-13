@@ -58,7 +58,7 @@ export function ViolSheet() {
           >
             <PhIcon name="ph-fill ph-sparkle" size={15} color="#C75A31" className="mt-px flex-shrink-0" />
             <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: '#8A5138' }}>
-              Penny: two courtesy reminders always come before any fee (§9). Most notices close
+              AI: two courtesy reminders always come before any fee (§9). Most notices close
               themselves — 2 neighbors self-cured this month.
             </p>
           </div>

@@ -12,7 +12,7 @@ interface IssueItem {
   reporters: string;
   vendor?: string;
   steps: StatusStep[];
-  penny: string;
+  aiTip: string;
 }
 
 function getIssues(state: ReturnType<typeof usePavStore.getState>): Record<string, IssueItem> {
@@ -30,7 +30,7 @@ function getIssues(state: ReturnType<typeof usePavStore.getState>): Record<strin
         { label: 'Assigned', state: state.reportTicketed ? 'done' : 'pending' },
         { label: 'Resolved', state: 'pending' },
       ],
-      penny: 'Streetlight repairs are city responsibility, but the board coordinates. Typical turnaround: 5–7 business days once assigned.',
+      aiTip: 'Streetlight repairs are city responsibility, but the board coordinates. Typical turnaround: 5–7 business days once assigned.',
     },
     'pool-gate': {
       title: 'Pool gate latch',
@@ -45,7 +45,7 @@ function getIssues(state: ReturnType<typeof usePavStore.getState>): Record<strin
         { label: 'Scheduled', state: state.gateScheduled ? 'done' : 'active' },
         { label: 'Resolved', state: 'pending' },
       ],
-      penny: 'Pool gate latches are safety-critical per §6.3 of the CC&Rs. The board fast-tracks these items.',
+      aiTip: 'Pool gate latches are safety-critical per §6.3 of the CC&Rs. The board fast-tracks these items.',
     },
     irrigation: {
       title: 'Irrigation valve',
@@ -60,7 +60,7 @@ function getIssues(state: ReturnType<typeof usePavStore.getState>): Record<strin
         { label: 'Assigned', state: 'done' },
         { label: 'Fixed\nJun 24', state: 'done' },
       ],
-      penny: 'Irrigation issues in common areas are handled by the landscaping vendor under the existing maintenance contract.',
+      aiTip: 'Irrigation issues in common areas are handled by the landscaping vendor under the existing maintenance contract.',
     },
   };
 }
@@ -130,7 +130,7 @@ export function IssueDetailSheet() {
         style={{ background: 'rgba(42,157,92,0.06)', border: '1px solid rgba(42,157,92,0.12)' }}
       >
         <PhIcon name="ph-fill ph-sparkle" size={16} color="#2A9D5C" />
-        <p className="m-0 text-[12.5px] font-semibold text-navy">{issue.penny}</p>
+        <p className="m-0 text-[12.5px] font-semibold text-navy">{issue.aiTip}</p>
       </div>
     </Sheet>
   );

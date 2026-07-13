@@ -798,7 +798,7 @@ export function BoardDesk() {
           </div>
 
           <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
-            Friday digest · drafted by Penny
+            Friday digest · drafted by AI
           </p>
           <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             <div className="flex flex-col gap-2 mb-3">
@@ -885,7 +885,7 @@ export function BoardDesk() {
                 <PhIcon name="ph-fill ph-sparkle" size={19} color="#C75A31" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="m-0 mb-px text-[13.5px] font-bold text-navy">June 18 minutes — drafted by Penny</p>
+                <p className="m-0 mb-px text-[13.5px] font-bold text-navy">June 18 minutes — drafted by AI</p>
                 <p className="m-0 text-[11.5px] font-semibold text-stone">
                   From the meeting recording · 4 pp · needs your review
                 </p>

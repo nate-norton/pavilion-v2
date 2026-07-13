@@ -396,7 +396,7 @@ export function Hoa() {
         </div>
       </div>
 
-      {/* Docs + Penny */}
+      {/* Docs + AI */}
       <div className="grid grid-cols-2 gap-2.5">
         <div
           onClick={() => set({ docsOpen: true, docReader: false })}
@@ -410,12 +410,12 @@ export function Hoa() {
           </p>
         </div>
         <div
-          onClick={() => set({ pennyOpen: true })}
+          onClick={() => set({ aiOpen: true })}
           className="rounded-[18px] p-[15px] cursor-pointer text-white"
           style={{ background: 'linear-gradient(150deg,#E06A3E,#C75A31)' }}
         >
           <PhIcon name="ph-fill ph-sparkle" size={22} color="#fff" />
-          <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold">Ask Penny</p>
+          <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold">Ask AI</p>
           <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgba(255,255,255,0.85)' }}>
             &quot;Can I paint my fence black?&quot;
           </p>

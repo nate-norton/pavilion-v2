@@ -107,7 +107,7 @@ export function ArcDetailSheet() {
       >
         <PhIcon name="ph-fill ph-sparkle" size={16} color="#2A9D5C" />
         <p className="m-0 text-[12.5px] font-semibold text-navy">
-          Penny: ARC reviews take 10–14 business days per §4.3 of the CC&amp;Rs.
+          AI: ARC reviews take 10–14 business days per §4.3 of the CC&amp;Rs.
         </p>
       </div>
     </Sheet>
