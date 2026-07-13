@@ -74,12 +74,12 @@ export function Portfolio() {
                   <PhIcon name="ph-fill ph-buildings" size={19} color="#1A3352" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="m-0 text-[14.5px] font-extrabold text-navy">{c.name}</p>
+                  <p className="m-0 text-[14.5px] font-bold text-navy">{c.name}</p>
                   <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
                     {c.doors} doors · {c.dues}
                   </p>
                 </div>
-                <span className="text-xs font-extrabold flex-shrink-0" style={{ color: openColor }}>
+                <span className="text-xs font-bold flex-shrink-0" style={{ color: openColor }}>
                   {openLabel}
                 </span>
               </div>
@@ -87,7 +87,7 @@ export function Portfolio() {
                 <div className="flex-1">
                   <ProgressBar pct={c.collected} height={8} color={c.tone} track="#EDE6D6" />
                 </div>
-                <span className="text-[11.5px] font-extrabold flex-shrink-0 text-navy">{c.collected}% collected</span>
+                <span className="text-[11.5px] font-bold flex-shrink-0 text-navy">{c.collected}% collected</span>
               </div>
             </div>
           );
