@@ -86,7 +86,7 @@ export function MyPlace() {
   const mpJuneColor = !juneLate || state.paid ? '#228049' : state.planActive ? '#3A73B5' : '#C75A31';
 
   const statusPill = (label: string, bg: string, color: string) => (
-    <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold flex-shrink-0" style={{ background: bg, color }}>
+    <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0" style={{ background: bg, color }}>
       {label}
     </span>
   );
@@ -116,7 +116,7 @@ export function MyPlace() {
         </div>
         <div>
           <h1 className="m-0 mb-0.5 font-serif font-normal text-2xl text-navy">Alex Rivera</h1>
-          <p className="m-0 text-[12.5px] font-bold" style={{ color: '#8A8375' }}>
+          <p className="m-0 text-[12.5px] font-bold text-stone">
             {roleLabel}
           </p>
         </div>
@@ -125,30 +125,30 @@ export function MyPlace() {
       {/* Stat tiles */}
       <div className="grid grid-cols-3 gap-[9px] mb-3.5">
         <div onClick={() => set({ paySheetOpen: true })} className="rounded-[15px] text-center cursor-pointer" style={{ background: duesBg, padding: '12px 10px' }}>
-          <p className="m-0 mb-[3px] text-[10px] font-extrabold uppercase" style={{ letterSpacing: '0.08em', color: duesColor }}>
+          <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: duesColor }}>
             {statOneLabel}
           </p>
-          <p className="m-0 text-[12.5px] font-extrabold text-navy">{statOneValue}</p>
+          <p className="m-0 text-[12.5px] font-bold text-navy">{statOneValue}</p>
         </div>
         <div
           onClick={() => set({ myPlaceOpen: false, tab: 'reserve' })}
           className="rounded-[15px] text-center cursor-pointer"
           style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', padding: '12px 10px' }}
         >
-          <p className="m-0 mb-[3px] text-[10px] font-extrabold uppercase" style={{ letterSpacing: '0.08em', color: '#8A8375' }}>
+          <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: '#8A8375' }}>
             Bookings
           </p>
-          <p className="m-0 text-[12.5px] font-extrabold text-navy">{myBookings}</p>
+          <p className="m-0 text-[12.5px] font-bold text-navy">{myBookings}</p>
         </div>
         <div
           onClick={() => set({ myPlaceOpen: false, tab: 'commons', commonsView: 'circles' })}
           className="rounded-[15px] text-center cursor-pointer"
           style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', padding: '12px 10px' }}
         >
-          <p className="m-0 mb-[3px] text-[10px] font-extrabold uppercase" style={{ letterSpacing: '0.08em', color: '#8A8375' }}>
+          <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: '#8A8375' }}>
             Groups
           </p>
-          <p className="m-0 text-[12.5px] font-extrabold text-navy">{myCirclesCount} joined</p>
+          <p className="m-0 text-[12.5px] font-bold text-navy">{myCirclesCount} joined</p>
         </div>
       </div>
 
@@ -167,9 +167,9 @@ export function MyPlace() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <p className="m-0 text-[14.5px] font-extrabold text-cream">Board desk</p>
+              <p className="m-0 text-[14.5px] font-bold text-cream">Board desk</p>
               <span
-                className="rounded-full px-2 py-0.5 text-[9.5px] font-extrabold"
+                className="rounded-full px-2 py-0.5 text-[9.5px] font-bold"
                 style={{ background: 'rgba(232,167,136,0.2)', color: '#E8A788', letterSpacing: '0.06em' }}
               >
                 TREASURER
@@ -199,7 +199,7 @@ export function MyPlace() {
             <PhIcon name="ph-fill ph-buildings" size={22} color="#E8A788" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="m-0 text-[14.5px] font-extrabold text-cream">Portfolio</p>
+            <p className="m-0 text-[14.5px] font-bold text-cream">Portfolio</p>
             <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgba(245,240,230,0.65)' }}>
               3 communities · {pfDoors} doors · {pfCollected}% collected
             </p>
@@ -216,7 +216,7 @@ export function MyPlace() {
           <div style={CARD}>
             <div className="flex items-center justify-between gap-2.5 mb-3">
               <p className="m-0 font-serif text-base text-navy">Your lease</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold" style={{ background: '#EAF3FD', color: '#3A73B5' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: '#EAF3FD', color: '#3A73B5' }}>
                 Active
               </span>
             </div>
@@ -228,8 +228,8 @@ export function MyPlace() {
                 <PhIcon name="ph-fill ph-calendar-blank" size={16} color="#5B554A" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="m-0 text-[13px] font-extrabold text-navy">12-month term · renews Mar 1, 2027</p>
-                <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+                <p className="m-0 text-[13px] font-bold text-navy">12-month term · renews Mar 1, 2027</p>
+                <p className="m-0 text-[11.5px] font-semibold text-stone">
                   $2,400/mo · paid to owner, not the HOA
                 </p>
               </div>
@@ -239,8 +239,8 @@ export function MyPlace() {
                 <PhIcon name="ph-fill ph-user" size={16} color="#5B554A" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="m-0 text-[13px] font-extrabold text-navy">Owner: Dana Okafor · #27</p>
-                <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+                <p className="m-0 text-[13px] font-bold text-navy">Owner: Dana Okafor · #27</p>
+                <p className="m-0 text-[11.5px] font-semibold text-stone">
                   Handles ARC requests &amp; dues
                 </p>
               </div>
@@ -252,8 +252,8 @@ export function MyPlace() {
                 <PhIcon name="ph-fill ph-identification-card" size={17} color="#A87B1F" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="m-0 mb-0.5 text-[13.5px] font-extrabold text-navy">Tenant registration</p>
-                <p className="m-0 mb-2.5 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+                <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">Tenant registration</p>
+                <p className="m-0 mb-2.5 text-[11.5px] font-semibold text-stone">
                   CC&amp;Rs §7.4 asks tenants to register with the office within 14 days.
                 </p>
                 {!state.tenantRegistered ? (
@@ -266,7 +266,7 @@ export function MyPlace() {
                     Register now
                   </button>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 text-[12.5px] font-extrabold" style={{ color: '#228049' }}>
+                  <span className="inline-flex items-center gap-1.5 text-[12.5px] font-bold text-sagedark">
                     <PhIcon name="ph-fill ph-check-circle" size={15} />
                     Registered with the office
                   </span>
@@ -287,8 +287,8 @@ export function MyPlace() {
           >
             <PhIcon name="ph-fill ph-arrows-clockwise" size={17} color="#1A3352" className="flex-shrink-0" />
             <div className="flex-1">
-              <p className="m-0 text-[13px] font-extrabold text-navy">{mpApLabel}</p>
-              <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+              <p className="m-0 text-[13px] font-bold text-navy">{mpApLabel}</p>
+              <p className="m-0 text-[11.5px] font-semibold text-stone">
                 Juniper CU ····4821 · free ACH · change bank or date anytime
               </p>
             </div>
@@ -340,13 +340,13 @@ export function MyPlace() {
           style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
         >
           <div className="w-[34px] h-[34px] rounded-full bg-navy flex items-center justify-center text-cream font-extrabold text-[13px]">A</div>
-          <p className="m-0 flex-1 text-[13.5px] font-extrabold text-navy">
+          <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
             You{' '}
-            <span className="font-semibold" style={{ color: '#A39B8B' }}>
+            <span className="font-semibold text-stonelight">
               · Owner
             </span>
           </p>
-          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold" style={{ background: '#EDE6D6', color: '#6E6759' }}>
+          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: '#EDE6D6', color: '#6E6759' }}>
             Admin
           </span>
         </div>
@@ -357,13 +357,13 @@ export function MyPlace() {
           >
             S
           </div>
-          <p className="m-0 flex-1 text-[13.5px] font-extrabold text-navy">
+          <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
             Sam R.{' '}
-            <span className="font-semibold" style={{ color: '#A39B8B' }}>
+            <span className="font-semibold text-stonelight">
               · Partner
             </span>
           </p>
-          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-extrabold" style={{ background: '#EDE6D6', color: '#6E6759' }}>
+          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: '#EDE6D6', color: '#6E6759' }}>
             Member
           </span>
         </div>
@@ -378,7 +378,7 @@ export function MyPlace() {
             >
               <PhIcon name="ph-bold ph-envelope-simple" size={14} />
             </div>
-            <p className="m-0 flex-1 text-[13px] font-bold" style={{ color: '#8A8375' }}>
+            <p className="m-0 flex-1 text-[13px] font-bold text-stone">
               Invite sent — they&apos;ll join once they accept
             </p>
           </div>
@@ -388,7 +388,7 @@ export function MyPlace() {
       {/* Vehicles & pets */}
       <div style={CARD}>
         <p className="m-0 mb-[3px] font-serif text-base text-navy">Vehicles &amp; pets</p>
-        <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+        <p className="m-0 mb-3 text-[11.5px] font-semibold text-stone">
           On file for guest passes, gate logs &amp; the pet registry.
         </p>
         <div
@@ -399,8 +399,8 @@ export function MyPlace() {
             <PhIcon name="ph-fill ph-car" size={17} color="#3A73B5" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="m-0 text-[13px] font-extrabold text-navy">Subaru Outback · Slate</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+            <p className="m-0 text-[13px] font-bold text-navy">Subaru Outback · Slate</p>
+            <p className="m-0 text-[11.5px] font-semibold text-stone">
               Plate 8XR-4471 · resident decal #204
             </p>
           </div>
@@ -413,8 +413,8 @@ export function MyPlace() {
             <PhIcon name="ph-fill ph-dog" size={17} color="#A87B1F" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="m-0 text-[13px] font-extrabold text-navy">Biscuit · Golden mix</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+            <p className="m-0 text-[13px] font-bold text-navy">Biscuit · Golden mix</p>
+            <p className="m-0 text-[11.5px] font-semibold text-stone">
               Registered · licensed &amp; up to date
             </p>
           </div>
@@ -529,7 +529,7 @@ export function MyPlace() {
           <PhIcon name="ph-fill ph-bell" size={17} color="#1A3352" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13px] font-bold text-navy">
             Notifications{' '}
-            <span className="font-semibold" style={{ color: '#A39B8B' }}>
+            <span className="font-semibold text-stonelight">
               · Digest + urgent only
             </span>
           </p>
@@ -554,7 +554,7 @@ export function MyPlace() {
             <PhIcon name="ph-fill ph-translate" size={17} color="#1A3352" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13px] font-bold text-navy">
               Language{' '}
-              <span className="font-semibold" style={{ color: '#A39B8B' }}>
+              <span className="font-semibold text-stonelight">
                 · English
               </span>
             </p>

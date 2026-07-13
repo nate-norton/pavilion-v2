@@ -69,7 +69,7 @@ export function Onboarding() {
         {step === 0 && (
           <div className="animate-fadeup">
             <p
-              className="m-0 mb-2.5 text-[11px] font-extrabold uppercase"
+              className="m-0 mb-2.5 text-[11px] font-bold uppercase"
               style={{ letterSpacing: '0.14em', color: '#C75A31' }}
             >
               Juniper Ridge · Est. 1994
@@ -88,7 +88,7 @@ export function Onboarding() {
                 <PhIcon name="ph-fill ph-house-line" size={23} color="#1A3352" />
               </div>
               <div className="flex-1">
-                <p className="m-0 mb-0.5 text-[15px] font-extrabold" style={{ color: '#1A3352' }}>
+                <p className="m-0 mb-0.5 text-[15px] font-bold" style={{ color: '#1A3352' }}>
                   #27 Alder Way
                 </p>
                 <p className="m-0 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
@@ -231,7 +231,7 @@ export function Onboarding() {
                 }}
               >
                 <PhIcon name="ph-fill ph-file-text" size={12} color="#C75A31" />
-                <span className="text-[11px] font-extrabold" style={{ color: '#5B554A' }}>
+                <span className="text-[11px] font-bold" style={{ color: '#5B554A' }}>
                   CC&Rs §5.7 · Animals
                 </span>
               </span>

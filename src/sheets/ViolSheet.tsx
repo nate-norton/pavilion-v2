@@ -24,14 +24,14 @@ export function ViolSheet() {
       {!state.violFixed ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">A friendly heads-up</p>
-          <p className="m-0 mb-3.5 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: '#8A8375' }}>
             Courtesy notice #V-31 · no fee · nothing on your record
           </p>
           <div
             className="rounded-2xl p-[15px] mb-3"
             style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.1)' }}
           >
-            <p className="m-0 mb-2 text-[13.5px] font-extrabold text-navy">
+            <p className="m-0 mb-2 text-[13.5px] font-bold text-navy">
               Trash bins visible from the street · #27 Alder Way
             </p>
             <div className="mb-2.5">
@@ -42,7 +42,7 @@ export function ViolSheet() {
               style={{ background: '#F5F0E6', border: '1px solid rgba(26,51,82,0.1)' }}
             >
               <PhIcon name="ph-fill ph-file-text" size={12} color="#C75A31" />
-              <span className="text-[11px] font-extrabold" style={{ color: '#5B554A' }}>
+              <span className="text-[11px] font-bold" style={{ color: '#5B554A' }}>
                 CC&amp;Rs §6.3 · Bins stored out of street view except pickup day
               </span>
             </span>
@@ -84,7 +84,7 @@ export function ViolSheet() {
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-xl text-navy">
             Marked fixed. Thanks, neighbor.
           </p>
-          <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: '#8A8375' }}>
             The board confirms on their next walk-through — then #V-31 closes with no record and no
             fee.
           </p>

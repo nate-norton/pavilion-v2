@@ -18,12 +18,12 @@ export function ReportSheet() {
       {!state.reportSubmitted ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">Report a problem</p>
-          <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: '#8A8375' }}>
             Goes only to the board &amp; manager — never the public feed.
           </p>
 
           <p
-            className="m-0 mb-2 text-[11px] font-extrabold uppercase text-stone"
+            className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
             style={{ letterSpacing: '0.12em' }}
           >
             Category
@@ -41,7 +41,7 @@ export function ReportSheet() {
           </div>
 
           <p
-            className="m-0 mb-2 text-[11px] font-extrabold uppercase text-stone"
+            className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
             style={{ letterSpacing: '0.12em' }}
           >
             What&apos;s going on?
@@ -50,7 +50,7 @@ export function ReportSheet() {
             value={state.reportDesc}
             onChange={(e) => set({ reportDesc: e.target.value })}
             placeholder="e.g. Sprinkler head broken on the Green, spraying the sidewalk"
-            className="w-full bg-[#FFFEFA] rounded-[13px] px-3.5 py-3 text-[13.5px] font-semibold text-navy outline-none font-sans resize-none mb-3.5"
+            className="w-full bg-[#FFFEFA] rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans resize-none mb-3.5"
             style={{ minHeight: 70, border: '1px solid rgba(26,51,82,0.12)' }}
           />
 
@@ -85,7 +85,7 @@ export function ReportSheet() {
         <div className="text-center pt-1.5 pb-1 animate-fadeup">
           <PhIcon name="ph-fill ph-shield-check" size={48} color="#2A9D5C" />
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-xl text-navy">Sent — privately.</p>
-          <p className="m-0 mb-3.5 text-[13px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-3.5 text-[13px] font-bold" style={{ color: '#8A8375' }}>
             Ticket #M-89 · {state.reportType} · the board sees it, the feed never does
           </p>
           <div className="flex items-center justify-center gap-0 mb-4">
@@ -125,7 +125,7 @@ export function ReportSheet() {
               </span>
             </div>
           </div>
-          <p className="m-0 mb-3.5 text-xs font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-3.5 text-xs font-bold" style={{ color: '#8A8375' }}>
             Track it anytime in My Place → My requests
           </p>
           <button

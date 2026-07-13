@@ -48,13 +48,13 @@ export function DecisionDetailSheet() {
   return (
     <Sheet open onClose={() => set({ decisionDetailIdx: null })}>
       <p className="m-0 font-serif text-[19px] text-navy mb-1">{d.text}</p>
-      <p className="m-0 text-[12.5px] font-semibold mb-4" style={{ color: '#8A8375' }}>
+      <p className="m-0 text-[12.5px] font-bold mb-4" style={{ color: '#8A8375' }}>
         {d.date}
       </p>
 
       <div className="flex items-center justify-between gap-2.5 mb-2">
         <span
-          className="rounded-full px-2.5 py-1 text-[11px] font-extrabold"
+          className="rounded-full px-2.5 py-1 text-[11px] font-bold"
           style={{
             background: d.passed ? '#E9F6EE' : '#FBEDE4',
             color: d.passed ? '#228049' : '#C75A31',
@@ -80,20 +80,20 @@ export function DecisionDetailSheet() {
       </div>
 
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-extrabold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
           Summary
         </p>
         <p className="m-0 text-[13.5px] font-semibold text-navy leading-relaxed">{d.detail}</p>
       </div>
 
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-extrabold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
           Board members present
         </p>
         {d.board.map((name) => (
           <div key={name} className="flex items-center gap-2 py-1">
             <PhIcon name="ph-fill ph-check-circle" size={14} color="#2A9D5C" />
-            <span className="text-[13px] font-semibold text-navy">{name}</span>
+            <span className="text-[13px] font-bold text-navy">{name}</span>
           </div>
         ))}
       </div>

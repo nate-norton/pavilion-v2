@@ -29,7 +29,7 @@ export function PaySheet() {
       {notPaid && (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">{payTitle}</p>
-          <p className="m-0 mb-3.5 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: '#8A8375' }}>
             #27 Alder Way · due Jul 3
           </p>
           {delinquent && (
@@ -69,14 +69,14 @@ export function PaySheet() {
           >
             <PhIcon name="ph-fill ph-bank" size={20} color="#1A3352" className="flex-shrink-0" />
             <div className="flex-1">
-              <p className="m-0 text-[13px] font-extrabold text-navy">
+              <p className="m-0 text-[13px] font-bold text-navy">
                 Juniper Credit Union ····4821
               </p>
               <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
                 No card fees — ACH is free
               </p>
             </div>
-            <span className="text-xs font-extrabold" style={{ color: '#4A90E2' }}>
+            <span className="text-xs font-bold" style={{ color: '#4A90E2' }}>
               Change
             </span>
           </div>
@@ -91,7 +91,7 @@ export function PaySheet() {
               className="flex-shrink-0"
             />
             <div className="flex-1">
-              <p className="m-0 text-[13px] font-extrabold text-navy">Autopay on the 3rd</p>
+              <p className="m-0 text-[13px] font-bold text-navy">Autopay on the 3rd</p>
               <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
                 Never think about dues again
               </p>
@@ -122,7 +122,7 @@ export function PaySheet() {
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-[22px] text-navy">
             Payment plan is set.
           </p>
-          <p className="m-0 mb-3.5 text-[13px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-3.5 text-[13px] font-bold" style={{ color: '#8A8375' }}>
             3 × $190 · Jul 3, Aug 3, Sep 3 · autopay from Juniper CU ····4821
           </p>
           <div
@@ -130,7 +130,7 @@ export function PaySheet() {
             style={{ border: '1px dashed rgba(26,51,82,0.2)' }}
           >
             <PhIcon name="ph-fill ph-shield-check" size={17} color="#2A9D5C" />
-            <span className="text-[12.5px] font-extrabold text-navy">
+            <span className="text-[12.5px] font-bold text-navy">
               No late fees while the plan is active — the board sees you as current
             </span>
           </div>
@@ -149,7 +149,7 @@ export function PaySheet() {
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-[22px] text-navy">
             Paid. Done in two taps.
           </p>
-          <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: '#8A8375' }}>
             $285.00 · Jul 1, 9:41 AM · Juniper CU ····4821
           </p>
           <div
@@ -157,7 +157,7 @@ export function PaySheet() {
             style={{ border: '1px dashed rgba(26,51,82,0.2)' }}
           >
             <PhIcon name="ph-fill ph-receipt" size={17} color="#1A3352" />
-            <span className="text-[13px] font-extrabold text-navy">
+            <span className="text-[13px] font-bold text-navy">
               Receipt #P-2231 · saved to Documents
             </span>
           </div>

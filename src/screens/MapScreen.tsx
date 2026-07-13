@@ -38,7 +38,7 @@ export function MapScreen() {
       <div className="flex items-center justify-between gap-2.5" style={{ padding: '58px 18px 0' }}>
         <BackButton onClick={() => set({ mapOpen: false, selPin: null })} className="" />
         <span
-          className="rounded-full text-[11px] font-extrabold text-navy"
+          className="rounded-full text-[11px] font-bold text-navy"
           style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', padding: '5px 11px' }}
         >
           {pinCountLabel}
@@ -94,7 +94,7 @@ export function MapScreen() {
           className="absolute flex items-center justify-center"
           style={{ left: '53%', top: '5%', width: '36%', height: '16%', background: '#DCE9DD', borderRadius: 18 }}
         >
-          <span className="text-[9.5px] font-extrabold" style={{ color: '#5F8A6F', letterSpacing: '0.1em' }}>
+          <span className="text-[9.5px] font-bold" style={{ color: '#5F8A6F', letterSpacing: '0.1em' }}>
             THE GREEN
           </span>
         </div>
@@ -108,7 +108,7 @@ export function MapScreen() {
         <div className="absolute flex gap-1.5" style={{ left: '50%', top: '44%' }}>
           <span style={HOUSE} />
           <span
-            className="flex items-center justify-center text-[9px] font-extrabold text-cream"
+            className="flex items-center justify-center text-[9px] font-bold text-cream"
             style={{ width: 26, height: 20, borderRadius: 5, background: '#1A3352' }}
           >
             27
@@ -116,12 +116,12 @@ export function MapScreen() {
           <span style={HOUSE} />
         </div>
         <div className="absolute" style={{ left: '50%', top: '44%', transform: 'translate(4px,24px)' }}>
-          <span className="text-[9px] font-extrabold text-navy">You</span>
+          <span className="text-[9px] font-bold text-navy">You</span>
         </div>
         <div className="absolute flex gap-1.5" style={{ left: '6%', top: '82%' }}>
           <span style={HOUSE} />
           <span
-            className="flex items-center justify-center text-[9px] font-extrabold text-white"
+            className="flex items-center justify-center text-[9px] font-bold text-white"
             style={{ width: 26, height: 20, borderRadius: 5, background: '#D9A441' }}
           >
             42
@@ -150,7 +150,7 @@ export function MapScreen() {
           ].map(([c, l]) => (
             <div key={l} className="flex items-center gap-1.5">
               <span className="w-[9px] h-[9px] rounded-full" style={{ background: c }} />
-              <span className="text-[9.5px] font-extrabold" style={{ color: '#5B554A' }}>
+              <span className="text-[9.5px] font-bold" style={{ color: '#5B554A' }}>
                 {l}
               </span>
             </div>
@@ -200,7 +200,7 @@ export function MapScreen() {
               <PhIcon name={selPinObj.icon} size={18} color="#fff" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="m-0 mb-px text-[13px] font-extrabold text-navy leading-[1.25]">{selPinObj.title}</p>
+              <p className="m-0 mb-px text-[13px] font-bold text-navy leading-[1.25]">{selPinObj.title}</p>
               <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
                 {selPinObj.sub}
               </p>

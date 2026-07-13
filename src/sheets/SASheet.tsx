@@ -20,7 +20,7 @@ export function SASheet() {
       {notSaPaid && (
         <div>
           <p className="m-0 mb-0.5 font-serif text-[22px] text-navy">Roof-reserve assessment</p>
-          <p className="m-0 mb-3.5 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: '#8A8375' }}>
             One-time · #27 Alder Way · approved 91–22 on Jun 18
           </p>
           <div
@@ -36,10 +36,10 @@ export function SASheet() {
                 <span className="text-base">.00</span>
               </span>
             </div>
-            <p className="m-0 text-xs leading-[1.55] font-semibold" style={{ color: '#8A8375' }}>
+            <p className="m-0 text-xs leading-[1.55] font-bold" style={{ color: '#8A8375' }}>
               The 2026 reserve study flagged the clubhouse roof at end-of-life. This one-time
               assessment funds replacement without touching monthly dues.{' '}
-              <span className="font-extrabold" style={{ color: '#3A73B5' }}>
+              <span className="font-bold" style={{ color: '#3A73B5' }}>
                 Reserve study →
               </span>
             </p>
@@ -80,7 +80,7 @@ export function SASheet() {
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-[22px] text-navy">
             Assessment plan set.
           </p>
-          <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: '#8A8375' }}>
             3 × $150 · Aug 1, Sep 1, Oct 1 · autopay from Juniper CU ····4821
           </p>
           <button
@@ -97,7 +97,7 @@ export function SASheet() {
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-[22px] text-navy">
             Paid in full — thank you.
           </p>
-          <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: '#8A8375' }}>
             $450.00 · receipt #S-118 · Juniper CU ····4821
           </p>
           <button

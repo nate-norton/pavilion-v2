@@ -8,7 +8,7 @@ export interface PillProps {
 export function Pill({ label, bg, color }: PillProps) {
   return (
     <span
-      className="rounded-full px-2.5 py-1 text-[11px] font-extrabold"
+      className="rounded-full px-2.5 py-1 text-[11px] font-bold"
       style={{ background: bg, color }}
     >
       {label}

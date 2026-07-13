@@ -34,7 +34,7 @@ export function Notifications() {
         <PhIcon name={nt.icon} size={18} color={nt.color} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="m-0 mb-px text-[13px] font-extrabold text-navy leading-[1.3]">{nt.title}</p>
+        <p className="m-0 mb-px text-[13px] font-bold text-navy leading-[1.3]">{nt.title}</p>
         <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
           {nt.sub} · {nt.cat}
         </p>
@@ -67,7 +67,7 @@ export function Notifications() {
 
       {today.length > 0 && (
         <div>
-          <p className="m-0 mb-[9px] text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
+          <p className="m-0 mb-[9px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Today
           </p>
           <div className="flex flex-col gap-[9px] mb-5">{today.map(renderRow)}</div>
@@ -76,7 +76,7 @@ export function Notifications() {
 
       {earlier.length > 0 && (
         <div>
-          <p className="m-0 mb-[9px] text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
+          <p className="m-0 mb-[9px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: '#8A8375' }}>
             Earlier
           </p>
           <div className="flex flex-col gap-[9px] mb-5">{earlier.map(renderRow)}</div>
@@ -86,7 +86,7 @@ export function Notifications() {
       {allMuted && (
         <div className="text-center" style={{ padding: '22px 16px 26px' }}>
           <PhIcon name="ph ph-bell-slash" size={32} color="#A39B8B" className="inline-block" />
-          <p className="mt-[9px] mb-0.5 text-sm font-extrabold text-navy">Quiet in here</p>
+          <p className="mt-[9px] mb-0.5 text-sm font-bold text-navy">Quiet in here</p>
           <p className="m-0 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
             Every category is muted. Turn one back on below.
           </p>

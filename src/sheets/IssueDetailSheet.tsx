@@ -91,7 +91,7 @@ export function IssueDetailSheet() {
           <p className="m-0 font-serif text-[19px] text-navy">{issue.title}</p>
         </div>
         <span
-          className="rounded-full px-2.5 py-1 text-[11px] font-extrabold flex-shrink-0"
+          className="rounded-full px-2.5 py-1 text-[11px] font-bold flex-shrink-0"
           style={{
             background: isResolved ? '#E9F6EE' : '#FBF3E0',
             color: isResolved ? '#228049' : '#A87B1F',
@@ -108,17 +108,17 @@ export function IssueDetailSheet() {
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
         <div className="flex items-center gap-2.5 mb-2">
           <PhIcon name="ph-fill ph-map-trifold" size={14} color="#8A8375" />
-          <p className="m-0 text-[13px] font-semibold text-navy">{issue.location}</p>
+          <p className="m-0 text-[13px] font-bold text-navy">{issue.location}</p>
         </div>
         <div className="flex items-center gap-2.5">
           <PhIcon name="ph-fill ph-users" size={14} color="#8A8375" />
-          <p className="m-0 text-[13px] font-semibold text-navy">{issue.reporters}</p>
+          <p className="m-0 text-[13px] font-bold text-navy">{issue.reporters}</p>
         </div>
       </div>
 
       {issue.vendor && (
         <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-          <p className="m-0 text-[11px] font-extrabold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
             Vendor
           </p>
           <p className="m-0 text-[13.5px] font-bold text-navy">{issue.vendor}</p>
