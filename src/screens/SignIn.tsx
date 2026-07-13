@@ -35,7 +35,7 @@ export function SignIn() {
         >
           <PhIcon name="ph-fill ph-house-line" size={20} color="#E8A788" className="flex-shrink-0" />
           <div>
-            <p className="m-0 mb-px text-[13.5px] font-extrabold text-cream">Juniper Ridge</p>
+            <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Juniper Ridge</p>
             <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgba(245,240,230,0.6)' }}>
               136 homes · Est. 1994 · you were invited by your HOA
             </p>

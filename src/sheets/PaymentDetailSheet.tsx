@@ -103,7 +103,7 @@ export function PaymentDetailSheet() {
 
       {status.confirmation && (
         <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-          <p className="m-0 text-[11px] font-extrabold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
             Confirmation
           </p>
           <p className="m-0 text-[13.5px] font-bold text-navy">{status.confirmation}</p>

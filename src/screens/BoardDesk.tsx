@@ -670,7 +670,7 @@ export function BoardDesk() {
                 <button
                   onClick={sendBroadcast}
                   disabled={!canBc}
-                  className="w-full border-0 rounded-[13px] py-[13px] text-sm font-bold"
+                  className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold"
                   style={{ background: canBc ? '#E06A3E' : '#DDD5C2', color: canBc ? '#fff' : '#A39B8B', cursor: canBc ? 'pointer' : 'default' }}
                 >
                   Send to 136 households
