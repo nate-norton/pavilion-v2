@@ -58,34 +58,38 @@ export function ArcSheet() {
         Photos
       </p>
       <div className="grid grid-cols-2 gap-2.5 mb-4">
-        <div
-          className="flex flex-col items-center justify-center gap-1"
+        <button
+          type="button"
+          onClick={() => set({ arcPhoto1: true })}
+          className="flex flex-col items-center justify-center gap-1 cursor-pointer"
           style={{
             height: 76,
-            border: '1.5px dashed rgba(26,51,82,0.2)',
+            border: state.arcPhoto1 ? '1.5px solid rgba(42,157,92,0.4)' : '1.5px dashed rgba(26,51,82,0.2)',
             borderRadius: 13,
-            background: 'repeating-linear-gradient(-45deg,#F3EDE0 0 8px,#F9F5EC 8px 16px)',
+            background: state.arcPhoto1 ? '#E9F6EE' : 'repeating-linear-gradient(-45deg,#F3EDE0 0 8px,#F9F5EC 8px 16px)',
           }}
         >
-          <PhIcon name="ph ph-camera-plus" size={19} color="#8A8375" />
-          <span className="font-mono text-[10px]" style={{ color: '#8A8375' }}>
-            current state
+          <PhIcon name={state.arcPhoto1 ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={19} color={state.arcPhoto1 ? '#2A9D5C' : '#8A8375'} />
+          <span className="font-mono text-[10px]" style={{ color: state.arcPhoto1 ? '#228049' : '#8A8375' }}>
+            {state.arcPhoto1 ? 'added ✓' : 'current state'}
           </span>
-        </div>
-        <div
-          className="flex flex-col items-center justify-center gap-1"
+        </button>
+        <button
+          type="button"
+          onClick={() => set({ arcPhoto2: true })}
+          className="flex flex-col items-center justify-center gap-1 cursor-pointer"
           style={{
             height: 76,
-            border: '1.5px dashed rgba(26,51,82,0.2)',
+            border: state.arcPhoto2 ? '1.5px solid rgba(42,157,92,0.4)' : '1.5px dashed rgba(26,51,82,0.2)',
             borderRadius: 13,
-            background: 'repeating-linear-gradient(-45deg,#F3EDE0 0 8px,#F9F5EC 8px 16px)',
+            background: state.arcPhoto2 ? '#E9F6EE' : 'repeating-linear-gradient(-45deg,#F3EDE0 0 8px,#F9F5EC 8px 16px)',
           }}
         >
-          <PhIcon name="ph ph-image-square" size={19} color="#8A8375" />
-          <span className="font-mono text-[10px]" style={{ color: '#8A8375' }}>
-            plan / inspiration
+          <PhIcon name={state.arcPhoto2 ? 'ph-fill ph-check-circle' : 'ph ph-image-square'} size={19} color={state.arcPhoto2 ? '#2A9D5C' : '#8A8375'} />
+          <span className="font-mono text-[10px]" style={{ color: state.arcPhoto2 ? '#228049' : '#8A8375' }}>
+            {state.arcPhoto2 ? 'added ✓' : 'plan / inspiration'}
           </span>
-        </div>
+        </button>
       </div>
 
       <div

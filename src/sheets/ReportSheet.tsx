@@ -54,20 +54,22 @@ export function ReportSheet() {
             style={{ minHeight: 70, border: '1px solid rgba(26,51,82,0.12)' }}
           />
 
-          <div
-            className="flex items-center justify-center gap-2 mb-4"
+          <button
+            type="button"
+            onClick={() => set({ reportPhoto: true })}
+            className="w-full flex items-center justify-center gap-2 mb-4 cursor-pointer"
             style={{
               height: 70,
-              border: '1.5px dashed rgba(26,51,82,0.2)',
+              border: state.reportPhoto ? '1.5px solid rgba(42,157,92,0.4)' : '1.5px dashed rgba(26,51,82,0.2)',
               borderRadius: 13,
-              background: 'repeating-linear-gradient(-45deg,#F3EDE0 0 8px,#F9F5EC 8px 16px)',
+              background: state.reportPhoto ? '#E9F6EE' : 'repeating-linear-gradient(-45deg,#F3EDE0 0 8px,#F9F5EC 8px 16px)',
             }}
           >
-            <PhIcon name="ph ph-camera-plus" size={18} color="#8A8375" />
-            <span className="font-mono text-[10px]" style={{ color: '#8A8375' }}>
-              add a photo (optional)
+            <PhIcon name={state.reportPhoto ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={state.reportPhoto ? '#2A9D5C' : '#8A8375'} />
+            <span className="font-mono text-[10px]" style={{ color: state.reportPhoto ? '#228049' : '#8A8375' }}>
+              {state.reportPhoto ? 'photo added ✓' : 'add a photo (optional)'}
             </span>
-          </div>
+          </button>
 
           <button
             onClick={submitReport}

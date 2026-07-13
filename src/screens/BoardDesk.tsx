@@ -845,19 +845,19 @@ export function BoardDesk() {
           <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgba(26,51,82,0.08)' }}>
             <div className="flex flex-col gap-[9px] mb-3">
               <div className="flex gap-2.5 items-center">
-                <PhIcon name="ph ph-dots-six-vertical" size={14} color="#C9C1B0" />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: '#C9C1B0' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">2027 budget ratification</span>
               </div>
               <div className="flex gap-2.5 items-center">
-                <PhIcon name="ph ph-dots-six-vertical" size={14} color="#C9C1B0" />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: '#C9C1B0' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">Board election — 2 seats, 3 candidates</span>
               </div>
               <div className="flex gap-2.5 items-center">
-                <PhIcon name="ph ph-dots-six-vertical" size={14} color="#C9C1B0" />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: '#C9C1B0' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">Pool furniture vote — results</span>
               </div>
               <div className="flex gap-2.5 items-center">
-                <PhIcon name="ph ph-dots-six-vertical" size={14} color="#C9C1B0" />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: '#C9C1B0' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">Open comment (2 min each)</span>
               </div>
             </div>

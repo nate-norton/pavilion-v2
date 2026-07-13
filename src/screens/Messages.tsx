@@ -1,4 +1,5 @@
 import { BackButton } from '../components/BackButton';
+import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 import { CHAT_SEED } from '../data';
 
@@ -16,10 +17,42 @@ export function Messages() {
       style={{ background: '#F5F0E6', padding: '60px 18px 40px' }}
     >
       <BackButton onClick={() => set({ msgsOpen: false })} />
-      <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">Messages</h1>
+      <div className="flex items-center justify-between mb-1">
+        <h1 className="m-0 font-serif font-normal text-[26px] text-navy">Messages</h1>
+        <button
+          type="button"
+          onClick={() => set({ newMsgOpen: true })}
+          className="w-9 h-9 rounded-full border-none flex items-center justify-center cursor-pointer bg-navy"
+        >
+          <PhIcon name="ph-bold ph-pencil-simple-line" size={16} color="#F5F0E6" />
+        </button>
+      </div>
       <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: '#7A7365' }}>
         Neighbor-to-neighbor. Private, and never in the feed.
       </p>
+      {state.newMsgOpen && (
+        <div className="rounded-2xl mb-4 overflow-hidden animate-fadeup" style={{ border: '1px solid rgba(26,51,82,0.1)' }}>
+          <p className="m-0 px-3.5 pt-3 pb-2 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+            Start a conversation
+          </p>
+          {Object.entries(CHAT_SEED).map(([k, p]) => (
+            <div
+              key={k}
+              onClick={() => set({ chatWith: k, msgsOpen: false, newMsgOpen: false })}
+              className="flex items-center gap-2.5 px-3.5 py-2.5 cursor-pointer bg-[#FFFEFA]"
+              style={{ borderTop: '1px solid rgba(26,51,82,0.06)' }}
+            >
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white font-extrabold text-xs flex-shrink-0"
+                style={{ background: p.color }}
+              >
+                {p.initial}
+              </div>
+              <p className="m-0 text-[13px] font-bold text-navy">{p.name} <span className="font-semibold text-stonelight">· {p.unit}</span></p>
+            </div>
+          ))}
+        </div>
+      )}
       <div className="flex flex-col gap-[9px]">
         {Object.entries(CHAT_SEED).map(([k, p]) => {
           const mine = state.chats[k] || [];

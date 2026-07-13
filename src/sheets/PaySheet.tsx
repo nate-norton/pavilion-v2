@@ -64,22 +64,48 @@ export function PaySheet() {
             Landscaping $78 · Reserves $71 · Insurance $54 · Utilities $48 · Mgmt $34
           </p>
           <div
-            className="rounded-[14px] p-[13px_14px] flex items-center gap-2.5 mb-2.5 bg-[#FFFEFA]"
+            className="rounded-[14px] p-[13px_14px] flex items-center gap-2.5 mb-2.5 bg-[#FFFEFA] cursor-pointer"
             style={{ border: '1px solid rgba(26,51,82,0.1)' }}
+            onClick={() => set({ payMethodOpen: !state.payMethodOpen })}
           >
             <PhIcon name="ph-fill ph-bank" size={20} color="#1A3352" className="flex-shrink-0" />
             <div className="flex-1">
               <p className="m-0 text-[13px] font-bold text-navy">
-                Juniper Credit Union ····4821
+                {state.payMethod === 'jcu' ? 'Juniper Credit Union ····4821' : state.payMethod === 'visa' ? 'Visa ····7923' : 'Apple Pay'}
               </p>
               <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
-                No card fees — ACH is free
+                {state.payMethod === 'jcu' ? 'No card fees — ACH is free' : state.payMethod === 'visa' ? '$2.85 processing fee' : 'No card fees'}
               </p>
             </div>
             <span className="text-xs font-bold" style={{ color: '#4A90E2' }}>
               Change
             </span>
           </div>
+          {state.payMethodOpen && (
+            <div className="rounded-[14px] mb-2.5 overflow-hidden animate-fadeup" style={{ border: '1px solid rgba(26,51,82,0.1)' }}>
+              {[
+                { key: 'jcu', label: 'Juniper Credit Union ····4821', sub: 'ACH · free', icon: 'ph-fill ph-bank' },
+                { key: 'visa', label: 'Visa ····7923', sub: '$2.85 fee', icon: 'ph-fill ph-credit-card' },
+                { key: 'apple', label: 'Apple Pay', sub: 'No fee', icon: 'ph-fill ph-apple-logo' },
+              ].map((pm) => (
+                <div
+                  key={pm.key}
+                  onClick={() => set({ payMethod: pm.key, payMethodOpen: false })}
+                  className="flex items-center gap-2.5 px-3.5 py-3 cursor-pointer bg-[#FFFEFA]"
+                  style={{ borderBottom: pm.key !== 'apple' ? '1px solid rgba(26,51,82,0.06)' : undefined }}
+                >
+                  <PhIcon name={pm.icon} size={17} color="#1A3352" className="flex-shrink-0" />
+                  <div className="flex-1">
+                    <p className="m-0 text-[12.5px] font-bold text-navy">{pm.label}</p>
+                    <p className="m-0 text-[11px] font-semibold" style={{ color: '#8A8375' }}>{pm.sub}</p>
+                  </div>
+                  {state.payMethod === pm.key && (
+                    <PhIcon name="ph-fill ph-check-circle" size={16} color="#2A9D5C" />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
           <div
             className="rounded-[14px] p-[13px_14px] flex items-center gap-2.5 mb-4 bg-[#FFFEFA]"
             style={{ border: '1px solid rgba(26,51,82,0.1)' }}

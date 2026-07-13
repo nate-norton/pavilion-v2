@@ -39,9 +39,14 @@ export function SASheet() {
             <p className="m-0 text-xs leading-[1.55] font-bold" style={{ color: '#8A8375' }}>
               The 2026 reserve study flagged the clubhouse roof at end-of-life. This one-time
               assessment funds replacement without touching monthly dues.{' '}
-              <span className="font-bold" style={{ color: '#3A73B5' }}>
+              <button
+                type="button"
+                onClick={() => set({ saSheetOpen: false, docsOpen: true, docReader: true, docReaderKey: 'reserve' })}
+                className="inline border-none bg-transparent p-0 font-bold cursor-pointer font-sans text-xs"
+                style={{ color: '#3A73B5' }}
+              >
                 Reserve study →
-              </span>
+              </button>
             </p>
           </div>
           <div

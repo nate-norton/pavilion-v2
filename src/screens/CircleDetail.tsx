@@ -98,18 +98,32 @@ export function CircleDetail() {
         </div>
       </div>
 
-      <div style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', borderRadius: 16, padding: 15, marginBottom: 10 }}>
-        <p className="m-0 mb-1 text-[12.5px] font-bold text-navy">Tomato starts — free on the bench by plot 4</p>
-        <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
-          Garden Circle · 1d · 9 likes
-        </p>
-      </div>
-      <div style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', borderRadius: 16, padding: 15 }}>
-        <p className="m-0 mb-1 text-[12.5px] font-bold text-navy">Compost bin how-to (with photos)</p>
-        <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
-          Rosa M. · 4d · 12 likes
-        </p>
-      </div>
+      {[
+        { id: 'tomato', title: 'Tomato starts — free on the bench by plot 4', author: 'Garden Circle', time: '1d', likes: 9 },
+        { id: 'compost', title: 'Compost bin how-to (with photos)', author: 'Rosa M.', time: '4d', likes: 12 },
+      ].map((post) => {
+        const liked = !!state.circlePostLiked[post.id];
+        return (
+          <div key={post.id} style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', borderRadius: 16, padding: 15, marginBottom: 10 }}>
+            <p className="m-0 mb-1.5 text-[12.5px] font-bold text-navy">{post.title}</p>
+            <div className="flex items-center justify-between">
+              <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+                {post.author} · {post.time}
+              </p>
+              <button
+                type="button"
+                onClick={() => set({ circlePostLiked: { ...state.circlePostLiked, [post.id]: !liked } })}
+                className="border-none bg-transparent flex items-center gap-1 cursor-pointer p-0"
+              >
+                <PhIcon name={liked ? 'ph-fill ph-heart' : 'ph ph-heart'} size={14} color={liked ? '#E06A3E' : '#A39B8B'} />
+                <span className="text-[11.5px] font-bold" style={{ color: liked ? '#E06A3E' : '#A39B8B' }}>
+                  {post.likes + (liked ? 1 : 0)}
+                </span>
+              </button>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

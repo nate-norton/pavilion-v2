@@ -3,6 +3,15 @@ import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 import { CHAT_SEED } from '../data';
 
+function now(): string {
+  const d = new Date();
+  let h = d.getHours();
+  const m = String(d.getMinutes()).padStart(2, '0');
+  const ap = h < 12 ? 'AM' : 'PM';
+  h = h % 12 || 12;
+  return `${h}:${m} ${ap}`;
+}
+
 /** 1:1 chat thread screen — ported from prototype lines 1926-1953. */
 export function Chat() {
   const state = usePavStore();
@@ -83,6 +92,11 @@ export function Chat() {
         <button
           type="button"
           title="Send a photo"
+          onClick={() => {
+            if (!chatKey) return;
+            const updated = [...(state.chats[chatKey] || []), { me: true, text: '📷 Photo', time: now() }];
+            set({ chats: { ...state.chats, [chatKey]: updated } });
+          }}
           className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
           style={{ border: '1px solid rgba(26,51,82,0.12)', background: '#FFFEFA' }}
         >

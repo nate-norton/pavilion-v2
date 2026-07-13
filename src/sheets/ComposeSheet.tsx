@@ -6,6 +6,7 @@ import { usePavStore } from '../store/store';
 
 export function ComposeSheet() {
   const composeOpen = usePavStore((s) => s.composeOpen);
+  const composePhoto = usePavStore((s) => s.composePhoto);
   const set = usePavStore((s) => s.set);
   const [text, setText] = useState('');
   const [posted, setPosted] = useState(false);
@@ -13,7 +14,7 @@ export function ComposeSheet() {
   if (!composeOpen) return null;
 
   const close = () => {
-    set({ composeOpen: false });
+    set({ composeOpen: false, composePhoto: false });
     setText('');
     setPosted(false);
   };
@@ -46,13 +47,30 @@ export function ComposeSheet() {
             style={{ minHeight: 100, outline: 'none' }}
           />
           <div className="flex items-center justify-between mt-3">
-            <div className="flex gap-2">
-              <div className="w-9 h-9 rounded-full bg-cream flex items-center justify-center">
-                <PhIcon name="ph-fill ph-camera" size={18} color="#8A8375" />
-              </div>
-              <div className="w-9 h-9 rounded-full bg-cream flex items-center justify-center">
-                <PhIcon name="ph-fill ph-image-square" size={18} color="#8A8375" />
-              </div>
+            <div className="flex gap-2 items-center">
+              {composePhoto ? (
+                <span className="text-[11.5px] font-bold text-sage flex items-center gap-1">
+                  <PhIcon name="ph-fill ph-check-circle" size={14} color="#2A9D5C" />
+                  Photo attached
+                </span>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => set({ composePhoto: true })}
+                    className="w-9 h-9 rounded-full bg-cream flex items-center justify-center border-none cursor-pointer"
+                  >
+                    <PhIcon name="ph-fill ph-camera" size={18} color="#8A8375" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => set({ composePhoto: true })}
+                    className="w-9 h-9 rounded-full bg-cream flex items-center justify-center border-none cursor-pointer"
+                  >
+                    <PhIcon name="ph-fill ph-image-square" size={18} color="#8A8375" />
+                  </button>
+                </>
+              )}
             </div>
             <button
               onClick={post}

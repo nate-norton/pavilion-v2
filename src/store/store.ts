@@ -162,6 +162,18 @@ export interface PavData {
   arcNeedsInfo: boolean;
   digestScheduled: boolean;
   langOpen: boolean;
+  // photo attachment state
+  arcPhoto1: boolean;
+  arcPhoto2: boolean;
+  reportPhoto: boolean;
+  composePhoto: boolean;
+  // payment method picker
+  payMethodOpen: boolean;
+  payMethod: string;
+  // circle detail
+  circlePostLiked: Record<string, boolean>;
+  // new message
+  newMsgOpen: boolean;
   // scenario flags
   showDelinquent: boolean;
   showSpecialAssessment: boolean;
@@ -322,6 +334,18 @@ export const dataDefaults: PavData = {
   arcNeedsInfo: false,
   digestScheduled: false,
   langOpen: false,
+  // photo attachment state
+  arcPhoto1: false,
+  arcPhoto2: false,
+  reportPhoto: false,
+  composePhoto: false,
+  // payment method picker
+  payMethodOpen: false,
+  payMethod: 'jcu',
+  // circle detail
+  circlePostLiked: {},
+  // new message
+  newMsgOpen: false,
   // scenario flags
   showDelinquent: false,
   showSpecialAssessment: false,
