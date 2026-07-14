@@ -61,7 +61,7 @@ export function Today() {
 
   return (
     <div
-      className="absolute inset-0 overflow-y-auto pav-scroll animate-scpop"
+      className="absolute inset-0 overflow-y-auto pav-scroll"
       style={{ padding: '64px 20px 150px' }}
     >
       {showAlert && (

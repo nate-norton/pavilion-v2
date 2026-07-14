@@ -29,7 +29,7 @@ export function Reserve() {
   if (amen) {
     return (
       <div
-        className="absolute inset-0 overflow-y-auto pav-scroll animate-scpop"
+        className="absolute inset-0 overflow-y-auto pav-scroll"
         style={{ padding: '64px 18px 150px' }}
       >
         <div className="animate-fadeup">

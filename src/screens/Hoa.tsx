@@ -58,7 +58,7 @@ export function Hoa() {
   ];
 
   return (
-    <div className="absolute inset-0 overflow-y-auto pav-scroll animate-scpop" style={{ padding: '64px 18px 150px' }}>
+    <div className="absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: '64px 18px 150px' }}>
       <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">The HOA, in the open</h1>
       <p className="m-0 mb-[18px] text-[13.5px] font-semibold text-taupe">
         Every dollar, vote, and decision — visible to every household.
