@@ -90,7 +90,6 @@ export interface PavData {
   rsvpMovie: boolean;
   liked: boolean;
   offered: boolean;
-  waved: boolean;
   filter: string;
   amenIdx: number | null;
   slotIdx: number | null;
@@ -136,7 +135,6 @@ export interface PavData {
   commonsView: string;
   nudgeDismissed: boolean;
   claimed: Record<string, boolean>;
-  dirWaved: Record<string, boolean>;
   circJoined: Record<string, boolean>;
   largeType: boolean;
   notifOpen: boolean;
@@ -268,7 +266,6 @@ export const dataDefaults: PavData = {
   rsvpMovie: false,
   liked: false,
   offered: false,
-  waved: false,
   filter: 'all',
   amenIdx: null,
   slotIdx: null,
@@ -320,7 +317,6 @@ export const dataDefaults: PavData = {
   commonsView: 'feed',
   nudgeDismissed: false,
   claimed: {},
-  dirWaved: {},
   circJoined: {},
   largeType: false,
   notifOpen: false,
