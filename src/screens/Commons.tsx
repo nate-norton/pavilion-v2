@@ -3,7 +3,7 @@ import { Avatar } from '../components/Avatar';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
-import { CIRC, DIR, FREE } from '../data';
+import { DIR, FREE } from '../data';
 import { usePavStore } from '../store/store';
 
 const SEG_OPTIONS = [
@@ -17,7 +17,6 @@ const SEG_OPTIONS = [
 export function Commons() {
   const state = usePavStore();
   const { set, addComment } = state;
-  const [circleStarted, setCircleStarted] = useState(false);
 
   const likeCount = 14 + (state.liked ? 1 : 0);
   const heartClass = state.liked ? 'ph-fill ph-heart' : 'ph ph-heart';
@@ -225,11 +224,11 @@ export function Commons() {
                     </p>
                   </div>
                   <button
-                    onClick={() => set({ circleOpen: true })}
+                    onClick={() => set({ activeGroup: 'gr-garden' })}
                     className="border-none rounded-full px-2.5 py-1 text-[11px] font-extrabold cursor-pointer"
                     style={{ background: '#E9F6EE', color: '#228049' }}
                   >
-                    Circle →
+                    Group →
                   </button>
                 </div>
                 <p className="m-0 text-sm leading-[1.55]" style={{ color: '#3E4C63' }}>
@@ -241,101 +240,122 @@ export function Commons() {
         </div>
       )}
 
-      {state.commonsView === 'circles' && (
-        <div className="animate-fadeup">
-          <p className="m-0 mx-1 mb-2.5 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
-            Yours
-          </p>
-          <div className="flex flex-col gap-2.5 mb-5">
-            <div
-              onClick={() => set({ circleOpen: true })}
-              className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
-              style={{ border: '1px solid rgba(26,51,82,0.08)' }}
-            >
-              <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: '#E9F6EE' }}>
-                <PhIcon name="ph-fill ph-plant" size={20} color="#2A9D5C" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="m-0 mb-px text-sm font-bold text-navy">Garden Circle</p>
-                <p className="m-0 text-[11.5px] text-stone font-semibold">24 members · next: Sat work party, 9 AM</p>
-              </div>
-              <span className="text-[12.5px] font-extrabold flex-shrink-0 text-terracotta">
-                Open →
-              </span>
-            </div>
-            <div
-              onClick={() => set({ circleOpen: true })}
-              className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
-              style={{ border: '1px solid rgba(26,51,82,0.08)' }}
-            >
-              <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: '#EAF3FD' }}>
-                <PhIcon name="ph-fill ph-tennis-ball" size={20} color="#3A73B5" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="m-0 mb-px text-sm font-bold text-navy">Pickleball</p>
-                <p className="m-0 text-[11.5px] text-stone font-semibold">18 members · league night Thu 6 PM</p>
-              </div>
-              <span className="rounded-full px-2.5 py-1 text-[10.5px] font-bold flex-shrink-0" style={{ background: '#E9F6EE', color: '#228049' }}>
-                Joined ✓
-              </span>
-            </div>
-          </div>
-
-          <p className="m-0 mx-1 mb-2.5 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
-            Discover
-          </p>
-          <div className="flex flex-col gap-2.5">
-            {CIRC.map((c) => {
-              const joined = !!state.circJoined[c.key];
-              return (
-                <div
-                  key={c.key}
-                  className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3"
-                  style={{ border: '1px solid rgba(26,51,82,0.08)' }}
-                >
-                  <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: c.bg }}>
-                    <PhIcon name={c.icon} size={20} color={c.color} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="m-0 mb-px text-sm font-bold text-navy">{c.name}</p>
-                    <p className="m-0 text-[11.5px] text-stone font-semibold">{c.sub}</p>
-                  </div>
-                  <button
-                    onClick={() => set({ circJoined: { ...state.circJoined, [c.key]: !joined } })}
-                    className="border-none rounded-full px-3.5 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"
-                    style={joined ? { background: '#E9F6EE', color: '#228049' } : { background: '#1A3352', color: '#F5F0E6' }}
-                  >
-                    {joined ? 'Joined ✓' : 'Join'}
-                  </button>
+      {state.commonsView === 'circles' && (() => {
+        const allGroups = Object.values(state.groups).filter((g) => !g.isGroupChat);
+        const joined = allGroups.filter((g) => g.joined);
+        const discover = allGroups.filter((g) => !g.joined);
+        return (
+          <div className="animate-fadeup">
+            {joined.length > 0 && (
+              <>
+                <p className="m-0 mx-1 mb-2.5 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+                  Yours
+                </p>
+                <div className="flex flex-col gap-2.5 mb-5">
+                  {joined.map((g) => {
+                    const openPolls = g.polls.filter((p) => !p.myVote).length;
+                    const upcomingEvents = g.events.filter((e) => !e.rsvped).length;
+                    const lastMsg = g.messages[g.messages.length - 1];
+                    return (
+                      <div
+                        key={g.key}
+                        onClick={() => set({ activeGroup: g.key })}
+                        className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
+                        style={{ border: '1px solid rgba(26,51,82,0.08)' }}
+                      >
+                        <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: g.color + '18' }}>
+                          <PhIcon name={g.icon} size={20} color={g.color} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="m-0 mb-px text-sm font-bold text-navy flex items-center gap-1.5">
+                            {g.name}
+                            {g.muted && <PhIcon name="ph-fill ph-bell-slash" size={11} color="#A39B8B" />}
+                          </p>
+                          <p className="m-0 text-[11.5px] text-stone font-semibold overflow-hidden text-ellipsis whitespace-nowrap">
+                            {lastMsg ? lastMsg.text : `${g.memberCount} members`}
+                          </p>
+                          {(openPolls > 0 || upcomingEvents > 0) && (
+                            <div className="flex gap-2 mt-1">
+                              {openPolls > 0 && (
+                                <span className="text-[10px] font-bold rounded-full px-2 py-0.5" style={{ background: '#FBF3E0', color: '#B8872E' }}>
+                                  {openPolls} poll{openPolls > 1 ? 's' : ''}
+                                </span>
+                              )}
+                              {upcomingEvents > 0 && (
+                                <span className="text-[10px] font-bold rounded-full px-2 py-0.5" style={{ background: '#EAF3FD', color: '#3A73B5' }}>
+                                  {upcomingEvents} event{upcomingEvents > 1 ? 's' : ''}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <span className="text-[12.5px] font-extrabold flex-shrink-0 text-terracotta">
+                          Open →
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
+              </>
+            )}
+
+            {discover.length > 0 && (
+              <>
+                <p className="m-0 mx-1 mb-2.5 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+                  Discover
+                </p>
+                <div className="flex flex-col gap-2.5 mb-5">
+                  {discover.map((g) => {
+                    const nextEvent = g.events[0];
+                    return (
+                      <div
+                        key={g.key}
+                        onClick={() => set({ activeGroup: g.key })}
+                        className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
+                        style={{ border: '1px solid rgba(26,51,82,0.08)' }}
+                      >
+                        <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: g.color + '18' }}>
+                          <PhIcon name={g.icon} size={20} color={g.color} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="m-0 mb-px text-sm font-bold text-navy">{g.name}</p>
+                          <p className="m-0 text-[11.5px] text-stone font-semibold">
+                            {g.memberCount} members{nextEvent ? ` · ${nextEvent.title}` : ''}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); state.toggleGroupJoin(g.key); }}
+                          className="border-none rounded-full px-3.5 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"
+                          style={{ background: '#1A3352', color: '#F5F0E6' }}
+                        >
+                          Join
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+
             <div
-              onClick={() => setCircleStarted(true)}
+              onClick={() => set({ createGroupOpen: true })}
               className="rounded-[18px] p-4 flex items-center gap-3 cursor-pointer"
               style={{ border: '1.5px dashed rgba(26,51,82,0.2)' }}
             >
               <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-sand">
-                {circleStarted
-                  ? <PhIcon name="ph-fill ph-check-circle" size={20} color="#2A9D5C" />
-                  : <PhIcon name="ph-bold ph-plus" size={18} color="#8A8375" />
-                }
+                <PhIcon name="ph-bold ph-plus" size={18} color="#8A8375" />
               </div>
               <div className="flex-1">
-                <p className="m-0 mb-px text-sm font-bold text-bark">
-                  {circleStarted ? 'Circle request sent!' : 'Start a circle'}
-                </p>
+                <p className="m-0 mb-px text-sm font-bold text-bark">Start a group</p>
                 <p className="m-0 text-[11.5px] text-stonelight font-semibold">
-                  {circleStarted
-                    ? 'The board will review and invite neighbors nearby.'
-                    : 'Any interest counts — 5 neighbors makes it official'
-                  }
+                  Any interest counts — 5 neighbors makes it official
                 </p>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {state.commonsView === 'dir' && (
         <div className="animate-fadeup">

@@ -53,7 +53,7 @@ export function MyPlace() {
   const duesBg = state.paid ? '#E9F6EE' : state.planActive ? '#EAF3FD' : '#FBEDE4';
   const duesColor = state.paid ? '#228049' : state.planActive ? '#3A73B5' : '#C75A31';
   const myBookings = state.booked && state.bookingSummary ? '1 upcoming' : 'None yet';
-  const myCirclesCount = 2 + Object.values(state.circJoined).filter(Boolean).length;
+  const myCirclesCount = Object.values(state.groups).filter((g) => !g.isGroupChat && g.joined).length;
 
   const pfDoors = PORTFOLIO.reduce((a, c) => a + c.doors, 0);
   const pfCollected = Math.round(
@@ -489,24 +489,18 @@ export function MyPlace() {
       <div style={CARD}>
         <p className="m-0 mb-[11px] font-serif text-base text-navy">My groups</p>
         <div className="flex gap-2 flex-wrap">
-          <button
-            type="button"
-            onClick={() => set({ circleOpen: true })}
-            className="inline-flex items-center gap-1.5 border-none rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans"
-            style={{ background: '#E9F6EE', color: '#228049', padding: '8px 13px' }}
-          >
-            <PhIcon name="ph-fill ph-plant" size={14} />
-            Garden
-          </button>
-          <button
-            type="button"
-            onClick={() => set({ circleOpen: true })}
-            className="inline-flex items-center gap-1.5 border-none rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans"
-            style={{ background: '#EAF3FD', color: '#3A73B5', padding: '8px 13px' }}
-          >
-            <PhIcon name="ph-fill ph-tennis-ball" size={14} />
-            Pickleball
-          </button>
+          {Object.values(state.groups).filter((g) => !g.isGroupChat && g.joined).map((g) => (
+            <button
+              key={g.key}
+              type="button"
+              onClick={() => set({ activeGroup: g.key })}
+              className="inline-flex items-center gap-1.5 border-none rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans"
+              style={{ background: g.color + '18', color: g.color, padding: '8px 13px' }}
+            >
+              <PhIcon name={g.icon} size={14} />
+              {g.name}
+            </button>
+          ))}
           <button
             type="button"
             onClick={() => set({ myPlaceOpen: false, tab: 'commons', commonsView: 'circles' })}
