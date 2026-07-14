@@ -2,7 +2,7 @@ import { useState, type CSSProperties, type ReactNode } from 'react';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
-import { usePavStore } from '../store/store';
+import { usePavStore, dataDefaults } from '../store/store';
 import { getDelinquent } from '../store/selectors';
 import { PORTFOLIO } from '../data';
 
@@ -575,7 +575,10 @@ export function MyPlace() {
             </div>
           )}
         </div>
-        <button type="button" onClick={() => set({ loginOpen: true, myPlaceOpen: false })} className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer font-sans p-0" style={{ color: '#C75A31' }}>
+        <button type="button" onClick={() => {
+          localStorage.removeItem('pavilion-demo');
+          usePavStore.setState({ ...dataDefaults, loginOpen: true, epoch: usePavStore.getState().epoch + 1 });
+        }} className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer font-sans p-0" style={{ color: '#C75A31' }}>
           Sign out
         </button>
       </div>
