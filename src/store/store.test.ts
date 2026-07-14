@@ -35,6 +35,17 @@ it('attention summary reacts to role', () => {
   expect(getAttention(s()).n).toBe(0);
 });
 
+it('pickRole closes any open sheets/overlays', () => {
+  act(() => s().set({ aiOpen: true, paySheetOpen: true, notifOpen: true, chatWith: 'okafor', activeGroup: 'gr-garden' }));
+  act(() => s().pickRole('manager'));
+  expect(s().role).toBe('manager');
+  expect(s().aiOpen).toBe(false);
+  expect(s().paySheetOpen).toBe(false);
+  expect(s().notifOpen).toBe(false);
+  expect(s().chatWith).toBe(null);
+  expect(s().activeGroup).toBe(null);
+});
+
 it('delinquent scenario computes from flags', () => {
   act(() => s().set({ showDelinquent: true }));
   expect(getQuorum(s()).count).toBe(87);

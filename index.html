@@ -13,6 +13,13 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Demo helper: opening the app with ?fresh wipes persisted state before
+      // the store hydrates, so a projector machine always starts clean.
+      if (location.search.indexOf('fresh') !== -1) {
+        try { localStorage.removeItem('pavilion-demo'); } catch (e) { /* ignore */ }
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

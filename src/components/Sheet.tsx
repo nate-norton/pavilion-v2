@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 
 export interface SheetProps {
   open: boolean;
@@ -12,6 +12,15 @@ export interface SheetProps {
  * Prototype reference: pay-sheet lines 1282-1285.
  */
 export function Sheet({ open, onClose, children, maxHeight }: SheetProps) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open, onClose]);
+
   if (!open) return null;
 
   return (

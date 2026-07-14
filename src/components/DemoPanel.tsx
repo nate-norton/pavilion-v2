@@ -1,4 +1,4 @@
-import { usePavStore, dataDefaults } from '../store/store';
+import { usePavStore, dataDefaults, overlaysClosed } from '../store/store';
 import { Toggle } from './Toggle';
 
 const ROLES = [
@@ -37,6 +37,10 @@ export function DemoPanel() {
   const reset = () => {
     localStorage.removeItem('pavilion-demo');
     usePavStore.setState({ ...dataDefaults, epoch: usePavStore.getState().epoch + 1 });
+  };
+
+  const replayOnboarding = () => {
+    set({ ...overlaysClosed, obOpen: true, obStep: 0 });
   };
 
   return (
@@ -91,12 +95,20 @@ export function DemoPanel() {
         </div>
       </div>
 
-      <button
-        onClick={reset}
-        className="w-full rounded-xl py-2.5 text-[13px] font-bold text-ember border-2 border-ember/20 hover:bg-ember/5 transition-colors"
-      >
-        Reset demo
-      </button>
+      <div className="flex flex-col gap-2">
+        <button
+          onClick={replayOnboarding}
+          className="w-full rounded-xl py-2.5 text-[13px] font-bold text-navy border-2 border-navy/15 hover:bg-navy/5 transition-colors"
+        >
+          Replay onboarding
+        </button>
+        <button
+          onClick={reset}
+          className="w-full rounded-xl py-2.5 text-[13px] font-bold text-ember border-2 border-ember/20 hover:bg-ember/5 transition-colors"
+        >
+          Reset demo
+        </button>
+      </div>
     </div>
   );
 }

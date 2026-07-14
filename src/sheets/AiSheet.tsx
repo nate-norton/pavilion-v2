@@ -15,6 +15,15 @@ export function AiSheet() {
     if (el) el.scrollTop = el.scrollHeight;
   }, [msgs, typing]);
 
+  useEffect(() => {
+    if (!state.aiOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') set({ aiOpen: false });
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [state.aiOpen, set]);
+
   if (!state.aiOpen) return null;
 
   const close = () => set({ aiOpen: false });

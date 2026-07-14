@@ -538,6 +538,25 @@ export const dataDefaults: PavData = {
   showAlert: false,
 };
 
+/**
+ * Every overlay/sheet/detail flag collapsed to its closed state. Derived
+ * from dataDefaults so any new `*Open` sheet is covered automatically.
+ * Spread this to guarantee a clean surface when switching roles, resetting,
+ * or replaying onboarding — no stale sheet left floating over the app.
+ */
+const OVERLAY_DETAIL_KEYS = [
+  'chatWith', 'activeGroup', 'arcDetailId', 'issueDetailId',
+  'paymentDetailIdx', 'decisionDetailIdx',
+] as const;
+export const overlaysClosed: Partial<PavData> = (() => {
+  const out: Record<string, unknown> = {};
+  for (const key of Object.keys(dataDefaults)) {
+    if (key.endsWith('Open')) out[key] = false;
+  }
+  for (const key of OVERLAY_DETAIL_KEYS) out[key] = null;
+  return out as Partial<PavData>;
+})();
+
 function now(): string {
   const d = new Date();
   let h = d.getHours();
@@ -673,10 +692,9 @@ export const usePavStore = create<PavState>()(persist((set, get) => ({
 
   pickRole: (role: string) => {
     set((s) => ({
+      ...overlaysClosed,
       role,
       boardMode: false,
-      myPlaceOpen: false,
-      portfolioOpen: false,
       tab: 'today',
       epoch: s.epoch + 1,
     }));
