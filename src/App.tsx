@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { PhoneFrame } from './components/PhoneFrame';
 import { DemoPanel } from './components/DemoPanel';
+import { ThemeProvider } from './theme/ThemeProvider';
+import { brandTokens } from './theme/themes';
+import { usePavStore } from './store/store';
 
 export default function App() {
   const [showPanel, setShowPanel] = useState(false);
+  const brandTheme = usePavStore((s) => s.brandTheme);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -17,7 +21,8 @@ export default function App() {
   }, []);
 
   return (
-    <div
+    <ThemeProvider
+      tokens={brandTokens(brandTheme)}
       className="min-h-dvh flex items-center justify-center p-6 max-[500px]:p-0 gap-6"
       style={{ background: 'radial-gradient(120% 90% at 50% 0%, rgb(var(--creamtint)) 0%, rgb(var(--sandtint)) 60%, rgb(var(--sanddeep)) 100%)' }}
     >
@@ -37,6 +42,6 @@ export default function App() {
           ⚙
         </button>
       )}
-    </div>
+    </ThemeProvider>
   );
 }

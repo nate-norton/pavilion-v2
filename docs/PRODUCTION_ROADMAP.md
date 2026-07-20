@@ -78,6 +78,15 @@ bundle can support both with a runtime flag if we prefer a single deploy.
 
 ## Phase 0 — Design system foundation (do this first; unblocks everything)
 
+> **Status: complete (2026-07-20).** Palette tokenized to `:root` CSS vars
+> (raw ramp + semantic aliases); Tailwind wired to `rgb(var(--x) / <alpha>)`;
+> 1,251 inline hex/rgba literals codemodded to tokens across 47 files (zero
+> raw color hex left in screens/sheets); `ThemeProvider` + per-community brand
+> presets with a live switcher in the DemoPanel; component gallery at
+> `?gallery` / `/kitchen-sink` rendering every token swatch and primitive.
+> Follow-up: collapse the near-duplicate "extended" one-off tokens into a
+> tighter ramp (flagged in `index.css`).
+
 Goal: make "change a color / component / spacing" a one-file edit. This pays
 for itself immediately because we'll be redesigning constantly.
 
@@ -245,7 +254,7 @@ Once Phases 0–1 land, the product-discovery loop is cheap:
 
 | # | Milestone | Blocks |
 |---|-----------|--------|
-| M0 | Design tokens + Tailwind wired to vars + hex codemod + component gallery | everything |
+| M0 ✅ | Design tokens + Tailwind wired to vars + hex codemod + component gallery | everything |
 | M1 | Repository interface + MockRepository; screens off raw data imports | M2 |
 | M2 | Demo deployed to stable URL in `demo` mode; CI guard | sales-ready |
 | M3 | Supabase project, schema, RLS, Auth; seed Juniper Ridge | M4 |

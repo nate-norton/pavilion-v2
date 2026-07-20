@@ -1,5 +1,6 @@
 import { usePavStore, dataDefaults, overlaysClosed } from '../store/store';
 import { Toggle } from './Toggle';
+import { BRAND_THEMES } from '../theme/themes';
 
 const ROLES = [
   { key: 'owner', label: 'Owner' },
@@ -19,6 +20,7 @@ export function DemoPanel() {
   const paid = usePavStore((s) => s.paid);
   const voted = usePavStore((s) => s.voted);
   const boardMode = usePavStore((s) => s.boardMode);
+  const brandTheme = usePavStore((s) => s.brandTheme);
   const set = usePavStore((s) => s.set);
   const pickRole = usePavStore((s) => s.pickRole);
 
@@ -61,6 +63,27 @@ export function DemoPanel() {
               }}
             >
               {r.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-sm">
+        <p className="text-[11px] font-bold text-bark/50 uppercase tracking-wider mb-3">
+          Community brand
+        </p>
+        <div className="grid grid-cols-2 gap-1.5">
+          {BRAND_THEMES.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => set({ brandTheme: t.key })}
+              className="rounded-xl py-2 text-[12px] font-bold transition-colors"
+              style={{
+                background: brandTheme === t.key ? 'rgb(var(--terracotta))' : 'rgb(var(--navy) / 0.06)',
+                color: brandTheme === t.key ? 'rgb(var(--paper))' : 'rgb(var(--navy))',
+              }}
+            >
+              {t.label}
             </button>
           ))}
         </div>

@@ -137,6 +137,7 @@ export interface PavData {
   claimed: Record<string, boolean>;
   circJoined: Record<string, boolean>;
   largeType: boolean;
+  brandTheme: string;
   notifOpen: boolean;
   notifsRead: boolean;
   mutedCats: Record<string, boolean>;
@@ -319,6 +320,7 @@ export const dataDefaults: PavData = {
   claimed: {},
   circJoined: {},
   largeType: false,
+  brandTheme: 'juniper',
   notifOpen: false,
   notifsRead: false,
   mutedCats: {},
