@@ -1,11 +1,14 @@
 import { PhIcon } from '../components/PhIcon';
-import { AMENS, SLOTS, DAYS } from '../data';
+import { useAmenities, useReservationSlots, useReservationDays } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 /** Reserve screen — ported from prototype lines 523-628. */
 export function Reserve() {
   const state = usePavStore();
   const { set, book, cancelBooking } = state;
+  const AMENS = useAmenities();
+  const SLOTS = useReservationSlots();
+  const DAYS = useReservationDays();
 
   const amen = state.amenIdx != null ? AMENS[state.amenIdx] : null;
   const hasBooking = !!state.bookingSummary && state.booked;
