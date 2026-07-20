@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { AMENS, SLOTS, DAYS, QA } from '../data';
+import { QA } from '../data';
 
 export interface AiMsg {
   me: boolean;
@@ -93,8 +93,7 @@ export interface PavData {
   filter: string;
   amenIdx: number | null;
   slotIdx: number | null;
-  booked: boolean;
-  bookingSummary: string | null;
+  bookingConfirmed: boolean;
   dayIdx: number;
   durIdx: number;
   waitlisted: Record<string, boolean>;
@@ -234,8 +233,6 @@ export interface PavData {
 
 export interface PavActions {
   set: (patch: Partial<PavData>) => void;
-  book: () => void;
-  cancelBooking: () => void;
   submitArc: () => void;
   submitReport: () => void;
   issuePass: () => void;
@@ -270,8 +267,7 @@ export const dataDefaults: PavData = {
   filter: 'all',
   amenIdx: null,
   slotIdx: null,
-  booked: false,
-  bookingSummary: null,
+  bookingConfirmed: false,
   dayIdx: 0,
   durIdx: 1,
   waitlisted: {},
@@ -574,21 +570,6 @@ export const usePavStore = create<PavState>()(persist((set, get) => ({
 
   set: (patch) => set(patch),
 
-  book: () => {
-    const st = get();
-    if (st.slotIdx == null || st.amenIdx == null) return;
-    const a = AMENS[st.amenIdx];
-    const dayLabel = DAYS[st.dayIdx].split(' · ')[0];
-    set({
-      booked: true,
-      calAdded: false,
-      bookingSummary:
-        a.name + ' · ' + dayLabel + ', ' + SLOTS[st.slotIdx] + ' · ' + ['1 hr', '2 hr'][st.durIdx],
-    });
-  },
-
-  cancelBooking: () => set({ booked: false, bookingSummary: null, slotIdx: null, calAdded: false }),
-
   submitArc: () => {
     if (!get().arcType) return;
     set({ arcSubmitted: true, arcSheetOpen: false });
@@ -824,7 +805,7 @@ export const usePavStore = create<PavState>()(persist((set, get) => ({
 }), {
   name: 'pavilion-demo',
   partialize: (state) => {
-    const { typing, aiInput, chatInput, groupChatInput, commentInput, searchQ, docQ, bcText, ...rest } = state;
+    const { typing, aiInput, chatInput, groupChatInput, commentInput, searchQ, docQ, bcText, bookingConfirmed, ...rest } = state;
     return rest;
   },
 }));

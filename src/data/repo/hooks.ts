@@ -1,7 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useRepository } from './context';
 import { hasSnapshot, type Repository, type RepositorySnapshot } from './Repository';
 import type { ChatSeed, QA } from '../types';
+
+/** Reactive read of mutable domain state — re-renders when the repo mutates. */
+export function useReservation() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getReservation());
+}
 
 /**
  * Reads a domain slice through the repository. Seeds initial state from the

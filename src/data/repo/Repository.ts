@@ -15,11 +15,35 @@ import type {
  * Reads are grouped by domain; writes/mutations arrive as those slices move
  * off the Zustand store in later Phase 1 steps.
  */
+/** A household's current amenity booking (one active per household). */
+export interface ReservationState {
+  booked: boolean;
+  summary: string | null;
+}
+
+/** Resolved booking request — the screen supplies display strings it already has. */
+export interface NewReservation {
+  amenity: string;
+  day: string;
+  slot: string;
+  hours: 1 | 2;
+}
+
 export interface Repository {
+  /**
+   * Subscribe to mutable-domain changes (bookings, groups, …). Returns an
+   * unsubscribe fn. Hooks pair this with the sync getters below via
+   * useSyncExternalStore so writes re-render the UI.
+   */
+  subscribe(listener: () => void): () => void;
+
   // Reservations
   listAmenities(): Promise<Amenity[]>;
   getReservationSlots(): Promise<string[]>;
   getReservationDays(): Promise<string[]>;
+  getReservation(): ReservationState;
+  createReservation(input: NewReservation): Promise<void>;
+  cancelReservation(): Promise<void>;
 
   // Community / people
   listDirectory(): Promise<DirEntry[]>;

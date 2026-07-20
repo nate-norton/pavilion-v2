@@ -1,5 +1,5 @@
 import { PhIcon } from '../components/PhIcon';
-import { useNotifications, usePortfolio } from '../data/repo';
+import { useNotifications, usePortfolio, useReservation } from '../data/repo';
 import { usePavStore } from '../store/store';
 import { getAttention, getDelinquent, getQuorum } from '../store/selectors';
 
@@ -16,6 +16,7 @@ export function Today() {
   const set = state.set;
   const NOTIFS = useNotifications();
   const PORTFOLIO = usePortfolio();
+  const reservation = useReservation();
   const { n, summary: attnSummary } = getAttention(state);
   const { pct: quorumPct } = getQuorum(state);
   const delinquent = getDelinquent(state);
@@ -42,7 +43,7 @@ export function Today() {
   const rsvpFood = state.rsvpFood;
   const tacoGoing = 12 + (rsvpFood ? 1 : 0);
 
-  const hasBooking = !!state.bookingSummary && state.booked;
+  const hasBooking = reservation.booked && !!reservation.summary;
 
   const payCardTitle =
     state.planActive && !state.paid
@@ -288,7 +289,7 @@ export function Today() {
         {hasBooking ? (
           <div onClick={() => set({ tab: 'reserve' })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
             <PhIcon name="ph-fill ph-calendar-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
-            <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">Reserved: {state.bookingSummary}</p>
+            <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">Reserved: {reservation.summary}</p>
           </div>
         ) : (
           <div onClick={() => set({ tab: 'reserve' })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>

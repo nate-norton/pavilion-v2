@@ -1,6 +1,7 @@
 import { usePavStore, dataDefaults, overlaysClosed } from '../store/store';
 import { Toggle } from './Toggle';
 import { BRAND_THEMES } from '../theme/themes';
+import { resetDemoData } from '../data/repo';
 
 const ROLES = [
   { key: 'owner', label: 'Owner' },
@@ -38,6 +39,7 @@ export function DemoPanel() {
 
   const reset = () => {
     localStorage.removeItem('pavilion-demo');
+    resetDemoData();
     usePavStore.setState({ ...dataDefaults, epoch: usePavStore.getState().epoch + 1 });
   };
 

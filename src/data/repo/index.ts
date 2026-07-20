@@ -1,10 +1,14 @@
 import type { Repository } from './Repository';
 import { MockRepository } from './MockRepository';
+import { mockDomain } from './mockDomainStore';
 
 export type { Repository, RepositorySnapshot } from './Repository';
 export { MockRepository } from './MockRepository';
 export { RepositoryProvider, useRepository } from './context';
 export * from './hooks';
+
+/** Restore the demo's mutable domain data to pristine (used by Reset / Sign out). */
+export const resetDemoData = () => mockDomain.reset();
 
 /**
  * Runtime selection of the data backend. `VITE_APP_MODE=demo` (the default)

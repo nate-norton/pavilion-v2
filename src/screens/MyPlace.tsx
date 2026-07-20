@@ -4,7 +4,7 @@ import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
 import { getDelinquent } from '../store/selectors';
-import { usePortfolio } from '../data/repo';
+import { usePortfolio, useReservation, resetDemoData } from '../data/repo';
 
 const CARD: CSSProperties = {
   background: 'rgb(var(--paper))',
@@ -32,6 +32,7 @@ export function MyPlace() {
   const state = usePavStore();
   const { set } = state;
   const PORTFOLIO = usePortfolio();
+  const reservation = useReservation();
 
   const [apConfirm, setApConfirm] = useState(false);
 
@@ -53,7 +54,7 @@ export function MyPlace() {
   const statOneValue = isTenant ? 'Active' : isManager ? 'Manager' : duesLabel;
   const duesBg = state.paid ? 'rgb(var(--mint))' : state.planActive ? 'rgb(var(--skypale))' : 'rgb(var(--blush))';
   const duesColor = state.paid ? 'rgb(var(--sagedark))' : state.planActive ? 'rgb(var(--skydeep))' : 'rgb(var(--terracotta))';
-  const myBookings = state.booked && state.bookingSummary ? '1 upcoming' : 'None yet';
+  const myBookings = reservation.booked && reservation.summary ? '1 upcoming' : 'None yet';
   const myCirclesCount = Object.values(state.groups).filter((g) => !g.isGroupChat && g.joined).length;
 
   const pfDoors = PORTFOLIO.reduce((a, c) => a + c.doors, 0);
@@ -572,6 +573,7 @@ export function MyPlace() {
         </div>
         <button type="button" onClick={() => {
           localStorage.removeItem('pavilion-demo');
+          resetDemoData();
           usePavStore.setState({ ...dataDefaults, loginOpen: true, epoch: usePavStore.getState().epoch + 1 });
         }} className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer font-sans p-0" style={{ color: 'rgb(var(--terracotta))' }}>
           Sign out

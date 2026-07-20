@@ -3,7 +3,8 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { Repository, RepositorySnapshot, SnapshotReadable } from './Repository';
+import type { NewReservation, Repository, RepositorySnapshot, SnapshotReadable } from './Repository';
+import { mockDomain } from './mockDomainStore';
 
 /**
  * Demo backend. Serves the in-memory `src/data/*` seed data behind the async
@@ -11,9 +12,18 @@ import type { Repository, RepositorySnapshot, SnapshotReadable } from './Reposit
  * instantly (the demo has no real latency). Preserves today's behavior exactly.
  */
 export class MockRepository implements Repository, SnapshotReadable {
+  subscribe = mockDomain.subscribe;
+
   listAmenities = async () => AMENS;
   getReservationSlots = async () => SLOTS;
   getReservationDays = async () => DAYS;
+  getReservation = () => mockDomain.get().reservation;
+  createReservation = async ({ amenity, day, slot, hours }: NewReservation) => {
+    mockDomain.set({ reservation: { booked: true, summary: `${amenity} · ${day}, ${slot} · ${hours} hr` } });
+  };
+  cancelReservation = async () => {
+    mockDomain.set({ reservation: { booked: false, summary: null } });
+  };
 
   listDirectory = async () => DIR;
   listCircles = async () => CIRC;

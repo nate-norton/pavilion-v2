@@ -1,22 +1,35 @@
 import { PhIcon } from '../components/PhIcon';
-import { useAmenities, useReservationSlots, useReservationDays } from '../data/repo';
+import { useAmenities, useReservationSlots, useReservationDays, useReservation, useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 /** Reserve screen — ported from prototype lines 523-628. */
 export function Reserve() {
   const state = usePavStore();
-  const { set, book, cancelBooking } = state;
+  const { set } = state;
+  const repo = useRepository();
   const AMENS = useAmenities();
   const SLOTS = useReservationSlots();
   const DAYS = useReservationDays();
+  const reservation = useReservation();
 
   const amen = state.amenIdx != null ? AMENS[state.amenIdx] : null;
-  const hasBooking = !!state.bookingSummary && state.booked;
+  const hasBooking = reservation.booked && !!reservation.summary;
   const canBook = state.slotIdx != null;
   const notCalAdded = !state.calAdded;
 
+  const book = () => {
+    if (state.slotIdx == null || amen == null) return;
+    const day = DAYS[state.dayIdx].split(' · ')[0];
+    repo.createReservation({ amenity: amen.name, day, slot: SLOTS[state.slotIdx], hours: state.durIdx === 1 ? 2 : 1 });
+    set({ bookingConfirmed: true, calAdded: false });
+  };
+  const cancelBooking = () => {
+    repo.cancelReservation();
+    set({ bookingConfirmed: false, slotIdx: null, calAdded: false });
+  };
+
   const openAmen = (i: number) =>
-    set({ amenIdx: i, slotIdx: null, booked: false, waitlisted: {}, durIdx: 1 });
+    set({ amenIdx: i, slotIdx: null, bookingConfirmed: false, waitlisted: {}, durIdx: 1 });
 
   const backToList = () => set({ amenIdx: null });
 
@@ -146,7 +159,7 @@ export function Reserve() {
             })}
           </div>
 
-          {!state.booked ? (
+          {!state.bookingConfirmed ? (
             <button
               onClick={book}
               className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold"
@@ -168,7 +181,7 @@ export function Reserve() {
                 <div>
                   <p className="m-0 mb-0.5 text-[15px] font-bold text-navy">Booked!</p>
                   <p className="m-0 text-[13px] font-bold" style={{ color: 'rgb(var(--sagegray))' }}>
-                    {state.bookingSummary}
+                    {reservation.summary}
                   </p>
                 </div>
               </div>
@@ -236,7 +249,7 @@ export function Reserve() {
           >
             <PhIcon name="ph-fill ph-ticket" size={21} color="rgb(var(--sage))" className="flex-shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{state.bookingSummary}</p>
+              <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{reservation.summary}</p>
               <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--sagegray))' }}>
                 We&apos;ll remind you an hour before
               </p>
