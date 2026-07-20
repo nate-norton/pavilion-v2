@@ -249,20 +249,32 @@ Once Phases 0–1 land, the product-discovery loop is cheap:
 | M1 | Repository interface + MockRepository; screens off raw data imports | M2 |
 | M2 | Demo deployed to stable URL in `demo` mode; CI guard | sales-ready |
 | M3 | Supabase project, schema, RLS, Auth; seed Juniper Ridge | M4 |
-| M4 | SupabaseRepository; reservations + dues + ARC live end-to-end | pilot |
-| M5 | Payments, notifications, onboarding/invites, observability | GA |
+| M4 | SupabaseRepository; ARC + Commons/Groups + board features live end-to-end | pilot |
+| M5 | Reservations + dues live; notifications, onboarding/invites, observability | GA-prep |
+| M5b | Payments (Stripe) fast-follow once pilot community is live | GA |
 | M6 | Per-community theming, RAG doc-AI, native/push | scale |
 
 ---
 
-## Open decisions (need product input)
+## Locked decisions (2026-07-20)
 
-1. **Demo deployment**: single stable living demo, a frozen pitch build, or
-   both? (Recommend: both.)
-2. **Live routing**: separate deploys (`demo.` / `app.`) vs. one app with a
-   runtime mode flag? (Recommend: separate deploys, shared codebase.)
-3. **First pilot community & workflow** to harden end-to-end. (Recommend:
-   reservations + dues, since they're the most complete in the demo.)
-4. **Payments provider** and whether dues collection is in the MVP or fast-follow.
-5. **Data model for roles**: confirm owner/tenant/manager is the full set, or
-   add board-member vs. manager (self-managed vs. professionally-managed HOAs).
+1. **Demo deployment — both.** Ship (a) a *frozen pitch build* tagged and
+   deployed to its own Vercel project that can never break, and (b) a *living
+   demo* on the shared codebase (`VITE_APP_MODE=demo`) that evolves with the
+   product. Sales always has a stable link; the living demo showcases progress.
+2. **Deployment — separate deploys, shared code.** `demo.pavilion.app` and
+   `app.pavilion.app` build from one repo, selected by `VITE_APP_MODE`. The
+   demo bundle tree-shakes out all Supabase code so no keys/network can leak.
+3. **First real slice — ARC + Commons/Groups + board features.** Harden these
+   end-to-end first (payment-light, but they exercise auth, multi-role RLS, the
+   board/manager permission model, and realtime chat/polls). Reservations + dues
+   follow once the role/RLS foundation is proven.
+4. **Payments — fast-follow.** Auth + core workflows ship first; Stripe (dues,
+   special assessments, autopay) lands once a pilot community is live. Keeps
+   compliance/webhook complexity off the critical path.
+
+## Still open (need product input)
+
+- **Role model**: confirm owner/tenant/manager is the full set, or split
+  board-member vs. professional manager (self-managed vs. managed HOAs). This
+  shapes the `memberships.role` enum and RLS policies.
