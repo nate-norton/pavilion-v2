@@ -364,16 +364,6 @@ export const overlaysClosed: Partial<PavData> = (() => {
   return out as Partial<PavData>;
 })();
 
-function now(): string {
-  const d = new Date();
-  let h = d.getHours();
-  const m = String(d.getMinutes()).padStart(2, '0');
-  const ap = h < 12 ? 'AM' : 'PM';
-  h = h % 12;
-  if (h === 0) h = 12;
-  return h + ':' + m + ' ' + ap;
-}
-
 export const usePavStore = create<PavState>()(persist((set, get) => ({
   ...dataDefaults,
 
