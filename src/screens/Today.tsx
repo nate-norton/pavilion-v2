@@ -1,5 +1,5 @@
 import { PhIcon } from '../components/PhIcon';
-import { NOTIFS, PORTFOLIO } from '../data';
+import { useNotifications, usePortfolio } from '../data/repo';
 import { usePavStore } from '../store/store';
 import { getAttention, getDelinquent, getQuorum } from '../store/selectors';
 
@@ -14,6 +14,8 @@ const CARET = <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--c
 export function Today() {
   const state = usePavStore();
   const set = state.set;
+  const NOTIFS = useNotifications();
+  const PORTFOLIO = usePortfolio();
   const { n, summary: attnSummary } = getAttention(state);
   const { pct: quorumPct } = getQuorum(state);
   const delinquent = getDelinquent(state);

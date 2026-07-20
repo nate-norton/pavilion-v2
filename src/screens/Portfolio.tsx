@@ -1,18 +1,19 @@
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { usePavStore } from '../store/store';
-import { PORTFOLIO } from '../data';
-
-const pfDoors = PORTFOLIO.reduce((a, c) => a + c.doors, 0);
-const pfCollected = Math.round(
-  PORTFOLIO.reduce((a, c) => a + c.collected * c.doors, 0) / pfDoors
-);
-const pfOpen = PORTFOLIO.reduce((a, c) => a + c.open, 0);
+import { usePortfolio } from '../data/repo';
 
 /** Manager portfolio screen — ported from prototype lines 2447-2478. */
 export function Portfolio() {
   const state = usePavStore();
   const { set } = state;
+  const PORTFOLIO = usePortfolio();
+
+  const pfDoors = PORTFOLIO.reduce((a, c) => a + c.doors, 0);
+  const pfCollected = pfDoors
+    ? Math.round(PORTFOLIO.reduce((a, c) => a + c.collected * c.doors, 0) / pfDoors)
+    : 0;
+  const pfOpen = PORTFOLIO.reduce((a, c) => a + c.open, 0);
 
   if (!state.portfolioOpen) return null;
 

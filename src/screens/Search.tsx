@@ -1,12 +1,13 @@
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { SEARCH } from '../data';
+import { useSearchIndex } from '../data/repo';
 
 const SUGGESTIONS = ['fence colors', 'pool hours', 'ladder', 'annual meeting'];
 
 /** Global search screen — ported from prototype lines 2359-2403. */
 export function Search() {
   const state = usePavStore();
+  const SEARCH = useSearchIndex();
   const { set } = state;
 
   if (!state.searchOpen) return null;

@@ -1,13 +1,15 @@
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { NOTIFS, NOTIF_CATS } from '../data';
-import type { Notif } from '../data';
+import { useNotifications, useNotifCategories } from '../data/repo';
+import type { Notif } from '../data/types';
 
 /** Notifications / Activity screen — ported from prototype lines 1834-1900. */
 export function Notifications() {
   const state = usePavStore();
   const { set } = state;
+  const NOTIFS = useNotifications();
+  const NOTIF_CATS = useNotifCategories();
 
   if (!state.notifOpen) return null;
 

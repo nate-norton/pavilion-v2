@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore } from '../store/store';
-import { HH, ONBOARD_CIRCLES } from '../data';
+import { useHouseholdOptions, useOnboardCircles } from '../data/repo';
 
 const CARD: CSSProperties = {
   background: 'rgb(var(--paper))',
@@ -14,6 +14,8 @@ const CARD: CSSProperties = {
 /** Onboarding flow — ported from prototype lines 1451-1549 / JS 3376-3395. */
 export function Onboarding() {
   const state = usePavStore();
+  const HH = useHouseholdOptions();
+  const ONBOARD_CIRCLES = useOnboardCircles();
   const { set } = state;
 
   if (!state.obOpen) return null;

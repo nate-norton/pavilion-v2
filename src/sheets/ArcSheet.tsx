@@ -2,12 +2,13 @@ import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { Chip } from '../components/Chip';
 import { usePavStore } from '../store/store';
-import { ARC_TYPES } from '../data';
+import { useArcTypes } from '../data/repo';
 
 /** ARC request sheet — ported from prototype lines 1358-1397. */
 export function ArcSheet() {
   const state = usePavStore();
   const { set, submitArc } = state;
+  const ARC_TYPES = useArcTypes();
 
   const closeArc = () => set({ arcSheetOpen: false });
   const canSubmit = !!state.arcType;

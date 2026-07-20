@@ -2,7 +2,7 @@ import { type CSSProperties } from 'react';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { DOCS, DOC_SECTIONS } from '../data';
+import { useDocuments, useDocSections } from '../data/repo';
 
 const DOC_CONTENT: Record<string, { sections: { tag: string; name: string; body: string }[] }> = {
   bylaws: {
@@ -47,6 +47,8 @@ const SECTION_CARD: CSSProperties = {
 export function Documents() {
   const state = usePavStore();
   const { set, askAiDocsSummary } = state;
+  const DOCS = useDocuments();
+  const DOC_SECTIONS = useDocSections();
 
   if (!state.docsOpen) return null;
 
@@ -256,6 +258,7 @@ export function Documents() {
 function GenericDocReader() {
   const state = usePavStore();
   const { set } = state;
+  const DOCS = useDocuments();
   const doc = DOCS.find((d) => d.key === state.docReaderKey);
   const content = DOC_CONTENT[state.docReaderKey];
   if (!doc || !content) return null;

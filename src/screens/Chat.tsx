@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { CHAT_SEED } from '../data';
+import { useChatSeed } from '../data/repo';
 
 function now(): string {
   const d = new Date();
@@ -15,6 +15,7 @@ function now(): string {
 /** 1:1 chat thread screen — ported from prototype lines 1926-1953. */
 export function Chat() {
   const state = usePavStore();
+  const CHAT_SEED = useChatSeed();
   const { set, sendChatMessage } = state;
   const listRef = useRef<HTMLDivElement>(null);
 

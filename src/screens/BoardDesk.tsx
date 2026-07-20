@@ -4,7 +4,7 @@ import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { usePavStore } from '../store/store';
 import { getTriage, getBoardOpenCount, getQuorum } from '../store/selectors';
-import { VENDORS, AGING } from '../data';
+import { useVendors, useAging } from '../data/repo';
 
 const BOARD_SEGS = [
   { key: 'desk', label: 'Desk' },
@@ -16,6 +16,8 @@ const BOARD_SEGS = [
 /** Board desk screen — ported from prototype lines 830-1278. */
 export function BoardDesk() {
   const state = usePavStore();
+  const VENDORS = useVendors();
+  const AGING = useAging();
   const { set } = state;
 
   const [voteConfirm, setVoteConfirm] = useState(false);

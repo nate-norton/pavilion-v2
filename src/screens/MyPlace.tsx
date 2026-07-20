@@ -4,7 +4,7 @@ import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
 import { getDelinquent } from '../store/selectors';
-import { PORTFOLIO } from '../data';
+import { usePortfolio } from '../data/repo';
 
 const CARD: CSSProperties = {
   background: 'rgb(var(--paper))',
@@ -31,6 +31,7 @@ function Row({ children, divider, onClick }: { children: ReactNode; divider?: bo
 export function MyPlace() {
   const state = usePavStore();
   const { set } = state;
+  const PORTFOLIO = usePortfolio();
 
   const [apConfirm, setApConfirm] = useState(false);
 
@@ -56,9 +57,9 @@ export function MyPlace() {
   const myCirclesCount = Object.values(state.groups).filter((g) => !g.isGroupChat && g.joined).length;
 
   const pfDoors = PORTFOLIO.reduce((a, c) => a + c.doors, 0);
-  const pfCollected = Math.round(
-    PORTFOLIO.reduce((a, c) => a + c.collected * c.doors, 0) / pfDoors
-  );
+  const pfCollected = pfDoors
+    ? Math.round(PORTFOLIO.reduce((a, c) => a + c.collected * c.doors, 0) / pfDoors)
+    : 0;
 
   const approved = state.arcApprovedByBoard;
   const arcNewTitle = state.arcType || 'Exterior update';

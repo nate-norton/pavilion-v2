@@ -2,12 +2,13 @@ import { useEffect, useRef } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { TypingDots } from '../components/TypingDots';
 import { usePavStore } from '../store/store';
-import { QA } from '../data';
+import { useAiQA } from '../data/repo';
 
 /** AI scripted-assistant sheet — ported from prototype lines 1399-1449. */
 export function AiSheet() {
   const state = usePavStore();
   const { set, msgs, typing, aiInput, askAiChip, sendAiMessage } = state;
+  const QA = useAiQA();
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

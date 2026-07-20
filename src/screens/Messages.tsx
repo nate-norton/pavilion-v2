@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { CHAT_SEED } from '../data';
+import { useChatSeed } from '../data/repo';
 
 type MsgTab = 'direct' | 'group-chats' | 'groups';
 
 export function Messages() {
   const state = usePavStore();
   const { set } = state;
+  const CHAT_SEED = useChatSeed();
   const [msgTab, setMsgTab] = useState<MsgTab>('direct');
 
   if (!state.msgsOpen || state.chatWith || state.activeGroup) return null;

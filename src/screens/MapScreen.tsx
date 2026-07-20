@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { PINS, MAP_LAYERS } from '../data';
+import { useMapPins, useMapLayers } from '../data/repo';
 
 const HOUSE: CSSProperties = {
   width: 26,
@@ -15,6 +15,8 @@ const HOUSE: CSSProperties = {
 /** Community map screen — ported from prototype lines 1771-1832. */
 export function MapScreen() {
   const state = usePavStore();
+  const PINS = useMapPins();
+  const MAP_LAYERS = useMapLayers();
   const { set } = state;
 
   if (!state.mapOpen) return null;

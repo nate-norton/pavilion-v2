@@ -3,7 +3,7 @@ import { Avatar } from '../components/Avatar';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
-import { DIR, FREE } from '../data';
+import { useDirectory, useFreeItems } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 const SEG_OPTIONS = [
@@ -17,6 +17,8 @@ const SEG_OPTIONS = [
 export function Commons() {
   const state = usePavStore();
   const { set, addComment } = state;
+  const DIR = useDirectory();
+  const FREE = useFreeItems();
 
   const likeCount = 14 + (state.liked ? 1 : 0);
   const heartClass = state.liked ? 'ph-fill ph-heart' : 'ph ph-heart';
