@@ -272,9 +272,15 @@ Once Phases 0–1 land, the product-discovery loop is cheap:
 4. **Payments — fast-follow.** Auth + core workflows ship first; Stripe (dues,
    special assessments, autopay) lands once a pilot community is live. Keeps
    compliance/webhook complexity off the critical path.
+5. **Role model — resident + board only (no professional management yet).**
+   High-level user types are **resident** and **board**. We are *not* building
+   the professional community-management surface (multi-community portfolio,
+   management-company tooling) for now. The `memberships.role` enum starts as
+   `resident | board`; the demo's `manager`/Portfolio surface is deprioritized
+   and will be hidden/removed from the product path (it can stay in the frozen
+   pitch build if useful). Self-managed HOAs are the target; managed-HOA /
+   professional-manager support is a later, additive phase.
 
 ## Still open (need product input)
 
-- **Role model**: confirm owner/tenant/manager is the full set, or split
-  board-member vs. professional manager (self-managed vs. managed HOAs). This
-  shapes the `memberships.role` enum and RLS policies.
+- _(none blocking — role model locked 2026-07-20)_

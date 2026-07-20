@@ -2,8 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Design tokens (Phase 0). Colors live here as space-separated RGB triplets so
+ * Tailwind can compose them with alpha via `rgb(var(--x) / <alpha-value>)`.
+ * Raw ramp = the named palette; semantic aliases = intent-based names screens
+ * should prefer, so a rebrand (or per-community theming later) is a one-file
+ * edit. Changing a raw value here restyles every utility that references it.
+ */
+:root {
+  /* Raw ramp */
+  --navy: 26 51 82;
+  --cream: 245 240 230;
+  --paper: 255 254 250;
+  --sand: 237 230 214;
+  --parchment: 249 245 236;
+  --ember: 224 106 62;
+  --terracotta: 199 90 49;
+  --blush: 251 237 228;
+  --peach: 232 167 136;
+  --sage: 42 157 92;
+  --mint: 233 246 238;
+  --sagedark: 34 128 73;
+  --gold: 217 164 65;
+  --goldpale: 251 243 224;
+  --golddark: 168 123 31;
+  --sky: 74 144 226;
+  --skydeep: 58 115 181;
+  --skypale: 234 243 253;
+  --ink: 62 76 99;
+  --stone: 138 131 117;
+  --stonelight: 163 155 139;
+  --bark: 91 85 74;
+  --taupe: 122 115 101;
+  --red: 199 64 46;
+
+  /* Semantic aliases — prefer these in screens/components */
+  --color-bg: var(--cream);
+  --color-surface: var(--paper);
+  --color-primary: var(--navy);
+  --color-text: var(--navy);
+  --color-muted: var(--stone);
+  --color-accent: var(--terracotta);
+  --color-danger: var(--red);
+  --color-success: var(--sage);
+}
+
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { margin: 0; padding: 0; background: #F5F0E6; }
+html, body { margin: 0; padding: 0; background: rgb(var(--color-bg)); }
 body { font-family: 'Nunito Sans', system-ui, sans-serif; }
 .pav-scroll::-webkit-scrollbar { display: none; }
 .pav-scroll { -ms-overflow-style: none; scrollbar-width: none; }
