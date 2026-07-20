@@ -1,26 +1,26 @@
 import { useEffect, useRef } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { useChatSeed } from '../data/repo';
-
-function now(): string {
-  const d = new Date();
-  let h = d.getHours();
-  const m = String(d.getMinutes()).padStart(2, '0');
-  const ap = h < 12 ? 'AM' : 'PM';
-  h = h % 12 || 12;
-  return `${h}:${m} ${ap}`;
-}
+import { useChatSeed, useChats, useRepository } from '../data/repo';
 
 /** 1:1 chat thread screen — ported from prototype lines 1926-1953. */
 export function Chat() {
   const state = usePavStore();
   const CHAT_SEED = useChatSeed();
-  const { set, sendChatMessage } = state;
+  const { set } = state;
+  const repo = useRepository();
+  const chats = useChats();
   const listRef = useRef<HTMLDivElement>(null);
 
   const chatKey = state.chatWith;
-  const thread = chatKey ? state.chats[chatKey] : undefined;
+  const thread = chatKey ? chats[chatKey] : undefined;
+
+  const sendChatMessage = () => {
+    const t = state.chatInput.trim();
+    if (!t || !chatKey) return;
+    repo.sendChatMessage(chatKey, t);
+    set({ chatInput: '' });
+  };
 
   useEffect(() => {
     const el = listRef.current;
@@ -31,7 +31,7 @@ export function Chat() {
   const p = CHAT_SEED[chatKey];
   if (!p) return null;
 
-  const msgs = [{ me: false, text: p.seed, time: p.time }, ...(state.chats[chatKey] || [])];
+  const msgs = [{ me: false, text: p.seed, time: p.time }, ...(chats[chatKey] || [])];
 
   return (
     <div
@@ -93,11 +93,7 @@ export function Chat() {
         <button
           type="button"
           title="Send a photo"
-          onClick={() => {
-            if (!chatKey) return;
-            const updated = [...(state.chats[chatKey] || []), { me: true, text: '📷 Photo', time: now() }];
-            set({ chats: { ...state.chats, [chatKey]: updated } });
-          }}
+          onClick={() => { if (chatKey) repo.sendChatMessage(chatKey, '📷 Photo', false); }}
           className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
           style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))' }}
         >

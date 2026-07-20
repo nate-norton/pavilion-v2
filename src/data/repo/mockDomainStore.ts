@@ -1,4 +1,6 @@
 import type { ReservationState } from './Repository';
+import type { Comment, ChatMsg, GroupData } from '../types';
+import { GROUPS_SEED } from '../groups';
 
 /**
  * The MockRepository's mutable domain state — the data that used to live in the
@@ -12,23 +14,33 @@ import type { ReservationState } from './Repository';
  */
 export interface MockDomainState {
   reservation: ReservationState;
+  comments: Comment[];
+  chats: Record<string, ChatMsg[]>;
+  groups: Record<string, GroupData>;
 }
 
 const STORAGE_KEY = 'pavilion-demo-data';
 
-const initialState: MockDomainState = {
+const freshState = (): MockDomainState => ({
   reservation: { booked: false, summary: null },
-};
+  comments: [
+    { who: 'Tom B.', color: '#4A90E2', text: 'Anytime, Maria!' },
+    { who: 'Priya S.', color: '#2A9D5C', text: 'This is what the Ridge is about.' },
+  ],
+  chats: {},
+  groups: structuredClone(GROUPS_SEED),
+});
 
 function load(): MockDomainState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return { ...initialState, ...JSON.parse(raw) };
+    if (raw) return { ...freshState(), ...JSON.parse(raw) };
   } catch { /* ignore corrupt/absent storage */ }
-  return initialState;
+  return freshState();
 }
 
 let state: MockDomainState = load();
+let generation = 0;
 const listeners = new Set<() => void>();
 
 function persist() {
@@ -46,9 +58,12 @@ export const mockDomain = {
     listeners.add(listener);
     return () => { listeners.delete(listener); };
   },
+  /** Bumps on reset; scripted auto-replies capture it to cancel if stale. */
+  generation: () => generation,
   /** Restore the pristine demo state (used by Reset / Sign out). */
   reset() {
-    state = initialState;
+    generation += 1;
+    state = freshState();
     try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
     listeners.forEach((l) => l());
   },

@@ -1,8 +1,16 @@
 import type {
   Amenity, Vendor, DirEntry, FreeItem, Doc, DocSection, Notif, Circle,
   PortfolioEntry, AgingBucket, Pin, MapLayer, SearchItem, ChatSeed, QA,
-  HHOption, OnboardCircle,
+  HHOption, OnboardCircle, Comment, ChatMsg, GroupData,
 } from '../types';
+
+/** Fields the create-group flow collects; membership/seed are filled in. */
+export interface NewGroup {
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+}
 
 /**
  * The data seam. Screens talk to this interface via hooks (see hooks.ts),
@@ -44,6 +52,25 @@ export interface Repository {
   getReservation(): ReservationState;
   createReservation(input: NewReservation): Promise<void>;
   cancelReservation(): Promise<void>;
+
+  // Feed comments
+  getComments(): Comment[];
+  addComment(text: string): Promise<void>;
+
+  // Direct messages
+  getChats(): Record<string, ChatMsg[]>;
+  /** `reply` (default true) triggers the scripted neighbor reply; photos pass false. */
+  sendChatMessage(chatKey: string, text: string, reply?: boolean): Promise<void>;
+
+  // Groups & group chats
+  getGroups(): Record<string, GroupData>;
+  sendGroupMessage(groupKey: string, text: string): Promise<void>;
+  /** Returns the new group's key so the caller can open it. */
+  createGroup(input: NewGroup): Promise<string>;
+  toggleGroupJoin(groupKey: string): Promise<void>;
+  toggleGroupMute(groupKey: string): Promise<void>;
+  voteGroupPoll(groupKey: string, pollId: string, option: string): Promise<void>;
+  rsvpGroupEvent(groupKey: string, eventId: string): Promise<void>;
 
   // Community / people
   listDirectory(): Promise<DirEntry[]>;

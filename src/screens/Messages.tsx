@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { useChatSeed } from '../data/repo';
+import { useChatSeed, useChats, useGroups } from '../data/repo';
 
 type MsgTab = 'direct' | 'group-chats' | 'groups';
 
@@ -10,6 +10,8 @@ export function Messages() {
   const state = usePavStore();
   const { set } = state;
   const CHAT_SEED = useChatSeed();
+  const chats = useChats();
+  const groups = useGroups();
   const [msgTab, setMsgTab] = useState<MsgTab>('direct');
 
   if (!state.msgsOpen || state.chatWith || state.activeGroup) return null;
@@ -20,8 +22,8 @@ export function Messages() {
     { key: 'groups', label: 'Groups' },
   ];
 
-  const groupChats = Object.values(state.groups).filter((g) => g.isGroupChat);
-  const communityGroups = Object.values(state.groups).filter((g) => !g.isGroupChat);
+  const groupChats = Object.values(groups).filter((g) => g.isGroupChat);
+  const communityGroups = Object.values(groups).filter((g) => !g.isGroupChat);
 
   const gcUnread = groupChats.reduce((n, g) => n + (g.joined && g.messages.length > 0 ? 1 : 0), 0);
   const grUnread = communityGroups.filter((g) => g.joined).length;
@@ -110,7 +112,7 @@ export function Messages() {
       {msgTab === 'direct' && (
         <div className="flex flex-col gap-[9px]">
           {Object.entries(CHAT_SEED).map(([k, p]) => {
-            const mine = state.chats[k] || [];
+            const mine = chats[k] || [];
             const last = mine.length ? mine[mine.length - 1] : { text: p.seed, me: false };
             const preview = (last.me ? 'You: ' : '') + last.text;
             const lastTime = mine.length ? mine[mine.length - 1].time || 'now' : p.time;

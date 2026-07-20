@@ -3,7 +3,7 @@ import { Avatar } from '../components/Avatar';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
-import { useDirectory, useFreeItems } from '../data/repo';
+import { useDirectory, useFreeItems, useComments, useGroups, useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 const SEG_OPTIONS = [
@@ -16,15 +16,25 @@ const SEG_OPTIONS = [
 /** The Commons screen — ported from prototype lines 279-521. */
 export function Commons() {
   const state = usePavStore();
-  const { set, addComment } = state;
+  const { set } = state;
+  const repo = useRepository();
   const DIR = useDirectory();
   const FREE = useFreeItems();
+  const comments = useComments();
+  const groups = useGroups();
+
+  const addComment = () => {
+    const t = state.commentInput.trim();
+    if (!t) return;
+    repo.addComment(t);
+    set({ commentInput: '' });
+  };
 
   const likeCount = 14 + (state.liked ? 1 : 0);
   const heartClass = state.liked ? 'ph-fill ph-heart' : 'ph ph-heart';
   const heartColor = state.liked ? 'rgb(var(--ember))' : 'rgb(var(--stone))';
 
-  const commentCount = state.comments.length;
+  const commentCount = comments.length;
   const movieGoing = 23 + (state.rsvpMovie ? 1 : 0);
 
   const onCommentKey = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -105,7 +115,7 @@ export function Commons() {
                 {state.commentsOpen && (
                   <div className="mt-3 pt-3 animate-fadeup" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)' }}>
                     <div className="flex flex-col gap-2.5 mb-2.5">
-                      {state.comments.map((cm, i) => (
+                      {comments.map((cm, i) => (
                         <div key={i} className="flex gap-2.5 items-start">
                           <Avatar initial={cm.who} color={cm.color} size={26} />
                           <div className="bg-cream rounded-xl px-2.5 py-2 flex-1">
@@ -243,7 +253,7 @@ export function Commons() {
       )}
 
       {state.commonsView === 'circles' && (() => {
-        const allGroups = Object.values(state.groups).filter((g) => !g.isGroupChat);
+        const allGroups = Object.values(groups).filter((g) => !g.isGroupChat);
         const joined = allGroups.filter((g) => g.joined);
         const discover = allGroups.filter((g) => !g.joined);
         return (
@@ -327,7 +337,7 @@ export function Commons() {
                         </div>
                         <button
                           type="button"
-                          onClick={(e) => { e.stopPropagation(); state.toggleGroupJoin(g.key); }}
+                          onClick={(e) => { e.stopPropagation(); repo.toggleGroupJoin(g.key); }}
                           className="border-none rounded-full px-3.5 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"
                           style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }}
                         >

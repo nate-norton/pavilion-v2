@@ -1,6 +1,7 @@
 import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { usePavStore } from '../store/store';
+import { useRepository } from '../data/repo';
 
 const ICON_OPTIONS = [
   { icon: 'ph-fill ph-users-three', label: 'General' },
@@ -17,10 +18,22 @@ const COLOR_OPTIONS = ['rgb(var(--navy))', 'rgb(var(--terracotta))', 'rgb(var(--
 
 export function CreateGroupSheet() {
   const state = usePavStore();
-  const { set, createGroup } = state;
+  const { set } = state;
+  const repo = useRepository();
 
   const close = () => set({ createGroupOpen: false, createGroupName: '', createGroupDesc: '', createGroupIcon: 'ph-fill ph-users-three', createGroupColor: 'rgb(var(--navy))' });
   const canCreate = state.createGroupName.trim().length > 0;
+
+  const createGroup = async () => {
+    if (!canCreate) return;
+    const key = await repo.createGroup({
+      name: state.createGroupName.trim(),
+      description: state.createGroupDesc.trim(),
+      icon: state.createGroupIcon,
+      color: state.createGroupColor,
+    });
+    set({ createGroupOpen: false, createGroupName: '', createGroupDesc: '', createGroupIcon: 'ph-fill ph-users-three', createGroupColor: 'rgb(var(--navy))', activeGroup: key });
+  };
 
   return (
     <Sheet open={state.createGroupOpen} onClose={close} maxHeight="85%">

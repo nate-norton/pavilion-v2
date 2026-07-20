@@ -145,3 +145,60 @@ export interface DocSection {
   kw: string;
   body: string;
 }
+
+// ── Mutable domain entities (owned by the repository / mock domain store) ──
+
+export interface ChatMsg {
+  me: boolean;
+  text: string;
+  time: string;
+}
+
+export interface Comment {
+  who: string;
+  color: string;
+  text: string;
+}
+
+export interface GroupPoll {
+  id: string;
+  question: string;
+  options: string[];
+  votes: Record<string, number>;
+  myVote: string | null;
+  author: string;
+  time: string;
+}
+
+export interface GroupEvent {
+  id: string;
+  title: string;
+  when: string;
+  where: string;
+  going: number;
+  rsvped: boolean;
+}
+
+export interface GroupPin {
+  id: string;
+  text: string;
+  author: string;
+  time: string;
+}
+
+export interface GroupData {
+  key: string;
+  name: string;
+  icon: string;
+  color: string;
+  description: string;
+  memberCount: number;
+  isGroupChat: boolean;
+  members: { name: string; initial: string; color: string }[];
+  messages: ChatMsg[];
+  polls: GroupPoll[];
+  events: GroupEvent[];
+  pins: GroupPin[];
+  joined: boolean;
+  muted: boolean;
+}

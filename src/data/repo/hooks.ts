@@ -9,6 +9,21 @@ export function useReservation() {
   return useSyncExternalStore(repo.subscribe, () => repo.getReservation());
 }
 
+export function useComments() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getComments());
+}
+
+export function useChats() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getChats());
+}
+
+export function useGroups() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getGroups());
+}
+
 /**
  * Reads a domain slice through the repository. Seeds initial state from the
  * synchronous snapshot when the backend offers one (the mock → no loading

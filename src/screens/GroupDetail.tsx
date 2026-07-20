@@ -2,16 +2,27 @@ import { useState, useEffect, useRef } from 'react';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
+import { useGroups, useRepository } from '../data/repo';
 
 type Tab = 'chat' | 'polls' | 'events' | 'members';
 
 export function GroupDetail() {
   const state = usePavStore();
-  const { set, sendGroupMessage, voteGroupPoll, rsvpGroupEvent, toggleGroupJoin, toggleGroupMute } = state;
+  const { set } = state;
+  const repo = useRepository();
+  const groups = useGroups();
+  const { voteGroupPoll, rsvpGroupEvent, toggleGroupJoin, toggleGroupMute } = repo;
   const [tab, setTab] = useState<Tab>('chat');
   const listRef = useRef<HTMLDivElement>(null);
 
-  const group = state.activeGroup ? state.groups[state.activeGroup] : null;
+  const group = state.activeGroup ? groups[state.activeGroup] : null;
+
+  const sendGroupMessage = () => {
+    const t = state.groupChatInput.trim();
+    if (!t || !state.activeGroup) return;
+    repo.sendGroupMessage(state.activeGroup, t);
+    set({ groupChatInput: '' });
+  };
 
   useEffect(() => {
     const el = listRef.current;

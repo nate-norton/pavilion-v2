@@ -4,7 +4,7 @@ import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
 import { getDelinquent } from '../store/selectors';
-import { usePortfolio, useReservation, resetDemoData } from '../data/repo';
+import { usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
 
 const CARD: CSSProperties = {
   background: 'rgb(var(--paper))',
@@ -33,6 +33,7 @@ export function MyPlace() {
   const { set } = state;
   const PORTFOLIO = usePortfolio();
   const reservation = useReservation();
+  const groups = useGroups();
 
   const [apConfirm, setApConfirm] = useState(false);
 
@@ -55,7 +56,7 @@ export function MyPlace() {
   const duesBg = state.paid ? 'rgb(var(--mint))' : state.planActive ? 'rgb(var(--skypale))' : 'rgb(var(--blush))';
   const duesColor = state.paid ? 'rgb(var(--sagedark))' : state.planActive ? 'rgb(var(--skydeep))' : 'rgb(var(--terracotta))';
   const myBookings = reservation.booked && reservation.summary ? '1 upcoming' : 'None yet';
-  const myCirclesCount = Object.values(state.groups).filter((g) => !g.isGroupChat && g.joined).length;
+  const myCirclesCount = Object.values(groups).filter((g) => !g.isGroupChat && g.joined).length;
 
   const pfDoors = PORTFOLIO.reduce((a, c) => a + c.doors, 0);
   const pfCollected = pfDoors
@@ -491,7 +492,7 @@ export function MyPlace() {
       <div style={CARD}>
         <p className="m-0 mb-[11px] font-serif text-base text-navy">My groups</p>
         <div className="flex gap-2 flex-wrap">
-          {Object.values(state.groups).filter((g) => !g.isGroupChat && g.joined).map((g) => (
+          {Object.values(groups).filter((g) => !g.isGroupChat && g.joined).map((g) => (
             <button
               key={g.key}
               type="button"
