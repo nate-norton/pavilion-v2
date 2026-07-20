@@ -13,7 +13,7 @@ export interface StatusTimelineProps {
 const DOT_COLOR: Record<StatusStep['state'], string> = {
   done: 'rgb(var(--sage))',
   active: 'rgb(var(--gold))',
-  pending: '#D9CFB8',
+  pending: 'rgb(var(--sanddim))',
 };
 
 const DEFAULT_ICON: Record<StatusStep['state'], string> = {
@@ -29,7 +29,7 @@ export function StatusTimeline({ steps }: StatusTimelineProps) {
       {steps.map((step, i) => {
         // Segment is green only when the next step is 'done'
         const nextStep = steps[i + 1];
-        const segColor = nextStep && nextStep.state === 'done' ? 'rgb(var(--sage))' : '#D9CFB8';
+        const segColor = nextStep && nextStep.state === 'done' ? 'rgb(var(--sage))' : 'rgb(var(--sanddim))';
         return (
           <div key={step.label} className="contents">
             <div className="flex flex-col items-center gap-1 flex-1">
@@ -37,7 +37,7 @@ export function StatusTimeline({ steps }: StatusTimelineProps) {
                 className="w-[22px] h-[22px] rounded-full flex items-center justify-center"
                 style={{ background: DOT_COLOR[step.state] }}
               >
-                <PhIcon name={step.icon ?? DEFAULT_ICON[step.state]} size={11} color="#fff" />
+                <PhIcon name={step.icon ?? DEFAULT_ICON[step.state]} size={11} color="rgb(var(--white))" />
               </span>
               <span className="text-[10.5px] font-bold text-bark text-center">
                 {step.label.split('\n').map((line, j) => (

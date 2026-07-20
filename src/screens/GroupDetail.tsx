@@ -55,7 +55,7 @@ export function GroupDetail() {
             type="button"
             onClick={() => toggleGroupMute(group.key)}
             className="w-8 h-8 rounded-full border-none flex items-center justify-center cursor-pointer"
-            style={{ background: group.muted ? '#FEF3EE' : 'rgb(var(--navy) / 0.06)' }}
+            style={{ background: group.muted ? 'rgb(var(--blushpale))' : 'rgb(var(--navy) / 0.06)' }}
           >
             <PhIcon
               name={group.muted ? 'ph-fill ph-bell-slash' : 'ph-fill ph-bell'}
@@ -97,7 +97,7 @@ export function GroupDetail() {
               {t.count && t.count > 0 ? (
                 <span
                   className="min-w-[16px] h-4 rounded-full flex items-center justify-center text-[9px] font-extrabold px-1"
-                  style={{ background: tab === t.key ? 'rgb(var(--navy))' : '#D5CFBF', color: tab === t.key ? 'rgb(var(--cream))' : '#6E6759' }}
+                  style={{ background: tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--taupepale))', color: tab === t.key ? 'rgb(var(--cream))' : 'rgb(var(--barkgray))' }}
                 >
                   {t.count}
                 </span>
@@ -128,7 +128,7 @@ export function GroupDetail() {
               <div ref={listRef} className="pav-scroll flex-1 overflow-y-auto flex flex-col gap-2.5" style={{ padding: '16px 18px' }}>
                 {group.messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-10" style={{ color: 'rgb(var(--stonelight))' }}>
-                    <PhIcon name="ph ph-chat-circle-dots" size={32} color="#D5CFBF" />
+                    <PhIcon name="ph ph-chat-circle-dots" size={32} color="rgb(var(--taupepale))" />
                     <p className="m-0 mt-2 text-[13px] font-semibold">No messages yet — say something!</p>
                   </div>
                 ) : (
@@ -146,7 +146,7 @@ export function GroupDetail() {
                       >
                         <p className="m-0 text-[13.5px] leading-[1.45] font-semibold">{m.text}</p>
                       </div>
-                      <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: '#B4AC9C' }}>
+                      <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--claygray))' }}>
                         {m.time || ''}
                       </span>
                     </div>
@@ -181,7 +181,7 @@ export function GroupDetail() {
         <div className="pav-scroll flex-1 overflow-y-auto" style={{ padding: '16px 18px' }}>
           {group.polls.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10" style={{ color: 'rgb(var(--stonelight))' }}>
-              <PhIcon name="ph ph-chart-bar-horizontal" size={32} color="#D5CFBF" />
+              <PhIcon name="ph ph-chart-bar-horizontal" size={32} color="rgb(var(--taupepale))" />
               <p className="m-0 mt-2 text-[13px] font-semibold">No polls yet</p>
             </div>
           ) : (
@@ -246,7 +246,7 @@ export function GroupDetail() {
         <div className="pav-scroll flex-1 overflow-y-auto" style={{ padding: '16px 18px' }}>
           {group.events.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10" style={{ color: 'rgb(var(--stonelight))' }}>
-              <PhIcon name="ph ph-calendar-dots" size={32} color="#D5CFBF" />
+              <PhIcon name="ph ph-calendar-dots" size={32} color="rgb(var(--taupepale))" />
               <p className="m-0 mt-2 text-[13px] font-semibold">No upcoming events</p>
             </div>
           ) : (
@@ -330,7 +330,7 @@ export function GroupDetail() {
               type="button"
               onClick={() => toggleGroupJoin(group.key)}
               className="w-full mt-4 border-none rounded-xl py-3 text-[13px] font-extrabold cursor-pointer"
-              style={{ background: '#FEF3EE', color: 'rgb(var(--terracotta))' }}
+              style={{ background: 'rgb(var(--blushpale))', color: 'rgb(var(--terracotta))' }}
             >
               Leave group
             </button>

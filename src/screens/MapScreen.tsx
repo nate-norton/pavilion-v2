@@ -80,29 +80,29 @@ export function MapScreen() {
       {/* Stylized map */}
       <div
         className="flex-1 relative rounded-[22px] overflow-hidden"
-        style={{ margin: '12px 14px 16px', background: '#EFE8D6', border: '1px solid rgb(var(--navy) / 0.08)' }}
+        style={{ margin: '12px 14px 16px', background: 'rgb(var(--creamsand))', border: '1px solid rgb(var(--navy) / 0.08)' }}
       >
         <div
           className="absolute left-0 right-0"
-          style={{ top: '30%', height: 22, background: '#F7F3EA', borderTop: '1px solid rgb(var(--navy) / 0.06)', borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}
+          style={{ top: '30%', height: 22, background: 'rgb(var(--creamlight))', borderTop: '1px solid rgb(var(--navy) / 0.06)', borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}
         />
         <div
           className="absolute left-0 right-0"
-          style={{ top: '64%', height: 22, background: '#F7F3EA', borderTop: '1px solid rgb(var(--navy) / 0.06)', borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}
+          style={{ top: '64%', height: 22, background: 'rgb(var(--creamlight))', borderTop: '1px solid rgb(var(--navy) / 0.06)', borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}
         />
         <div
           className="absolute top-0 bottom-0"
-          style={{ left: '44%', width: 22, background: '#F7F3EA', borderLeft: '1px solid rgb(var(--navy) / 0.06)', borderRight: '1px solid rgb(var(--navy) / 0.06)' }}
+          style={{ left: '44%', width: 22, background: 'rgb(var(--creamlight))', borderLeft: '1px solid rgb(var(--navy) / 0.06)', borderRight: '1px solid rgb(var(--navy) / 0.06)' }}
         />
         <div
           className="absolute flex items-center justify-center"
-          style={{ left: '53%', top: '5%', width: '36%', height: '16%', background: '#DCE9DD', borderRadius: 18 }}
+          style={{ left: '53%', top: '5%', width: '36%', height: '16%', background: 'rgb(var(--sagepale))', borderRadius: 18 }}
         >
-          <span className="text-[9.5px] font-bold" style={{ color: '#5F8A6F', letterSpacing: '0.1em' }}>
+          <span className="text-[9.5px] font-bold" style={{ color: 'rgb(var(--sagegray))', letterSpacing: '0.1em' }}>
             THE GREEN
           </span>
         </div>
-        <div className="absolute" style={{ left: '7%', top: '39%', width: '24%', height: '11%', background: '#D8E6F4', borderRadius: 14 }} />
+        <div className="absolute" style={{ left: '7%', top: '39%', width: '24%', height: '11%', background: 'rgb(var(--skytint))', borderRadius: 14 }} />
         <div className="absolute flex gap-1.5" style={{ left: '6%', top: '12%' }}>
           <span style={HOUSE} />
           <span style={HOUSE} />
@@ -178,7 +178,7 @@ export function MapScreen() {
               boxShadow: '0 4px 10px rgb(var(--navy) / 0.25)',
             }}
           >
-            <PhIcon name={p.icon} size={15} color="#fff" />
+            <PhIcon name={p.icon} size={15} color="rgb(var(--white))" />
           </button>
         ))}
 
@@ -201,7 +201,7 @@ export function MapScreen() {
               className="w-[38px] h-[38px] rounded-xl flex items-center justify-center flex-shrink-0"
               style={{ background: selPinObj.color }}
             >
-              <PhIcon name={selPinObj.icon} size={18} color="#fff" />
+              <PhIcon name={selPinObj.icon} size={18} color="rgb(var(--white))" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="m-0 mb-px text-[13px] font-bold text-navy leading-[1.25]">{selPinObj.title}</p>

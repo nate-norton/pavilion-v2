@@ -37,11 +37,11 @@ export function AiSheet() {
         data-testid="ai-scrim"
         onClick={close}
         className="absolute inset-0 animate-scrimfade"
-        style={{ background: 'rgba(26,30,20,0.4)' }}
+        style={{ background: 'rgb(var(--scrim) / 0.4)' }}
       />
       <div
         className="absolute left-0 right-0 bottom-0 bg-parchment rounded-t-[28px] flex flex-col animate-sheetup"
-        style={{ height: '78%', boxShadow: '0 -18px 50px rgba(26,30,20,0.25)' }}
+        style={{ height: '78%', boxShadow: '0 -18px 50px rgb(var(--scrim) / 0.25)' }}
       >
         <div
           className="flex items-center gap-[11px] px-[18px] pt-4 pb-3"
@@ -51,7 +51,7 @@ export function AiSheet() {
             className="w-[38px] h-[38px] rounded-full flex items-center justify-center flex-shrink-0"
             style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}
           >
-            <PhIcon name="ph-fill ph-sparkle" size={18} color="#fff" />
+            <PhIcon name="ph-fill ph-sparkle" size={18} color="rgb(var(--white))" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[15px] font-bold text-navy">AI</p>

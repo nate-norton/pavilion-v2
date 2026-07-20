@@ -62,7 +62,7 @@ export function ReportSheet() {
               height: 70,
               border: state.reportPhoto ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
               borderRadius: 13,
-              background: state.reportPhoto ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,#F3EDE0 0 8px,rgb(var(--parchment)) 8px 16px)',
+              background: state.reportPhoto ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--creamdim)) 0 8px,rgb(var(--parchment)) 8px 16px)',
             }}
           >
             <PhIcon name={state.reportPhoto ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={state.reportPhoto ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
@@ -75,8 +75,8 @@ export function ReportSheet() {
             onClick={submitReport}
             className="w-full border-none rounded-2xl py-[15px] text-[14.5px] font-extrabold font-sans"
             style={{
-              background: canReport ? 'rgb(var(--ember))' : '#DDD5C2',
-              color: canReport ? '#fff' : 'rgb(var(--stonelight))',
+              background: canReport ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
+              color: canReport ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
               cursor: canReport ? 'pointer' : 'default',
             }}
           >
@@ -96,31 +96,31 @@ export function ReportSheet() {
                 className="w-5 h-5 rounded-full flex items-center justify-center"
                 style={{ background: 'rgb(var(--sage))' }}
               >
-                <PhIcon name="ph-bold ph-check" size={10} color="#fff" />
+                <PhIcon name="ph-bold ph-check" size={10} color="rgb(var(--white))" />
               </span>
               <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
                 Submitted
               </span>
             </div>
-            <div className="h-0.5" style={{ background: '#D9CFB8', width: 36, marginBottom: 16 }} />
+            <div className="h-0.5" style={{ background: 'rgb(var(--sanddim))', width: 36, marginBottom: 16 }} />
             <div className="flex flex-col items-center gap-1" style={{ width: 80 }}>
               <span
                 className="w-5 h-5 rounded-full flex items-center justify-center"
                 style={{ background: 'rgb(var(--gold))' }}
               >
-                <PhIcon name="ph-bold ph-hourglass" size={10} color="#fff" />
+                <PhIcon name="ph-bold ph-hourglass" size={10} color="rgb(var(--white))" />
               </span>
               <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
                 Triage
               </span>
             </div>
-            <div className="h-0.5" style={{ background: '#D9CFB8', width: 36, marginBottom: 16 }} />
+            <div className="h-0.5" style={{ background: 'rgb(var(--sanddim))', width: 36, marginBottom: 16 }} />
             <div className="flex flex-col items-center gap-1" style={{ width: 80 }}>
               <span
                 className="w-5 h-5 rounded-full flex items-center justify-center"
-                style={{ background: '#D9CFB8' }}
+                style={{ background: 'rgb(var(--sanddim))' }}
               >
-                <PhIcon name="ph-bold ph-dots-three" size={10} color="#fff" />
+                <PhIcon name="ph-bold ph-dots-three" size={10} color="rgb(var(--white))" />
               </span>
               <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
                 Fixed

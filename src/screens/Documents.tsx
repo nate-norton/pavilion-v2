@@ -183,12 +183,12 @@ export function Documents() {
                     March 2026 revision · §4.2
                   </p>
                   <p className="m-0 mb-[5px] text-[12.5px] font-bold" style={{ lineHeight: 1.55 }}>
-                    <span style={{ background: '#FBE4E0', color: '#B23A2B', textDecoration: 'line-through', borderRadius: 3, padding: '1px 3px' }}>
+                    <span style={{ background: 'rgb(var(--blushdim))', color: 'rgb(var(--reddeep))', textDecoration: 'line-through', borderRadius: 3, padding: '1px 3px' }}>
                       Cedar, Slate Gray, White
                     </span>
                   </p>
                   <p className="m-0 mb-2 text-[12.5px] font-bold" style={{ lineHeight: 1.55 }}>
-                    <span style={{ background: '#E2F2E8', color: 'rgb(var(--sagedark))', borderRadius: 3, padding: '1px 3px' }}>
+                    <span style={{ background: 'rgb(var(--sagetint))', color: 'rgb(var(--sagedark))', borderRadius: 3, padding: '1px 3px' }}>
                       Cedar, Slate Gray, White, Sage, Clay
                     </span>
                   </p>

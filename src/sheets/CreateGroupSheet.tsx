@@ -13,7 +13,7 @@ const ICON_OPTIONS = [
   { icon: 'ph-fill ph-plant', label: 'Garden' },
 ];
 
-const COLOR_OPTIONS = ['rgb(var(--navy))', 'rgb(var(--terracotta))', 'rgb(var(--sage))', 'rgb(var(--gold))', 'rgb(var(--sky))', 'rgb(var(--ember))', '#74B992', '#8B5CF6'];
+const COLOR_OPTIONS = ['rgb(var(--navy))', 'rgb(var(--terracotta))', 'rgb(var(--sage))', 'rgb(var(--gold))', 'rgb(var(--sky))', 'rgb(var(--ember))', 'rgb(var(--sagelight))', 'rgb(var(--violet))'];
 
 export function CreateGroupSheet() {
   const state = usePavStore();
@@ -87,7 +87,7 @@ export function CreateGroupSheet() {
               className="w-8 h-8 rounded-full border-none cursor-pointer flex items-center justify-center"
               style={{ background: c, outline: state.createGroupColor === c ? '2.5px solid ' + c : 'none', outlineOffset: 2 }}
             >
-              {state.createGroupColor === c && <PhIcon name="ph-fill ph-check" size={14} color="#fff" />}
+              {state.createGroupColor === c && <PhIcon name="ph-fill ph-check" size={14} color="rgb(var(--white))" />}
             </button>
           ))}
         </div>
@@ -119,7 +119,7 @@ export function CreateGroupSheet() {
           disabled={!canCreate}
           className="w-full border-none rounded-full py-3.5 text-sm font-extrabold cursor-pointer"
           style={{
-            background: canCreate ? 'rgb(var(--navy))' : '#D5CFBF',
+            background: canCreate ? 'rgb(var(--navy))' : 'rgb(var(--taupepale))',
             color: canCreate ? 'rgb(var(--cream))' : 'rgb(var(--stonelight))',
           }}
         >

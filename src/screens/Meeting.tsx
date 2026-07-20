@@ -48,7 +48,7 @@ export function Meeting() {
         <div className="rounded-full overflow-hidden mb-2.5" style={{ height: 8, background: 'rgb(var(--cream) / 0.15)' }}>
           <div
             className="h-full rounded-full"
-            style={{ width: `${quorum.pct}%`, background: 'linear-gradient(90deg,rgb(var(--ember)),#F97B4B)', transition: 'width 0.6s ease' }}
+            style={{ width: `${quorum.pct}%`, background: 'linear-gradient(90deg,rgb(var(--ember)),rgb(var(--emberbright)))', transition: 'width 0.6s ease' }}
           />
         </div>
         <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>

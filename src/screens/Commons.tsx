@@ -277,7 +277,7 @@ export function Commons() {
                           {(openPolls > 0 || upcomingEvents > 0) && (
                             <div className="flex gap-2 mt-1">
                               {openPolls > 0 && (
-                                <span className="text-[10px] font-bold rounded-full px-2 py-0.5" style={{ background: 'rgb(var(--goldpale))', color: '#B8872E' }}>
+                                <span className="text-[10px] font-bold rounded-full px-2 py-0.5" style={{ background: 'rgb(var(--goldpale))', color: 'rgb(var(--goldmid))' }}>
                                   {openPolls} poll{openPolls > 1 ? 's' : ''}
                                 </span>
                               )}

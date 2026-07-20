@@ -346,7 +346,7 @@ export function MyPlace() {
               · Owner
             </span>
           </p>
-          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: 'rgb(var(--sand))', color: '#6E6759' }}>
+          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: 'rgb(var(--sand))', color: 'rgb(var(--barkgray))' }}>
             Admin
           </span>
         </div>
@@ -363,7 +363,7 @@ export function MyPlace() {
               · Partner
             </span>
           </p>
-          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: 'rgb(var(--sand))', color: '#6E6759' }}>
+          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: 'rgb(var(--sand))', color: 'rgb(var(--barkgray))' }}>
             Member
           </span>
         </div>

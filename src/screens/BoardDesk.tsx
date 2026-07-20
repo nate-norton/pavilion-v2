@@ -281,7 +281,7 @@ export function BoardDesk() {
             )}
             {state.reminderSent && (
               <div className="rounded-xl px-3.5 py-[11px] flex items-center gap-[9px] animate-fadeup" style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}>
-                <PhIcon name="ph-fill ph-paper-plane-tilt" size={16} color="#6fd39c" />
+                <PhIcon name="ph-fill ph-paper-plane-tilt" size={16} color="rgb(var(--sagebright))" />
                 <span className="text-[12.5px] font-bold">Reminder queued for tonight&apos;s digest — app, email &amp; SMS</span>
               </div>
             )}
@@ -325,14 +325,14 @@ export function BoardDesk() {
             <div className="flex items-center gap-[11px] py-[11px]" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
               <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#A-118 · Backyard pergola · #27</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: '#6E6759' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--barkgray))' }}>
                 Jun 12
               </span>
             </div>
             <div className="flex items-center gap-[11px] py-[11px]">
               <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#A-115 · Fence stain, Cedar · #33</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: '#6E6759' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--barkgray))' }}>
                 May 30
               </span>
             </div>
@@ -671,7 +671,7 @@ export function BoardDesk() {
                   onClick={sendBroadcast}
                   disabled={!canBc}
                   className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold"
-                  style={{ background: canBc ? 'rgb(var(--ember))' : '#DDD5C2', color: canBc ? '#fff' : 'rgb(var(--stonelight))', cursor: canBc ? 'pointer' : 'default' }}
+                  style={{ background: canBc ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canBc ? 'rgb(var(--white))' : 'rgb(var(--stonelight))', cursor: canBc ? 'pointer' : 'default' }}
                 >
                   Send to 136 households
                 </button>
@@ -737,7 +737,7 @@ export function BoardDesk() {
                         onClick={() => canPostVote && setVoteConfirm(true)}
                         disabled={!canPostVote}
                         className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                        style={{ background: canPostVote ? 'rgb(var(--ember))' : '#DDD5C2', color: canPostVote ? '#fff' : 'rgb(var(--stonelight))' }}
+                        style={{ background: canPostVote ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
                       >
                         Open the ballot
                       </button>
@@ -746,7 +746,7 @@ export function BoardDesk() {
                         <button
                           onClick={() => { postVote(); setVoteConfirm(false); }}
                           className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                          style={{ background: 'rgb(var(--ember))', color: '#fff' }}
+                          style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
                         >
                           Confirm — open to 136 households
                         </button>
@@ -789,7 +789,7 @@ export function BoardDesk() {
                   <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedark">
                     Ballot is open — &quot;{voteQPreview}&quot;
                   </p>
-                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#5F8A6F' }}>
+                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagegray))' }}>
                     Live on every resident&apos;s Today screen · closes in 7 days · you&apos;ll see the tally here
                   </p>
                 </div>
@@ -845,19 +845,19 @@ export function BoardDesk() {
           <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
             <div className="flex flex-col gap-[9px] mb-3">
               <div className="flex gap-2.5 items-center">
-                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: '#C9C1B0' }} />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--taupedim))' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">2027 budget ratification</span>
               </div>
               <div className="flex gap-2.5 items-center">
-                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: '#C9C1B0' }} />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--taupedim))' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">Board election — 2 seats, 3 candidates</span>
               </div>
               <div className="flex gap-2.5 items-center">
-                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: '#C9C1B0' }} />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--taupedim))' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">Pool furniture vote — results</span>
               </div>
               <div className="flex gap-2.5 items-center">
-                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: '#C9C1B0' }} />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--taupedim))' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">Open comment (2 min each)</span>
               </div>
             </div>

@@ -59,7 +59,7 @@ export function SASheet() {
               color="rgb(var(--skydeep))"
               className="flex-shrink-0"
             />
-            <p className="m-0 text-xs font-bold" style={{ color: '#3A6491' }}>
+            <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--skydark))' }}>
               Due Aug 1 — or spread it interest-free across 3 months.
             </p>
           </div>

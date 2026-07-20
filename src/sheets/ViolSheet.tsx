@@ -57,7 +57,7 @@ export function ViolSheet() {
             style={{ background: 'rgb(var(--blush))' }}
           >
             <PhIcon name="ph-fill ph-sparkle" size={15} color="rgb(var(--terracotta))" className="mt-px flex-shrink-0" />
-            <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: '#8A5138' }}>
+            <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: 'rgb(var(--brown))' }}>
               AI: two courtesy reminders always come before any fee (§9). Most notices close
               themselves — 2 neighbors self-cured this month.
             </p>

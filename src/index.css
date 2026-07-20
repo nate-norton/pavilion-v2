@@ -36,6 +36,53 @@
   --taupe: 122 115 101;
   --red: 199 64 46;
 
+  /*
+   * Extended one-off tokens (provisional names). These were inline hex
+   * literals scattered across screens; tokenized at their exact values so
+   * nothing shifts. Several neutrals/greens are near-duplicate drift
+   * (e.g. --claypale vs --taupedim, the --sage* pale ramp) and are prime
+   * candidates to collapse into a tighter ramp once design signs off.
+   */
+  --sandpale: 221 213 194;
+  --sanddim: 217 207 184;
+  --taupepale: 213 207 191;
+  --taupedim: 201 193 176;
+  --claypale: 201 192 174;
+  --claygray: 180 172 156;
+  --stonegray: 138 127 111;
+  --barkgray: 110 103 89;
+  --creamlight: 247 243 234;
+  --creamdim: 243 237 224;
+  --creamtint: 242 235 220;
+  --creamsand: 239 232 214;
+  --sandtint: 235 227 208;
+  --sanddeep: 229 220 198;
+  --sandwarm: 228 220 200;
+  --blushpale: 254 243 238;
+  --blushdim: 251 228 224;
+  --sagegray: 95 138 111;
+  --sagelight: 116 185 146;
+  --sagebright: 111 211 156;
+  --sagemid: 85 172 124;
+  --sagepale: 220 233 221;
+  --sagetint: 226 242 232;
+  --sagewash: 213 228 214;
+  --sagemist: 191 220 201;
+  --sagesoft: 169 210 184;
+  --sagecool: 143 198 166;
+  --emberbright: 249 123 75;
+  --brown: 138 81 56;
+  --reddeep: 178 58 43;
+  --goldmid: 184 135 46;
+  --skytint: 216 230 244;
+  --skydark: 58 100 145;
+  --violet: 139 92 246;
+  /* Mechanical (non-brand): scrims, shadows, pure white/black */
+  --scrim: 26 30 20;
+  --shadow: 50 42 26;
+  --white: 255 255 255;
+  --black: 0 0 0;
+
   /* Semantic aliases — prefer these in screens/components */
   --color-bg: var(--cream);
   --color-surface: var(--paper);

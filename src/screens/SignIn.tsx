@@ -19,7 +19,7 @@ export function SignIn() {
       <div className="flex-1">
         <div
           className="w-16 h-16 rounded-[20px] flex items-center justify-center mb-[22px]"
-          style={{ background: 'linear-gradient(150deg,#F97B4B,rgb(var(--terracotta)))' }}
+          style={{ background: 'linear-gradient(150deg,rgb(var(--emberbright)),rgb(var(--terracotta)))' }}
         >
           <span className="font-serif text-[30px] text-white">P</span>
         </div>

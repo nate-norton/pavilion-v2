@@ -8,7 +8,7 @@ const ROW_PAD = { padding: '14px 0' } as const;
 const DOT = 'w-2 h-2 rounded-full flex-shrink-0';
 const ROW_TITLE = 'm-0 text-sm font-bold text-navy leading-[1.3]';
 const ROW_SUB = 'm-0 mt-px text-xs text-stone font-semibold';
-const CARET = <PhIcon name="ph-bold ph-caret-right" size={13} color="#C9C0AE" className="flex-shrink-0" />;
+const CARET = <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--claypale))" className="flex-shrink-0" />;
 
 /** Today screen — ported from prototype v10 lines 82-260. */
 export function Today() {
@@ -69,7 +69,7 @@ export function Today() {
           <PhIcon name="ph-fill ph-warning" size={17} className="mt-px flex-shrink-0" />
           <div className="flex-1">
             <p className="m-0 mb-px text-[13px] font-bold">Water shutoff — Alder Way</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgba(255,255,255,0.85)' }}>
+            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.85)' }}>
               Today 1–4 PM · hydrant repair · bottled water at the clubhouse
             </p>
           </div>
@@ -77,7 +77,7 @@ export function Today() {
             onClick={() => set({ alertDismissed: true })}
             className="border-none bg-transparent cursor-pointer p-0.5 flex-shrink-0"
           >
-            <PhIcon name="ph-bold ph-x" size={13} color="rgba(255,255,255,0.7)" />
+            <PhIcon name="ph-bold ph-x" size={13} color="rgb(var(--white) / 0.7)" />
           </button>
         </div>
       )}
@@ -136,7 +136,7 @@ export function Today() {
 
         {isTenant && (
           <div onClick={() => set({ myPlaceOpen: true })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: '#C9C0AE' }} />
+            <span className={DOT} style={{ background: 'rgb(var(--claypale))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>Your lease &amp; amenities</p>
               <p className={ROW_SUB}>Rent goes to your landlord — Pavilion handles the rest</p>
@@ -203,7 +203,7 @@ export function Today() {
 
         {showArcCardRole && (
           <div onClick={() => set({ arcSeen: true, tab: 'hoa' })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: '#C9C0AE' }} />
+            <span className={DOT} style={{ background: 'rgb(var(--claypale))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>Your pergola was approved</p>
               <p className={ROW_SUB}>ARC #A-118 · reviewed in 6 days</p>
@@ -215,7 +215,7 @@ export function Today() {
         {showAllClear && (
           <div className="flex items-center gap-[13px] animate-fadeup" style={{ padding: '16px 0' }}>
             <PhIcon name="ph-fill ph-check-circle" size={18} color="rgb(var(--sage))" className="flex-shrink-0 -ml-1" />
-            <p className="m-0 text-[13.5px] font-bold" style={{ color: '#5F8A6F' }}>
+            <p className="m-0 text-[13.5px] font-bold" style={{ color: 'rgb(var(--sagegray))' }}>
               All caught up — nothing needs you today.
             </p>
           </div>
@@ -234,7 +234,7 @@ export function Today() {
             onClick={() => set({ nudgeDismissed: true })}
             className="border-none bg-transparent cursor-pointer flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full"
           >
-            <PhIcon name="ph-bold ph-x" size={12} color="#C9C0AE" />
+            <PhIcon name="ph-bold ph-x" size={12} color="rgb(var(--claypale))" />
           </button>
         </div>
       )}
@@ -292,14 +292,14 @@ export function Today() {
           <div onClick={() => set({ tab: 'reserve' })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
             <PhIcon name="ph ph-swimming-pool" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">Pool cabana open today · 4 slots left</p>
-            <PhIcon name="ph-bold ph-caret-right" size={12} color="#C9C0AE" className="flex-shrink-0" />
+            <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
           </div>
         )}
 
         <div onClick={() => set({ mapOpen: true })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
           <PhIcon name="ph ph-map-trifold" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">Neighborhood map · 5 pins today</p>
-          <PhIcon name="ph-bold ph-caret-right" size={12} color="#C9C0AE" className="flex-shrink-0" />
+          <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
         </div>
 
         <div className="flex items-center gap-3" style={ROW_PAD}>

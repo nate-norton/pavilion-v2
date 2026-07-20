@@ -43,7 +43,7 @@ export function PaySheet() {
                 color="rgb(var(--terracotta))"
                 className="mt-px flex-shrink-0"
               />
-              <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: '#8A5138' }}>
+              <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: 'rgb(var(--brown))' }}>
                 June is 30 days past due. You're in the courtesy period — no fees, no interest
                 (§9). A payment plan keeps it that way.
               </p>

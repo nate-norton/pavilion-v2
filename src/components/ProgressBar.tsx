@@ -18,7 +18,7 @@ export function ProgressBar({ pct, color = 'rgb(var(--navy))', track = 'rgb(var(
         className="h-full rounded-full"
         style={{
           width: `${clamped}%`,
-          background: gradient ? 'linear-gradient(90deg,rgb(var(--ember)),#F97B4B)' : color,
+          background: gradient ? 'linear-gradient(90deg,rgb(var(--ember)),rgb(var(--emberbright)))' : color,
           transition: 'width 0.6s cubic-bezier(0.22,1,0.36,1)',
         }}
       />

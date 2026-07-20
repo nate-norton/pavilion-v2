@@ -63,8 +63,8 @@ export function PassSheet() {
             onClick={issuePass}
             className="w-full border-none rounded-2xl py-[15px] text-[14.5px] font-extrabold"
             style={{
-              background: canPass ? 'rgb(var(--ember))' : '#DDD5C2',
-              color: canPass ? '#fff' : 'rgb(var(--stonelight))',
+              background: canPass ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
+              color: canPass ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
               cursor: canPass ? 'pointer' : 'default',
             }}
           >

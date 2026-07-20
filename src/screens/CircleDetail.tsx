@@ -3,11 +3,11 @@ import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 
 const AVATARS = [
-  { initial: 'R', bg: 'rgb(var(--terracotta))', color: '#fff' },
-  { initial: 'T', bg: 'rgb(var(--sky))', color: '#fff' },
-  { initial: 'P', bg: 'rgb(var(--sage))', color: '#fff' },
+  { initial: 'R', bg: 'rgb(var(--terracotta))', color: 'rgb(var(--white))' },
+  { initial: 'T', bg: 'rgb(var(--sky))', color: 'rgb(var(--white))' },
+  { initial: 'P', bg: 'rgb(var(--sage))', color: 'rgb(var(--white))' },
   { initial: 'A', bg: 'rgb(var(--navy))', color: 'rgb(var(--cream))' },
-  { initial: '+20', bg: 'rgb(var(--sand))', color: '#6E6759' },
+  { initial: '+20', bg: 'rgb(var(--sand))', color: 'rgb(var(--barkgray))' },
 ];
 
 /** Garden Circle detail screen — ported from prototype lines 2043-2086. */
@@ -28,11 +28,11 @@ export function CircleDetail() {
       <BackButton onClick={() => set({ circleOpen: false })} />
       <div
         className="rounded-[18px] mb-3.5 flex items-center justify-center"
-        style={{ height: 96, background: 'repeating-linear-gradient(-45deg,#D5E4D6 0 10px,#DCE9DD 10px 20px)' }}
+        style={{ height: 96, background: 'repeating-linear-gradient(-45deg,rgb(var(--sagewash)) 0 10px,rgb(var(--sagepale)) 10px 20px)' }}
       >
         <span
           className="font-mono text-[10px] rounded-[5px]"
-          style={{ color: '#5F8A6F', background: 'rgb(var(--paper) / 0.85)', padding: '3px 8px' }}
+          style={{ color: 'rgb(var(--sagegray))', background: 'rgb(var(--paper) / 0.85)', padding: '3px 8px' }}
         >
           photo — the garden in June
         </span>

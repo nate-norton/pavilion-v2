@@ -66,7 +66,7 @@ export function ArcSheet() {
             height: 76,
             border: state.arcPhoto1 ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
             borderRadius: 13,
-            background: state.arcPhoto1 ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,#F3EDE0 0 8px,rgb(var(--parchment)) 8px 16px)',
+            background: state.arcPhoto1 ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--creamdim)) 0 8px,rgb(var(--parchment)) 8px 16px)',
           }}
         >
           <PhIcon name={state.arcPhoto1 ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={19} color={state.arcPhoto1 ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
@@ -82,7 +82,7 @@ export function ArcSheet() {
             height: 76,
             border: state.arcPhoto2 ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
             borderRadius: 13,
-            background: state.arcPhoto2 ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,#F3EDE0 0 8px,rgb(var(--parchment)) 8px 16px)',
+            background: state.arcPhoto2 ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--creamdim)) 0 8px,rgb(var(--parchment)) 8px 16px)',
           }}
         >
           <PhIcon name={state.arcPhoto2 ? 'ph-fill ph-check-circle' : 'ph ph-image-square'} size={19} color={state.arcPhoto2 ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
@@ -97,7 +97,7 @@ export function ArcSheet() {
         style={{ background: 'rgb(var(--blush))' }}
       >
         <PhIcon name="ph-fill ph-sparkle" size={15} color="rgb(var(--terracotta))" className="mt-px flex-shrink-0" />
-        <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: '#8A5138' }}>
+        <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: 'rgb(var(--brown))' }}>
           AI: Sage &amp; Clay are pre-approved paint colors (CC&amp;Rs §4.2) — those requests are
           usually fast-tracked.
         </p>
@@ -107,8 +107,8 @@ export function ArcSheet() {
         onClick={submitArc}
         className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold font-sans"
         style={{
-          background: canSubmit ? 'rgb(var(--ember))' : '#DDD5C2',
-          color: canSubmit ? '#fff' : 'rgb(var(--stonelight))',
+          background: canSubmit ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
+          color: canSubmit ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
           cursor: canSubmit ? 'pointer' : 'default',
         }}
       >

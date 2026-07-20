@@ -204,9 +204,9 @@ export function Onboarding() {
           <div className="animate-fadeup">
             <div
               className="w-[62px] h-[62px] rounded-full flex items-center justify-center mb-4"
-              style={{ background: 'linear-gradient(150deg,#F97B4B,rgb(var(--terracotta)))' }}
+              style={{ background: 'linear-gradient(150deg,rgb(var(--emberbright)),rgb(var(--terracotta)))' }}
             >
-              <PhIcon name="ph-fill ph-sparkle" size={28} color="#fff" />
+              <PhIcon name="ph-fill ph-sparkle" size={28} color="rgb(var(--white))" />
             </div>
             <h1 className="m-0 mb-2.5 font-serif font-normal text-[28px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
               Meet your AI assistant.

@@ -58,10 +58,10 @@ export function NavDock() {
               className="w-[50px] h-[50px] rounded-full flex items-center justify-center"
               style={{
                 border: '3px solid rgb(var(--cream))',
-                background: 'linear-gradient(150deg,#F97B4B,rgb(var(--terracotta)))',
+                background: 'linear-gradient(150deg,rgb(var(--emberbright)),rgb(var(--terracotta)))',
               }}
             >
-              <PhIcon name="ph-fill ph-sparkle" size={22} color="#fff" />
+              <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--white))" />
             </div>
             <span className="text-[10px] font-extrabold mt-[2px]" style={{ color: ACTIVE }}>
               Ask AI

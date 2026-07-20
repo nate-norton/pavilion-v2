@@ -239,7 +239,7 @@ function GroupRow({ group, preview, time, onClick }: {
         {(openPolls > 0 || upcomingEvents > 0) && (
           <div className="flex gap-2 mt-1">
             {openPolls > 0 && (
-              <span className="text-[10.5px] font-bold rounded-full px-2 py-0.5" style={{ background: 'rgb(var(--goldpale))', color: '#B8872E' }}>
+              <span className="text-[10.5px] font-bold rounded-full px-2 py-0.5" style={{ background: 'rgb(var(--goldpale))', color: 'rgb(var(--goldmid))' }}>
                 {openPolls} poll{openPolls > 1 ? 's' : ''}
               </span>
             )}
@@ -252,7 +252,7 @@ function GroupRow({ group, preview, time, onClick }: {
         )}
       </div>
       {!group.joined && (
-        <span className="text-[11px] font-bold rounded-full px-2.5 py-1 flex-shrink-0" style={{ background: 'rgb(var(--navy) / 0.06)', color: '#6E6759' }}>
+        <span className="text-[11px] font-bold rounded-full px-2.5 py-1 flex-shrink-0" style={{ background: 'rgb(var(--navy) / 0.06)', color: 'rgb(var(--barkgray))' }}>
           Join
         </span>
       )}
@@ -263,7 +263,7 @@ function GroupRow({ group, preview, time, onClick }: {
 function EmptyState({ icon, text, actionLabel, onAction }: { icon: string; text: string; actionLabel: string; onAction: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center py-10">
-      <PhIcon name={icon} size={36} color="#D5CFBF" />
+      <PhIcon name={icon} size={36} color="rgb(var(--taupepale))" />
       <p className="m-0 mt-2 text-[13px] font-semibold" style={{ color: 'rgb(var(--stonelight))' }}>{text}</p>
       <button
         onClick={onAction}

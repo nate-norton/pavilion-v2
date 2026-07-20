@@ -42,7 +42,7 @@ export function Notifications() {
       {nt.unread && !state.notifsRead && (
         <span data-testid="notif-dot" className="w-[9px] h-[9px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--ember))' }} />
       )}
-      <PhIcon name="ph ph-caret-right" size={13} color="#C9C1B0" className="flex-shrink-0" />
+      <PhIcon name="ph ph-caret-right" size={13} color="rgb(var(--taupedim))" className="flex-shrink-0" />
     </div>
   );
 

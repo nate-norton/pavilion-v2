@@ -29,12 +29,12 @@ export function Sheet({ open, onClose, children, maxHeight }: SheetProps) {
         data-testid="sheet-scrim"
         onClick={onClose}
         className="absolute inset-0 animate-scrimfade"
-        style={{ background: 'rgba(26,30,20,0.4)' }}
+        style={{ background: 'rgb(var(--scrim) / 0.4)' }}
       />
       <div
         className="absolute left-0 right-0 bottom-0 bg-parchment rounded-t-[28px] px-5 pt-3.5 pb-6 animate-sheetup overflow-y-auto"
         style={{
-          boxShadow: '0 -18px 50px rgba(26,30,20,0.25)',
+          boxShadow: '0 -18px 50px rgb(var(--scrim) / 0.25)',
           maxHeight: maxHeight ?? '90%',
         }}
       >

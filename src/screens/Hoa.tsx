@@ -16,11 +16,11 @@ const DUES_LEGEND = [
 ];
 
 const FORECAST_BARS = [
-  { year: "'26", height: 47, color: '#BFDCC9' },
-  { year: "'27", height: 49, color: '#A9D2B8' },
-  { year: "'28", height: 51, color: '#8FC6A6' },
-  { year: "'29", height: 54, color: '#74B992' },
-  { year: "'30", height: 57, color: '#55AC7C' },
+  { year: "'26", height: 47, color: 'rgb(var(--sagemist))' },
+  { year: "'27", height: 49, color: 'rgb(var(--sagesoft))' },
+  { year: "'28", height: 51, color: 'rgb(var(--sagecool))' },
+  { year: "'29", height: 54, color: 'rgb(var(--sagelight))' },
+  { year: "'30", height: 57, color: 'rgb(var(--sagemid))' },
   { year: "'31", height: 60, color: 'rgb(var(--sage))' },
 ];
 
@@ -93,7 +93,7 @@ export function Hoa() {
             <button
               onClick={voteYes}
               className="flex-1 border-none rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-              style={{ background: 'rgb(var(--ember))', color: '#fff' }}
+              style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
             >
               Yes, replace it
             </button>
@@ -114,7 +114,7 @@ export function Hoa() {
               style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}
             >
               <Confetti />
-              <PhIcon name="ph-fill ph-seal-check" size={20} color="#6fd39c" className="flex-shrink-0" />
+              <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sagebright))" className="flex-shrink-0" />
               <p className="m-0 text-[13px] font-bold text-cream">
                 You voted <strong>{votedLabel}</strong> · ballot receipt #R-0482 · secret ballot
               </p>
@@ -357,7 +357,7 @@ export function Hoa() {
           </span>
           <span
             className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0 bg-sand"
-            style={{ color: '#6E6759' }}
+            style={{ color: 'rgb(var(--barkgray))' }}
           >
             Fixed Jun 24
           </span>
@@ -414,9 +414,9 @@ export function Hoa() {
           className="rounded-[18px] p-[15px] cursor-pointer text-white"
           style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}
         >
-          <PhIcon name="ph-fill ph-sparkle" size={22} color="#fff" />
+          <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--white))" />
           <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold">Ask AI</p>
-          <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgba(255,255,255,0.85)' }}>
+          <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.85)' }}>
             &quot;Can I paint my fence black?&quot;
           </p>
         </div>

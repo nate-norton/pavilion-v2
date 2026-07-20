@@ -119,7 +119,7 @@ function StatePill({ label, active }: { label: string; active: boolean }) {
       className="rounded-full px-2.5 py-1 text-[11px] font-bold"
       style={{
         background: active ? 'rgb(var(--sage) / 0.12)' : 'rgb(var(--navy) / 0.06)',
-        color: active ? 'rgb(var(--sage))' : '#8A7F6F',
+        color: active ? 'rgb(var(--sage))' : 'rgb(var(--stonegray))',
       }}
     >
       {label}
