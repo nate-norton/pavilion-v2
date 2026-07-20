@@ -45,9 +45,9 @@ export function Reserve() {
           <p className="m-0 mb-2.5 text-[13px] text-taupe font-semibold">{amen.sub} · free for residents</p>
           <div
             className="bg-paper rounded-[13px] px-3.5 py-2.5 flex gap-2.5 items-start mb-[18px]"
-            style={{ border: '1px solid rgba(26,51,82,0.08)' }}
+            style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
           >
-            <PhIcon name="ph-fill ph-info" size={14} color="#8A8375" className="mt-px flex-shrink-0" />
+            <PhIcon name="ph-fill ph-info" size={14} color="rgb(var(--stone))" className="mt-px flex-shrink-0" />
             <p className="m-0 text-xs leading-[1.5] font-bold text-stone">{amen.rules}</p>
           </div>
 
@@ -67,9 +67,9 @@ export function Reserve() {
                   className="rounded-[13px] py-2.5 text-xs font-extrabold cursor-pointer text-center leading-[1.3]"
                   style={{
                     width: 64,
-                    border: on ? '1px solid #1A3352' : '1px solid rgba(26,51,82,0.12)',
-                    background: on ? '#1A3352' : '#FFFEFA',
-                    color: on ? '#F5F0E6' : '#5B554A',
+                    border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',
+                    background: on ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
+                    color: on ? 'rgb(var(--cream))' : 'rgb(var(--bark))',
                   }}
                 >
                   {d}
@@ -85,7 +85,7 @@ export function Reserve() {
             >
               Pick a time
             </p>
-            <span className="text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
+            <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
               Taken? Tap to waitlist
             </span>
           </div>
@@ -102,12 +102,12 @@ export function Reserve() {
                   className="rounded-[13px] py-3.5 text-[13.5px] font-extrabold cursor-pointer"
                   style={{
                     border: sel
-                      ? '1px solid #1A3352'
+                      ? '1px solid rgb(var(--navy))'
                       : taken && wl
-                        ? '1px solid rgba(42,157,92,0.35)'
-                        : '1px solid rgba(26,51,82,0.12)',
-                    background: taken ? (wl ? '#E9F6EE' : '#EDE6D6') : sel ? '#1A3352' : '#FFFEFA',
-                    color: taken ? (wl ? '#228049' : '#B4AC9C') : sel ? '#F5F0E6' : '#1A3352',
+                        ? '1px solid rgb(var(--sage) / 0.35)'
+                        : '1px solid rgb(var(--navy) / 0.12)',
+                    background: taken ? (wl ? 'rgb(var(--mint))' : 'rgb(var(--sand))') : sel ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
+                    color: taken ? (wl ? 'rgb(var(--sagedark))' : '#B4AC9C') : sel ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
                     textDecoration: taken && !wl ? 'line-through' : 'none',
                   }}
                 >
@@ -132,9 +132,9 @@ export function Reserve() {
                   onClick={() => set({ durIdx: i })}
                   className="flex-1 rounded-[13px] py-[11px] text-[13px] font-extrabold cursor-pointer"
                   style={{
-                    border: on ? '1px solid #1A3352' : '1px solid rgba(26,51,82,0.12)',
-                    background: on ? '#1A3352' : '#FFFEFA',
-                    color: on ? '#F5F0E6' : '#5B554A',
+                    border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',
+                    background: on ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
+                    color: on ? 'rgb(var(--cream))' : 'rgb(var(--bark))',
                   }}
                 >
                   {label}
@@ -148,8 +148,8 @@ export function Reserve() {
               onClick={book}
               className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold"
               style={{
-                background: canBook ? '#E06A3E' : '#DDD5C2',
-                color: canBook ? '#fff' : '#A39B8B',
+                background: canBook ? 'rgb(var(--ember))' : '#DDD5C2',
+                color: canBook ? '#fff' : 'rgb(var(--stonelight))',
                 cursor: canBook ? 'pointer' : 'default',
               }}
             >
@@ -158,10 +158,10 @@ export function Reserve() {
           ) : (
             <div
               className="rounded-[18px] px-4 py-[18px] animate-fadeup"
-              style={{ background: '#E9F6EE', border: '1px solid rgba(42,157,92,0.25)' }}
+              style={{ background: 'rgb(var(--mint))', border: '1px solid rgb(var(--sage) / 0.25)' }}
             >
               <div className="flex items-center gap-3 mb-3">
-                <PhIcon name="ph-fill ph-check-circle" size={28} color="#2A9D5C" className="flex-shrink-0" />
+                <PhIcon name="ph-fill ph-check-circle" size={28} color="rgb(var(--sage))" className="flex-shrink-0" />
                 <div>
                   <p className="m-0 mb-0.5 text-[15px] font-bold text-navy">Booked!</p>
                   <p className="m-0 text-[13px] font-bold" style={{ color: '#5F8A6F' }}>
@@ -173,14 +173,14 @@ export function Reserve() {
                 <button
                   onClick={() => set({ calAdded: true })}
                   className="w-full border-none text-white rounded-[13px] py-[11px] text-[13.5px] font-extrabold cursor-pointer mb-2.5 flex items-center justify-center gap-1.5"
-                  style={{ background: '#2A9D5C' }}
+                  style={{ background: 'rgb(var(--sage))' }}
                 >
                   <PhIcon name="ph-fill ph-calendar-plus" size={15} />
                   Add to my calendar
                 </button>
               ) : (
                 <div className="flex items-center justify-center gap-1.5 py-[11px] mb-2.5 animate-fadeup">
-                  <PhIcon name="ph-fill ph-check-circle" size={15} color="#2A9D5C" />
+                  <PhIcon name="ph-fill ph-check-circle" size={15} color="rgb(var(--sage))" />
                   <span className="text-[12.5px] font-bold text-sagedark">
                     On your calendar — reminder an hour before
                   </span>
@@ -189,7 +189,7 @@ export function Reserve() {
               <button
                 onClick={backToList}
                 className="w-full bg-transparent rounded-[13px] py-[11px] text-[13.5px] font-extrabold cursor-pointer"
-                style={{ border: '1.5px solid rgba(42,157,92,0.35)', color: '#228049' }}
+                style={{ border: '1.5px solid rgb(var(--sage) / 0.35)', color: 'rgb(var(--sagedark))' }}
               >
                 Done
               </button>
@@ -207,21 +207,21 @@ export function Reserve() {
     >
       <div>
         <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">Reserve</h1>
-        <p className="m-0 mb-3.5 text-[13.5px] font-semibold" style={{ color: '#7A7365' }}>
+        <p className="m-0 mb-3.5 text-[13.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
           Amenities, booked in two taps. One active booking per household.
         </p>
         <div
           onClick={() => set({ passOpen: true })}
           className="rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5 bg-navy"
         >
-          <PhIcon name="ph-fill ph-qr-code" size={22} color="#E8A788" className="flex-shrink-0" />
+          <PhIcon name="ph-fill ph-qr-code" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
           <div className="flex-1">
             <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Expecting visitors?</p>
-            <p className="m-0 text-xs font-semibold" style={{ color: 'rgba(245,240,230,0.65)' }}>
+            <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
               Issue a gate &amp; parking pass in two taps
             </p>
           </div>
-          <span className="text-[13px] font-extrabold" style={{ color: '#E8A788' }}>
+          <span className="text-[13px] font-extrabold" style={{ color: 'rgb(var(--peach))' }}>
             Pass →
           </span>
         </div>
@@ -229,9 +229,9 @@ export function Reserve() {
         {hasBooking && (
           <div
             className="rounded-2xl px-4 py-3.5 mb-3.5 flex items-center gap-3 animate-fadeup"
-            style={{ background: '#E9F6EE', border: '1px solid rgba(42,157,92,0.25)' }}
+            style={{ background: 'rgb(var(--mint))', border: '1px solid rgb(var(--sage) / 0.25)' }}
           >
-            <PhIcon name="ph-fill ph-ticket" size={21} color="#2A9D5C" className="flex-shrink-0" />
+            <PhIcon name="ph-fill ph-ticket" size={21} color="rgb(var(--sage))" className="flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{state.bookingSummary}</p>
               <p className="m-0 text-xs font-bold" style={{ color: '#5F8A6F' }}>
@@ -254,14 +254,14 @@ export function Reserve() {
               key={a.name}
               onClick={() => openAmen(i)}
               className="bg-paper rounded-[18px] px-4 py-[15px] flex items-center gap-3.5 cursor-pointer"
-              style={{ border: '1px solid rgba(26,51,82,0.08)' }}
+              style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
             >
               <div className="w-11 h-11 rounded-[14px] flex items-center justify-center flex-shrink-0 bg-sand">
-                <PhIcon name={a.icon} size={22} color="#1A3352" />
+                <PhIcon name={a.icon} size={22} color="rgb(var(--navy))" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-0.5 text-[15px] font-bold text-navy">{a.name}</p>
-                <p className="m-0 mb-1 text-[12.5px] font-semibold" style={{ color: '#8A8375' }}>
+                <p className="m-0 mb-1 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
                   {a.sub}
                 </p>
                 <p
@@ -278,7 +278,7 @@ export function Reserve() {
               <div className="flex flex-col items-end gap-1 flex-shrink-0">
                 <span
                   className="rounded-full px-2.5 py-1 text-[11px] font-bold"
-                  style={{ background: '#E9F6EE', color: '#228049' }}
+                  style={{ background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' }}
                 >
                   {a.avail}
                 </span>

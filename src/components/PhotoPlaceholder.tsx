@@ -11,12 +11,12 @@ export function PhotoPlaceholder({ label, height = 88, tint = '#E4DCC8' }: Photo
       className="rounded-xl flex items-center justify-center"
       style={{
         height,
-        background: `repeating-linear-gradient(-45deg,${tint} 0 10px,#EDE6D6 10px 20px)`,
+        background: `repeating-linear-gradient(-45deg,${tint} 0 10px,rgb(var(--sand)) 10px 20px)`,
       }}
     >
       <span
         className="font-mono text-[10px] rounded px-2 py-[3px]"
-        style={{ color: '#8A8375', background: 'rgba(255,254,250,0.85)' }}
+        style={{ color: 'rgb(var(--stone))', background: 'rgb(var(--paper) / 0.85)' }}
       >
         {label}
       </span>

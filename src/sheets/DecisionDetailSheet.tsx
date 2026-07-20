@@ -48,7 +48,7 @@ export function DecisionDetailSheet() {
   return (
     <Sheet open onClose={() => set({ decisionDetailIdx: null })}>
       <p className="m-0 font-serif text-[19px] text-navy mb-1">{d.text}</p>
-      <p className="m-0 text-[12.5px] font-bold mb-4" style={{ color: '#8A8375' }}>
+      <p className="m-0 text-[12.5px] font-bold mb-4" style={{ color: 'rgb(var(--stone))' }}>
         {d.date}
       </p>
 
@@ -56,8 +56,8 @@ export function DecisionDetailSheet() {
         <span
           className="rounded-full px-2.5 py-1 text-[11px] font-bold"
           style={{
-            background: d.passed ? '#E9F6EE' : '#FBEDE4',
-            color: d.passed ? '#228049' : '#C75A31',
+            background: d.passed ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
+            color: d.passed ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
           }}
         >
           {d.passed ? 'Passed' : 'Declined'}
@@ -68,31 +68,31 @@ export function DecisionDetailSheet() {
       </div>
 
       <div className="mb-5">
-        <ProgressBar pct={pct} color={d.passed ? '#2A9D5C' : '#C75A31'} />
+        <ProgressBar pct={pct} color={d.passed ? 'rgb(var(--sage))' : 'rgb(var(--terracotta))'} />
         <div className="flex justify-between mt-1.5">
-          <span className="text-[11px] font-bold" style={{ color: '#2A9D5C' }}>
+          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sage))' }}>
             Yes {pct}%
           </span>
-          <span className="text-[11px] font-bold" style={{ color: '#C75A31' }}>
+          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--terracotta))' }}>
             No {100 - pct}%
           </span>
         </div>
       </div>
 
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
           Summary
         </p>
         <p className="m-0 text-[13.5px] font-semibold text-navy leading-relaxed">{d.detail}</p>
       </div>
 
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
           Board members present
         </p>
         {d.board.map((name) => (
           <div key={name} className="flex items-center gap-2 py-1">
-            <PhIcon name="ph-fill ph-check-circle" size={14} color="#2A9D5C" />
+            <PhIcon name="ph-fill ph-check-circle" size={14} color="rgb(var(--sage))" />
             <span className="text-[13px] font-bold text-navy">{name}</span>
           </div>
         ))}
@@ -101,7 +101,7 @@ export function DecisionDetailSheet() {
       <button
         onClick={() => set({ docsOpen: true, docReader: false, decisionDetailIdx: null })}
         className="w-full rounded-2xl py-3 border-none text-[13.5px] font-extrabold cursor-pointer font-sans bg-transparent"
-        style={{ border: '1.5px solid rgba(26,51,82,0.15)', color: '#1A3352' }}
+        style={{ border: '1.5px solid rgb(var(--navy) / 0.15)', color: 'rgb(var(--navy))' }}
       >
         View full meeting minutes
       </button>

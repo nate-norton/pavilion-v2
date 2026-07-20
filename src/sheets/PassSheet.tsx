@@ -17,7 +17,7 @@ export function PassSheet() {
       {!state.passIssued ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">Guest pass</p>
-          <p className="m-0 mb-4 text-xs font-bold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-4 text-xs font-bold" style={{ color: 'rgb(var(--stone))' }}>
             Gate + Lot B parking · the camera reads the plate, no paper needed.
           </p>
           <input
@@ -25,14 +25,14 @@ export function PassSheet() {
             onChange={(e) => set({ passName: e.target.value })}
             placeholder="Guest name"
             className="w-full bg-paper rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans mb-2.5"
-            style={{ border: '1px solid rgba(26,51,82,0.12)' }}
+            style={{ border: '1px solid rgb(var(--navy) / 0.12)' }}
           />
           <input
             value={state.passPlate}
             onChange={(e) => set({ passPlate: e.target.value })}
             placeholder="License plate"
             className="w-full bg-paper rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans mb-3.5"
-            style={{ border: '1px solid rgba(26,51,82,0.12)' }}
+            style={{ border: '1px solid rgb(var(--navy) / 0.12)' }}
           />
           <p
             className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
@@ -49,9 +49,9 @@ export function PassSheet() {
                   onClick={() => set({ passDur: i })}
                   className="flex-1 rounded-xl py-2.5 text-xs font-extrabold cursor-pointer"
                   style={{
-                    border: on ? '1px solid #1A3352' : '1px solid rgba(26,51,82,0.12)',
-                    background: on ? '#1A3352' : '#FFFEFA',
-                    color: on ? '#F5F0E6' : '#5B554A',
+                    border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',
+                    background: on ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
+                    color: on ? 'rgb(var(--cream))' : 'rgb(var(--bark))',
                   }}
                 >
                   {label}
@@ -63,8 +63,8 @@ export function PassSheet() {
             onClick={issuePass}
             className="w-full border-none rounded-2xl py-[15px] text-[14.5px] font-extrabold"
             style={{
-              background: canPass ? '#E06A3E' : '#DDD5C2',
-              color: canPass ? '#fff' : '#A39B8B',
+              background: canPass ? 'rgb(var(--ember))' : '#DDD5C2',
+              color: canPass ? '#fff' : 'rgb(var(--stonelight))',
               cursor: canPass ? 'pointer' : 'default',
             }}
           >
@@ -79,20 +79,20 @@ export function PassSheet() {
               style={{ gridTemplateColumns: 'repeat(5,1fr)', gridTemplateRows: 'repeat(5,1fr)', gap: 3 }}
             >
               {[1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1].map((on, i) => (
-                <span key={i} style={{ background: on ? '#1A3352' : undefined, borderRadius: 2 }} />
+                <span key={i} style={{ background: on ? 'rgb(var(--navy))' : undefined, borderRadius: 2 }} />
               ))}
             </div>
             <div className="min-w-0">
               <p
                 className="m-0 mb-[3px] text-[11px] font-bold uppercase"
-                style={{ letterSpacing: '0.12em', color: '#E8A788' }}
+                style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}
               >
                 Pass JR-0142
               </p>
               <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.25]">
                 {state.passName} · {state.passPlate}
               </p>
-              <p className="m-0 text-xs font-bold" style={{ color: 'rgba(245,240,230,0.65)' }}>
+              <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
                 {PASS_DURS[state.passDur]} · Lot B · expires automatically
               </p>
             </div>
@@ -101,7 +101,7 @@ export function PassSheet() {
             <button
               onClick={() => set({ passTexted: true })}
               className="flex-1 bg-transparent rounded-[13px] py-3 text-[13px] font-extrabold cursor-pointer text-navy flex items-center justify-center gap-1.5"
-              style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
+              style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
             >
               <PhIcon name="ph-fill ph-chat-teardrop-text" size={15} />
               {state.passTexted ? 'Sent ✓' : 'Text to guest'}

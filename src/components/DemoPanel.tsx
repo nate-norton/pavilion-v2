@@ -56,8 +56,8 @@ export function DemoPanel() {
               onClick={() => pickRole(r.key)}
               className="flex-1 rounded-xl py-2 text-[13px] font-bold transition-colors"
               style={{
-                background: role === r.key ? '#1A3352' : 'rgba(26,51,82,0.06)',
-                color: role === r.key ? '#FFFEFA' : '#1A3352',
+                background: role === r.key ? 'rgb(var(--navy))' : 'rgb(var(--navy) / 0.06)',
+                color: role === r.key ? 'rgb(var(--paper))' : 'rgb(var(--navy))',
               }}
             >
               {r.label}
@@ -118,8 +118,8 @@ function StatePill({ label, active }: { label: string; active: boolean }) {
     <span
       className="rounded-full px-2.5 py-1 text-[11px] font-bold"
       style={{
-        background: active ? 'rgba(42,157,92,0.12)' : 'rgba(26,51,82,0.06)',
-        color: active ? '#2A9D5C' : '#8A7F6F',
+        background: active ? 'rgb(var(--sage) / 0.12)' : 'rgb(var(--navy) / 0.06)',
+        color: active ? 'rgb(var(--sage))' : '#8A7F6F',
       }}
     >
       {label}

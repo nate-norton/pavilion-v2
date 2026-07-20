@@ -12,11 +12,11 @@ interface ConfettiPiece {
 
 // Copied verbatim from prototype line 193.
 const PIECES: ConfettiPiece[] = [
-  { width: 7, height: 11, background: '#E06A3E', tx: '-84px', ty: '-72px', rot: '220deg', delay: '0.05s', duration: '0.9s' },
-  { width: 6, height: 6, background: '#2A9D5C', tx: '70px', ty: '-84px', rot: '160deg', radius: '50%', delay: '0.1s', duration: '0.95s' },
-  { width: 7, height: 11, background: '#D9A441', tx: '120px', ty: '-40px', rot: '300deg', delay: '0s', duration: '0.85s' },
-  { width: 6, height: 6, background: '#4A90E2', tx: '-120px', ty: '-30px', rot: '120deg', radius: '50%', delay: '0.08s', duration: '1s' },
-  { width: 7, height: 11, background: '#1A3352', tx: '40px', ty: '-96px', rot: '260deg', delay: '0.12s', duration: '0.9s' },
+  { width: 7, height: 11, background: 'rgb(var(--ember))', tx: '-84px', ty: '-72px', rot: '220deg', delay: '0.05s', duration: '0.9s' },
+  { width: 6, height: 6, background: 'rgb(var(--sage))', tx: '70px', ty: '-84px', rot: '160deg', radius: '50%', delay: '0.1s', duration: '0.95s' },
+  { width: 7, height: 11, background: 'rgb(var(--gold))', tx: '120px', ty: '-40px', rot: '300deg', delay: '0s', duration: '0.85s' },
+  { width: 6, height: 6, background: 'rgb(var(--sky))', tx: '-120px', ty: '-30px', rot: '120deg', radius: '50%', delay: '0.08s', duration: '1s' },
+  { width: 7, height: 11, background: 'rgb(var(--navy))', tx: '40px', ty: '-96px', rot: '260deg', delay: '0.12s', duration: '0.9s' },
   { width: 6, height: 10, background: '#F97B4B', tx: '-40px', ty: '-100px', rot: '180deg', delay: '0s', duration: '1s' },
 ];
 

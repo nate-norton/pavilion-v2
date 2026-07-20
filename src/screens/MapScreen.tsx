@@ -8,8 +8,8 @@ const HOUSE: CSSProperties = {
   width: 26,
   height: 20,
   borderRadius: 5,
-  background: '#FFFEFA',
-  border: '1px solid rgba(26,51,82,0.1)',
+  background: 'rgb(var(--paper))',
+  border: '1px solid rgb(var(--navy) / 0.1)',
 };
 
 /** Community map screen — ported from prototype lines 1771-1832. */
@@ -37,20 +37,20 @@ export function MapScreen() {
     <div
       data-screen-label="Map"
       className="absolute inset-0 z-[76] flex flex-col animate-scpop"
-      style={{ background: '#F5F0E6' }}
+      style={{ background: 'rgb(var(--cream))' }}
     >
       <div className="flex items-center justify-between gap-2.5" style={{ padding: '58px 18px 0' }}>
         <BackButton onClick={() => set({ mapOpen: false, selPin: null })} className="" />
         <span
           className="rounded-full text-[11px] font-bold text-navy"
-          style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', padding: '5px 11px' }}
+          style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', padding: '5px 11px' }}
         >
           {pinCountLabel}
         </span>
       </div>
       <div style={{ padding: '10px 18px 0' }}>
         <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">Juniper Ridge</h1>
-        <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: '#7A7365' }}>
+        <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
           Tap a pin to see what&apos;s happening.
         </p>
         <div className="flex gap-[7px]">
@@ -63,9 +63,9 @@ export function MapScreen() {
                 onClick={() => set({ mapLayer: key, selPin: null })}
                 className="inline-flex items-center gap-[5px] rounded-full text-[11.5px] font-extrabold cursor-pointer font-sans"
                 style={{
-                  border: on ? '1px solid #1A3352' : '1px solid rgba(26,51,82,0.12)',
-                  background: on ? '#1A3352' : '#FFFEFA',
-                  color: on ? '#F5F0E6' : '#5B554A',
+                  border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',
+                  background: on ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
+                  color: on ? 'rgb(var(--cream))' : 'rgb(var(--bark))',
                   padding: '7px 12px',
                 }}
               >
@@ -80,19 +80,19 @@ export function MapScreen() {
       {/* Stylized map */}
       <div
         className="flex-1 relative rounded-[22px] overflow-hidden"
-        style={{ margin: '12px 14px 16px', background: '#EFE8D6', border: '1px solid rgba(26,51,82,0.08)' }}
+        style={{ margin: '12px 14px 16px', background: '#EFE8D6', border: '1px solid rgb(var(--navy) / 0.08)' }}
       >
         <div
           className="absolute left-0 right-0"
-          style={{ top: '30%', height: 22, background: '#F7F3EA', borderTop: '1px solid rgba(26,51,82,0.06)', borderBottom: '1px solid rgba(26,51,82,0.06)' }}
+          style={{ top: '30%', height: 22, background: '#F7F3EA', borderTop: '1px solid rgb(var(--navy) / 0.06)', borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}
         />
         <div
           className="absolute left-0 right-0"
-          style={{ top: '64%', height: 22, background: '#F7F3EA', borderTop: '1px solid rgba(26,51,82,0.06)', borderBottom: '1px solid rgba(26,51,82,0.06)' }}
+          style={{ top: '64%', height: 22, background: '#F7F3EA', borderTop: '1px solid rgb(var(--navy) / 0.06)', borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}
         />
         <div
           className="absolute top-0 bottom-0"
-          style={{ left: '44%', width: 22, background: '#F7F3EA', borderLeft: '1px solid rgba(26,51,82,0.06)', borderRight: '1px solid rgba(26,51,82,0.06)' }}
+          style={{ left: '44%', width: 22, background: '#F7F3EA', borderLeft: '1px solid rgb(var(--navy) / 0.06)', borderRight: '1px solid rgb(var(--navy) / 0.06)' }}
         />
         <div
           className="absolute flex items-center justify-center"
@@ -113,7 +113,7 @@ export function MapScreen() {
           <span style={HOUSE} />
           <span
             className="flex items-center justify-center text-[9px] font-bold text-cream"
-            style={{ width: 26, height: 20, borderRadius: 5, background: '#1A3352' }}
+            style={{ width: 26, height: 20, borderRadius: 5, background: 'rgb(var(--navy))' }}
           >
             27
           </span>
@@ -126,7 +126,7 @@ export function MapScreen() {
           <span style={HOUSE} />
           <span
             className="flex items-center justify-center text-[9px] font-bold text-white"
-            style={{ width: 26, height: 20, borderRadius: 5, background: '#D9A441' }}
+            style={{ width: 26, height: 20, borderRadius: 5, background: 'rgb(var(--gold))' }}
           >
             42
           </span>
@@ -140,21 +140,21 @@ export function MapScreen() {
           style={{
             top: 10,
             right: 10,
-            background: 'rgba(255,254,250,0.92)',
-            border: '1px solid rgba(26,51,82,0.08)',
+            background: 'rgb(var(--paper) / 0.92)',
+            border: '1px solid rgb(var(--navy) / 0.08)',
             borderRadius: 12,
             padding: '9px 11px',
-            boxShadow: '0 4px 12px -6px rgba(26,51,82,0.2)',
+            boxShadow: '0 4px 12px -6px rgb(var(--navy) / 0.2)',
           }}
         >
           {[
-            ['#4A90E2', 'Amenities'],
-            ['#E06A3E', 'Events'],
-            ['#D9A441', 'Alerts'],
+            ['rgb(var(--sky))', 'Amenities'],
+            ['rgb(var(--ember))', 'Events'],
+            ['rgb(var(--gold))', 'Alerts'],
           ].map(([c, l]) => (
             <div key={l} className="flex items-center gap-1.5">
               <span className="w-[9px] h-[9px] rounded-full" style={{ background: c }} />
-              <span className="text-[9.5px] font-bold" style={{ color: '#5B554A' }}>
+              <span className="text-[9.5px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
                 {l}
               </span>
             </div>
@@ -174,8 +174,8 @@ export function MapScreen() {
               top: p.y,
               transform: 'translate(-50%,-50%)',
               background: p.color,
-              border: '3px solid #FFFEFA',
-              boxShadow: '0 4px 10px rgba(26,51,82,0.25)',
+              border: '3px solid rgb(var(--paper))',
+              boxShadow: '0 4px 10px rgb(var(--navy) / 0.25)',
             }}
           >
             <PhIcon name={p.icon} size={15} color="#fff" />
@@ -190,11 +190,11 @@ export function MapScreen() {
               left: 12,
               right: 12,
               bottom: 12,
-              background: '#FFFEFA',
-              border: '1px solid rgba(26,51,82,0.1)',
+              background: 'rgb(var(--paper))',
+              border: '1px solid rgb(var(--navy) / 0.1)',
               borderRadius: 16,
               padding: '13px 14px',
-              boxShadow: '0 10px 30px -10px rgba(26,51,82,0.3)',
+              boxShadow: '0 10px 30px -10px rgb(var(--navy) / 0.3)',
             }}
           >
             <div
@@ -205,7 +205,7 @@ export function MapScreen() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="m-0 mb-px text-[13px] font-bold text-navy leading-[1.25]">{selPinObj.title}</p>
-              <p className="m-0 text-[11.5px] font-semibold" style={{ color: '#8A8375' }}>
+              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
                 {selPinObj.sub}
               </p>
             </div>
@@ -222,9 +222,9 @@ export function MapScreen() {
               aria-label="Close pin"
               onClick={() => set({ selPin: null })}
               className="border-none w-[26px] h-[26px] rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
-              style={{ background: '#EDE6D6' }}
+              style={{ background: 'rgb(var(--sand))' }}
             >
-              <PhIcon name="ph-bold ph-x" size={11} color="#5B554A" />
+              <PhIcon name="ph-bold ph-x" size={11} color="rgb(var(--bark))" />
             </button>
           </div>
         )}

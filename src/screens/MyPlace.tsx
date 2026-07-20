@@ -7,8 +7,8 @@ import { getDelinquent } from '../store/selectors';
 import { PORTFOLIO } from '../data';
 
 const CARD: CSSProperties = {
-  background: '#FFFEFA',
-  border: '1px solid rgba(26,51,82,0.08)',
+  background: 'rgb(var(--paper))',
+  border: '1px solid rgb(var(--navy) / 0.08)',
   borderRadius: 18,
   padding: 16,
   marginBottom: 12,
@@ -20,7 +20,7 @@ function Row({ children, divider, onClick }: { children: ReactNode; divider?: bo
     <div
       onClick={onClick}
       className={`flex items-center gap-2.5${onClick ? ' cursor-pointer' : ''}`}
-      style={divider ? { paddingBottom: 10, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 10 } : undefined}
+      style={divider ? { paddingBottom: 10, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 10 } : undefined}
     >
       {children}
     </div>
@@ -50,8 +50,8 @@ export function MyPlace() {
   const duesLabel = state.paid ? 'Paid · Jul 1' : state.planActive ? 'Plan active' : delinquent ? '30 days late' : 'Due Jul 3';
   const statOneLabel = isTenant ? 'Lease' : isManager ? 'Role' : 'Dues';
   const statOneValue = isTenant ? 'Active' : isManager ? 'Manager' : duesLabel;
-  const duesBg = state.paid ? '#E9F6EE' : state.planActive ? '#EAF3FD' : '#FBEDE4';
-  const duesColor = state.paid ? '#228049' : state.planActive ? '#3A73B5' : '#C75A31';
+  const duesBg = state.paid ? 'rgb(var(--mint))' : state.planActive ? 'rgb(var(--skypale))' : 'rgb(var(--blush))';
+  const duesColor = state.paid ? 'rgb(var(--sagedark))' : state.planActive ? 'rgb(var(--skydeep))' : 'rgb(var(--terracotta))';
   const myBookings = state.booked && state.bookingSummary ? '1 upcoming' : 'None yet';
   const myCirclesCount = Object.values(state.groups).filter((g) => !g.isGroupChat && g.joined).length;
 
@@ -73,8 +73,8 @@ export function MyPlace() {
       : delinquent
         ? 'Past due'
         : 'Due Jul 3';
-  const mpJulyBg = state.paid ? '#E9F6EE' : state.planActive ? '#EAF3FD' : delinquent ? '#FBEDE4' : '#FBF3E0';
-  const mpJulyColor = state.paid ? '#228049' : state.planActive ? '#3A73B5' : delinquent ? '#C75A31' : '#A87B1F';
+  const mpJulyBg = state.paid ? 'rgb(var(--mint))' : state.planActive ? 'rgb(var(--skypale))' : delinquent ? 'rgb(var(--blush))' : 'rgb(var(--goldpale))';
+  const mpJulyColor = state.paid ? 'rgb(var(--sagedark))' : state.planActive ? 'rgb(var(--skydeep))' : delinquent ? 'rgb(var(--terracotta))' : 'rgb(var(--golddark))';
   const mpJuneStatus = !juneLate
     ? 'Paid Jun 3 · #P-2168'
     : state.paid
@@ -82,8 +82,8 @@ export function MyPlace() {
       : state.planActive
         ? 'In plan'
         : 'Past due · 30 days';
-  const mpJuneBg = !juneLate || state.paid ? '#E9F6EE' : state.planActive ? '#EAF3FD' : '#FBEDE4';
-  const mpJuneColor = !juneLate || state.paid ? '#228049' : state.planActive ? '#3A73B5' : '#C75A31';
+  const mpJuneBg = !juneLate || state.paid ? 'rgb(var(--mint))' : state.planActive ? 'rgb(var(--skypale))' : 'rgb(var(--blush))';
+  const mpJuneColor = !juneLate || state.paid ? 'rgb(var(--sagedark))' : state.planActive ? 'rgb(var(--skydeep))' : 'rgb(var(--terracotta))';
 
   const statusPill = (label: string, bg: string, color: string) => (
     <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0" style={{ background: bg, color }}>
@@ -95,7 +95,7 @@ export function MyPlace() {
     <div
       onClick={idx != null ? () => set({ paymentDetailIdx: idx }) : undefined}
       className={`flex items-center gap-2.5${idx != null ? ' cursor-pointer' : ''}`}
-      style={last ? undefined : { paddingBottom: 10, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 10 }}
+      style={last ? undefined : { paddingBottom: 10, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 10 }}
     >
       <span className="flex-1 text-[13px] font-bold text-navy">{label}</span>
       {pill}
@@ -106,7 +106,7 @@ export function MyPlace() {
     <div
       data-screen-label="My Place"
       className="pav-scroll absolute inset-0 z-[76] overflow-y-auto animate-scpop"
-      style={{ background: '#F5F0E6', padding: '60px 18px 40px' }}
+      style={{ background: 'rgb(var(--cream))', padding: '60px 18px 40px' }}
     >
       <BackButton onClick={() => set({ myPlaceOpen: false })} className="mb-4" />
 
@@ -133,9 +133,9 @@ export function MyPlace() {
         <div
           onClick={() => set({ myPlaceOpen: false, tab: 'reserve' })}
           className="rounded-[15px] text-center cursor-pointer"
-          style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', padding: '12px 10px' }}
+          style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', padding: '12px 10px' }}
         >
-          <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: '#8A8375' }}>
+          <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
             Bookings
           </p>
           <p className="m-0 text-[12.5px] font-bold text-navy">{myBookings}</p>
@@ -143,9 +143,9 @@ export function MyPlace() {
         <div
           onClick={() => set({ myPlaceOpen: false, tab: 'commons', commonsView: 'circles' })}
           className="rounded-[15px] text-center cursor-pointer"
-          style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.08)', padding: '12px 10px' }}
+          style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', padding: '12px 10px' }}
         >
-          <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: '#8A8375' }}>
+          <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
             Groups
           </p>
           <p className="m-0 text-[12.5px] font-bold text-navy">{myCirclesCount} joined</p>
@@ -161,25 +161,25 @@ export function MyPlace() {
         >
           <div
             className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0"
-            style={{ background: 'rgba(245,240,230,0.12)' }}
+            style={{ background: 'rgb(var(--cream) / 0.12)' }}
           >
-            <PhIcon name="ph-fill ph-shield-star" size={22} color="#E8A788" />
+            <PhIcon name="ph-fill ph-shield-star" size={22} color="rgb(var(--peach))" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <p className="m-0 text-[14.5px] font-bold text-cream">Board desk</p>
               <span
                 className="rounded-full px-2 py-0.5 text-[9.5px] font-bold"
-                style={{ background: 'rgba(232,167,136,0.2)', color: '#E8A788', letterSpacing: '0.06em' }}
+                style={{ background: 'rgb(var(--peach) / 0.2)', color: 'rgb(var(--peach))', letterSpacing: '0.06em' }}
               >
                 TREASURER
               </span>
             </div>
-            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgba(245,240,230,0.65)' }}>
+            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
               Triage, collections, votes &amp; broadcasts
             </p>
           </div>
-          <span className="text-[13px] font-extrabold flex-shrink-0" style={{ color: '#E8A788' }}>
+          <span className="text-[13px] font-extrabold flex-shrink-0" style={{ color: 'rgb(var(--peach))' }}>
             Open →
           </span>
         </div>
@@ -194,17 +194,17 @@ export function MyPlace() {
         >
           <div
             className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0"
-            style={{ background: 'rgba(245,240,230,0.12)' }}
+            style={{ background: 'rgb(var(--cream) / 0.12)' }}
           >
-            <PhIcon name="ph-fill ph-buildings" size={22} color="#E8A788" />
+            <PhIcon name="ph-fill ph-buildings" size={22} color="rgb(var(--peach))" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[14.5px] font-bold text-cream">Portfolio</p>
-            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgba(245,240,230,0.65)' }}>
+            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
               3 communities · {pfDoors} doors · {pfCollected}% collected
             </p>
           </div>
-          <span className="text-[13px] font-extrabold flex-shrink-0" style={{ color: '#E8A788' }}>
+          <span className="text-[13px] font-extrabold flex-shrink-0" style={{ color: 'rgb(var(--peach))' }}>
             Open →
           </span>
         </div>
@@ -216,16 +216,16 @@ export function MyPlace() {
           <div style={CARD}>
             <div className="flex items-center justify-between gap-2.5 mb-3">
               <p className="m-0 font-serif text-base text-navy">Your lease</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: '#EAF3FD', color: '#3A73B5' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: 'rgb(var(--skypale))', color: 'rgb(var(--skydeep))' }}>
                 Active
               </span>
             </div>
             <div
               className="flex items-center gap-[11px]"
-              style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
+              style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
             >
-              <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: '#EDE6D6' }}>
-                <PhIcon name="ph-fill ph-calendar-blank" size={16} color="#5B554A" />
+              <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
+                <PhIcon name="ph-fill ph-calendar-blank" size={16} color="rgb(var(--bark))" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 text-[13px] font-bold text-navy">12-month term · renews Mar 1, 2027</p>
@@ -235,8 +235,8 @@ export function MyPlace() {
               </div>
             </div>
             <div className="flex items-center gap-[11px]">
-              <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: '#EDE6D6' }}>
-                <PhIcon name="ph-fill ph-user" size={16} color="#5B554A" />
+              <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
+                <PhIcon name="ph-fill ph-user" size={16} color="rgb(var(--bark))" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 text-[13px] font-bold text-navy">Owner: Dana Okafor · #27</p>
@@ -246,10 +246,10 @@ export function MyPlace() {
               </div>
             </div>
           </div>
-          <div style={{ ...CARD, border: '1px solid rgba(217,164,65,0.4)' }}>
+          <div style={{ ...CARD, border: '1px solid rgb(var(--gold) / 0.4)' }}>
             <div className="flex items-start gap-[11px]">
-              <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: '#FBF3E0' }}>
-                <PhIcon name="ph-fill ph-identification-card" size={17} color="#A87B1F" />
+              <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--goldpale))' }}>
+                <PhIcon name="ph-fill ph-identification-card" size={17} color="rgb(var(--golddark))" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">Tenant registration</p>
@@ -283,9 +283,9 @@ export function MyPlace() {
           <p className="m-0 mb-[11px] font-serif text-base text-navy">Payments</p>
           <div
             className="flex items-center gap-2.5"
-            style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
+            style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
           >
-            <PhIcon name="ph-fill ph-arrows-clockwise" size={17} color="#1A3352" className="flex-shrink-0" />
+            <PhIcon name="ph-fill ph-arrows-clockwise" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
             <div className="flex-1">
               <p className="m-0 text-[13px] font-bold text-navy">{mpApLabel}</p>
               <p className="m-0 text-[11.5px] font-semibold text-stone">
@@ -297,7 +297,7 @@ export function MyPlace() {
                 <button
                   onClick={() => { set({ apPaused: !state.apPaused }); setApConfirm(false); }}
                   className="border-none rounded-full px-2.5 py-1.5 text-[11px] font-extrabold cursor-pointer"
-                  style={{ background: state.apPaused ? '#E9F6EE' : '#FBEDE4', color: state.apPaused ? '#228049' : '#C75A31' }}
+                  style={{ background: state.apPaused ? 'rgb(var(--mint))' : 'rgb(var(--blush))', color: state.apPaused ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))' }}
                 >
                   {state.apPaused ? 'Resume' : 'Pause'}
                 </button>
@@ -314,8 +314,8 @@ export function MyPlace() {
           </div>
           {payRow('July 2026 · $285', statusPill(mpJulyStatus, mpJulyBg, mpJulyColor), false, 0)}
           {payRow('June 2026 · $285', statusPill(mpJuneStatus, mpJuneBg, mpJuneColor), false, 1)}
-          {payRow('May 2026 · $285', statusPill('Paid May 3 · #P-2103', '#E9F6EE', '#228049'), false, 2)}
-          {payRow('April 2026 · $285', statusPill('Paid Apr 3 · #P-2041', '#E9F6EE', '#228049'), true, 3)}
+          {payRow('May 2026 · $285', statusPill('Paid May 3 · #P-2103', 'rgb(var(--mint))', 'rgb(var(--sagedark))'), false, 2)}
+          {payRow('April 2026 · $285', statusPill('Paid Apr 3 · #P-2041', 'rgb(var(--mint))', 'rgb(var(--sagedark))'), true, 3)}
         </div>
       )}
 
@@ -328,7 +328,7 @@ export function MyPlace() {
               type="button"
               onClick={() => set({ memberAdded: true })}
               className="inline-flex items-center gap-[5px] bg-transparent rounded-full text-[11.5px] font-extrabold text-navy cursor-pointer font-sans"
-              style={{ border: '1.5px solid rgba(26,51,82,0.15)', padding: '6px 12px' }}
+              style={{ border: '1.5px solid rgb(var(--navy) / 0.15)', padding: '6px 12px' }}
             >
               <PhIcon name="ph-bold ph-plus" size={12} />
               Add member
@@ -337,7 +337,7 @@ export function MyPlace() {
         </div>
         <div
           className="flex items-center gap-[11px]"
-          style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
+          style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
         >
           <div className="w-[34px] h-[34px] rounded-full bg-navy flex items-center justify-center text-cream font-extrabold text-[13px]">A</div>
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
@@ -346,14 +346,14 @@ export function MyPlace() {
               · Owner
             </span>
           </p>
-          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: '#EDE6D6', color: '#6E6759' }}>
+          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: 'rgb(var(--sand))', color: '#6E6759' }}>
             Admin
           </span>
         </div>
         <div className="flex items-center gap-[11px]">
           <div
             className="w-[34px] h-[34px] rounded-full flex items-center justify-center text-white font-extrabold text-[13px]"
-            style={{ background: '#C75A31' }}
+            style={{ background: 'rgb(var(--terracotta))' }}
           >
             S
           </div>
@@ -363,18 +363,18 @@ export function MyPlace() {
               · Partner
             </span>
           </p>
-          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: '#EDE6D6', color: '#6E6759' }}>
+          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: 'rgb(var(--sand))', color: '#6E6759' }}>
             Member
           </span>
         </div>
         {state.memberAdded && (
           <div
             className="flex items-center gap-[11px] animate-fadeup"
-            style={{ paddingTop: 11, borderTop: '1px solid rgba(26,51,82,0.06)', marginTop: 11 }}
+            style={{ paddingTop: 11, borderTop: '1px solid rgb(var(--navy) / 0.06)', marginTop: 11 }}
           >
             <div
               className="w-[34px] h-[34px] rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: '#EDE6D6', border: '1.5px dashed rgba(26,51,82,0.25)', color: '#8A8375' }}
+              style={{ background: 'rgb(var(--sand))', border: '1.5px dashed rgb(var(--navy) / 0.25)', color: 'rgb(var(--stone))' }}
             >
               <PhIcon name="ph-bold ph-envelope-simple" size={14} />
             </div>
@@ -393,10 +393,10 @@ export function MyPlace() {
         </p>
         <div
           className="flex items-center gap-[11px]"
-          style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
+          style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
         >
-          <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: '#EAF3FD' }}>
-            <PhIcon name="ph-fill ph-car" size={17} color="#3A73B5" />
+          <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--skypale))' }}>
+            <PhIcon name="ph-fill ph-car" size={17} color="rgb(var(--skydeep))" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[13px] font-bold text-navy">Subaru Outback · Slate</p>
@@ -407,10 +407,10 @@ export function MyPlace() {
         </div>
         <div
           className="flex items-center gap-[11px]"
-          style={{ paddingBottom: 12, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 12 }}
+          style={{ paddingBottom: 12, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 12 }}
         >
-          <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: '#FBF3E0' }}>
-            <PhIcon name="ph-fill ph-dog" size={17} color="#A87B1F" />
+          <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--goldpale))' }}>
+            <PhIcon name="ph-fill ph-dog" size={17} color="rgb(var(--golddark))" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[13px] font-bold text-navy">Biscuit · Golden mix</p>
@@ -423,13 +423,13 @@ export function MyPlace() {
           <div className="flex flex-col gap-2 mb-2">
             {state.vehicleAdded && (
               <div className="flex items-center gap-2.5 animate-fadeup">
-                <PhIcon name="ph-fill ph-check-circle" size={16} color="#2A9D5C" />
+                <PhIcon name="ph-fill ph-check-circle" size={16} color="rgb(var(--sage))" />
                 <span className="text-[13px] font-bold text-navy">Honda Civic · Silver · ABC-1234</span>
               </div>
             )}
             {state.petAdded && (
               <div className="flex items-center gap-2.5 animate-fadeup">
-                <PhIcon name="ph-fill ph-check-circle" size={16} color="#2A9D5C" />
+                <PhIcon name="ph-fill ph-check-circle" size={16} color="rgb(var(--sage))" />
                 <span className="text-[13px] font-bold text-navy">Luna · Tabby cat</span>
               </div>
             )}
@@ -441,7 +441,7 @@ export function MyPlace() {
               type="button"
               onClick={() => set({ vehicleAdded: true })}
               className="flex-1 bg-transparent rounded-[11px] py-[9px] text-xs font-extrabold text-navy cursor-pointer font-sans flex items-center justify-center gap-[5px]"
-              style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
+              style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
             >
               <PhIcon name="ph-bold ph-plus" size={12} />
               Vehicle
@@ -452,7 +452,7 @@ export function MyPlace() {
               type="button"
               onClick={() => set({ petAdded: true })}
               className="flex-1 bg-transparent rounded-[11px] py-[9px] text-xs font-extrabold text-navy cursor-pointer font-sans flex items-center justify-center gap-[5px]"
-              style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
+              style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
             >
               <PhIcon name="ph-bold ph-plus" size={12} />
               Pet
@@ -466,22 +466,22 @@ export function MyPlace() {
         <p className="m-0 mb-[11px] font-serif text-base text-navy">My requests</p>
         {state.arcSubmitted && (
           <Row divider onClick={() => set({ arcDetailId: 'A-121' })}>
-            <PhIcon name="ph-fill ph-pencil-ruler" size={17} color="#3A73B5" className="flex-shrink-0" />
+            <PhIcon name="ph-fill ph-pencil-ruler" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13px] font-bold text-navy">{arcNewTitle} · #A-121</p>
-            {statusPill(approved ? 'Approved' : 'In review', approved ? '#E9F6EE' : '#FBEDE4', approved ? '#228049' : '#C75A31')}
+            {statusPill(approved ? 'Approved' : 'In review', approved ? 'rgb(var(--mint))' : 'rgb(var(--blush))', approved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))')}
           </Row>
         )}
         {state.reportSubmitted && (
           <Row divider>
-            <PhIcon name="ph-fill ph-wrench" size={17} color="#C75A31" className="flex-shrink-0" />
+            <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--terracotta))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13px] font-bold text-navy">{reportTypeLabel} report · #M-89</p>
-            {statusPill('In triage', '#FBEDE4', '#C75A31')}
+            {statusPill('In triage', 'rgb(var(--blush))', 'rgb(var(--terracotta))')}
           </Row>
         )}
         <Row onClick={() => set({ arcDetailId: 'A-118' })}>
-          <PhIcon name="ph-fill ph-seal-check" size={17} color="#2A9D5C" className="flex-shrink-0" />
+          <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13px] font-bold text-navy">Backyard pergola · #A-118</p>
-          {statusPill('Approved', '#E9F6EE', '#228049')}
+          {statusPill('Approved', 'rgb(var(--mint))', 'rgb(var(--sagedark))')}
         </Row>
       </div>
 
@@ -505,7 +505,7 @@ export function MyPlace() {
             type="button"
             onClick={() => set({ myPlaceOpen: false, tab: 'commons', commonsView: 'circles' })}
             className="bg-transparent rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans"
-            style={{ border: '1.5px dashed rgba(26,51,82,0.2)', color: '#8A8375', padding: '7px 13px' }}
+            style={{ border: '1.5px dashed rgb(var(--navy) / 0.2)', color: 'rgb(var(--stone))', padding: '7px 13px' }}
           >
             + Browse
           </button>
@@ -518,41 +518,41 @@ export function MyPlace() {
         <div
           onClick={() => set({ notifOpen: true, myPlaceOpen: false })}
           className="flex items-center gap-2.5 cursor-pointer"
-          style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
+          style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
         >
-          <PhIcon name="ph-fill ph-bell" size={17} color="#1A3352" className="flex-shrink-0" />
+          <PhIcon name="ph-fill ph-bell" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13px] font-bold text-navy">
             Notifications{' '}
             <span className="font-semibold text-stonelight">
               · Digest + urgent only
             </span>
           </p>
-          <PhIcon name="ph ph-caret-right" size={14} color="#A39B8B" />
+          <PhIcon name="ph ph-caret-right" size={14} color="rgb(var(--stonelight))" />
         </div>
         <div
           className="flex items-center gap-2.5"
-          style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
+          style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
         >
-          <PhIcon name="ph-fill ph-text-aa" size={17} color="#1A3352" className="flex-shrink-0" />
+          <PhIcon name="ph-fill ph-text-aa" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13px] font-bold text-navy">Large type</p>
           <Toggle on={state.largeType} onToggle={() => set({ largeType: !state.largeType })} />
         </div>
         <div
           className="flex flex-col"
-          style={{ paddingBottom: 11, borderBottom: '1px solid rgba(26,51,82,0.06)', marginBottom: 11 }}
+          style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
         >
           <div
             onClick={() => set({ langOpen: !state.langOpen })}
             className="flex items-center gap-2.5 cursor-pointer"
           >
-            <PhIcon name="ph-fill ph-translate" size={17} color="#1A3352" className="flex-shrink-0" />
+            <PhIcon name="ph-fill ph-translate" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13px] font-bold text-navy">
               Language{' '}
               <span className="font-semibold text-stonelight">
                 · English
               </span>
             </p>
-            <PhIcon name={state.langOpen ? 'ph ph-caret-up' : 'ph ph-caret-right'} size={14} color="#A39B8B" />
+            <PhIcon name={state.langOpen ? 'ph ph-caret-up' : 'ph ph-caret-right'} size={14} color="rgb(var(--stonelight))" />
           </div>
           {state.langOpen && (
             <div className="mt-2.5 ml-[29px] flex flex-col gap-1.5 animate-fadeup">
@@ -561,7 +561,7 @@ export function MyPlace() {
                   <PhIcon
                     name={lang === 'English' ? 'ph-fill ph-check-circle' : 'ph ph-circle'}
                     size={16}
-                    color={lang === 'English' ? '#2A9D5C' : '#A39B8B'}
+                    color={lang === 'English' ? 'rgb(var(--sage))' : 'rgb(var(--stonelight))'}
                   />
                   <span className="text-[13px] font-semibold text-navy">{lang}</span>
                 </div>
@@ -572,7 +572,7 @@ export function MyPlace() {
         <button type="button" onClick={() => {
           localStorage.removeItem('pavilion-demo');
           usePavStore.setState({ ...dataDefaults, loginOpen: true, epoch: usePavStore.getState().epoch + 1 });
-        }} className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer font-sans p-0" style={{ color: '#C75A31' }}>
+        }} className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer font-sans p-0" style={{ color: 'rgb(var(--terracotta))' }}>
           Sign out
         </button>
       </div>

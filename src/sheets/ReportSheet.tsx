@@ -18,7 +18,7 @@ export function ReportSheet() {
       {!state.reportSubmitted ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">Report a problem</p>
-          <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
             Goes only to the board &amp; manager — never the public feed.
           </p>
 
@@ -50,8 +50,8 @@ export function ReportSheet() {
             value={state.reportDesc}
             onChange={(e) => set({ reportDesc: e.target.value })}
             placeholder="e.g. Sprinkler head broken on the Green, spraying the sidewalk"
-            className="w-full bg-[#FFFEFA] rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans resize-none mb-3.5"
-            style={{ minHeight: 70, border: '1px solid rgba(26,51,82,0.12)' }}
+            className="w-full bg-[rgb(var(--paper))] rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans resize-none mb-3.5"
+            style={{ minHeight: 70, border: '1px solid rgb(var(--navy) / 0.12)' }}
           />
 
           <button
@@ -60,13 +60,13 @@ export function ReportSheet() {
             className="w-full flex items-center justify-center gap-2 mb-4 cursor-pointer"
             style={{
               height: 70,
-              border: state.reportPhoto ? '1.5px solid rgba(42,157,92,0.4)' : '1.5px dashed rgba(26,51,82,0.2)',
+              border: state.reportPhoto ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
               borderRadius: 13,
-              background: state.reportPhoto ? '#E9F6EE' : 'repeating-linear-gradient(-45deg,#F3EDE0 0 8px,#F9F5EC 8px 16px)',
+              background: state.reportPhoto ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,#F3EDE0 0 8px,rgb(var(--parchment)) 8px 16px)',
             }}
           >
-            <PhIcon name={state.reportPhoto ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={state.reportPhoto ? '#2A9D5C' : '#8A8375'} />
-            <span className="font-mono text-[10px]" style={{ color: state.reportPhoto ? '#228049' : '#8A8375' }}>
+            <PhIcon name={state.reportPhoto ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={state.reportPhoto ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
+            <span className="font-mono text-[10px]" style={{ color: state.reportPhoto ? 'rgb(var(--sagedark))' : 'rgb(var(--stone))' }}>
               {state.reportPhoto ? 'photo added ✓' : 'add a photo (optional)'}
             </span>
           </button>
@@ -75,8 +75,8 @@ export function ReportSheet() {
             onClick={submitReport}
             className="w-full border-none rounded-2xl py-[15px] text-[14.5px] font-extrabold font-sans"
             style={{
-              background: canReport ? '#E06A3E' : '#DDD5C2',
-              color: canReport ? '#fff' : '#A39B8B',
+              background: canReport ? 'rgb(var(--ember))' : '#DDD5C2',
+              color: canReport ? '#fff' : 'rgb(var(--stonelight))',
               cursor: canReport ? 'pointer' : 'default',
             }}
           >
@@ -85,20 +85,20 @@ export function ReportSheet() {
         </div>
       ) : (
         <div className="text-center pt-1.5 pb-1 animate-fadeup">
-          <PhIcon name="ph-fill ph-shield-check" size={48} color="#2A9D5C" />
+          <PhIcon name="ph-fill ph-shield-check" size={48} color="rgb(var(--sage))" />
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-xl text-navy">Sent — privately.</p>
-          <p className="m-0 mb-3.5 text-[13px] font-bold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-3.5 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
             Ticket #M-89 · {state.reportType} · the board sees it, the feed never does
           </p>
           <div className="flex items-center justify-center gap-0 mb-4">
             <div className="flex flex-col items-center gap-1" style={{ width: 80 }}>
               <span
                 className="w-5 h-5 rounded-full flex items-center justify-center"
-                style={{ background: '#2A9D5C' }}
+                style={{ background: 'rgb(var(--sage))' }}
               >
                 <PhIcon name="ph-bold ph-check" size={10} color="#fff" />
               </span>
-              <span className="text-[10px] font-bold" style={{ color: '#5B554A' }}>
+              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
                 Submitted
               </span>
             </div>
@@ -106,11 +106,11 @@ export function ReportSheet() {
             <div className="flex flex-col items-center gap-1" style={{ width: 80 }}>
               <span
                 className="w-5 h-5 rounded-full flex items-center justify-center"
-                style={{ background: '#D9A441' }}
+                style={{ background: 'rgb(var(--gold))' }}
               >
                 <PhIcon name="ph-bold ph-hourglass" size={10} color="#fff" />
               </span>
-              <span className="text-[10px] font-bold" style={{ color: '#5B554A' }}>
+              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
                 Triage
               </span>
             </div>
@@ -122,12 +122,12 @@ export function ReportSheet() {
               >
                 <PhIcon name="ph-bold ph-dots-three" size={10} color="#fff" />
               </span>
-              <span className="text-[10px] font-bold" style={{ color: '#5B554A' }}>
+              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
                 Fixed
               </span>
             </div>
           </div>
-          <p className="m-0 mb-3.5 text-xs font-bold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-3.5 text-xs font-bold" style={{ color: 'rgb(var(--stone))' }}>
             Track it anytime in My Place → My requests
           </p>
           <button

@@ -16,7 +16,7 @@ export function BackButton({ onClick, label = 'Back', className }: BackButtonPro
         'border-none bg-transparent flex items-center gap-[5px] text-[13px] font-extrabold cursor-pointer font-sans p-0 ' +
         (className ?? 'mb-3.5')
       }
-      style={{ color: '#8A8375' }}
+      style={{ color: 'rgb(var(--stone))' }}
     >
       <PhIcon name="ph-bold ph-arrow-left" size={14} />
       {label}

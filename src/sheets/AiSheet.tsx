@@ -45,17 +45,17 @@ export function AiSheet() {
       >
         <div
           className="flex items-center gap-[11px] px-[18px] pt-4 pb-3"
-          style={{ borderBottom: '1px solid rgba(26,51,82,0.07)' }}
+          style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}
         >
           <div
             className="w-[38px] h-[38px] rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(150deg,#E06A3E,#C75A31)' }}
+            style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}
           >
             <PhIcon name="ph-fill ph-sparkle" size={18} color="#fff" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[15px] font-bold text-navy">AI</p>
-            <p className="m-0 text-[11.5px] font-bold" style={{ color: '#8A8375' }}>
+            <p className="m-0 text-[11.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
               Answers cite Juniper Ridge&apos;s actual documents
             </p>
           </div>
@@ -63,7 +63,7 @@ export function AiSheet() {
             onClick={close}
             className="border-none w-[30px] h-[30px] rounded-full flex items-center justify-center flex-shrink-0 bg-sand cursor-pointer"
           >
-            <PhIcon name="ph-bold ph-x" size={13} color="#5B554A" />
+            <PhIcon name="ph-bold ph-x" size={13} color="rgb(var(--bark))" />
           </button>
         </div>
 
@@ -77,9 +77,9 @@ export function AiSheet() {
               <div
                 className="max-w-[82%] animate-msgbubble"
                 style={{
-                  background: m.me ? '#1A3352' : '#FFFEFA',
-                  color: m.me ? '#F5F0E6' : '#1A3352',
-                  border: m.me ? 'none' : '1px solid rgba(26,51,82,0.08)',
+                  background: m.me ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
+                  color: m.me ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
+                  border: m.me ? 'none' : '1px solid rgb(var(--navy) / 0.08)',
                   borderRadius: m.me ? '18px 18px 6px 18px' : '18px 18px 18px 6px',
                   padding: '11px 14px',
                 }}
@@ -89,23 +89,23 @@ export function AiSheet() {
                   <button
                     onClick={openCite}
                     className="inline-flex items-center gap-[5px] mt-[9px] rounded-lg px-[9px] py-[5px] cursor-pointer font-sans"
-                    style={{ background: '#F5F0E6', border: '1px solid rgba(26,51,82,0.14)' }}
+                    style={{ background: 'rgb(var(--cream))', border: '1px solid rgb(var(--navy) / 0.14)' }}
                   >
-                    <PhIcon name="ph-fill ph-file-text" size={12} color="#C75A31" />
-                    <span className="text-[11px] font-bold" style={{ color: '#5B554A' }}>
+                    <PhIcon name="ph-fill ph-file-text" size={12} color="rgb(var(--terracotta))" />
+                    <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
                       {m.cite}
                     </span>
-                    <PhIcon name="ph-bold ph-arrow-up-right" size={10} color="#A39B8B" />
+                    <PhIcon name="ph-bold ph-arrow-up-right" size={10} color="rgb(var(--stonelight))" />
                   </button>
                 )}
                 {m.askBoard && (
                   <button
                     onClick={askTheBoard}
                     className="flex items-center gap-[7px] mt-2.5 w-full justify-center border-none rounded-[11px] py-2.5 cursor-pointer font-sans"
-                    style={{ background: '#1A3352' }}
+                    style={{ background: 'rgb(var(--navy))' }}
                   >
-                    <PhIcon name="ph-fill ph-paper-plane-tilt" size={14} color="#E8A788" />
-                    <span className="text-[12.5px] font-extrabold" style={{ color: '#F5F0E6' }}>
+                    <PhIcon name="ph-fill ph-paper-plane-tilt" size={14} color="rgb(var(--peach))" />
+                    <span className="text-[12.5px] font-extrabold" style={{ color: 'rgb(var(--cream))' }}>
                       Pass this to the board
                     </span>
                   </button>
@@ -122,7 +122,7 @@ export function AiSheet() {
               key={key}
               onClick={() => askAiChip(key)}
               className="rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer font-sans text-navy"
-              style={{ border: '1px solid rgba(26,51,82,0.14)', background: '#FFFEFA' }}
+              style={{ border: '1px solid rgb(var(--navy) / 0.14)', background: 'rgb(var(--paper))' }}
             >
               {qa.q}
             </button>
@@ -137,14 +137,14 @@ export function AiSheet() {
             }}
             placeholder="Ask about rules, dues, amenities…"
             className="flex-1 rounded-full px-4 py-3 text-[13.5px] font-bold text-navy outline-none font-sans"
-            style={{ border: '1px solid rgba(26,51,82,0.12)', background: '#FFFEFA' }}
+            style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))' }}
           />
           <button
             onClick={send}
             className="w-11 h-11 border-none rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
-            style={{ background: '#1A3352' }}
+            style={{ background: 'rgb(var(--navy))' }}
           >
-            <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="#F5F0E6" />
+            <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--cream))" />
           </button>
         </div>
       </div>

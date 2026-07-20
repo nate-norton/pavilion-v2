@@ -1,8 +1,8 @@
 import { usePavStore } from '../store/store';
 import { PhIcon } from './PhIcon';
 
-const ACTIVE = '#F5F0E6';
-const INACTIVE = 'rgba(245,240,230,0.45)';
+const ACTIVE = 'rgb(var(--cream))';
+const INACTIVE = 'rgb(var(--cream) / 0.45)';
 
 const TABS: { key: string; icon: string; label: string }[] = [
   { key: 'today', icon: 'ph-fill ph-sun-horizon', label: 'Today' },
@@ -44,7 +44,7 @@ export function NavDock() {
     >
       <div
         className="bg-navy rounded-[26px] h-[66px] grid items-center px-1.5"
-        style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', boxShadow: '0 18px 40px -14px rgba(26,51,82,0.55)' }}
+        style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', boxShadow: '0 18px 40px -14px rgb(var(--navy) / 0.55)' }}
       >
         {TABS.map(renderTab)}
         <div className="flex justify-center">
@@ -57,8 +57,8 @@ export function NavDock() {
             <div
               className="w-[50px] h-[50px] rounded-full flex items-center justify-center"
               style={{
-                border: '3px solid #F5F0E6',
-                background: 'linear-gradient(150deg,#F97B4B,#C75A31)',
+                border: '3px solid rgb(var(--cream))',
+                background: 'linear-gradient(150deg,#F97B4B,rgb(var(--terracotta)))',
               }}
             >
               <PhIcon name="ph-fill ph-sparkle" size={22} color="#fff" />

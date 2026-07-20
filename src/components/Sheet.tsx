@@ -40,7 +40,7 @@ export function Sheet({ open, onClose, children, maxHeight }: SheetProps) {
       >
         <div
           className="w-10 h-1 rounded-full mx-auto mb-4"
-          style={{ background: 'rgba(26,51,82,0.15)' }}
+          style={{ background: 'rgb(var(--navy) / 0.15)' }}
         />
         {children}
       </div>

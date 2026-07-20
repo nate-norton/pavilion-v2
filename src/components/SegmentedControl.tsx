@@ -24,9 +24,9 @@ export function SegmentedControl({ options, value, onChange, variant = 'light' }
         const active = opt.key === value;
         const style: CSSProperties = active
           ? variant === 'dark'
-            ? { background: '#1A3352', color: '#F5F0E6' }
-            : { background: '#FFFEFA', color: '#1A3352', boxShadow: '0 2px 6px rgba(26,51,82,0.1)' }
-          : { background: 'transparent', color: '#8A8375' };
+            ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }
+            : { background: 'rgb(var(--paper))', color: 'rgb(var(--navy))', boxShadow: '0 2px 6px rgb(var(--navy) / 0.1)' }
+          : { background: 'transparent', color: 'rgb(var(--stone))' };
         return (
           <button
             key={opt.key}

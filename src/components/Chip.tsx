@@ -24,7 +24,7 @@ export function Chip({ label, active, onClick, icon, size = 'sm' }: ChipProps) {
         `inline-flex items-center gap-1.5 rounded-full ${SIZE_CLASSES[size]} text-[12.5px] font-extrabold font-sans cursor-pointer ` +
         (active ? 'bg-navy text-cream border-0' : 'bg-paper text-bark border')
       }
-      style={active ? undefined : { borderColor: 'rgba(26,51,82,0.12)', borderWidth: 1 }}
+      style={active ? undefined : { borderColor: 'rgb(var(--navy) / 0.12)', borderWidth: 1 }}
     >
       {icon}
       {label}

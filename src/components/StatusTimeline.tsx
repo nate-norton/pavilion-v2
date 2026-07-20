@@ -11,8 +11,8 @@ export interface StatusTimelineProps {
 }
 
 const DOT_COLOR: Record<StatusStep['state'], string> = {
-  done: '#2A9D5C',
-  active: '#D9A441',
+  done: 'rgb(var(--sage))',
+  active: 'rgb(var(--gold))',
   pending: '#D9CFB8',
 };
 
@@ -29,7 +29,7 @@ export function StatusTimeline({ steps }: StatusTimelineProps) {
       {steps.map((step, i) => {
         // Segment is green only when the next step is 'done'
         const nextStep = steps[i + 1];
-        const segColor = nextStep && nextStep.state === 'done' ? '#2A9D5C' : '#D9CFB8';
+        const segColor = nextStep && nextStep.state === 'done' ? 'rgb(var(--sage))' : '#D9CFB8';
         return (
           <div key={step.label} className="contents">
             <div className="flex flex-col items-center gap-1 flex-1">

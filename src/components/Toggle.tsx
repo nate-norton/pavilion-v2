@@ -27,7 +27,7 @@ export function Toggle({ on, onToggle, size = 'sm' }: ToggleProps) {
       style={{
         width: trackW,
         height: trackH,
-        background: on ? '#2A9D5C' : 'rgba(26,51,82,0.15)',
+        background: on ? 'rgb(var(--sage))' : 'rgb(var(--navy) / 0.15)',
         transition: 'background 0.2s ease',
       }}
     >

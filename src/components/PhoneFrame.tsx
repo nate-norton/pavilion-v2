@@ -23,7 +23,7 @@ export function PhoneFrame() {
     <div
       data-testid="phone-frame"
       className="relative w-[393px] h-[830px] max-h-[calc(100vh-48px)] rounded-[44px] overflow-hidden bg-cream shrink-0 max-[500px]:w-full max-[500px]:h-dvh max-[500px]:max-h-dvh max-[500px]:rounded-none"
-      style={{ boxShadow: '0 40px 90px -30px rgba(50,42,26,0.5), 0 0 0 1px rgba(26,51,82,0.05)' }}
+      style={{ boxShadow: '0 40px 90px -30px rgba(50,42,26,0.5), 0 0 0 1px rgb(var(--navy) / 0.05)' }}
     >
       <ErrorBoundary>
         <div key={tab} className={`absolute inset-0 ${slideClass}`}>

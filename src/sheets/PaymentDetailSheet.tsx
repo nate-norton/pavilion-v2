@@ -3,11 +3,11 @@ import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 
 const DUES_LEGEND = [
-  { label: 'Landscaping', amount: '$78', color: '#2A9D5C' },
-  { label: 'Reserves', amount: '$71', color: '#1A3352' },
-  { label: 'Insurance', amount: '$54', color: '#E06A3E' },
-  { label: 'Utilities', amount: '$48', color: '#D9A441' },
-  { label: 'Management', amount: '$34', color: '#A39B8B' },
+  { label: 'Landscaping', amount: '$78', color: 'rgb(var(--sage))' },
+  { label: 'Reserves', amount: '$71', color: 'rgb(var(--navy))' },
+  { label: 'Insurance', amount: '$54', color: 'rgb(var(--ember))' },
+  { label: 'Utilities', amount: '$48', color: 'rgb(var(--gold))' },
+  { label: 'Management', amount: '$34', color: 'rgb(var(--stonelight))' },
 ];
 
 interface PaymentRow {
@@ -27,26 +27,26 @@ const PAYMENTS: PaymentRow[] = [
     month: 'July 2026',
     amount: '$285',
     getStatus: ({ paid }) => paid
-      ? { label: 'Paid', bg: '#E9F6EE', color: '#228049', isPaid: true, confirmation: '#P-2187' }
-      : { label: 'Due Jul 1', bg: '#EAF3FD', color: '#3A73B5', isPaid: false },
+      ? { label: 'Paid', bg: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))', isPaid: true, confirmation: '#P-2187' }
+      : { label: 'Due Jul 1', bg: 'rgb(var(--skypale))', color: 'rgb(var(--skydeep))', isPaid: false },
   },
   {
     month: 'June 2026',
     amount: '$285',
     getStatus: ({ paid, showDelinquent }) => {
-      if (showDelinquent && !paid) return { label: 'Past due – 30 days', bg: '#FBEDE4', color: '#C75A31', isPaid: false };
-      return { label: 'Paid Jun 2', bg: '#E9F6EE', color: '#228049', isPaid: true, confirmation: '#P-2145' };
+      if (showDelinquent && !paid) return { label: 'Past due – 30 days', bg: 'rgb(var(--blush))', color: 'rgb(var(--terracotta))', isPaid: false };
+      return { label: 'Paid Jun 2', bg: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))', isPaid: true, confirmation: '#P-2145' };
     },
   },
   {
     month: 'May 2026',
     amount: '$285',
-    getStatus: () => ({ label: 'Paid May 3', bg: '#E9F6EE', color: '#228049', isPaid: true, confirmation: '#P-2103' }),
+    getStatus: () => ({ label: 'Paid May 3', bg: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))', isPaid: true, confirmation: '#P-2103' }),
   },
   {
     month: 'April 2026',
     amount: '$285',
-    getStatus: () => ({ label: 'Paid Apr 3', bg: '#E9F6EE', color: '#228049', isPaid: true, confirmation: '#P-2041' }),
+    getStatus: () => ({ label: 'Paid Apr 3', bg: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))', isPaid: true, confirmation: '#P-2041' }),
   },
 ];
 
@@ -77,7 +77,7 @@ export function PaymentDetailSheet() {
       <p className="m-0 text-[28px] font-bold text-navy mb-4">{row.amount}</p>
 
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-2.5" style={{ color: '#A39B8B' }}>
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-2.5" style={{ color: 'rgb(var(--stonelight))' }}>
           Breakdown
         </p>
         {DUES_LEGEND.map((d) => (
@@ -92,18 +92,18 @@ export function PaymentDetailSheet() {
       </div>
 
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
           Payment method
         </p>
         <div className="flex items-center gap-2.5">
-          <PhIcon name="ph-fill ph-bank" size={16} color="#1A3352" />
+          <PhIcon name="ph-fill ph-bank" size={16} color="rgb(var(--navy))" />
           <p className="m-0 text-[13.5px] font-bold text-navy">Juniper CU ····4821 · ACH</p>
         </div>
       </div>
 
       {status.confirmation && (
         <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
             Confirmation
           </p>
           <p className="m-0 text-[13.5px] font-bold text-navy">{status.confirmation}</p>
@@ -114,7 +114,7 @@ export function PaymentDetailSheet() {
         <button
           onClick={() => set({ paySheetOpen: true, paymentDetailIdx: null })}
           className="w-full rounded-2xl py-3.5 border-none text-[15px] font-extrabold cursor-pointer font-sans mt-1"
-          style={{ background: '#1A3352', color: '#F5F0E6' }}
+          style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }}
         >
           Pay now
         </button>

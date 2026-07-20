@@ -24,12 +24,12 @@ export function ViolSheet() {
       {!state.violFixed ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">A friendly heads-up</p>
-          <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
             Courtesy notice #V-31 · no fee · nothing on your record
           </p>
           <div
             className="rounded-2xl p-[15px] mb-3"
-            style={{ background: '#FFFEFA', border: '1px solid rgba(26,51,82,0.1)' }}
+            style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.1)' }}
           >
             <p className="m-0 mb-2 text-[13.5px] font-bold text-navy">
               Trash bins visible from the street · #27 Alder Way
@@ -39,10 +39,10 @@ export function ViolSheet() {
             </div>
             <span
               className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5"
-              style={{ background: '#F5F0E6', border: '1px solid rgba(26,51,82,0.1)' }}
+              style={{ background: 'rgb(var(--cream))', border: '1px solid rgb(var(--navy) / 0.1)' }}
             >
-              <PhIcon name="ph-fill ph-file-text" size={12} color="#C75A31" />
-              <span className="text-[11px] font-bold" style={{ color: '#5B554A' }}>
+              <PhIcon name="ph-fill ph-file-text" size={12} color="rgb(var(--terracotta))" />
+              <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
                 CC&amp;Rs §6.3 · Bins stored out of street view except pickup day
               </span>
             </span>
@@ -54,9 +54,9 @@ export function ViolSheet() {
 
           <div
             className="rounded-[13px] p-[11px_13px] flex gap-2.5 items-start mb-4"
-            style={{ background: '#FBEDE4' }}
+            style={{ background: 'rgb(var(--blush))' }}
           >
-            <PhIcon name="ph-fill ph-sparkle" size={15} color="#C75A31" className="mt-px flex-shrink-0" />
+            <PhIcon name="ph-fill ph-sparkle" size={15} color="rgb(var(--terracotta))" className="mt-px flex-shrink-0" />
             <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: '#8A5138' }}>
               AI: two courtesy reminders always come before any fee (§9). Most notices close
               themselves — 2 neighbors self-cured this month.
@@ -66,25 +66,25 @@ export function ViolSheet() {
           <button
             onClick={markViolFixed}
             className="w-full border-none rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer text-white mb-2.5"
-            style={{ background: '#2A9D5C' }}
+            style={{ background: 'rgb(var(--sage))' }}
           >
             I&apos;ve taken care of it
           </button>
           <button
             onClick={violMsgBoard}
             className="w-full bg-transparent rounded-[14px] py-3 text-[13px] font-extrabold cursor-pointer text-navy"
-            style={{ border: '1.5px solid rgba(26,51,82,0.15)' }}
+            style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
           >
             Something&apos;s off? Message the board privately
           </button>
         </div>
       ) : (
         <div className="text-center pt-1.5 pb-1 animate-fadeup">
-          <PhIcon name="ph-fill ph-check-circle" size={48} color="#2A9D5C" />
+          <PhIcon name="ph-fill ph-check-circle" size={48} color="rgb(var(--sage))" />
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-xl text-navy">
             Marked fixed. Thanks, neighbor.
           </p>
-          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: '#8A8375' }}>
+          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
             The board confirms on their next walk-through — then #V-31 closes with no record and no
             fee.
           </p>

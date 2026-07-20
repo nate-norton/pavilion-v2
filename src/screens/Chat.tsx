@@ -36,16 +36,16 @@ export function Chat() {
     <div
       data-screen-label="Chat"
       className="absolute inset-0 z-[78] flex flex-col animate-scpop"
-      style={{ background: '#F5F0E6' }}
+      style={{ background: 'rgb(var(--cream))' }}
     >
-      <div className="flex items-center gap-[11px]" style={{ padding: '58px 18px 12px', borderBottom: '1px solid rgba(26,51,82,0.07)' }}>
+      <div className="flex items-center gap-[11px]" style={{ padding: '58px 18px 12px', borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
         <button
           type="button"
           aria-label="Back to messages"
           onClick={() => set({ chatWith: null, msgsOpen: true })}
           className="border-none bg-transparent cursor-pointer p-1 font-sans"
         >
-          <PhIcon name="ph-bold ph-arrow-left" size={17} color="#1A3352" />
+          <PhIcon name="ph-bold ph-arrow-left" size={17} color="rgb(var(--navy))" />
         </button>
         <div
           className="w-[38px] h-[38px] rounded-full flex items-center justify-center text-white font-extrabold text-sm flex-shrink-0"
@@ -56,11 +56,11 @@ export function Chat() {
         <div className="flex-1 min-w-0">
           <p className="m-0 text-[14.5px] font-bold text-navy">
             {p.name}{' '}
-            <span className="font-semibold" style={{ color: '#A39B8B' }}>
+            <span className="font-semibold" style={{ color: 'rgb(var(--stonelight))' }}>
               · {p.unit}
             </span>
           </p>
-          <p className="m-0 text-[11px] font-bold" style={{ color: '#8A8375' }}>
+          <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
             Neighbor · usually replies fast
           </p>
         </div>
@@ -72,9 +72,9 @@ export function Chat() {
             <div
               style={{
                 maxWidth: '80%',
-                background: m.me ? '#1A3352' : '#FFFEFA',
-                color: m.me ? '#F5F0E6' : '#1A3352',
-                border: m.me ? 'none' : '1px solid rgba(26,51,82,0.08)',
+                background: m.me ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
+                color: m.me ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
+                border: m.me ? 'none' : '1px solid rgb(var(--navy) / 0.08)',
                 borderRadius: m.me ? '18px 18px 6px 18px' : '18px 18px 18px 6px',
                 padding: '10px 13px',
               }}
@@ -98,9 +98,9 @@ export function Chat() {
             set({ chats: { ...state.chats, [chatKey]: updated } });
           }}
           className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
-          style={{ border: '1px solid rgba(26,51,82,0.12)', background: '#FFFEFA' }}
+          style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))' }}
         >
-          <PhIcon name="ph-fill ph-camera" size={18} color="#8A8375" />
+          <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--stone))" />
         </button>
         <input
           value={state.chatInput}
@@ -110,7 +110,7 @@ export function Chat() {
           }}
           placeholder="Message…"
           className="flex-1 rounded-full text-[13.5px] font-semibold text-navy outline-none font-sans min-w-0"
-          style={{ border: '1px solid rgba(26,51,82,0.12)', background: '#FFFEFA', padding: '12px 16px' }}
+          style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))', padding: '12px 16px' }}
         />
         <button
           type="button"
@@ -118,7 +118,7 @@ export function Chat() {
           onClick={sendChatMessage}
           className="w-11 h-11 border-none rounded-full bg-navy flex items-center justify-center cursor-pointer flex-shrink-0"
         >
-          <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="#F5F0E6" />
+          <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--cream))" />
         </button>
       </div>
     </div>

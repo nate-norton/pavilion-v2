@@ -65,15 +65,15 @@ export function ArcDetailSheet() {
         <span
           className="rounded-full px-2.5 py-1 text-[11px] font-bold flex-shrink-0"
           style={{
-            background: isApproved ? '#E9F6EE' : '#FBEDE4',
-            color: isApproved ? '#228049' : '#C75A31',
+            background: isApproved ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
+            color: isApproved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
           }}
         >
           {item.status}
         </span>
       </div>
 
-      <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1" style={{ color: '#A39B8B' }}>
+      <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1" style={{ color: 'rgb(var(--stonelight))' }}>
         Request #{item.id}
       </p>
 
@@ -82,7 +82,7 @@ export function ArcDetailSheet() {
       </div>
 
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3.5">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
           Description
         </p>
         <p className="m-0 text-[13.5px] font-semibold text-navy leading-relaxed">
@@ -92,7 +92,7 @@ export function ArcDetailSheet() {
 
       {item.conditions && (
         <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3.5">
-          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
             Conditions
           </p>
           <p className="m-0 text-[13.5px] font-semibold text-navy leading-relaxed">
@@ -103,9 +103,9 @@ export function ArcDetailSheet() {
 
       <div
         className="flex items-center gap-2.5 rounded-2xl px-4 py-3"
-        style={{ background: 'rgba(42,157,92,0.06)', border: '1px solid rgba(42,157,92,0.12)' }}
+        style={{ background: 'rgb(var(--sage) / 0.06)', border: '1px solid rgb(var(--sage) / 0.12)' }}
       >
-        <PhIcon name="ph-fill ph-sparkle" size={16} color="#2A9D5C" />
+        <PhIcon name="ph-fill ph-sparkle" size={16} color="rgb(var(--sage))" />
         <p className="m-0 text-[12.5px] font-semibold text-navy">
           AI: ARC reviews take 10–14 business days per §4.3 of the CC&amp;Rs.
         </p>

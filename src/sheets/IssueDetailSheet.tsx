@@ -20,7 +20,7 @@ function getIssues(state: ReturnType<typeof usePavStore.getState>): Record<strin
     streetlight: {
       title: 'Streetlight out',
       icon: 'ph-fill ph-lightbulb',
-      iconColor: '#D9A441',
+      iconColor: 'rgb(var(--gold))',
       location: 'Alder Way, near #27',
       reporters: 'Reported by 3 neighbors',
       vendor: state.reportTicketed ? 'BrightPath Electric · assigned' : undefined,
@@ -35,7 +35,7 @@ function getIssues(state: ReturnType<typeof usePavStore.getState>): Record<strin
     'pool-gate': {
       title: 'Pool gate latch',
       icon: 'ph-fill ph-wrench',
-      iconColor: '#C75A31',
+      iconColor: 'rgb(var(--terracotta))',
       location: 'Community pool, main entrance',
       reporters: 'Reported by 2 neighbors',
       vendor: state.gateScheduled ? 'AquaFix · scheduled Thu Jul 3' : undefined,
@@ -50,7 +50,7 @@ function getIssues(state: ReturnType<typeof usePavStore.getState>): Record<strin
     irrigation: {
       title: 'Irrigation valve',
       icon: 'ph-fill ph-check-circle',
-      iconColor: '#A39B8B',
+      iconColor: 'rgb(var(--stonelight))',
       location: 'The Green, northeast corner',
       reporters: 'Reported by 1 neighbor',
       vendor: 'GreenScape Landscaping · completed',
@@ -93,8 +93,8 @@ export function IssueDetailSheet() {
         <span
           className="rounded-full px-2.5 py-1 text-[11px] font-bold flex-shrink-0"
           style={{
-            background: isResolved ? '#E9F6EE' : '#FBF3E0',
-            color: isResolved ? '#228049' : '#A87B1F',
+            background: isResolved ? 'rgb(var(--mint))' : 'rgb(var(--goldpale))',
+            color: isResolved ? 'rgb(var(--sagedark))' : 'rgb(var(--golddark))',
           }}
         >
           {isResolved ? 'Resolved' : 'Open'}
@@ -107,18 +107,18 @@ export function IssueDetailSheet() {
 
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
         <div className="flex items-center gap-2.5 mb-2">
-          <PhIcon name="ph-fill ph-map-trifold" size={14} color="#8A8375" />
+          <PhIcon name="ph-fill ph-map-trifold" size={14} color="rgb(var(--stone))" />
           <p className="m-0 text-[13px] font-bold text-navy">{issue.location}</p>
         </div>
         <div className="flex items-center gap-2.5">
-          <PhIcon name="ph-fill ph-users" size={14} color="#8A8375" />
+          <PhIcon name="ph-fill ph-users" size={14} color="rgb(var(--stone))" />
           <p className="m-0 text-[13px] font-bold text-navy">{issue.reporters}</p>
         </div>
       </div>
 
       {issue.vendor && (
         <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#A39B8B' }}>
+          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
             Vendor
           </p>
           <p className="m-0 text-[13.5px] font-bold text-navy">{issue.vendor}</p>
@@ -127,9 +127,9 @@ export function IssueDetailSheet() {
 
       <div
         className="flex items-center gap-2.5 rounded-2xl px-4 py-3"
-        style={{ background: 'rgba(42,157,92,0.06)', border: '1px solid rgba(42,157,92,0.12)' }}
+        style={{ background: 'rgb(var(--sage) / 0.06)', border: '1px solid rgb(var(--sage) / 0.12)' }}
       >
-        <PhIcon name="ph-fill ph-sparkle" size={16} color="#2A9D5C" />
+        <PhIcon name="ph-fill ph-sparkle" size={16} color="rgb(var(--sage))" />
         <p className="m-0 text-[12.5px] font-semibold text-navy">{issue.aiTip}</p>
       </div>
     </Sheet>
