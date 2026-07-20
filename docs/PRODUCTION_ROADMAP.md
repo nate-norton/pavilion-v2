@@ -118,6 +118,17 @@ hex remains in screens/sheets; component gallery renders every primitive.
 
 ## Phase 1 — Data layer seam (decouple UI from the mock)
 
+> **Status: complete (2026-07-20).** `Repository` interface + `MockRepository`
+> + `RepositoryProvider`/hooks + `createRepository()` factory (`VITE_APP_MODE`)
+> in `src/data/repo/`. All 14 screens read reference data through hooks (no raw
+> `src/data` imports). Mutable domain **collections** — reservations, feed
+> comments, DM chats, and the full groups system — live in a repo-owned
+> `mockDomainStore` (subscribe/set + localStorage), read reactively via
+> `useSyncExternalStore` and written via repo methods; `usePavStore` keeps only
+> ephemeral UI state. Deferred to Phase 2: the vote/ARC workflow flags
+> (`voted`, `arcSubmitted`, …) stay in the store since they feed the pure
+> selectors and move naturally when `votes`/`arc_requests` become real tables.
+
 Goal: the UI stops importing `src/data/*` and the demo store's domain data
 directly. Everything goes through typed repository hooks.
 
@@ -255,7 +266,7 @@ Once Phases 0–1 land, the product-discovery loop is cheap:
 | # | Milestone | Blocks |
 |---|-----------|--------|
 | M0 ✅ | Design tokens + Tailwind wired to vars + hex codemod + component gallery | everything |
-| M1 | Repository interface + MockRepository; screens off raw data imports | M2 |
+| M1 ✅ | Repository interface + MockRepository; screens off raw data imports | M2 |
 | M2 | Demo deployed to stable URL in `demo` mode; CI guard | sales-ready |
 | M3 | Supabase project, schema, RLS, Auth; seed Juniper Ridge | M4 |
 | M4 | SupabaseRepository; ARC + Commons/Groups + board features live end-to-end | pilot |
