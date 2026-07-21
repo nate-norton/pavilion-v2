@@ -347,6 +347,15 @@ export type Database = {
           },
         ]
       }
+      reports: {
+        Row: { community_id: string; created_at: string; id: string; kind: string; ref: string; reporter_label: string; reporter_profile_id: string | null; status: string; title: string; vendor: string }
+        Insert: { community_id: string; created_at?: string; id?: string; kind?: string; ref?: string; reporter_label?: string; reporter_profile_id?: string | null; status?: string; title: string; vendor?: string }
+        Update: { community_id?: string; created_at?: string; id?: string; kind?: string; ref?: string; reporter_label?: string; reporter_profile_id?: string | null; status?: string; title?: string; vendor?: string }
+        Relationships: [
+          { foreignKeyName: "reports_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "reports_reporter_profile_id_fkey"; columns: ["reporter_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
       special_assessments: {
         Row: { community_id: string; created_at: string; id: string; status: string; sub: string; title: string; unit_id: string }
         Insert: { community_id: string; created_at?: string; id?: string; status?: string; sub?: string; title: string; unit_id: string }

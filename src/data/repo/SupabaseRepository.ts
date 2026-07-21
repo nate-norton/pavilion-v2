@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
-import type { ArcState, ArcStep, CommunityEvent, DuesState, DuesStatement, DuesStatus, FeedPost, MemberContext, NewGroup, NewReservation, ReservationState, Repository, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcState, ArcStep, BoardTriage, CommunityEvent, DuesState, DuesStatement, DuesStatus, FeedPost, MemberContext, NewGroup, NewReservation, ReservationState, Repository, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -47,6 +47,7 @@ export class SupabaseRepository implements Repository {
     arc: { requests: [], unseenApproval: null } as ArcState,
     events: [] as CommunityEvent[],
     feed: [] as FeedPost[],
+    triage: { openCount: 0, summary: 'Triage queue is clear', hasItems: false } as BoardTriage,
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
     chats: {} as MockChatMap,
@@ -87,8 +88,28 @@ export class SupabaseRepository implements Repository {
     await this.hydrateCompliance();
     await this.hydrateArc();
     await this.hydrateSocial();
+    await this.hydrateTriage();
     await this.hydrateGroups();
     this.notify();
+  }
+
+  // ── Board triage (reports; empty for a fresh community) ─────────────────────
+  getBoardTriage = () => this.cache.triage;
+
+  private async hydrateTriage() {
+    if (!this.communityId) { this.cache.triage = { openCount: 0, summary: 'Triage queue is clear', hasItems: false }; return; }
+    const [openRes, anyRes] = await Promise.all([
+      this.client.from('reports').select('id', { count: 'exact', head: true })
+        .eq('community_id', this.communityId).neq('status', 'resolved'),
+      this.client.from('reports').select('id', { count: 'exact', head: true })
+        .eq('community_id', this.communityId),
+    ]);
+    const openCount = openRes.count ?? 0;
+    this.cache.triage = {
+      openCount,
+      summary: openCount === 0 ? 'Triage queue is clear' : `${openCount} ${openCount === 1 ? 'item' : 'items'} in triage`,
+      hasItems: (anyRes.count ?? 0) > 0,
+    };
   }
 
   // ── Social (events + feed; empty for a fresh community) ─────────────────────

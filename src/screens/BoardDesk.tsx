@@ -3,8 +3,7 @@ import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { usePavStore } from '../store/store';
-import { getTriage, getBoardOpenCount } from '../store/selectors';
-import { useVendors, useAging, useVotes, useAssessment } from '../data/repo';
+import { useVendors, useAging, useVotes, useAssessment, useBoardTriage } from '../data/repo';
 
 const BOARD_SEGS = [
   { key: 'desk', label: 'Desk' },
@@ -25,8 +24,8 @@ export function BoardDesk() {
   if (!state.boardMode) return null;
 
   const exitBoard = () => set({ boardMode: false });
-  const triage = getTriage(state);
-  const boardOpenN = getBoardOpenCount(state);
+  const triage = useBoardTriage();
+  const boardOpenN = triage.openCount;
   const { open: vote } = useVotes();
   const quorum = { count: vote?.quorumCount ?? 0, pct: vote?.quorumPct ?? 0 };
   const quorumTotal = vote?.quorumTotal ?? 136;
@@ -115,6 +114,14 @@ export function BoardDesk() {
             Triage
           </p>
           <div className="flex flex-col gap-2.5 mb-[22px]">
+            {!triage.hasItems ? (
+              <div className="rounded-[18px] px-4 py-[13px] flex items-center gap-2.5 bg-sand">
+                <PhIcon name="ph-fill ph-check-circle" size={17} color="rgb(var(--sage))" />
+                <p className="m-0 text-[12.5px] font-bold text-stone">
+                  Triage queue is clear — resident reports land here instantly
+                </p>
+              </div>
+            ) : (<>
             {/* Streetlight */}
             <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
               <div className="flex items-center gap-3">
@@ -257,13 +264,15 @@ export function BoardDesk() {
                 )}
               </div>
             </div>
+            </>)}
           </div>
 
+          {vote && (<>
           <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
             Vote monitor
           </p>
           <div className="bg-navy rounded-[20px] p-[18px] mb-[22px] text-cream">
-            <p className="m-0 mb-1 font-serif text-base">Pool furniture · closes Thu</p>
+            <p className="m-0 mb-1 font-serif text-base">{vote.title} · closes Thu</p>
             <div className="flex items-center justify-between my-2.5 mb-1.5">
               <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
                 QUORUM
@@ -291,6 +300,7 @@ export function BoardDesk() {
               </div>
             )}
           </div>
+          </>)}
         </div>
       )}
 

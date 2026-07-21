@@ -62,6 +62,13 @@ export interface DuesState {
   history: DuesStatement[];
 }
 
+/** The board's triage queue summary (empty for a fresh community). */
+export interface BoardTriage {
+  openCount: number;   // items still needing a board action
+  summary: string;     // 'Tuesday, July 1 · N items in triage'
+  hasItems: boolean;   // whether the community has any triage items at all
+}
+
 /** A community event (Today's featured card, the calendar, the Commons event). */
 export interface CommunityEvent {
   id: string;
@@ -185,6 +192,9 @@ export interface Repository {
 
   /** The member's ARC requests + any unseen approval (empty for a fresh member). */
   getArc(): ArcState;
+
+  /** The board's triage queue summary (empty for a fresh community). */
+  getBoardTriage(): BoardTriage;
 
   /** Community events (empty for a fresh community). */
   getEvents(): CommunityEvent[];

@@ -65,6 +65,12 @@ export function useArc() {
   return useSyncExternalStore(repo.subscribe, () => repo.getArc());
 }
 
+/** The board's triage queue summary (empty for a fresh community). */
+export function useBoardTriage() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getBoardTriage());
+}
+
 /** Community events (empty for a fresh community). */
 export function useEvents() {
   const repo = useRepository();

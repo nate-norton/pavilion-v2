@@ -3,7 +3,7 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { ArcRequest, ArcState, CommunityEvent, DuesState, DuesStatement, FeedPost, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcRequest, ArcState, BoardTriage, CommunityEvent, DuesState, DuesStatement, FeedPost, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
 import { usePavStore } from '../../store/store';
@@ -47,6 +47,26 @@ export class MockRepository implements Repository, SnapshotReadable {
 
   getEvents = () => DEMO_EVENTS;
   getFeed = () => DEMO_FEED;
+
+  // Board triage derived from the demo scenario flags, mirroring the old
+  // getTriage/getBoardOpenCount selectors. The demo always has seed triage
+  // items (streetlight + gate), so hasItems is true; live is empty.
+  private triageCache: { sig: string; value: BoardTriage } | null = null;
+  getBoardTriage = (): BoardTriage => {
+    const { reportTicketed, gateScheduled, arcSubmitted, arcApprovedByBoard, reportSubmitted, m89Assigned } = usePavStore.getState();
+    const sig = `${reportTicketed}|${gateScheduled}|${arcSubmitted}|${arcApprovedByBoard}|${reportSubmitted}|${m89Assigned}`;
+    if (this.triageCache?.sig === sig) return this.triageCache.value;
+    const arcOpen = arcSubmitted && !arcApprovedByBoard;
+    const left = (reportTicketed ? 0 : 1) + (arcOpen ? 1 : 0) + (gateScheduled ? 0 : 1);
+    const openCount = (reportTicketed ? 0 : 1) + (gateScheduled ? 0 : 1) + (arcOpen ? 1 : 0) + (reportSubmitted && !m89Assigned ? 1 : 0);
+    const value: BoardTriage = {
+      openCount,
+      summary: 'Tuesday, July 1 · ' + (left === 0 ? 'triage queue is clear' : left + (left === 1 ? ' item' : ' items') + ' in triage'),
+      hasItems: true,
+    };
+    this.triageCache = { sig, value };
+    return value;
+  };
 
   // Dues are derived from the demo scenario flags so the DemoPanel keeps
   // driving the cards. Memoized on the flags so useSyncExternalStore gets a
