@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { SLOTS, DAYS, ARC_TYPES, HH, ONBOARD_CIRCLES, QA, MAP_LAYERS, NOTIF_CATS } from '..';
+import { SLOTS, DAYS, ARC_TYPES, HH, ONBOARD_CIRCLES, MAP_LAYERS, NOTIF_CATS } from '..';
 import type {
   Amenity, Vendor, DirEntry, FreeItem, Doc, DocSection, Notif, Circle,
   PortfolioEntry, AgingBucket, Pin, MapLayer, SearchItem, ChatSeed, QA as QAType,
@@ -309,7 +309,8 @@ export class SupabaseRepository implements Repository {
   listMapLayers = async (): Promise<MapLayer[]> => MAP_LAYERS;
   listHouseholdOptions = async (): Promise<HHOption[]> => HH;
   listOnboardCircles = async (): Promise<OnboardCircle[]> => ONBOARD_CIRCLES;
-  getAiQA = async (): Promise<QAType> => QA;
+  // Scripted assistant Q&A is demo-only; live stubs the AI sheet.
+  getAiQA = async (): Promise<QAType> => ({});
 
   // ── Community reference data (no tables yet → empty states) ─────────────────
   listAmenities = async (): Promise<Amenity[]> => [];
