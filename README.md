@@ -49,16 +49,23 @@ screen upgrades the demo and the product simultaneously — and demo-only
 flourishes are gated behind `repo.isDemo()` so live mode shows honest empty
 states instead of fabricated data.
 
-## Branches & deploys
+## Domains, branches & deploys
 
-| Branch    | Mode | Purpose |
-|-----------|------|---------|
-| `dev`     | demo | The presenter demo — Vercel production deploy |
-| `staging` | live | The real app against the dev Supabase project (`.env.production` lives only here) |
+Everything lives under **pavilion.community**, split across three Vercel
+projects:
 
-Feature branches merge to `staging` for live verification and to `dev` for the
-demo. Never merge `staging` into `dev` — that would carry the live-mode config
-into the demo deploy.
+| URL | Vercel project | Branch | Mode | What it is |
+|-----|----------------|--------|------|------------|
+| [pavilion.community](https://pavilion.community) | `pavilion-website` | `main` (own repo) | — | Marketing site (the front door) |
+| [app.pavilion.community](https://app.pavilion.community) | `pavilion-v2` | `staging` | live | The product — Supabase-backed |
+| [demo.pavilion.community](https://demo.pavilion.community) | `pavilion-v2-demo` | `dev` | demo | The presenter demo — stable sales link |
+
+The app and the demo build from this same repo, so every improvement ships to
+both. Feature branches merge to `staging` (deploys the app) and to `dev`
+(deploys the demo). Never merge `staging` into `dev` — the live-mode config
+(`.env.production`) is committed only on `staging`, and merging it across
+would flip the demo into live mode. `pavilion-community.com` redirects to
+pavilion.community.
 
 ## Backend (live mode)
 
