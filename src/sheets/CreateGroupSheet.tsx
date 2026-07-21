@@ -29,14 +29,16 @@ export function CreateGroupSheet() {
   const createGroup = async () => {
     if (!canCreate) return;
     setBusy(true);
+    try {
     const key = await repo.createGroup({
       name: state.createGroupName.trim(),
       description: state.createGroupDesc.trim(),
       icon: state.createGroupIcon,
       color: state.createGroupColor,
     });
+      set({ createGroupOpen: false, createGroupName: '', createGroupDesc: '', createGroupIcon: 'ph-fill ph-users-three', createGroupColor: 'rgb(var(--navy))', activeGroup: key });
+    } catch { /* failure surfaced via the app toast */ }
     setBusy(false);
-    set({ createGroupOpen: false, createGroupName: '', createGroupDesc: '', createGroupIcon: 'ph-fill ph-users-three', createGroupColor: 'rgb(var(--navy))', activeGroup: key });
   };
 
   return (

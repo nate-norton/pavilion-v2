@@ -17,7 +17,9 @@ export function ArcSheet() {
     if (!canSubmit) return;
     if (repo.isDemo()) { submitArc(); return; }
     void repo.createArcRequest({ type: state.arcType ?? 'Exterior update', description: state.arcDesc })
-      .then(() => set({ arcSheetOpen: false, arcDesc: '', arcType: null }));
+      .then(() => set({ arcSheetOpen: false, arcDesc: '', arcType: null }))
+      .catch(() => {}); // failure surfaced via the app toast
+
   };
 
   return (

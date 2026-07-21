@@ -857,7 +857,8 @@ export function BoardDesk() {
                       onClick={() => {
                         setVoteConfirm(false);
                         void repo.openVote({ question: state.voteQ, yesLabel: state.voteOptA, noLabel: state.voteOptB })
-                          .then(() => set({ votePosted: true }));
+                          .then(() => set({ votePosted: true }))
+                          .catch(() => {}); // failure surfaced via the app toast
                       }}
                       className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
                       style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
