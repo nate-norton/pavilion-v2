@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
-import type { ArcState, ArcStep, BoardTriage, CommunityEvent, DuesState, DuesStatement, DuesStatus, FeedPost, MemberContext, NewGroup, NewReservation, ReservationState, Repository, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcState, ArcStep, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, DuesStatus, FeedPost, KnownIssue, MemberContext, NewGroup, NewReservation, ReservationState, Repository, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -48,6 +48,8 @@ export class SupabaseRepository implements Repository {
     events: [] as CommunityEvent[],
     feed: [] as FeedPost[],
     triage: { openCount: 0, summary: 'Triage queue is clear', hasItems: false } as BoardTriage,
+    issues: [] as KnownIssue[],
+    decisions: [] as Decision[],
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
     chats: {} as MockChatMap,
@@ -89,27 +91,60 @@ export class SupabaseRepository implements Repository {
     await this.hydrateArc();
     await this.hydrateSocial();
     await this.hydrateTriage();
+    await this.hydrateDecisions();
     await this.hydrateGroups();
     this.notify();
   }
 
-  // ── Board triage (reports; empty for a fresh community) ─────────────────────
+  isDemo = () => false;
+
+  // ── Board triage + known issues (reports; empty for a fresh community) ──────
   getBoardTriage = () => this.cache.triage;
+  getIssues = () => this.cache.issues;
 
   private async hydrateTriage() {
-    if (!this.communityId) { this.cache.triage = { openCount: 0, summary: 'Triage queue is clear', hasItems: false }; return; }
-    const [openRes, anyRes] = await Promise.all([
-      this.client.from('reports').select('id', { count: 'exact', head: true })
-        .eq('community_id', this.communityId).neq('status', 'resolved'),
-      this.client.from('reports').select('id', { count: 'exact', head: true })
-        .eq('community_id', this.communityId),
-    ]);
-    const openCount = openRes.count ?? 0;
+    if (!this.communityId) {
+      this.cache.triage = { openCount: 0, summary: 'Triage queue is clear', hasItems: false };
+      this.cache.issues = [];
+      return;
+    }
+    const { data } = await this.client.from('reports')
+      .select('id, title, status, vendor')
+      .eq('community_id', this.communityId)
+      .order('created_at', { ascending: false })
+      .limit(20);
+    const rows = data ?? [];
+    const openCount = rows.filter((r) => r.status !== 'resolved').length;
     this.cache.triage = {
       openCount,
       summary: openCount === 0 ? 'Triage queue is clear' : `${openCount} ${openCount === 1 ? 'item' : 'items'} in triage`,
-      hasItems: (anyRes.count ?? 0) > 0,
+      hasItems: rows.length > 0,
     };
+    this.cache.issues = rows.map((r): KnownIssue => {
+      const resolved = r.status === 'resolved';
+      const handled = r.status === 'ticketed' || r.status === 'assigned';
+      return {
+        id: r.id,
+        icon: resolved ? 'ph-fill ph-check-circle' : 'ph-fill ph-wrench',
+        iconColor: resolved ? 'rgb(var(--stonelight))' : 'rgb(var(--terracotta))',
+        title: r.title,
+        statusLabel: resolved ? 'Resolved' : handled ? (r.vendor || 'Ticketed') : 'In triage',
+        tone: resolved ? 'sand' : handled ? 'mint' : 'gold',
+        resolved,
+      };
+    });
+  }
+
+  // ── Decisions log (empty for a fresh community) ─────────────────────────────
+  getDecisions = () => this.cache.decisions;
+
+  private async hydrateDecisions() {
+    if (!this.communityId) { this.cache.decisions = []; return; }
+    const { data } = await this.client.from('decisions')
+      .select('*').eq('community_id', this.communityId).order('sort_order');
+    this.cache.decisions = (data ?? []).map((d) => ({
+      id: d.id, dateLabel: d.date_label, text: d.text, pillLabel: d.pill_label, passed: d.passed,
+    }));
   }
 
   // ── Social (events + feed; empty for a fresh community) ─────────────────────

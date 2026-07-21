@@ -71,6 +71,18 @@ export function useBoardTriage() {
   return useSyncExternalStore(repo.subscribe, () => repo.getBoardTriage());
 }
 
+/** Community-visible maintenance issues (empty when none). */
+export function useIssues() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getIssues());
+}
+
+/** The board's decisions log (empty for a fresh community). */
+export function useDecisions() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getDecisions());
+}
+
 /** Community events (empty for a fresh community). */
 export function useEvents() {
   const repo = useRepository();
