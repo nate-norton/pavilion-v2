@@ -1,6 +1,8 @@
 -- Phase 2 — core multi-tenant schema + RLS foundation.
 -- Every domain row is scoped to a community_id; access is driven by memberships.
 -- Role model (locked 2026-07-20): resident + board only.
+-- RLS helpers live in a non-exposed `private` schema so they can't be called
+-- via the REST API (PostgREST only exposes `public`), while policies still use them.
 
 create extension if not exists pgcrypto;
 
@@ -52,13 +54,16 @@ create index memberships_community_idx on public.memberships (community_id);
 create index memberships_profile_idx on public.memberships (profile_id);
 create index units_community_idx on public.units (community_id);
 
--- ── RLS helpers (SECURITY DEFINER → bypass RLS internally, avoid recursion) ──
-create or replace function public.current_profile_id()
+-- ── RLS helpers in a private (non-API-exposed) schema ────────────────────────
+create schema if not exists private;
+grant usage on schema private to anon, authenticated, service_role;
+
+create or replace function private.current_profile_id()
 returns uuid language sql stable security definer set search_path = public as $$
   select id from public.profiles where user_id = auth.uid() limit 1;
 $$;
 
-create or replace function public.is_member(c uuid)
+create or replace function private.is_member(c uuid)
 returns boolean language sql stable security definer set search_path = public as $$
   select exists (
     select 1 from public.memberships m
@@ -67,7 +72,7 @@ returns boolean language sql stable security definer set search_path = public as
   );
 $$;
 
-create or replace function public.is_board(c uuid)
+create or replace function private.is_board(c uuid)
 returns boolean language sql stable security definer set search_path = public as $$
   select exists (
     select 1 from public.memberships m
@@ -77,7 +82,7 @@ returns boolean language sql stable security definer set search_path = public as
   );
 $$;
 
-create or replace function public.shares_community(target uuid)
+create or replace function private.shares_community(target uuid)
 returns boolean language sql stable security definer set search_path = public as $$
   select exists (
     select 1
@@ -95,15 +100,15 @@ alter table public.units       enable row level security;
 alter table public.memberships enable row level security;
 
 create policy communities_read on public.communities
-  for select using (public.is_member(id));
+  for select using (private.is_member(id));
 
 create policy profiles_read on public.profiles
-  for select using (user_id = auth.uid() or public.shares_community(id));
+  for select using (user_id = auth.uid() or private.shares_community(id));
 create policy profiles_update_own on public.profiles
   for update using (user_id = auth.uid()) with check (user_id = auth.uid());
 
 create policy units_read on public.units
-  for select using (public.is_member(community_id));
+  for select using (private.is_member(community_id));
 
 create policy memberships_read on public.memberships
-  for select using (public.is_member(community_id));
+  for select using (private.is_member(community_id));
