@@ -1,7 +1,7 @@
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { getQuorum } from '../store/selectors';
+import { useVotes } from '../data/repo';
 
 const AGENDA = [
   '2027 budget ratification',
@@ -16,7 +16,8 @@ const PROXY_NAMES = ['Tom B. · #18', 'Rosa M. · #12', 'Priya S. · #31'];
 export function Meeting() {
   const state = usePavStore();
   const { set } = state;
-  const quorum = getQuorum(state);
+  const { open: vote } = useVotes();
+  const quorum = { count: vote?.quorumCount ?? 0, pct: vote?.quorumPct ?? 0 };
 
   if (!state.meetingOpen) return null;
 

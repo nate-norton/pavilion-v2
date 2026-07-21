@@ -24,6 +24,65 @@ export function useGroups() {
   return useSyncExternalStore(repo.subscribe, () => repo.getGroups());
 }
 
+/** The signed-in member's identity/community. null until resolved (live mode). */
+export function useMember() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getMember());
+}
+
+/**
+ * The member's dues (Today card + MyPlace history). In the demo this is derived
+ * from the store's scenario flags, so screens that call this must already
+ * subscribe to the store (they do, via usePavStore) to re-render on DemoPanel
+ * toggles; the repo snapshot is memoized so the reference stays stable.
+ */
+export function useDues() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getDues());
+}
+
+/** The community's open ballot + this member's vote. `open` is null when none. */
+export function useVotes() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getVotes());
+}
+
+/** The member's open courtesy notice / violation (null when compliant). */
+export function useViolation() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getViolation());
+}
+
+/** The member's one-time special assessment (null when none). */
+export function useAssessment() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getAssessment());
+}
+
+/** The member's ARC requests + any unseen approval (empty for a fresh member). */
+export function useArc() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getArc());
+}
+
+/** The board's triage queue summary (empty for a fresh community). */
+export function useBoardTriage() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getBoardTriage());
+}
+
+/** Community events (empty for a fresh community). */
+export function useEvents() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getEvents());
+}
+
+/** Commons feed posts (empty for a fresh community). */
+export function useFeed() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getFeed());
+}
+
 /**
  * Reads a domain slice through the repository. Seeds initial state from the
  * synchronous snapshot when the backend offers one (the mock → no loading

@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      arc_requests: {
+        Row: {
+          approved: boolean
+          community_id: string
+          created_at: string
+          id: string
+          ref: string
+          sort_order: number
+          status: string
+          status_label: string
+          steps: Json
+          title: string
+          unit_id: string
+        }
+        Insert: {
+          approved?: boolean
+          community_id: string
+          created_at?: string
+          id?: string
+          ref: string
+          sort_order?: number
+          status?: string
+          status_label?: string
+          steps?: Json
+          title: string
+          unit_id: string
+        }
+        Update: {
+          approved?: boolean
+          community_id?: string
+          created_at?: string
+          id?: string
+          ref?: string
+          sort_order?: number
+          status?: string
+          status_label?: string
+          steps?: Json
+          title?: string
+          unit_id?: string
+        }
+        Relationships: [
+          { foreignKeyName: "arc_requests_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "arc_requests_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
+        ]
+      }
       communities: {
         Row: {
           brand: Json
@@ -40,6 +85,79 @@ export type Database = {
           slug?: string
         }
         Relationships: []
+      }
+      dues_statements: {
+        Row: {
+          amount_cents: number
+          card_btn: string
+          card_sub: string
+          card_title: string
+          community_id: string
+          confirmation: string | null
+          created_at: string
+          id: string
+          is_current: boolean
+          period: string
+          period_label: string
+          sort_order: number
+          status: string
+          status_label: string
+          unit_id: string
+        }
+        Insert: {
+          amount_cents: number
+          card_btn?: string
+          card_sub?: string
+          card_title?: string
+          community_id: string
+          confirmation?: string | null
+          created_at?: string
+          id?: string
+          is_current?: boolean
+          period: string
+          period_label?: string
+          sort_order?: number
+          status?: string
+          status_label?: string
+          unit_id: string
+        }
+        Update: {
+          amount_cents?: number
+          card_btn?: string
+          card_sub?: string
+          card_title?: string
+          community_id?: string
+          confirmation?: string | null
+          created_at?: string
+          id?: string
+          is_current?: boolean
+          period?: string
+          period_label?: string
+          sort_order?: number
+          status?: string
+          status_label?: string
+          unit_id?: string
+        }
+        Relationships: [
+          { foreignKeyName: "dues_statements_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "dues_statements_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
+        ]
+      }
+      events: {
+        Row: { community_id: string; created_at: string; featured: boolean; going: number; id: string; photo_label: string; sort_order: number; tag_label: string; title: string; when_label: string; where_label: string }
+        Insert: { community_id: string; created_at?: string; featured?: boolean; going?: number; id?: string; photo_label?: string; sort_order?: number; tag_label?: string; title: string; when_label?: string; where_label?: string }
+        Update: { community_id?: string; created_at?: string; featured?: boolean; going?: number; id?: string; photo_label?: string; sort_order?: number; tag_label?: string; title?: string; when_label?: string; where_label?: string }
+        Relationships: [
+          { foreignKeyName: "events_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
+      }
+      feed_posts: {
+        Row: { author_color: string; author_initial: string; author_name: string; body: string; community_id: string; created_at: string; id: string; kind: string; photo_label: string; sort_order: number; tag_label: string; time_label: string; unit_label: string }
+        Insert: { author_color?: string; author_initial?: string; author_name: string; body?: string; community_id: string; created_at?: string; id?: string; kind?: string; photo_label?: string; sort_order?: number; tag_label?: string; time_label?: string; unit_label?: string }
+        Update: { author_color?: string; author_initial?: string; author_name?: string; body?: string; community_id?: string; created_at?: string; id?: string; kind?: string; photo_label?: string; sort_order?: number; tag_label?: string; time_label?: string; unit_label?: string }
+        Relationships: [
+          { foreignKeyName: "feed_posts_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
       }
       group_event_rsvps: {
         Row: { created_at: string; event_id: string; id: string; profile_id: string }
@@ -227,6 +345,95 @@ export type Database = {
             referencedRelation: "communities"
             referencedColumns: ["id"]
           },
+        ]
+      }
+      reports: {
+        Row: { community_id: string; created_at: string; id: string; kind: string; ref: string; reporter_label: string; reporter_profile_id: string | null; status: string; title: string; vendor: string }
+        Insert: { community_id: string; created_at?: string; id?: string; kind?: string; ref?: string; reporter_label?: string; reporter_profile_id?: string | null; status?: string; title: string; vendor?: string }
+        Update: { community_id?: string; created_at?: string; id?: string; kind?: string; ref?: string; reporter_label?: string; reporter_profile_id?: string | null; status?: string; title?: string; vendor?: string }
+        Relationships: [
+          { foreignKeyName: "reports_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "reports_reporter_profile_id_fkey"; columns: ["reporter_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      special_assessments: {
+        Row: { community_id: string; created_at: string; id: string; status: string; sub: string; title: string; unit_id: string }
+        Insert: { community_id: string; created_at?: string; id?: string; status?: string; sub?: string; title: string; unit_id: string }
+        Update: { community_id?: string; created_at?: string; id?: string; status?: string; sub?: string; title?: string; unit_id?: string }
+        Relationships: [
+          { foreignKeyName: "special_assessments_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "special_assessments_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
+        ]
+      }
+      violations: {
+        Row: { community_id: string; created_at: string; id: string; status: string; sub: string; title: string; unit_id: string }
+        Insert: { community_id: string; created_at?: string; id?: string; status?: string; sub?: string; title: string; unit_id: string }
+        Update: { community_id?: string; created_at?: string; id?: string; status?: string; sub?: string; title?: string; unit_id?: string }
+        Relationships: [
+          { foreignKeyName: "violations_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "violations_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
+        ]
+      }
+      vote_ballots: {
+        Row: { choice: string; created_at: string; id: string; profile_id: string; vote_id: string }
+        Insert: { choice: string; created_at?: string; id?: string; profile_id: string; vote_id: string }
+        Update: { choice?: string; created_at?: string; id?: string; profile_id?: string; vote_id?: string }
+        Relationships: [
+          { foreignKeyName: "vote_ballots_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+          { foreignKeyName: "vote_ballots_vote_id_fkey"; columns: ["vote_id"]; isOneToOne: false; referencedRelation: "votes"; referencedColumns: ["id"] },
+        ]
+      }
+      votes: {
+        Row: {
+          closes_label: string
+          community_id: string
+          created_at: string
+          id: string
+          no_count: number
+          no_label: string
+          quorum_count: number
+          quorum_total: number
+          receipt: string
+          status: string
+          subtitle: string
+          title: string
+          yes_count: number
+          yes_label: string
+        }
+        Insert: {
+          closes_label?: string
+          community_id: string
+          created_at?: string
+          id?: string
+          no_count?: number
+          no_label?: string
+          quorum_count?: number
+          quorum_total?: number
+          receipt?: string
+          status?: string
+          subtitle?: string
+          title: string
+          yes_count?: number
+          yes_label?: string
+        }
+        Update: {
+          closes_label?: string
+          community_id?: string
+          created_at?: string
+          id?: string
+          no_count?: number
+          no_label?: string
+          quorum_count?: number
+          quorum_total?: number
+          receipt?: string
+          status?: string
+          subtitle?: string
+          title?: string
+          yes_count?: number
+          yes_label?: string
+        }
+        Relationships: [
+          { foreignKeyName: "votes_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
         ]
       }
     }
