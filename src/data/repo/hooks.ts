@@ -83,6 +83,24 @@ export function useDecisions() {
   return useSyncExternalStore(repo.subscribe, () => repo.getDecisions());
 }
 
+/** The board's live triage rows (empty in demo — scripted cards render instead). */
+export function useTriageItems() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getTriageItems());
+}
+
+/** The member's own reports (live MyPlace "My requests"; empty in demo). */
+export function useMyReports() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getMyReports());
+}
+
+/** The board's live ARC queue across all units (empty in demo). */
+export function useBoardArcQueue() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getBoardArcQueue());
+}
+
 /** Community events (empty for a fresh community). */
 export function useEvents() {
   const repo = useRepository();

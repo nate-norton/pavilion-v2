@@ -3,6 +3,7 @@ import { Sheet } from '../components/Sheet';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { usePavStore } from '../store/store';
 import { StatusTimeline, type StatusStep } from '../components/StatusTimeline';
+import { useViolation, useRepository } from '../data/repo';
 
 const VIOL_STEPS: StatusStep[] = [
   { label: 'Noticed\nJun 27', state: 'active', icon: 'ph-bold ph-eye' },
@@ -14,10 +15,70 @@ const VIOL_STEPS: StatusStep[] = [
 export function ViolSheet() {
   const state = usePavStore();
   const { set } = state;
+  const repo = useRepository();
+  const viol = useViolation();
 
   const closeViol = () => set({ violSheetOpen: false });
   const markViolFixed = () => set({ violFixed: true });
   const violMsgBoard = () => set({ violSheetOpen: false, reportOpen: true, reportType: 'Violation concern' });
+
+  // Live: a generic notice from the real violation row — no scripted #V-31 story.
+  if (!repo.isDemo()) {
+    return (
+      <Sheet open={state.violSheetOpen} onClose={closeViol} maxHeight="86%">
+        {!viol ? (
+          <div className="text-center pt-1.5 pb-1">
+            <PhIcon name="ph-fill ph-check-circle" size={40} color="rgb(var(--sage))" />
+            <p className="m-0 mt-2.5 text-[15px] font-bold text-navy">Nothing open on your unit.</p>
+          </div>
+        ) : !viol.fixed ? (
+          <div>
+            <p className="m-0 mb-0.5 font-serif text-xl text-navy">A friendly heads-up</p>
+            <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+              Courtesy notice · no fee · nothing on your record
+            </p>
+            <div
+              className="rounded-2xl p-[15px] mb-4"
+              style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.1)' }}
+            >
+              <p className="m-0 mb-1 text-[13.5px] font-bold text-navy">{viol.title}</p>
+              {viol.sub && <p className="m-0 text-xs font-semibold text-stone">{viol.sub}</p>}
+            </div>
+            <button
+              onClick={() => void repo.markViolationFixed()}
+              className="w-full border-none rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer text-white mb-2.5"
+              style={{ background: 'rgb(var(--sage))' }}
+            >
+              I&apos;ve taken care of it
+            </button>
+            <button
+              onClick={violMsgBoard}
+              className="w-full bg-transparent rounded-[14px] py-3 text-[13px] font-extrabold cursor-pointer text-navy"
+              style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+            >
+              Something&apos;s off? Message the board privately
+            </button>
+          </div>
+        ) : (
+          <div className="text-center pt-1.5 pb-1 animate-fadeup">
+            <PhIcon name="ph-fill ph-check-circle" size={48} color="rgb(var(--sage))" />
+            <p className="m-0 mt-2.5 mb-[3px] font-serif text-xl text-navy">
+              Marked fixed. Thanks, neighbor.
+            </p>
+            <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+              The board confirms on their next walk-through — then it closes with no record and no fee.
+            </p>
+            <button
+              onClick={closeViol}
+              className="w-full border-none text-cream rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-navy"
+            >
+              Done
+            </button>
+          </div>
+        )}
+      </Sheet>
+    );
+  }
 
   return (
     <Sheet open={state.violSheetOpen} onClose={closeViol} maxHeight="86%">

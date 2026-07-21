@@ -3,7 +3,7 @@ import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { usePavStore } from '../store/store';
-import { useVendors, useAging, useVotes, useAssessment, useBoardTriage, useRepository } from '../data/repo';
+import { useVendors, useAging, useVotes, useAssessment, useBoardTriage, useTriageItems, useBoardArcQueue, useRepository } from '../data/repo';
 
 const BOARD_SEGS = [
   { key: 'desk', label: 'Desk' },
@@ -23,9 +23,12 @@ export function BoardDesk() {
   const triage = useBoardTriage();
   const { open: vote } = useVotes();
   const assessment = useAssessment();
-  // Requests/Money/Comms are scripted demo tooling with no live domain yet —
-  // a live board sees honest "coming soon" states instead of fabricated numbers.
-  const demo = useRepository().isDemo();
+  // The demo's Requests/Money/Comms are scripted; live renders real queues
+  // (triage, ARC, votes) and hides panels with no data domain yet.
+  const repo = useRepository();
+  const demo = repo.isDemo();
+  const triageItems = useTriageItems();
+  const boardArcQueue = useBoardArcQueue();
 
   if (!state.boardMode) return null;
 
@@ -124,6 +127,54 @@ export function BoardDesk() {
                   Triage queue is clear — resident reports land here instantly
                 </p>
               </div>
+            ) : !demo ? (
+              // Live: the real report queue with board actions.
+              triageItems.map((t) => {
+                const resolved = t.status === 'resolved';
+                const ticketed = t.status === 'ticketed' || t.status === 'assigned';
+                return (
+                  <div key={t.id} className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0"
+                        style={{ background: resolved ? 'rgb(var(--mint))' : 'rgb(var(--blush))' }}
+                      >
+                        <PhIcon
+                          name={resolved ? 'ph-fill ph-check-circle' : 'ph-fill ph-siren'}
+                          size={20}
+                          color={resolved ? 'rgb(var(--sage))' : 'rgb(var(--terracotta))'}
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">{t.title}</p>
+                        <p className="m-0 text-xs font-semibold text-stone">{t.sub}</p>
+                      </div>
+                      {t.status === 'open' && (
+                        <button
+                          onClick={() => void repo.setReportStatus(t.id, 'ticketed')}
+                          className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                        >
+                          Create ticket
+                        </button>
+                      )}
+                      {ticketed && (
+                        <button
+                          onClick={() => void repo.setReportStatus(t.id, 'resolved')}
+                          className="rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-transparent text-navy"
+                          style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                        >
+                          {t.ref ? `${t.ref} · Resolve` : 'Resolve'}
+                        </button>
+                      )}
+                      {resolved && (
+                        <span className="text-[11.5px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--sage))' }}>
+                          Resolved ✓
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
             ) : (<>
             {/* Streetlight */}
             <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -308,13 +359,54 @@ export function BoardDesk() {
       )}
 
       {state.boardTab === 'req' && !demo && (
-        <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <PhIcon name="ph-fill ph-tray" size={22} color="rgb(var(--claypale))" />
-          <p className="m-0 mt-2 text-[13px] font-bold text-navy">No requests yet</p>
-          <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
-            ARC requests and maintenance reports land here as residents submit them.
-          </p>
-        </div>
+        boardArcQueue.length === 0 ? (
+          <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+            <PhIcon name="ph-fill ph-tray" size={22} color="rgb(var(--claypale))" />
+            <p className="m-0 mt-2 text-[13px] font-bold text-navy">No requests yet</p>
+            <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
+              ARC requests land here as residents submit them.
+            </p>
+          </div>
+        ) : (
+          <div className="animate-fadeup">
+            <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+              ARC queue
+            </p>
+            <div className="bg-paper rounded-[18px] px-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+              {boardArcQueue.map((r, i) => (
+                <div
+                  key={r.id}
+                  className="flex items-center gap-[11px] py-[11px]"
+                  style={i < boardArcQueue.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}
+                >
+                  <PhIcon
+                    name={r.approved ? 'ph-fill ph-seal-check' : 'ph-fill ph-pencil-ruler'}
+                    size={17}
+                    color={r.approved ? 'rgb(var(--sage))' : 'rgb(var(--skydeep))'}
+                    className="flex-shrink-0"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="m-0 text-[13px] font-bold text-navy">{r.ref} · {r.title}</p>
+                    <p className="m-0 text-[11px] font-semibold text-stone">{r.unitLabel}</p>
+                  </div>
+                  {r.approved ? (
+                    <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0" style={{ background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' }}>
+                      Approved
+                    </span>
+                  ) : (
+                    <button
+                      onClick={() => void repo.decideArc(r.id, true)}
+                      className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 text-white"
+                      style={{ background: 'rgb(var(--sage))' }}
+                    >
+                      Approve
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )
       )}
       {state.boardTab === 'req' && demo && (
         <div className="animate-fadeup">
@@ -683,12 +775,107 @@ export function BoardDesk() {
       )}
 
       {state.boardTab === 'comms' && !demo && (
-        <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <PhIcon name="ph-fill ph-broadcast" size={22} color="rgb(var(--claypale))" />
-          <p className="m-0 mt-2 text-[13px] font-bold text-navy">Comms tools are on the way</p>
-          <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
-            Broadcasts, the Friday digest, and community votes will run from here.
+        <div className="animate-fadeup">
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+            Put it to a vote
           </p>
+          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+            {state.votePosted ? (
+              <div className="rounded-[13px] p-3.5 flex items-start gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
+                <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0 mt-px" />
+                <div>
+                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedark">
+                    Ballot is open — &quot;{voteQPreview}&quot;
+                  </p>
+                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagegray))' }}>
+                    Live on every resident&apos;s Today screen · watch the tally on the Desk tab
+                  </p>
+                  <button
+                    onClick={() => set({ votePosted: false, voteDraftOpen: false, voteQ: '' })}
+                    className="mt-2 border-0 bg-transparent p-0 text-[11.5px] font-extrabold cursor-pointer"
+                    style={{ color: 'rgb(var(--sagedark))' }}
+                  >
+                    Draft another →
+                  </button>
+                </div>
+              </div>
+            ) : !state.voteDraftOpen ? (
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--blush))' }}>
+                  <PhIcon name="ph-fill ph-check-square" size={20} color="rgb(var(--terracotta))" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="m-0 mb-px text-[13.5px] font-bold text-navy">Draft a community vote</p>
+                  <p className="m-0 text-[11.5px] font-semibold text-stone">
+                    Ask a yes/no or A/B question — results tally live
+                  </p>
+                </div>
+                <button
+                  onClick={openVoteDraft}
+                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                >
+                  New vote
+                </button>
+              </div>
+            ) : (
+              <div className="animate-fadeup">
+                <p className="m-0 mb-[7px] text-[11.5px] font-bold text-navy">Question</p>
+                <textarea
+                  value={state.voteQ}
+                  onChange={(e) => set({ voteQ: e.target.value })}
+                  placeholder="e.g. Should we add a second EV charger in Lot B?"
+                  className="w-full rounded-[13px] px-[13px] py-[11px] text-[13.5px] font-semibold text-navy outline-none resize-none mb-3"
+                  style={{ minHeight: 58, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                />
+                <p className="m-0 mb-[7px] text-[11.5px] font-bold text-navy">Choices</p>
+                <div className="flex gap-2 mb-3">
+                  <input
+                    value={state.voteOptA}
+                    onChange={(e) => set({ voteOptA: e.target.value })}
+                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                  <input
+                    value={state.voteOptB}
+                    onChange={(e) => set({ voteOptB: e.target.value })}
+                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                </div>
+                {!voteConfirm ? (
+                  <button
+                    onClick={() => canPostVote && setVoteConfirm(true)}
+                    disabled={!canPostVote}
+                    className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
+                    style={{ background: canPostVote ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
+                  >
+                    Open the ballot
+                  </button>
+                ) : (
+                  <div className="flex gap-2 animate-fadeup">
+                    <button
+                      onClick={() => {
+                        setVoteConfirm(false);
+                        void repo.openVote({ question: state.voteQ, yesLabel: state.voteOptA, noLabel: state.voteOptB })
+                          .then(() => set({ votePosted: true }));
+                      }}
+                      className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
+                      style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
+                    >
+                      Confirm — open to all households
+                    </button>
+                    <button
+                      onClick={() => setVoteConfirm(false)}
+                      className="rounded-[13px] px-4 py-[13px] text-sm font-extrabold cursor-pointer bg-transparent text-navy"
+                      style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                    >
+                      Back
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       )}
       {state.boardTab === 'comms' && demo && (
