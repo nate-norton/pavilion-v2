@@ -1,5 +1,5 @@
 import { PhIcon } from '../components/PhIcon';
-import { useArc, useAssessment, useDues, useEvents, useMember, useNotifications, usePortfolio, useReservation, useViolation, useVotes } from '../data/repo';
+import { useArc, useAssessment, useDues, useEvents, useMember, useNotifications, usePortfolio, useReservation, useRepository, useViolation, useVotes } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 const ROW = 'flex items-center gap-[13px] cursor-pointer';
@@ -17,6 +17,7 @@ export function Today() {
   const PORTFOLIO = usePortfolio();
   const reservation = useReservation();
   const member = useMember();
+  const demo = useRepository().isDemo();
   const firstName = member?.name.split(' ')[0] ?? '';
   const dues = useDues();
   const { open: vote } = useVotes();
@@ -94,7 +95,12 @@ export function Today() {
       )}
 
       <p className="m-0 mb-1.5 text-[11px] font-bold uppercase text-stonelight" style={{ letterSpacing: '0.14em' }}>
-        {member?.communityName ? `Tuesday, July 1 · ${member.communityName}` : 'Tuesday, July 1'}
+        {(() => {
+          const dateLabel = demo
+            ? 'Tuesday, July 1'
+            : new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+          return member?.communityName ? `${dateLabel} · ${member.communityName}` : dateLabel;
+        })()}
       </p>
       <div className="flex items-start justify-between gap-3 mb-1.5">
         <h1 className="m-0 font-serif font-normal text-[32px] text-navy leading-[1.1]" style={{ letterSpacing: '-0.01em' }}>
@@ -233,8 +239,8 @@ export function Today() {
         )}
       </div>
 
-      {/* AI nudge: one quiet line */}
-      {showNudge && hasNeighborhood && (
+      {/* AI nudge: one quiet line (scripted — demo only) */}
+      {demo && showNudge && hasNeighborhood && (
         <div className="flex gap-[9px] items-start" style={{ padding: '14px 6px 0' }}>
           <PhIcon name="ph-fill ph-sparkle" size={13} color="rgb(var(--terracotta))" className="mt-[3px] flex-shrink-0" />
           <p className="m-0 flex-1 text-xs leading-[1.5] font-semibold text-stone">
@@ -263,6 +269,7 @@ export function Today() {
       </div>
 
       {/* One featured event */}
+      {featuredEvent && (
       <div className="rounded-[20px] text-cream bg-navy mb-2.5" style={{ padding: '16px 18px' }}>
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
@@ -292,8 +299,10 @@ export function Today() {
           )}
         </div>
       </div>
+      )}
+      </>)}
 
-      {/* Quiet neighborhood list */}
+      {/* Quiet neighborhood list — always on: booking + map are real surfaces */}
       <div className="bg-paper rounded-[20px]" style={{ border: '1px solid rgb(var(--navy) / 0.1)', padding: '6px 18px' }}>
         {hasBooking ? (
           <div onClick={() => set({ tab: 'reserve' })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
@@ -303,17 +312,22 @@ export function Today() {
         ) : (
           <div onClick={() => set({ tab: 'reserve' })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
             <PhIcon name="ph ph-swimming-pool" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
-            <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">Pool cabana open today · 4 slots left</p>
+            <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
+              {demo ? 'Pool cabana open today · 4 slots left' : 'Reserve an amenity'}
+            </p>
             <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
           </div>
         )}
 
         <div onClick={() => set({ mapOpen: true })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
           <PhIcon name="ph ph-map-trifold" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
-          <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">Neighborhood map · 5 pins today</p>
+          <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
+            {demo ? 'Neighborhood map · 5 pins today' : 'Neighborhood map'}
+          </p>
           <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
         </div>
 
+        {demo && (
         <div className="flex items-center gap-3" style={ROW_PAD}>
           <PhIcon name="ph ph-hand-waving" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">The Okafors moved into #42</p>
@@ -325,8 +339,8 @@ export function Today() {
             Say hi
           </button>
         </div>
+        )}
       </div>
-      </>)}
     </div>
   );
 }

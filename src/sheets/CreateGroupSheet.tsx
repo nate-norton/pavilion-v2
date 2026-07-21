@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { usePavStore } from '../store/store';
@@ -20,18 +21,21 @@ export function CreateGroupSheet() {
   const state = usePavStore();
   const { set } = state;
   const repo = useRepository();
+  const [busy, setBusy] = useState(false);
 
   const close = () => set({ createGroupOpen: false, createGroupName: '', createGroupDesc: '', createGroupIcon: 'ph-fill ph-users-three', createGroupColor: 'rgb(var(--navy))' });
-  const canCreate = state.createGroupName.trim().length > 0;
+  const canCreate = state.createGroupName.trim().length > 0 && !busy;
 
   const createGroup = async () => {
     if (!canCreate) return;
+    setBusy(true);
     const key = await repo.createGroup({
       name: state.createGroupName.trim(),
       description: state.createGroupDesc.trim(),
       icon: state.createGroupIcon,
       color: state.createGroupColor,
     });
+    setBusy(false);
     set({ createGroupOpen: false, createGroupName: '', createGroupDesc: '', createGroupIcon: 'ph-fill ph-users-three', createGroupColor: 'rgb(var(--navy))', activeGroup: key });
   };
 
@@ -136,7 +140,7 @@ export function CreateGroupSheet() {
             color: canCreate ? 'rgb(var(--cream))' : 'rgb(var(--stonelight))',
           }}
         >
-          Create group
+          {busy ? 'Creating…' : 'Create group'}
         </button>
       </div>
     </Sheet>

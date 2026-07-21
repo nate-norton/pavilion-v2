@@ -75,8 +75,19 @@ export function Documents() {
           <BackButton onClick={() => set({ docsOpen: false })} />
           <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">Documents</h1>
           <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
-            Every governing document, searchable. Your AI has read them all.
+            {DOCS.length > 0
+              ? 'Every governing document, searchable. Your AI has read them all.'
+              : 'Every governing document, in one place.'}
           </p>
+          {DOCS.length === 0 && (
+            <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+              <PhIcon name="ph-fill ph-files" size={26} color="rgb(var(--claypale))" />
+              <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No documents yet</p>
+              <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
+                CC&amp;Rs, bylaws, budgets, and minutes appear here once your board publishes them.
+              </p>
+            </div>
+          )}
           <div className="flex flex-col gap-[9px]">
             {DOCS.map((d) => (
               <div

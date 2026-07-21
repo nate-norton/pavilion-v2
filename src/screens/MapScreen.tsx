@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { useMapPins, useMapLayers } from '../data/repo';
+import { useMapPins, useMapLayers, useMember } from '../data/repo';
 
 const HOUSE: CSSProperties = {
   width: 26,
@@ -17,6 +17,7 @@ export function MapScreen() {
   const state = usePavStore();
   const PINS = useMapPins();
   const MAP_LAYERS = useMapLayers();
+  const member = useMember();
   const { set } = state;
 
   if (!state.mapOpen) return null;
@@ -51,7 +52,7 @@ export function MapScreen() {
         </span>
       </div>
       <div style={{ padding: '10px 18px 0' }}>
-        <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">Juniper Ridge</h1>
+        <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">{member?.communityName || 'Juniper Ridge'}</h1>
         <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
           Tap a pin to see what&apos;s happening.
         </p>
