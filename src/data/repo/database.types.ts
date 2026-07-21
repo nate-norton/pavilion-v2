@@ -41,6 +41,83 @@ export type Database = {
         }
         Relationships: []
       }
+      group_event_rsvps: {
+        Row: { created_at: string; event_id: string; id: string; profile_id: string }
+        Insert: { created_at?: string; event_id: string; id?: string; profile_id: string }
+        Update: { created_at?: string; event_id?: string; id?: string; profile_id?: string }
+        Relationships: [
+          { foreignKeyName: "group_event_rsvps_event_id_fkey"; columns: ["event_id"]; isOneToOne: false; referencedRelation: "group_events"; referencedColumns: ["id"] },
+          { foreignKeyName: "group_event_rsvps_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      group_events: {
+        Row: { created_at: string; going: number; group_id: string; id: string; title: string; when_label: string; where_label: string }
+        Insert: { created_at?: string; going?: number; group_id: string; id?: string; title: string; when_label?: string; where_label?: string }
+        Update: { created_at?: string; going?: number; group_id?: string; id?: string; title?: string; when_label?: string; where_label?: string }
+        Relationships: [
+          { foreignKeyName: "group_events_group_id_fkey"; columns: ["group_id"]; isOneToOne: false; referencedRelation: "groups"; referencedColumns: ["id"] },
+        ]
+      }
+      group_members: {
+        Row: { created_at: string; group_id: string; id: string; profile_id: string }
+        Insert: { created_at?: string; group_id: string; id?: string; profile_id: string }
+        Update: { created_at?: string; group_id?: string; id?: string; profile_id?: string }
+        Relationships: [
+          { foreignKeyName: "group_members_group_id_fkey"; columns: ["group_id"]; isOneToOne: false; referencedRelation: "groups"; referencedColumns: ["id"] },
+          { foreignKeyName: "group_members_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      group_messages: {
+        Row: { body: string; created_at: string; group_id: string; id: string; profile_id: string | null }
+        Insert: { body: string; created_at?: string; group_id: string; id?: string; profile_id?: string | null }
+        Update: { body?: string; created_at?: string; group_id?: string; id?: string; profile_id?: string | null }
+        Relationships: [
+          { foreignKeyName: "group_messages_group_id_fkey"; columns: ["group_id"]; isOneToOne: false; referencedRelation: "groups"; referencedColumns: ["id"] },
+          { foreignKeyName: "group_messages_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      group_mutes: {
+        Row: { created_at: string; group_id: string; id: string; profile_id: string }
+        Insert: { created_at?: string; group_id: string; id?: string; profile_id: string }
+        Update: { created_at?: string; group_id?: string; id?: string; profile_id?: string }
+        Relationships: [
+          { foreignKeyName: "group_mutes_group_id_fkey"; columns: ["group_id"]; isOneToOne: false; referencedRelation: "groups"; referencedColumns: ["id"] },
+          { foreignKeyName: "group_mutes_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      group_pins: {
+        Row: { author: string; body: string; created_at: string; group_id: string; id: string }
+        Insert: { author?: string; body: string; created_at?: string; group_id: string; id?: string }
+        Update: { author?: string; body?: string; created_at?: string; group_id?: string; id?: string }
+        Relationships: [
+          { foreignKeyName: "group_pins_group_id_fkey"; columns: ["group_id"]; isOneToOne: false; referencedRelation: "groups"; referencedColumns: ["id"] },
+        ]
+      }
+      group_poll_votes: {
+        Row: { created_at: string; id: string; option: string; poll_id: string; profile_id: string }
+        Insert: { created_at?: string; id?: string; option: string; poll_id: string; profile_id: string }
+        Update: { created_at?: string; id?: string; option?: string; poll_id?: string; profile_id?: string }
+        Relationships: [
+          { foreignKeyName: "group_poll_votes_poll_id_fkey"; columns: ["poll_id"]; isOneToOne: false; referencedRelation: "group_polls"; referencedColumns: ["id"] },
+          { foreignKeyName: "group_poll_votes_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      group_polls: {
+        Row: { author: string; created_at: string; group_id: string; id: string; options: Json; question: string }
+        Insert: { author?: string; created_at?: string; group_id: string; id?: string; options?: Json; question: string }
+        Update: { author?: string; created_at?: string; group_id?: string; id?: string; options?: Json; question?: string }
+        Relationships: [
+          { foreignKeyName: "group_polls_group_id_fkey"; columns: ["group_id"]; isOneToOne: false; referencedRelation: "groups"; referencedColumns: ["id"] },
+        ]
+      }
+      groups: {
+        Row: { color: string; community_id: string; created_at: string; description: string; icon: string; id: string; is_group_chat: boolean; member_count: number; name: string }
+        Insert: { color?: string; community_id: string; created_at?: string; description?: string; icon?: string; id?: string; is_group_chat?: boolean; member_count?: number; name: string }
+        Update: { color?: string; community_id?: string; created_at?: string; description?: string; icon?: string; id?: string; is_group_chat?: boolean; member_count?: number; name?: string }
+        Relationships: [
+          { foreignKeyName: "groups_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
+      }
       memberships: {
         Row: {
           community_id: string
