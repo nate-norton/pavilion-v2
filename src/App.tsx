@@ -4,6 +4,7 @@ import { DemoPanel } from './components/DemoPanel';
 import { ThemeProvider } from './theme/ThemeProvider';
 import { brandTokens } from './theme/themes';
 import { usePavStore } from './store/store';
+import { AuthGate } from './auth/AuthGate';
 
 export default function App() {
   const [showPanel, setShowPanel] = useState(false);
@@ -21,6 +22,7 @@ export default function App() {
   }, []);
 
   return (
+    <AuthGate>
     <ThemeProvider
       tokens={brandTokens(brandTheme)}
       className="min-h-dvh flex items-center justify-center p-6 max-[500px]:p-0 gap-6"
@@ -43,5 +45,6 @@ export default function App() {
         </button>
       )}
     </ThemeProvider>
+    </AuthGate>
   );
 }

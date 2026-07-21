@@ -6,7 +6,7 @@ import type {
   HHOption, OnboardCircle, Comment, ChatMsg, GroupData,
 } from '../types';
 import type { Database } from './database.types';
-import { createSupabaseClient } from './supabaseClient';
+import { getSupabaseClient } from './supabaseClient';
 import type { NewGroup, NewReservation, ReservationState, Repository } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
@@ -46,7 +46,7 @@ export class SupabaseRepository implements Repository {
   private listeners = new Set<() => void>();
 
   constructor(client?: SupabaseClient<Database>) {
-    this.client = client ?? createSupabaseClient();
+    this.client = client ?? getSupabaseClient();
     this.client.auth.onAuthStateChange(() => { void this.refresh(); });
   }
 

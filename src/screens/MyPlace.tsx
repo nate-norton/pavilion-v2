@@ -5,6 +5,7 @@ import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
 import { getDelinquent } from '../store/selectors';
 import { usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
+import { isLiveMode, signOutLive } from '../auth/AuthGate';
 
 const CARD: CSSProperties = {
   background: 'rgb(var(--paper))',
@@ -573,6 +574,7 @@ export function MyPlace() {
           )}
         </div>
         <button type="button" onClick={() => {
+          if (isLiveMode) { void signOutLive(); return; }
           localStorage.removeItem('pavilion-demo');
           resetDemoData();
           usePavStore.setState({ ...dataDefaults, loginOpen: true, epoch: usePavStore.getState().epoch + 1 });
