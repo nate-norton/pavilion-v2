@@ -3,7 +3,7 @@ import { Avatar } from '../components/Avatar';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
-import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useRepository } from '../data/repo';
+import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember, useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 const SEG_OPTIONS = [
@@ -23,6 +23,7 @@ export function Commons() {
   const comments = useComments();
   const groups = useGroups();
   const feed = useFeed();
+  const member = useMember();
 
   const addComment = () => {
     const t = state.commentInput.trim();
@@ -58,7 +59,7 @@ export function Commons() {
             className="bg-paper rounded-2xl px-3.5 py-3 mb-2 flex items-center gap-2.5 cursor-pointer"
             style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
           >
-            <Avatar initial="A" color="rgb(var(--navy))" size={32} />
+            <Avatar initial={member?.initial ?? 'A'} color={member?.color ?? 'rgb(var(--navy))'} size={32} />
             <span className="flex-1 text-[13.5px] text-stonelight font-semibold">Share something…</span>
             <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--stonelight))" />
           </div>
@@ -84,6 +85,30 @@ export function Commons() {
                   Be the first to share something with your neighbors.
                 </p>
               </div>
+            ) : !repo.isDemo() ? (
+              // Live: real feed posts as generic cards (the demo renders its
+              // bespoke scripted posts below).
+              feed.map((p) => (
+                <div key={p.id} className="bg-paper rounded-[18px] p-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+                  <div className="flex items-center gap-2.5 mb-2.5">
+                    <Avatar initial={p.authorInitial} color={p.authorColor} size={36} />
+                    <div className="flex-1">
+                      <p className="m-0 text-[13.5px] font-bold text-navy">
+                        {p.authorName}{' '}
+                        <span className="font-semibold text-stonelight">
+                          {p.unitLabel ? `· ${p.unitLabel} ` : ''}· {p.timeLabel}
+                        </span>
+                      </p>
+                      {p.tagLabel && (
+                        <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--terracotta))' }}>
+                          {p.tagLabel}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <p className="m-0 text-[13.5px] leading-[1.55] font-semibold text-bark">{p.body}</p>
+                </div>
+              ))
             ) : (<>
             {(
               <div

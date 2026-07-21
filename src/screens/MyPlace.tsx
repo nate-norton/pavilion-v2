@@ -3,7 +3,7 @@ import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
-import { useArc, useDues, useMember, usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
+import { useArc, useDues, useMember, useMyReports, usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
 import type { DuesStatus } from '../data/repo';
 import { isLiveMode, signOutLive } from '../auth/AuthGate';
 
@@ -38,6 +38,7 @@ export function MyPlace() {
   const member = useMember();
   const dues = useDues();
   const arc = useArc();
+  const myReports = useMyReports();
 
   const [apConfirm, setApConfirm] = useState(false);
 
@@ -89,6 +90,7 @@ export function MyPlace() {
     : 0;
 
   const reportTypeLabel = state.reportType || 'Issue';
+  const hasReportRows = isLiveMode ? myReports.length > 0 : state.reportSubmitted;
 
   // Payments card (owner only)
   const mpApLabel = state.apPaused ? 'Autopay paused' : 'Autopay · the 3rd';
@@ -490,14 +492,25 @@ export function MyPlace() {
       {/* My requests */}
       <div style={CARD}>
         <p className="m-0 mb-[11px] font-serif text-base text-navy">My requests</p>
-        {state.reportSubmitted && (
+        {!isLiveMode && state.reportSubmitted && (
           <Row divider>
             <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--terracotta))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13px] font-bold text-navy">{reportTypeLabel} report · #M-89</p>
             {statusPill('In triage', 'rgb(var(--blush))', 'rgb(var(--terracotta))')}
           </Row>
         )}
-        {arc.requests.length === 0 && !state.reportSubmitted ? (
+        {isLiveMode && myReports.map((r) => (
+          <Row key={r.id} divider>
+            <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--terracotta))" className="flex-shrink-0" />
+            <p className="m-0 flex-1 text-[13px] font-bold text-navy">{r.title}{r.ref ? ` · ${r.ref}` : ''}</p>
+            {r.status === 'resolved'
+              ? statusPill('Resolved', 'rgb(var(--mint))', 'rgb(var(--sagedark))')
+              : r.status === 'open'
+                ? statusPill('In triage', 'rgb(var(--blush))', 'rgb(var(--terracotta))')
+                : statusPill('Ticketed', 'rgb(var(--goldpale))', 'rgb(var(--golddark))')}
+          </Row>
+        ))}
+        {arc.requests.length === 0 && !hasReportRows ? (
           <p className="m-0 text-[12.5px] font-semibold text-stone">No requests yet.</p>
         ) : (
           arc.requests.map((r, i) => (

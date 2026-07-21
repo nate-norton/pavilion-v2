@@ -2,6 +2,7 @@ import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { Chip } from '../components/Chip';
 import { usePavStore } from '../store/store';
+import { useRepository } from '../data/repo';
 
 const REPORT_CHIPS = ['Maintenance', 'Safety', 'Violation concern', 'Noise', 'Other'];
 
@@ -9,9 +10,21 @@ const REPORT_CHIPS = ['Maintenance', 'Safety', 'Violation concern', 'Noise', 'Ot
 export function ReportSheet() {
   const state = usePavStore();
   const { set, submitReport } = state;
+  const repo = useRepository();
+  const demo = repo.isDemo();
 
-  const closeReport = () => set({ reportOpen: false });
+  // Live resets the submitted flag on close so the member can file another
+  // report later; the demo keeps its scripted one-shot flow.
+  const closeReport = () => (demo
+    ? set({ reportOpen: false })
+    : set({ reportOpen: false, reportSubmitted: false, reportType: null }));
   const canReport = !!state.reportType;
+  const send = () => {
+    if (!canReport) return;
+    if (demo) { submitReport(); return; }
+    void repo.createReport({ kind: state.reportType ?? 'Other', description: state.reportDesc })
+      .then(() => set({ reportSubmitted: true, reportDesc: '' }));
+  };
 
   return (
     <Sheet open={state.reportOpen} onClose={closeReport} maxHeight="86%">
@@ -72,7 +85,7 @@ export function ReportSheet() {
           </button>
 
           <button
-            onClick={submitReport}
+            onClick={send}
             className="w-full border-none rounded-2xl py-[15px] text-[14.5px] font-extrabold font-sans"
             style={{
               background: canReport ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
@@ -88,7 +101,7 @@ export function ReportSheet() {
           <PhIcon name="ph-fill ph-shield-check" size={48} color="rgb(var(--sage))" />
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-xl text-navy">Sent — privately.</p>
           <p className="m-0 mb-3.5 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
-            Ticket #M-89 · {state.reportType} · the board sees it, the feed never does
+            {demo ? 'Ticket #M-89 · ' : ''}{state.reportType} · the board sees it, the feed never does
           </p>
           <div className="flex items-center justify-center gap-0 mb-4">
             <div className="flex flex-col items-center gap-1" style={{ width: 80 }}>
