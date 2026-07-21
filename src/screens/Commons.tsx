@@ -3,7 +3,7 @@ import { Avatar } from '../components/Avatar';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
-import { useDirectory, useFreeItems, useComments, useGroups, useRepository } from '../data/repo';
+import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 const SEG_OPTIONS = [
@@ -22,6 +22,7 @@ export function Commons() {
   const FREE = useFreeItems();
   const comments = useComments();
   const groups = useGroups();
+  const feed = useFeed();
 
   const addComment = () => {
     const t = state.commentInput.trim();
@@ -75,6 +76,15 @@ export function Commons() {
           </button>
 
           <div className="flex flex-col gap-3">
+            {feed.length === 0 ? (
+              <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+                <PhIcon name="ph-fill ph-chats-circle" size={26} color="rgb(var(--claypale))" />
+                <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">Nothing shared yet</p>
+                <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
+                  Be the first to share something with your neighbors.
+                </p>
+              </div>
+            ) : (<>
             {(
               <div
                 className="bg-paper rounded-[18px] p-4"
@@ -248,6 +258,7 @@ export function Commons() {
                 </p>
               </div>
             )}
+            </>)}
           </div>
         </div>
       )}

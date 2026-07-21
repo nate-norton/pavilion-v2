@@ -1,7 +1,6 @@
 import { PhIcon } from '../components/PhIcon';
-import { useNotifications, usePortfolio, useReservation } from '../data/repo';
+import { useArc, useAssessment, useDues, useEvents, useMember, useNotifications, usePortfolio, useReservation, useViolation, useVotes } from '../data/repo';
 import { usePavStore } from '../store/store';
-import { getAttention, getDelinquent, getQuorum } from '../store/selectors';
 
 const ROW = 'flex items-center gap-[13px] cursor-pointer';
 const ROW_PAD = { padding: '14px 0' } as const;
@@ -17,20 +16,39 @@ export function Today() {
   const NOTIFS = useNotifications();
   const PORTFOLIO = usePortfolio();
   const reservation = useReservation();
-  const { n, summary: attnSummary } = getAttention(state);
-  const { pct: quorumPct } = getQuorum(state);
-  const delinquent = getDelinquent(state);
+  const member = useMember();
+  const firstName = member?.name.split(' ')[0] ?? '';
+  const dues = useDues();
+  const { open: vote } = useVotes();
+  const violation = useViolation();
+  const assessment = useAssessment();
+  const arc = useArc();
+  const events = useEvents();
+  const featuredEvent = events.find((e) => e.featured) ?? null;
+  const hasNeighborhood = events.length > 0;
 
   const isOwner = state.role === 'owner';
   const isTenant = state.role === 'tenant';
   const isManager = state.role === 'manager';
 
-  const showPayCardRole = !state.paid && isOwner;
-  const showArcCardRole = !state.arcSeen && isOwner;
-  const showVoteCardRole = !state.voted && (isOwner || isManager);
-  const saCardShow = state.showSpecialAssessment && !state.saPaid;
-  const violPendingCard = state.showViolation && !state.violFixed;
-  const violFixedCard = state.showViolation && state.violFixed;
+  const showPayCardRole = !!dues.current && isOwner;
+  const showArcCardRole = !!arc.unseenApproval && isOwner;
+  const showVoteCardRole = !!vote && !vote.myVote && (isOwner || isManager);
+  const saCardShow = !!assessment && !assessment.paid;
+  const violPendingCard = !!violation && !violation.fixed;
+  const violFixedCard = !!violation && violation.fixed;
+
+  // "Needs you" counter — data-driven off the repo domains (empty for a fresh
+  // member). Dues + ARC are owner tasks; the open vote is owner/manager.
+  const ownerTasks = isOwner ? (dues.current ? 1 : 0) + (arc.unseenApproval ? 1 : 0) : 0;
+  const n = (showVoteCardRole ? 1 : 0) + ownerTasks;
+  const attnSummary =
+    n === 0
+      ? 'All caught up — enjoy the sunshine.'
+      : n === 1
+        ? 'One thing needs you before Thursday.'
+        : n + ' things need you before Thursday.';
+  const quorumPct = vote?.quorumPct ?? 0;
   const showAllClear = n === 0;
   const showAlert = state.showAlert && !state.alertDismissed;
   const showNudge = !state.nudgeDismissed;
@@ -41,23 +59,13 @@ export function Today() {
   const hasNotifBadge = notifBadge > 0;
 
   const rsvpFood = state.rsvpFood;
-  const tacoGoing = 12 + (rsvpFood ? 1 : 0);
+  const tacoGoing = (featuredEvent?.going ?? 0) + (rsvpFood ? 1 : 0);
 
   const hasBooking = reservation.booked && !!reservation.summary;
 
-  const payCardTitle =
-    state.planActive && !state.paid
-      ? 'Payment plan active'
-      : delinquent
-        ? 'Dues are past due'
-        : 'July dues are ready';
-  const payCardSub =
-    state.planActive && !state.paid
-      ? '3 × $190 · next runs Jul 3 · no fees'
-      : delinquent
-        ? '$570 · 30 days · courtesy period, no fees yet'
-        : '$285 · same as June · itemized inside';
-  const payCardBtn = state.planActive && !state.paid ? 'View plan' : 'Review & pay';
+  const payCardTitle = dues.cardTitle;
+  const payCardSub = dues.cardSub;
+  const payCardBtn = dues.cardBtn;
 
   const pfDoors = PORTFOLIO.reduce((a, c) => a + c.doors, 0);
   const pfOpen = PORTFOLIO.reduce((a, c) => a + c.open, 0);
@@ -86,11 +94,11 @@ export function Today() {
       )}
 
       <p className="m-0 mb-1.5 text-[11px] font-bold uppercase text-stonelight" style={{ letterSpacing: '0.14em' }}>
-        Tuesday, July 1 · Juniper Ridge
+        {member?.communityName ? `Tuesday, July 1 · ${member.communityName}` : 'Tuesday, July 1'}
       </p>
       <div className="flex items-start justify-between gap-3 mb-1.5">
         <h1 className="m-0 font-serif font-normal text-[32px] text-navy leading-[1.1]" style={{ letterSpacing: '-0.01em' }}>
-          Morning, Alex.
+          {firstName ? `Morning, ${firstName}.` : 'Morning.'}
         </h1>
         <div className="flex items-center gap-0.5 flex-shrink-0 mt-0.5">
           <button
@@ -152,8 +160,8 @@ export function Today() {
           <div onClick={() => set({ saSheetOpen: true })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
             <div className="flex-1 min-w-0">
-              <p className={ROW_TITLE}>Roof-reserve assessment · $450</p>
-              <p className={ROW_SUB}>Due Aug 1 · pay now or split into 3</p>
+              <p className={ROW_TITLE}>{assessment?.title}</p>
+              <p className={ROW_SUB}>{assessment?.sub}</p>
             </div>
             {CARET}
           </div>
@@ -163,7 +171,7 @@ export function Today() {
           <div onClick={() => set({ tab: 'hoa' })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
             <div className="flex-1 min-w-0">
-              <p className={ROW_TITLE}>Vote on the pool furniture</p>
+              <p className={ROW_TITLE}>{vote?.title ?? 'Open vote'}</p>
               <p className={ROW_SUB}>Closes Thursday · quorum at {quorumPct}%</p>
             </div>
             {CARET}
@@ -187,8 +195,8 @@ export function Today() {
           <div onClick={() => set({ violSheetOpen: true })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--gold))' }} />
             <div className="flex-1 min-w-0">
-              <p className={ROW_TITLE}>Courtesy notice: trash bins</p>
-              <p className={ROW_SUB}>No fee · auto-closes if fixed by Jul 8</p>
+              <p className={ROW_TITLE}>{violation?.title}</p>
+              <p className={ROW_SUB}>{violation?.sub}</p>
             </div>
             {CARET}
           </div>
@@ -208,8 +216,8 @@ export function Today() {
           <div onClick={() => set({ arcSeen: true, tab: 'hoa' })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--claypale))' }} />
             <div className="flex-1 min-w-0">
-              <p className={ROW_TITLE}>Your pergola was approved</p>
-              <p className={ROW_SUB}>ARC #A-118 · reviewed in 6 days</p>
+              <p className={ROW_TITLE}>{arc.unseenApproval?.title}</p>
+              <p className={ROW_SUB}>{arc.unseenApproval?.sub}</p>
             </div>
             {CARET}
           </div>
@@ -226,7 +234,7 @@ export function Today() {
       </div>
 
       {/* AI nudge: one quiet line */}
-      {showNudge && (
+      {showNudge && hasNeighborhood && (
         <div className="flex gap-[9px] items-start" style={{ padding: '14px 6px 0' }}>
           <PhIcon name="ph-fill ph-sparkle" size={13} color="rgb(var(--terracotta))" className="mt-[3px] flex-shrink-0" />
           <p className="m-0 flex-1 text-xs leading-[1.5] font-semibold text-stone">
@@ -242,7 +250,8 @@ export function Today() {
         </div>
       )}
 
-      {/* Around the neighborhood */}
+      {/* Around the neighborhood — ambient content; hidden for an empty community */}
+      {hasNeighborhood && (<>
       <div className="flex items-baseline justify-between gap-2.5" style={{ margin: '28px 0 12px' }}>
         <h2 className="m-0 font-serif font-normal text-[19px] text-navy">Around the neighborhood</h2>
         <button
@@ -258,9 +267,9 @@ export function Today() {
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
-              Today · 5–8 PM
+              {featuredEvent?.whenLabel}
             </p>
-            <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.2]">Taco cart at the clubhouse</p>
+            <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.2]">{featuredEvent?.title}</p>
             <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
               {tacoGoing} neighbors going
             </p>
@@ -317,6 +326,7 @@ export function Today() {
           </button>
         </div>
       </div>
+      </>)}
     </div>
   );
 }

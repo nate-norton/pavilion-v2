@@ -1,0 +1,4 @@
+-- Phase 2 — demo seed.
+-- Intentionally empty: the database carries the schema only, no rows. Communities,
+-- profiles, memberships, and domain data are created through the app (or a later
+-- seed) once auth + the SupabaseRepository are wired in.

@@ -7,7 +7,7 @@ beforeEach(() => act(() => usePavStore.setState(initialState, true)));
 
 it('owner sees vote, pay and ARC cards', () => {
   render(<Today />);
-  expect(screen.getByText(/vote on the pool furniture/i)).toBeInTheDocument();
+  expect(screen.getByText(/replace the pool furniture/i)).toBeInTheDocument();
   expect(screen.getByText(/july dues are ready/i)).toBeInTheDocument();
   expect(screen.getByText(/your pergola was approved/i)).toBeInTheDocument();
 });

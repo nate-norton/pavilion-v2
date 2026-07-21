@@ -3,8 +3,9 @@ import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
-import { getDelinquent } from '../store/selectors';
-import { usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
+import { useArc, useDues, useMember, usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
+import type { DuesStatus } from '../data/repo';
+import { isLiveMode, signOutLive } from '../auth/AuthGate';
 
 const CARD: CSSProperties = {
   background: 'rgb(var(--paper))',
@@ -34,6 +35,9 @@ export function MyPlace() {
   const PORTFOLIO = usePortfolio();
   const reservation = useReservation();
   const groups = useGroups();
+  const member = useMember();
+  const dues = useDues();
+  const arc = useArc();
 
   const [apConfirm, setApConfirm] = useState(false);
 
@@ -42,19 +46,40 @@ export function MyPlace() {
   const isOwner = state.role === 'owner';
   const isManager = state.role === 'manager';
   const isTenant = state.role === 'tenant';
-  const delinquent = getDelinquent(state);
-  const juneLate = state.showDelinquent;
 
-  const roleLabel = isTenant
-    ? 'Renter · #27 Alder Way'
-    : isManager
-      ? 'Property manager · Cedar Hill Mgmt'
-      : '#27 Alder Way · Owner · here since 2021';
-  const duesLabel = state.paid ? 'Paid · Jul 1' : state.planActive ? 'Plan active' : delinquent ? '30 days late' : 'Due Jul 3';
+  // Live mode: identity comes from the signed-in member's profile + membership.
+  // Demo mode: keep the scripted owner/tenant/manager scenario labels.
+  const liveRoleLabel = [
+    member?.unitLabel,
+    member?.role === 'board' ? 'Board member' : 'Resident',
+  ].filter(Boolean).join(' · ');
+  const roleLabel = isLiveMode
+    ? liveRoleLabel
+    : isTenant
+      ? 'Renter · #27 Alder Way'
+      : isManager
+        ? 'Property manager · Cedar Hill Mgmt'
+        : '#27 Alder Way · Owner · here since 2021';
+  const displayName = member?.name ?? 'Alex Rivera';
+  const displayInitial = member?.initial ?? 'A';
+  // Dues stat tile — data-driven off the member's dues (empty for a fresh member).
+  const duesStatus: DuesStatus | null = dues.current?.status ?? (dues.history[0] ? 'paid' : null);
+  const duesLabel =
+    duesStatus === 'paid' ? 'Paid · Jul 1'
+      : duesStatus === 'plan' ? 'Plan active'
+        : duesStatus === 'past_due' ? '30 days late'
+          : duesStatus === 'due' ? 'Due Jul 3'
+            : '—';
   const statOneLabel = isTenant ? 'Lease' : isManager ? 'Role' : 'Dues';
   const statOneValue = isTenant ? 'Active' : isManager ? 'Manager' : duesLabel;
-  const duesBg = state.paid ? 'rgb(var(--mint))' : state.planActive ? 'rgb(var(--skypale))' : 'rgb(var(--blush))';
-  const duesColor = state.paid ? 'rgb(var(--sagedark))' : state.planActive ? 'rgb(var(--skydeep))' : 'rgb(var(--terracotta))';
+  const duesBg = duesStatus === 'paid' ? 'rgb(var(--mint))'
+    : duesStatus === 'plan' ? 'rgb(var(--skypale))'
+      : duesStatus === 'due' || duesStatus === 'past_due' ? 'rgb(var(--blush))'
+        : 'rgb(var(--paper))';
+  const duesColor = duesStatus === 'paid' ? 'rgb(var(--sagedark))'
+    : duesStatus === 'plan' ? 'rgb(var(--skydeep))'
+      : duesStatus === 'due' || duesStatus === 'past_due' ? 'rgb(var(--terracotta))'
+        : 'rgb(var(--stone))';
   const myBookings = reservation.booked && reservation.summary ? '1 upcoming' : 'None yet';
   const myCirclesCount = Object.values(groups).filter((g) => !g.isGroupChat && g.joined).length;
 
@@ -63,36 +88,26 @@ export function MyPlace() {
     ? Math.round(PORTFOLIO.reduce((a, c) => a + c.collected * c.doors, 0) / pfDoors)
     : 0;
 
-  const approved = state.arcApprovedByBoard;
-  const arcNewTitle = state.arcType || 'Exterior update';
   const reportTypeLabel = state.reportType || 'Issue';
 
   // Payments card (owner only)
   const mpApLabel = state.apPaused ? 'Autopay paused' : 'Autopay · the 3rd';
-  const mpJulyStatus = state.paid
-    ? 'Paid Jul 1 · #P-2231'
-    : state.planActive
-      ? 'In plan · 3 × $190'
-      : delinquent
-        ? 'Past due'
-        : 'Due Jul 3';
-  const mpJulyBg = state.paid ? 'rgb(var(--mint))' : state.planActive ? 'rgb(var(--skypale))' : delinquent ? 'rgb(var(--blush))' : 'rgb(var(--goldpale))';
-  const mpJulyColor = state.paid ? 'rgb(var(--sagedark))' : state.planActive ? 'rgb(var(--skydeep))' : delinquent ? 'rgb(var(--terracotta))' : 'rgb(var(--golddark))';
-  const mpJuneStatus = !juneLate
-    ? 'Paid Jun 3 · #P-2168'
-    : state.paid
-      ? 'Paid Jul 1'
-      : state.planActive
-        ? 'In plan'
-        : 'Past due · 30 days';
-  const mpJuneBg = !juneLate || state.paid ? 'rgb(var(--mint))' : state.planActive ? 'rgb(var(--skypale))' : 'rgb(var(--blush))';
-  const mpJuneColor = !juneLate || state.paid ? 'rgb(var(--sagedark))' : state.planActive ? 'rgb(var(--skydeep))' : 'rgb(var(--terracotta))';
 
   const statusPill = (label: string, bg: string, color: string) => (
     <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0" style={{ background: bg, color }}>
       {label}
     </span>
   );
+
+  // Payments history rows come straight from the member's dues (empty in live).
+  const duesPillBg: Record<DuesStatus, string> = {
+    paid: 'rgb(var(--mint))', plan: 'rgb(var(--skypale))',
+    past_due: 'rgb(var(--blush))', due: 'rgb(var(--goldpale))',
+  };
+  const duesPillColor: Record<DuesStatus, string> = {
+    paid: 'rgb(var(--sagedark))', plan: 'rgb(var(--skydeep))',
+    past_due: 'rgb(var(--terracotta))', due: 'rgb(var(--golddark))',
+  };
 
   const payRow = (label: string, pill: ReactNode, last?: boolean, idx?: number) => (
     <div
@@ -115,10 +130,10 @@ export function MyPlace() {
 
       <div className="flex items-center gap-3.5 mb-[18px]">
         <div className="w-[58px] h-[58px] rounded-full bg-navy flex items-center justify-center text-cream font-extrabold text-[22px] flex-shrink-0">
-          A
+          {displayInitial}
         </div>
         <div>
-          <h1 className="m-0 mb-0.5 font-serif font-normal text-2xl text-navy">Alex Rivera</h1>
+          <h1 className="m-0 mb-0.5 font-serif font-normal text-2xl text-navy">{displayName}</h1>
           <p className="m-0 text-[12.5px] font-bold text-stone">
             {roleLabel}
           </p>
@@ -315,10 +330,18 @@ export function MyPlace() {
               <Toggle on={!state.apPaused} onToggle={() => setApConfirm(true)} />
             )}
           </div>
-          {payRow('July 2026 · $285', statusPill(mpJulyStatus, mpJulyBg, mpJulyColor), false, 0)}
-          {payRow('June 2026 · $285', statusPill(mpJuneStatus, mpJuneBg, mpJuneColor), false, 1)}
-          {payRow('May 2026 · $285', statusPill('Paid May 3 · #P-2103', 'rgb(var(--mint))', 'rgb(var(--sagedark))'), false, 2)}
-          {payRow('April 2026 · $285', statusPill('Paid Apr 3 · #P-2041', 'rgb(var(--mint))', 'rgb(var(--sagedark))'), true, 3)}
+          {dues.history.length === 0 ? (
+            <p className="m-0 py-2 text-[12.5px] font-semibold text-stone">No payments yet.</p>
+          ) : (
+            dues.history.map((d, i) =>
+              payRow(
+                `${d.period} 2026 · ${d.amountLabel}`,
+                statusPill(d.statusLabel, duesPillBg[d.status], duesPillColor[d.status]),
+                i === dues.history.length - 1,
+                i,
+              ),
+            )
+          )}
         </div>
       )}
 
@@ -467,13 +490,6 @@ export function MyPlace() {
       {/* My requests */}
       <div style={CARD}>
         <p className="m-0 mb-[11px] font-serif text-base text-navy">My requests</p>
-        {state.arcSubmitted && (
-          <Row divider onClick={() => set({ arcDetailId: 'A-121' })}>
-            <PhIcon name="ph-fill ph-pencil-ruler" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
-            <p className="m-0 flex-1 text-[13px] font-bold text-navy">{arcNewTitle} · #A-121</p>
-            {statusPill(approved ? 'Approved' : 'In review', approved ? 'rgb(var(--mint))' : 'rgb(var(--blush))', approved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))')}
-          </Row>
-        )}
         {state.reportSubmitted && (
           <Row divider>
             <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--terracotta))" className="flex-shrink-0" />
@@ -481,11 +497,26 @@ export function MyPlace() {
             {statusPill('In triage', 'rgb(var(--blush))', 'rgb(var(--terracotta))')}
           </Row>
         )}
-        <Row onClick={() => set({ arcDetailId: 'A-118' })}>
-          <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
-          <p className="m-0 flex-1 text-[13px] font-bold text-navy">Backyard pergola · #A-118</p>
-          {statusPill('Approved', 'rgb(var(--mint))', 'rgb(var(--sagedark))')}
-        </Row>
+        {arc.requests.length === 0 && !state.reportSubmitted ? (
+          <p className="m-0 text-[12.5px] font-semibold text-stone">No requests yet.</p>
+        ) : (
+          arc.requests.map((r, i) => (
+            <Row key={r.id} divider={i < arc.requests.length - 1} onClick={() => set({ arcDetailId: r.id })}>
+              <PhIcon
+                name={r.approved ? 'ph-fill ph-seal-check' : 'ph-fill ph-pencil-ruler'}
+                size={17}
+                color={r.approved ? 'rgb(var(--sage))' : 'rgb(var(--skydeep))'}
+                className="flex-shrink-0"
+              />
+              <p className="m-0 flex-1 text-[13px] font-bold text-navy">{r.title} · {r.ref}</p>
+              {statusPill(
+                r.statusLabel,
+                r.approved ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
+                r.approved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
+              )}
+            </Row>
+          ))
+        )}
       </div>
 
       {/* My groups */}
@@ -573,6 +604,7 @@ export function MyPlace() {
           )}
         </div>
         <button type="button" onClick={() => {
+          if (isLiveMode) { void signOutLive(); return; }
           localStorage.removeItem('pavilion-demo');
           resetDemoData();
           usePavStore.setState({ ...dataDefaults, loginOpen: true, epoch: usePavStore.getState().epoch + 1 });
