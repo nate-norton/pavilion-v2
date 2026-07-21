@@ -1,7 +1,6 @@
 import { PhIcon } from '../components/PhIcon';
-import { useDues, useMember, useNotifications, usePortfolio, useReservation } from '../data/repo';
+import { useDues, useMember, useNotifications, usePortfolio, useReservation, useVotes } from '../data/repo';
 import { usePavStore } from '../store/store';
-import { getAttention, getQuorum } from '../store/selectors';
 
 const ROW = 'flex items-center gap-[13px] cursor-pointer';
 const ROW_PAD = { padding: '14px 0' } as const;
@@ -20,8 +19,7 @@ export function Today() {
   const member = useMember();
   const firstName = member?.name.split(' ')[0] ?? '';
   const dues = useDues();
-  const { n, summary: attnSummary } = getAttention(state);
-  const { pct: quorumPct } = getQuorum(state);
+  const { open: vote } = useVotes();
 
   const isOwner = state.role === 'owner';
   const isTenant = state.role === 'tenant';
@@ -29,10 +27,22 @@ export function Today() {
 
   const showPayCardRole = !!dues.current && isOwner;
   const showArcCardRole = !state.arcSeen && isOwner;
-  const showVoteCardRole = !state.voted && (isOwner || isManager);
+  const showVoteCardRole = !!vote && !vote.myVote && (isOwner || isManager);
   const saCardShow = state.showSpecialAssessment && !state.saPaid;
   const violPendingCard = state.showViolation && !state.violFixed;
   const violFixedCard = state.showViolation && state.violFixed;
+
+  // "Needs you" counter — data-driven off the repo domains (empty for a fresh
+  // member). Dues + ARC are owner tasks; the open vote is owner/manager.
+  const ownerTasks = isOwner ? (dues.current ? 1 : 0) + (state.arcSeen ? 0 : 1) : 0;
+  const n = (showVoteCardRole ? 1 : 0) + ownerTasks;
+  const attnSummary =
+    n === 0
+      ? 'All caught up — enjoy the sunshine.'
+      : n === 1
+        ? 'One thing needs you before Thursday.'
+        : n + ' things need you before Thursday.';
+  const quorumPct = vote?.quorumPct ?? 0;
   const showAllClear = n === 0;
   const showAlert = state.showAlert && !state.alertDismissed;
   const showNudge = !state.nudgeDismissed;
@@ -155,7 +165,7 @@ export function Today() {
           <div onClick={() => set({ tab: 'hoa' })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
             <div className="flex-1 min-w-0">
-              <p className={ROW_TITLE}>Vote on the pool furniture</p>
+              <p className={ROW_TITLE}>{vote?.title ?? 'Open vote'}</p>
               <p className={ROW_SUB}>Closes Thursday · quorum at {quorumPct}%</p>
             </div>
             {CARET}

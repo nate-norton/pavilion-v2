@@ -3,8 +3,8 @@ import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { usePavStore } from '../store/store';
-import { getTriage, getBoardOpenCount, getQuorum } from '../store/selectors';
-import { useVendors, useAging } from '../data/repo';
+import { getTriage, getBoardOpenCount } from '../store/selectors';
+import { useVendors, useAging, useVotes } from '../data/repo';
 
 const BOARD_SEGS = [
   { key: 'desk', label: 'Desk' },
@@ -27,14 +27,16 @@ export function BoardDesk() {
   const exitBoard = () => set({ boardMode: false });
   const triage = getTriage(state);
   const boardOpenN = getBoardOpenCount(state);
-  const quorum = getQuorum(state);
+  const { open: vote } = useVotes();
+  const quorum = { count: vote?.quorumCount ?? 0, pct: vote?.quorumPct ?? 0 };
+  const quorumTotal = vote?.quorumTotal ?? 136;
 
   const arcNewTitle = state.arcType || 'Exterior update';
   const arcDescTrim = state.arcDesc.trim();
   const arcDescSnippet = arcDescTrim ? (arcDescTrim.length > 42 ? arcDescTrim.slice(0, 42) + '…' : arcDescTrim) : 'no description';
   const arcAwaitingBoard = state.arcSubmitted && !state.arcApprovedByBoard;
   const reportTypeLabel = state.reportType || 'Issue';
-  const nonVoters = 136 - quorum.count;
+  const nonVoters = quorumTotal - quorum.count;
   const canBc = state.bcText.trim().length > 0;
   const voteQPreview = state.voteQ.trim() || 'Your question appears here';
   const canPostVote = state.voteQ.trim().length > 0;
@@ -266,7 +268,7 @@ export function BoardDesk() {
                 QUORUM
               </span>
               <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
-                {quorum.count} of 136 households
+                {quorum.count} of {quorumTotal} households
               </span>
             </div>
             <div className="mb-[13px]">

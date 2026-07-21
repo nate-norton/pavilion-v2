@@ -41,6 +41,12 @@ export function useDues() {
   return useSyncExternalStore(repo.subscribe, () => repo.getDues());
 }
 
+/** The community's open ballot + this member's vote. `open` is null when none. */
+export function useVotes() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getVotes());
+}
+
 /**
  * Reads a domain slice through the repository. Seeds initial state from the
  * synchronous snapshot when the backend offers one (the mock → no loading

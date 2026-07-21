@@ -286,6 +286,68 @@ export type Database = {
           },
         ]
       }
+      vote_ballots: {
+        Row: { choice: string; created_at: string; id: string; profile_id: string; vote_id: string }
+        Insert: { choice: string; created_at?: string; id?: string; profile_id: string; vote_id: string }
+        Update: { choice?: string; created_at?: string; id?: string; profile_id?: string; vote_id?: string }
+        Relationships: [
+          { foreignKeyName: "vote_ballots_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+          { foreignKeyName: "vote_ballots_vote_id_fkey"; columns: ["vote_id"]; isOneToOne: false; referencedRelation: "votes"; referencedColumns: ["id"] },
+        ]
+      }
+      votes: {
+        Row: {
+          closes_label: string
+          community_id: string
+          created_at: string
+          id: string
+          no_count: number
+          no_label: string
+          quorum_count: number
+          quorum_total: number
+          receipt: string
+          status: string
+          subtitle: string
+          title: string
+          yes_count: number
+          yes_label: string
+        }
+        Insert: {
+          closes_label?: string
+          community_id: string
+          created_at?: string
+          id?: string
+          no_count?: number
+          no_label?: string
+          quorum_count?: number
+          quorum_total?: number
+          receipt?: string
+          status?: string
+          subtitle?: string
+          title: string
+          yes_count?: number
+          yes_label?: string
+        }
+        Update: {
+          closes_label?: string
+          community_id?: string
+          created_at?: string
+          id?: string
+          no_count?: number
+          no_label?: string
+          quorum_count?: number
+          quorum_total?: number
+          receipt?: string
+          status?: string
+          subtitle?: string
+          title?: string
+          yes_count?: number
+          yes_label?: string
+        }
+        Relationships: [
+          { foreignKeyName: "votes_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

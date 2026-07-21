@@ -62,6 +62,30 @@ export interface DuesState {
   history: DuesStatement[];
 }
 
+/** A community's single open ballot, plus this member's cast vote (if any). */
+export type VoteChoice = 'yes' | 'no';
+export interface OpenVote {
+  id: string;
+  title: string;
+  subtitle: string;
+  closesLabel: string;     // 'Open vote · Closes Thu, Jul 3'
+  quorumCount: number;     // households counted
+  quorumTotal: number;     // households needed
+  quorumPct: number;
+  yesCount: number;
+  noCount: number;
+  yesPct: number;
+  myVote: VoteChoice | null;
+  receipt: string;         // '#R-0482'
+  yesLabel: string;        // 'Yes, replace it'
+  noLabel: string;         // 'No, wait a year'
+}
+
+/** The votes surface. `open` is null when nothing is on the ballot (empty state). */
+export interface VotesState {
+  open: OpenVote | null;
+}
+
 /** The signed-in member's identity + their place in the community. */
 export interface MemberContext {
   name: string;
@@ -85,6 +109,11 @@ export interface Repository {
 
   /** The member's dues: the actionable statement + payment history (empty in live). */
   getDues(): DuesState;
+
+  /** The community's open ballot + this member's vote (open is null when none). */
+  getVotes(): VotesState;
+  /** Cast this member's ballot on the open vote. */
+  castVote(voteId: string, choice: VoteChoice): Promise<void>;
 
   // Reservations
   listAmenities(): Promise<Amenity[]>;

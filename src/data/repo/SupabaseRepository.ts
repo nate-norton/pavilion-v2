@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
-import type { DuesState, DuesStatement, DuesStatus, MemberContext, NewGroup, NewReservation, ReservationState, Repository } from './Repository';
+import type { DuesState, DuesStatement, DuesStatus, MemberContext, NewGroup, NewReservation, ReservationState, Repository, VoteChoice, VotesState } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -41,6 +41,7 @@ export class SupabaseRepository implements Repository {
   private cache = {
     member: null as MemberContext | null,
     dues: { current: null, cardTitle: '', cardSub: '', cardBtn: '', history: [] } as DuesState,
+    votes: { open: null } as VotesState,
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
     chats: {} as MockChatMap,
@@ -77,9 +78,53 @@ export class SupabaseRepository implements Repository {
     await this.resolveContext();
     await this.hydrateMember();
     await this.hydrateDues();
+    await this.hydrateVotes();
     await this.hydrateGroups();
     this.notify();
   }
+
+  // ── Votes (real, community-scoped; empty until the board opens a ballot) ────
+  getVotes = () => this.cache.votes;
+
+  private async hydrateVotes() {
+    if (!this.communityId) { this.cache.votes = { open: null }; return; }
+    const { data: vote } = await this.client.from('votes')
+      .select('*').eq('community_id', this.communityId).eq('status', 'open')
+      .order('created_at', { ascending: false }).limit(1).maybeSingle();
+    if (!vote) { this.cache.votes = { open: null }; return; }
+    let myVote: VoteChoice | null = null;
+    if (this.profileId) {
+      const { data: ballot } = await this.client.from('vote_ballots')
+        .select('choice').eq('vote_id', vote.id).eq('profile_id', this.profileId).maybeSingle();
+      myVote = (ballot?.choice as VoteChoice) ?? null;
+    }
+    const total = vote.yes_count + vote.no_count;
+    this.cache.votes = {
+      open: {
+        id: vote.id,
+        title: vote.title,
+        subtitle: vote.subtitle,
+        closesLabel: vote.closes_label,
+        quorumCount: vote.quorum_count,
+        quorumTotal: vote.quorum_total,
+        quorumPct: vote.quorum_total ? Math.round((vote.quorum_count / vote.quorum_total) * 100) : 0,
+        yesCount: vote.yes_count,
+        noCount: vote.no_count,
+        yesPct: total ? Math.round((vote.yes_count / total) * 100) : 0,
+        myVote,
+        receipt: vote.receipt,
+        yesLabel: vote.yes_label,
+        noLabel: vote.no_label,
+      },
+    };
+  }
+
+  castVote = async (voteId: string, choice: VoteChoice) => {
+    if (!this.profileId) return;
+    await this.client.from('vote_ballots')
+      .insert({ vote_id: voteId, profile_id: this.profileId, choice });
+    await this.refresh();
+  };
 
   // ── Dues (real, per-unit; empty until the board issues statements) ──────────
   getDues = () => this.cache.dues;

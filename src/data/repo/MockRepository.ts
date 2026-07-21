@@ -3,7 +3,7 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { DuesState, DuesStatement, MemberContext, NewGroup, NewReservation, Repository, RepositorySnapshot, SnapshotReadable } from './Repository';
+import type { DuesState, DuesStatement, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, VoteChoice, VotesState } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
 import { usePavStore } from '../../store/store';
@@ -75,6 +75,39 @@ export class MockRepository implements Repository, SnapshotReadable {
     };
     this.duesCache = { sig, value };
     return value;
+  };
+
+  // Votes derived from the demo scenario (voted, reminderSent), mirroring the
+  // old getQuorum/getTally selectors so the board reminder + ballot flows work.
+  private votesCache: { sig: string; value: VotesState } | null = null;
+  getVotes = (): VotesState => {
+    const { voted, reminderSent } = usePavStore.getState();
+    const sig = `${voted}|${reminderSent}`;
+    if (this.votesCache?.sig === sig) return this.votesCache.value;
+
+    const quorumCount = 87 + (voted ? 1 : 0) + (reminderSent ? 6 : 0);
+    const yesCount = 61 + (voted === 'yes' ? 1 : 0);
+    const noCount = 26 + (voted === 'no' ? 1 : 0);
+    const open: OpenVote = {
+      id: 'pool-furniture',
+      title: 'Replace the pool furniture',
+      subtitle: '$18,400 from reserves · 3 bids reviewed · lowest responsible bidder',
+      closesLabel: 'Open vote · Closes Thu, Jul 3',
+      quorumCount, quorumTotal: 136,
+      quorumPct: Math.round((quorumCount / 136) * 100),
+      yesCount, noCount,
+      yesPct: Math.round((yesCount / (yesCount + noCount)) * 100),
+      myVote: voted,
+      receipt: '#R-0482',
+      yesLabel: 'Yes, replace it',
+      noLabel: 'No, wait a year',
+    };
+    const value: VotesState = { open };
+    this.votesCache = { sig, value };
+    return value;
+  };
+  castVote = async (_voteId: string, choice: VoteChoice) => {
+    usePavStore.getState().set({ voted: choice });
   };
 
   listAmenities = async () => AMENS;
