@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      arc_requests: {
+        Row: {
+          approved: boolean
+          community_id: string
+          created_at: string
+          id: string
+          ref: string
+          sort_order: number
+          status: string
+          status_label: string
+          steps: Json
+          title: string
+          unit_id: string
+        }
+        Insert: {
+          approved?: boolean
+          community_id: string
+          created_at?: string
+          id?: string
+          ref: string
+          sort_order?: number
+          status?: string
+          status_label?: string
+          steps?: Json
+          title: string
+          unit_id: string
+        }
+        Update: {
+          approved?: boolean
+          community_id?: string
+          created_at?: string
+          id?: string
+          ref?: string
+          sort_order?: number
+          status?: string
+          status_label?: string
+          steps?: Json
+          title?: string
+          unit_id?: string
+        }
+        Relationships: [
+          { foreignKeyName: "arc_requests_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "arc_requests_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
+        ]
+      }
       communities: {
         Row: {
           brand: Json

@@ -3,7 +3,7 @@ import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
-import { useDues, useMember, usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
+import { useArc, useDues, useMember, usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
 import type { DuesStatus } from '../data/repo';
 import { isLiveMode, signOutLive } from '../auth/AuthGate';
 
@@ -37,6 +37,7 @@ export function MyPlace() {
   const groups = useGroups();
   const member = useMember();
   const dues = useDues();
+  const arc = useArc();
 
   const [apConfirm, setApConfirm] = useState(false);
 
@@ -87,8 +88,6 @@ export function MyPlace() {
     ? Math.round(PORTFOLIO.reduce((a, c) => a + c.collected * c.doors, 0) / pfDoors)
     : 0;
 
-  const approved = state.arcApprovedByBoard;
-  const arcNewTitle = state.arcType || 'Exterior update';
   const reportTypeLabel = state.reportType || 'Issue';
 
   // Payments card (owner only)
@@ -491,13 +490,6 @@ export function MyPlace() {
       {/* My requests */}
       <div style={CARD}>
         <p className="m-0 mb-[11px] font-serif text-base text-navy">My requests</p>
-        {state.arcSubmitted && (
-          <Row divider onClick={() => set({ arcDetailId: 'A-121' })}>
-            <PhIcon name="ph-fill ph-pencil-ruler" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
-            <p className="m-0 flex-1 text-[13px] font-bold text-navy">{arcNewTitle} · #A-121</p>
-            {statusPill(approved ? 'Approved' : 'In review', approved ? 'rgb(var(--mint))' : 'rgb(var(--blush))', approved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))')}
-          </Row>
-        )}
         {state.reportSubmitted && (
           <Row divider>
             <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--terracotta))" className="flex-shrink-0" />
@@ -505,11 +497,26 @@ export function MyPlace() {
             {statusPill('In triage', 'rgb(var(--blush))', 'rgb(var(--terracotta))')}
           </Row>
         )}
-        <Row onClick={() => set({ arcDetailId: 'A-118' })}>
-          <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
-          <p className="m-0 flex-1 text-[13px] font-bold text-navy">Backyard pergola · #A-118</p>
-          {statusPill('Approved', 'rgb(var(--mint))', 'rgb(var(--sagedark))')}
-        </Row>
+        {arc.requests.length === 0 && !state.reportSubmitted ? (
+          <p className="m-0 text-[12.5px] font-semibold text-stone">No requests yet.</p>
+        ) : (
+          arc.requests.map((r, i) => (
+            <Row key={r.id} divider={i < arc.requests.length - 1} onClick={() => set({ arcDetailId: r.id })}>
+              <PhIcon
+                name={r.approved ? 'ph-fill ph-seal-check' : 'ph-fill ph-pencil-ruler'}
+                size={17}
+                color={r.approved ? 'rgb(var(--sage))' : 'rgb(var(--skydeep))'}
+                className="flex-shrink-0"
+              />
+              <p className="m-0 flex-1 text-[13px] font-bold text-navy">{r.title} · {r.ref}</p>
+              {statusPill(
+                r.statusLabel,
+                r.approved ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
+                r.approved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
+              )}
+            </Row>
+          ))
+        )}
       </div>
 
       {/* My groups */}

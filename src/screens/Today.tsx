@@ -1,5 +1,5 @@
 import { PhIcon } from '../components/PhIcon';
-import { useAssessment, useDues, useMember, useNotifications, usePortfolio, useReservation, useViolation, useVotes } from '../data/repo';
+import { useArc, useAssessment, useDues, useMember, useNotifications, usePortfolio, useReservation, useViolation, useVotes } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 const ROW = 'flex items-center gap-[13px] cursor-pointer';
@@ -22,13 +22,14 @@ export function Today() {
   const { open: vote } = useVotes();
   const violation = useViolation();
   const assessment = useAssessment();
+  const arc = useArc();
 
   const isOwner = state.role === 'owner';
   const isTenant = state.role === 'tenant';
   const isManager = state.role === 'manager';
 
   const showPayCardRole = !!dues.current && isOwner;
-  const showArcCardRole = !state.arcSeen && isOwner;
+  const showArcCardRole = !!arc.unseenApproval && isOwner;
   const showVoteCardRole = !!vote && !vote.myVote && (isOwner || isManager);
   const saCardShow = !!assessment && !assessment.paid;
   const violPendingCard = !!violation && !violation.fixed;
@@ -36,7 +37,7 @@ export function Today() {
 
   // "Needs you" counter — data-driven off the repo domains (empty for a fresh
   // member). Dues + ARC are owner tasks; the open vote is owner/manager.
-  const ownerTasks = isOwner ? (dues.current ? 1 : 0) + (state.arcSeen ? 0 : 1) : 0;
+  const ownerTasks = isOwner ? (dues.current ? 1 : 0) + (arc.unseenApproval ? 1 : 0) : 0;
   const n = (showVoteCardRole ? 1 : 0) + ownerTasks;
   const attnSummary =
     n === 0
@@ -212,8 +213,8 @@ export function Today() {
           <div onClick={() => set({ arcSeen: true, tab: 'hoa' })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--claypale))' }} />
             <div className="flex-1 min-w-0">
-              <p className={ROW_TITLE}>Your pergola was approved</p>
-              <p className={ROW_SUB}>ARC #A-118 · reviewed in 6 days</p>
+              <p className={ROW_TITLE}>{arc.unseenApproval?.title}</p>
+              <p className={ROW_SUB}>{arc.unseenApproval?.sub}</p>
             </div>
             {CARET}
           </div>

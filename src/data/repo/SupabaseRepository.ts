@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
-import type { DuesState, DuesStatement, DuesStatus, MemberContext, NewGroup, NewReservation, ReservationState, Repository, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcState, ArcStep, DuesState, DuesStatement, DuesStatus, MemberContext, NewGroup, NewReservation, ReservationState, Repository, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -44,6 +44,7 @@ export class SupabaseRepository implements Repository {
     votes: { open: null } as VotesState,
     violation: null as ViolationNotice | null,
     assessment: null as SpecialAssessment | null,
+    arc: { requests: [], unseenApproval: null } as ArcState,
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
     chats: {} as MockChatMap,
@@ -82,8 +83,29 @@ export class SupabaseRepository implements Repository {
     await this.hydrateDues();
     await this.hydrateVotes();
     await this.hydrateCompliance();
+    await this.hydrateArc();
     await this.hydrateGroups();
     this.notify();
+  }
+
+  // ── ARC (real, per-unit; empty for a fresh member) ──────────────────────────
+  getArc = () => this.cache.arc;
+
+  private async hydrateArc() {
+    if (!this.unitId) { this.cache.arc = { requests: [], unseenApproval: null }; return; }
+    const { data: rows } = await this.client.from('arc_requests')
+      .select('*').eq('unit_id', this.unitId).order('sort_order');
+    this.cache.arc = {
+      requests: (rows ?? []).map((r) => ({
+        id: r.id,
+        ref: r.ref,
+        title: r.title,
+        approved: r.approved,
+        statusLabel: r.status_label,
+        steps: (r.steps as unknown as ArcStep[]) ?? [],
+      })),
+      unseenApproval: null,
+    };
   }
 
   // ── Compliance (violation + special assessment; empty for a fresh member) ───

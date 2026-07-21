@@ -62,6 +62,27 @@ export interface DuesState {
   history: DuesStatement[];
 }
 
+/** One architectural-review request on the member's unit. */
+export interface ArcStep {
+  label: string;
+  state: 'done' | 'active' | 'pending';
+}
+export interface ArcRequest {
+  id: string;          // 'A-118'
+  ref: string;         // '#A-118'
+  title: string;       // 'Backyard pergola'
+  approved: boolean;
+  statusLabel: string; // 'Approved' / 'In review'
+  steps: ArcStep[];
+}
+
+/** The member's ARC surface: their requests + an unseen approval to surface. */
+export interface ArcState {
+  requests: ArcRequest[];
+  /** Drives the Today "approved" card; null when nothing new to surface. */
+  unseenApproval: { title: string; sub: string } | null;
+}
+
 /** A courtesy notice / violation on the member's unit (null when compliant). */
 export interface ViolationNotice {
   id: string;
@@ -135,6 +156,9 @@ export interface Repository {
   getViolation(): ViolationNotice | null;
   /** The member's one-time special assessment (null when none). */
   getAssessment(): SpecialAssessment | null;
+
+  /** The member's ARC requests + any unseen approval (empty for a fresh member). */
+  getArc(): ArcState;
 
   // Reservations
   listAmenities(): Promise<Amenity[]>;

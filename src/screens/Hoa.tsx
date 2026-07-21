@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusTimeline } from '../components/StatusTimeline';
-import type { StatusStep } from '../components/StatusTimeline';
 import { Confetti } from '../components/Confetti';
 import { usePavStore } from '../store/store';
-import { useVotes, useRepository } from '../data/repo';
+import { useVotes, useArc, useRepository } from '../data/repo';
 
 const DUES_LEGEND = [
   { label: 'Landscaping', amount: '$78', color: 'rgb(var(--sage))' },
@@ -44,18 +43,7 @@ export function Hoa() {
   const voteYes = () => { if (vote) repo.castVote(vote.id, 'yes'); };
   const voteNo = () => { if (vote) repo.castVote(vote.id, 'no'); };
 
-  const approved = state.arcApprovedByBoard;
-  const arcNewTitle = state.arcType || 'Exterior update';
-  const arcNewSteps: StatusStep[] = [
-    { label: 'Submitted Jul 1', state: 'done' },
-    { label: 'Board review', state: approved ? 'done' : 'active' },
-    { label: 'Decision', state: approved ? 'done' : 'pending' },
-  ];
-  const pergolaSteps: StatusStep[] = [
-    { label: 'Submitted Jun 12', state: 'done' },
-    { label: 'Reviewed Jun 16', state: 'done' },
-    { label: 'Approved Jun 18', state: 'done' },
-  ];
+  const arc = useArc();
 
   return (
     <div className="absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: '64px 18px 150px' }}>
@@ -291,33 +279,33 @@ export function Hoa() {
           </button>
         </div>
 
-        {state.arcSubmitted && (
-          <div onClick={() => set({ arcDetailId: 'A-121' })} className="bg-cream rounded-2xl px-3.5 py-[13px] mb-2.5 animate-fadeup cursor-pointer">
-            <div className="flex items-center justify-between gap-2.5 mb-3">
-              <p className="m-0 text-[13.5px] font-bold text-navy">{arcNewTitle} · #A-121</p>
-              <span
-                className="rounded-full px-2.5 py-1 text-[11px] font-bold"
-                style={{
-                  background: approved ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
-                  color: approved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
-                }}
-              >
-                {approved ? 'Approved' : 'In review'}
-              </span>
+        {arc.requests.length === 0 ? (
+          <p className="m-0 py-1 text-[12.5px] font-semibold text-stone">
+            No requests yet. Start one with “+ New request”.
+          </p>
+        ) : (
+          arc.requests.map((r, i) => (
+            <div
+              key={r.id}
+              onClick={() => set({ arcDetailId: r.id })}
+              className={`bg-cream rounded-2xl px-3.5 py-[13px] cursor-pointer${i < arc.requests.length - 1 ? ' mb-2.5' : ''}`}
+            >
+              <div className="flex items-center justify-between gap-2.5 mb-3">
+                <p className="m-0 text-[13.5px] font-bold text-navy">{r.title} · {r.ref}</p>
+                <span
+                  className="rounded-full px-2.5 py-1 text-[11px] font-bold"
+                  style={{
+                    background: r.approved ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
+                    color: r.approved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
+                  }}
+                >
+                  {r.statusLabel}
+                </span>
+              </div>
+              <StatusTimeline steps={r.steps} />
             </div>
-            <StatusTimeline steps={arcNewSteps} />
-          </div>
+          ))
         )}
-
-        <div onClick={() => set({ arcDetailId: 'A-118' })} className="bg-cream rounded-2xl px-3.5 py-[13px] cursor-pointer">
-          <div className="flex items-center justify-between gap-2.5 mb-3">
-            <p className="m-0 text-[13.5px] font-bold text-navy">Backyard pergola · #A-118</p>
-            <span className="rounded-full px-2.5 py-1 text-[11px] font-bold" style={{ background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' }}>
-              Approved
-            </span>
-          </div>
-          <StatusTimeline steps={pergolaSteps} />
-        </div>
       </div>
 
       {/* Known issues */}

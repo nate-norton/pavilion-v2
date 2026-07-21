@@ -3,7 +3,7 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { DuesState, DuesStatement, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcRequest, ArcState, DuesState, DuesStatement, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
 import { usePavStore } from '../../store/store';
@@ -138,6 +138,43 @@ export class MockRepository implements Repository, SnapshotReadable {
       paid: saPaid,
     };
     this.saCache = { sig, value };
+    return value;
+  };
+
+  // ARC derived from the demo scenario (arcSubmitted, arcApprovedByBoard,
+  // arcType, arcSeen), memoized so useSyncExternalStore gets a stable ref.
+  private arcCache: { sig: string; value: ArcState } | null = null;
+  getArc = (): ArcState => {
+    const { arcSubmitted, arcApprovedByBoard, arcType, arcSeen } = usePavStore.getState();
+    const sig = `${arcSubmitted}|${arcApprovedByBoard}|${arcType}|${arcSeen}`;
+    if (this.arcCache?.sig === sig) return this.arcCache.value;
+
+    const pergola: ArcRequest = {
+      id: 'A-118', ref: '#A-118', title: 'Backyard pergola', approved: true, statusLabel: 'Approved',
+      steps: [
+        { label: 'Submitted Jun 12', state: 'done' },
+        { label: 'Reviewed Jun 16', state: 'done' },
+        { label: 'Approved Jun 18', state: 'done' },
+      ],
+    };
+    const requests: ArcRequest[] = [];
+    if (arcSubmitted) {
+      requests.push({
+        id: 'A-121', ref: '#A-121', title: arcType || 'Exterior update',
+        approved: arcApprovedByBoard, statusLabel: arcApprovedByBoard ? 'Approved' : 'In review',
+        steps: [
+          { label: 'Submitted Jul 1', state: 'done' },
+          { label: 'Board review', state: arcApprovedByBoard ? 'done' : 'active' },
+          { label: 'Decision', state: arcApprovedByBoard ? 'done' : 'pending' },
+        ],
+      });
+    }
+    requests.push(pergola);
+    const value: ArcState = {
+      requests,
+      unseenApproval: arcSeen ? null : { title: 'Your pergola was approved', sub: 'ARC #A-118 · reviewed in 6 days' },
+    };
+    this.arcCache = { sig, value };
     return value;
   };
 

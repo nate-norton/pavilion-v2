@@ -59,6 +59,12 @@ export function useAssessment() {
   return useSyncExternalStore(repo.subscribe, () => repo.getAssessment());
 }
 
+/** The member's ARC requests + any unseen approval (empty for a fresh member). */
+export function useArc() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getArc());
+}
+
 /**
  * Reads a domain slice through the repository. Seeds initial state from the
  * synchronous snapshot when the backend offers one (the mock → no loading
