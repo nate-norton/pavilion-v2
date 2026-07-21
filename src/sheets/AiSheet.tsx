@@ -2,13 +2,16 @@ import { useEffect, useRef } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { TypingDots } from '../components/TypingDots';
 import { usePavStore } from '../store/store';
-import { useAiQA } from '../data/repo';
+import { useAiQA, useRepository } from '../data/repo';
 
 /** AI scripted-assistant sheet — ported from prototype lines 1399-1449. */
 export function AiSheet() {
   const state = usePavStore();
   const { set, msgs, typing, aiInput, askAiChip, sendAiMessage } = state;
   const QA = useAiQA();
+  // The scripted assistant is demo-only; live stubs the sheet until a real
+  // document-grounded assistant exists — no canned answers in production.
+  const demo = useRepository().isDemo();
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,7 +60,7 @@ export function AiSheet() {
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[15px] font-bold text-navy">AI</p>
             <p className="m-0 text-[11.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
-              Answers cite Juniper Ridge&apos;s actual documents
+              {demo ? "Answers cite Juniper Ridge's actual documents" : 'Coming soon'}
             </p>
           </div>
           <button
@@ -68,6 +71,17 @@ export function AiSheet() {
           </button>
         </div>
 
+        {!demo ? (
+          <div className="flex-1 flex flex-col items-center justify-center px-8 pb-10 text-center">
+            <PhIcon name="ph-fill ph-sparkle" size={30} color="rgb(var(--claypale))" />
+            <p className="m-0 mt-3 text-[15px] font-bold text-navy">Ask AI is on the way</p>
+            <p className="m-0 mt-1.5 text-[13px] font-semibold leading-[1.5] text-stone">
+              It will answer questions about rules, dues, and amenities — grounded in your
+              community&apos;s actual documents, with citations.
+            </p>
+          </div>
+        ) : (
+        <>
         <div
           ref={listRef}
           data-ai-scroll
@@ -148,6 +162,8 @@ export function AiSheet() {
             <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--cream))" />
           </button>
         </div>
+        </>
+        )}
       </div>
     </div>
   );
