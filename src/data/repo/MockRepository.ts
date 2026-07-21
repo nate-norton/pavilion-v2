@@ -3,9 +3,10 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { MemberContext, NewGroup, NewReservation, Repository, RepositorySnapshot, SnapshotReadable } from './Repository';
+import type { DuesState, DuesStatement, MemberContext, NewGroup, NewReservation, Repository, RepositorySnapshot, SnapshotReadable } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
+import { usePavStore } from '../../store/store';
 
 /** The demo persona (stable reference for useSyncExternalStore). */
 const DEMO_MEMBER: MemberContext = {
@@ -32,6 +33,49 @@ export class MockRepository implements Repository, SnapshotReadable {
   subscribe = mockDomain.subscribe;
 
   getMember = () => DEMO_MEMBER;
+
+  // Dues are derived from the demo scenario flags so the DemoPanel keeps
+  // driving the cards. Memoized on the flags so useSyncExternalStore gets a
+  // stable reference between unrelated store changes.
+  private duesCache: { sig: string; value: DuesState } | null = null;
+  getDues = (): DuesState => {
+    const { paid, planActive, showDelinquent } = usePavStore.getState();
+    const delinquent = showDelinquent && !paid && !planActive;
+    const sig = `${paid}|${planActive}|${showDelinquent}`;
+    if (this.duesCache?.sig === sig) return this.duesCache.value;
+
+    const july: DuesStatement = {
+      id: 'jul', period: 'July', amountLabel: '$285',
+      status: paid ? 'paid' : planActive ? 'plan' : delinquent ? 'past_due' : 'due',
+      statusLabel: paid ? 'Paid Jul 1 · #P-2231' : planActive ? 'In plan · 3 × $190' : delinquent ? 'Past due' : 'Due Jul 3',
+      confirmation: paid ? '#P-2231' : null,
+    };
+    const june: DuesStatement = {
+      id: 'jun', period: 'June', amountLabel: '$285',
+      status: !showDelinquent || paid ? 'paid' : planActive ? 'plan' : 'past_due',
+      statusLabel: !showDelinquent ? 'Paid Jun 3 · #P-2168' : paid ? 'Paid Jul 1' : planActive ? 'In plan' : 'Past due · 30 days',
+      confirmation: !showDelinquent ? '#P-2168' : null,
+    };
+    const may: DuesStatement = {
+      id: 'may', period: 'May', amountLabel: '$285', status: 'paid',
+      statusLabel: 'Paid May 3 · #P-2103', confirmation: '#P-2103',
+    };
+    const april: DuesStatement = {
+      id: 'apr', period: 'April', amountLabel: '$285', status: 'paid',
+      statusLabel: 'Paid Apr 3 · #P-2041', confirmation: '#P-2041',
+    };
+    const value: DuesState = {
+      current: paid ? null : july,
+      cardTitle: planActive && !paid ? 'Payment plan active' : delinquent ? 'Dues are past due' : 'July dues are ready',
+      cardSub: planActive && !paid ? '3 × $190 · next runs Jul 3 · no fees'
+        : delinquent ? '$570 · 30 days · courtesy period, no fees yet'
+          : '$285 · same as June · itemized inside',
+      cardBtn: planActive && !paid ? 'View plan' : 'Review & pay',
+      history: [july, june, may, april],
+    };
+    this.duesCache = { sig, value };
+    return value;
+  };
 
   listAmenities = async () => AMENS;
   getReservationSlots = async () => SLOTS;

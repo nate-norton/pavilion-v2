@@ -41,6 +41,63 @@ export type Database = {
         }
         Relationships: []
       }
+      dues_statements: {
+        Row: {
+          amount_cents: number
+          card_btn: string
+          card_sub: string
+          card_title: string
+          community_id: string
+          confirmation: string | null
+          created_at: string
+          id: string
+          is_current: boolean
+          period: string
+          period_label: string
+          sort_order: number
+          status: string
+          status_label: string
+          unit_id: string
+        }
+        Insert: {
+          amount_cents: number
+          card_btn?: string
+          card_sub?: string
+          card_title?: string
+          community_id: string
+          confirmation?: string | null
+          created_at?: string
+          id?: string
+          is_current?: boolean
+          period: string
+          period_label?: string
+          sort_order?: number
+          status?: string
+          status_label?: string
+          unit_id: string
+        }
+        Update: {
+          amount_cents?: number
+          card_btn?: string
+          card_sub?: string
+          card_title?: string
+          community_id?: string
+          confirmation?: string | null
+          created_at?: string
+          id?: string
+          is_current?: boolean
+          period?: string
+          period_label?: string
+          sort_order?: number
+          status?: string
+          status_label?: string
+          unit_id?: string
+        }
+        Relationships: [
+          { foreignKeyName: "dues_statements_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "dues_statements_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
+        ]
+      }
       group_event_rsvps: {
         Row: { created_at: string; event_id: string; id: string; profile_id: string }
         Insert: { created_at?: string; event_id: string; id?: string; profile_id: string }

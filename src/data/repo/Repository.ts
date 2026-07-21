@@ -37,6 +37,31 @@ export interface NewReservation {
   hours: 1 | 2;
 }
 
+/** A single dues assessment — one row of the member's payment history. */
+export type DuesStatus = 'due' | 'paid' | 'past_due' | 'plan';
+export interface DuesStatement {
+  id: string;
+  period: string;         // 'July'
+  amountLabel: string;    // '$285'
+  status: DuesStatus;
+  statusLabel: string;    // 'Due Jul 3' / 'Paid Jun 3 · #P-2168'
+  confirmation: string | null;
+}
+
+/**
+ * The member's dues surface. `current` is the one actionable statement the
+ * Today screen offers to pay (null → nothing owed → no card); `history` feeds
+ * the MyPlace payments list. The card* strings are the Today headline/subline/
+ * button, carried here so the copy stays a data concern (empty in live).
+ */
+export interface DuesState {
+  current: DuesStatement | null;
+  cardTitle: string;
+  cardSub: string;
+  cardBtn: string;
+  history: DuesStatement[];
+}
+
 /** The signed-in member's identity + their place in the community. */
 export interface MemberContext {
   name: string;
@@ -57,6 +82,9 @@ export interface Repository {
 
   /** The current member's identity/community. null until resolved (live mode). */
   getMember(): MemberContext | null;
+
+  /** The member's dues: the actionable statement + payment history (empty in live). */
+  getDues(): DuesState;
 
   // Reservations
   listAmenities(): Promise<Amenity[]>;

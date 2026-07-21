@@ -3,7 +3,7 @@ import { MockRepository } from './MockRepository';
 import { SupabaseRepository } from './SupabaseRepository';
 import { mockDomain } from './mockDomainStore';
 
-export type { Repository, RepositorySnapshot } from './Repository';
+export type { Repository, RepositorySnapshot, MemberContext, DuesState, DuesStatement, DuesStatus } from './Repository';
 export { MockRepository } from './MockRepository';
 export { SupabaseRepository } from './SupabaseRepository';
 export { RepositoryProvider, useRepository } from './context';

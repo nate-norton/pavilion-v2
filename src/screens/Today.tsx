@@ -1,7 +1,7 @@
 import { PhIcon } from '../components/PhIcon';
-import { useMember, useNotifications, usePortfolio, useReservation } from '../data/repo';
+import { useDues, useMember, useNotifications, usePortfolio, useReservation } from '../data/repo';
 import { usePavStore } from '../store/store';
-import { getAttention, getDelinquent, getQuorum } from '../store/selectors';
+import { getAttention, getQuorum } from '../store/selectors';
 
 const ROW = 'flex items-center gap-[13px] cursor-pointer';
 const ROW_PAD = { padding: '14px 0' } as const;
@@ -19,15 +19,15 @@ export function Today() {
   const reservation = useReservation();
   const member = useMember();
   const firstName = member?.name.split(' ')[0] ?? '';
+  const dues = useDues();
   const { n, summary: attnSummary } = getAttention(state);
   const { pct: quorumPct } = getQuorum(state);
-  const delinquent = getDelinquent(state);
 
   const isOwner = state.role === 'owner';
   const isTenant = state.role === 'tenant';
   const isManager = state.role === 'manager';
 
-  const showPayCardRole = !state.paid && isOwner;
+  const showPayCardRole = !!dues.current && isOwner;
   const showArcCardRole = !state.arcSeen && isOwner;
   const showVoteCardRole = !state.voted && (isOwner || isManager);
   const saCardShow = state.showSpecialAssessment && !state.saPaid;
@@ -47,19 +47,9 @@ export function Today() {
 
   const hasBooking = reservation.booked && !!reservation.summary;
 
-  const payCardTitle =
-    state.planActive && !state.paid
-      ? 'Payment plan active'
-      : delinquent
-        ? 'Dues are past due'
-        : 'July dues are ready';
-  const payCardSub =
-    state.planActive && !state.paid
-      ? '3 × $190 · next runs Jul 3 · no fees'
-      : delinquent
-        ? '$570 · 30 days · courtesy period, no fees yet'
-        : '$285 · same as June · itemized inside';
-  const payCardBtn = state.planActive && !state.paid ? 'View plan' : 'Review & pay';
+  const payCardTitle = dues.cardTitle;
+  const payCardSub = dues.cardSub;
+  const payCardBtn = dues.cardBtn;
 
   const pfDoors = PORTFOLIO.reduce((a, c) => a + c.doors, 0);
   const pfOpen = PORTFOLIO.reduce((a, c) => a + c.open, 0);

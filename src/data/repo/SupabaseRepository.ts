@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
-import type { MemberContext, NewGroup, NewReservation, ReservationState, Repository } from './Repository';
+import type { DuesState, DuesStatement, DuesStatus, MemberContext, NewGroup, NewReservation, ReservationState, Repository } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -35,10 +35,12 @@ export class SupabaseRepository implements Repository {
   private client: SupabaseClient<Database>;
   private profileId: string | null = null;
   private communityId: string | null = null;
+  private unitId: string | null = null;
   private hydrated = false;
 
   private cache = {
     member: null as MemberContext | null,
+    dues: { current: null, cardTitle: '', cardSub: '', cardBtn: '', history: [] } as DuesState,
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
     chats: {} as MockChatMap,
@@ -63,18 +65,47 @@ export class SupabaseRepository implements Repository {
     if (!user) { this.profileId = null; this.communityId = null; return; }
     const { data: profile } = await this.client.from('profiles').select('id').eq('user_id', user.id).maybeSingle();
     this.profileId = profile?.id ?? null;
-    if (!this.profileId) { this.communityId = null; return; }
+    if (!this.profileId) { this.communityId = null; this.unitId = null; return; }
     const { data: membership } = await this.client.from('memberships')
-      .select('community_id').eq('profile_id', this.profileId).eq('status', 'active').maybeSingle();
+      .select('community_id, unit_id').eq('profile_id', this.profileId).eq('status', 'active').maybeSingle();
     this.communityId = membership?.community_id ?? null;
+    this.unitId = membership?.unit_id ?? null;
   }
 
   /** Re-read the current user's context + domain slices, then notify. */
   private async refresh() {
     await this.resolveContext();
     await this.hydrateMember();
+    await this.hydrateDues();
     await this.hydrateGroups();
     this.notify();
+  }
+
+  // ── Dues (real, per-unit; empty until the board issues statements) ──────────
+  getDues = () => this.cache.dues;
+
+  private async hydrateDues() {
+    const empty: DuesState = { current: null, cardTitle: '', cardSub: '', cardBtn: '', history: [] };
+    if (!this.unitId) { this.cache.dues = empty; return; }
+    const { data: rows } = await this.client.from('dues_statements')
+      .select('*').eq('unit_id', this.unitId).order('sort_order');
+    if (!rows || rows.length === 0) { this.cache.dues = empty; return; }
+    const toStatement = (r: Database['public']['Tables']['dues_statements']['Row']): DuesStatement => ({
+      id: r.id,
+      period: r.period_label || r.period,
+      amountLabel: `$${(r.amount_cents / 100).toLocaleString('en-US')}`,
+      status: r.status as DuesStatus,
+      statusLabel: r.status_label,
+      confirmation: r.confirmation,
+    });
+    const currentRow = rows.find((r) => r.is_current && r.status !== 'paid');
+    this.cache.dues = {
+      current: currentRow ? toStatement(currentRow) : null,
+      cardTitle: currentRow?.card_title ?? '',
+      cardSub: currentRow?.card_sub ?? '',
+      cardBtn: currentRow?.card_btn ?? '',
+      history: rows.map(toStatement),
+    };
   }
 
   // ── Member identity (real, from profile + membership) ───────────────────────

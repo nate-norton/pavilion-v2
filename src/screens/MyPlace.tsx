@@ -3,8 +3,8 @@ import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
-import { getDelinquent } from '../store/selectors';
-import { useMember, usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
+import { useDues, useMember, usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
+import type { DuesStatus } from '../data/repo';
 import { isLiveMode, signOutLive } from '../auth/AuthGate';
 
 const CARD: CSSProperties = {
@@ -36,6 +36,7 @@ export function MyPlace() {
   const reservation = useReservation();
   const groups = useGroups();
   const member = useMember();
+  const dues = useDues();
 
   const [apConfirm, setApConfirm] = useState(false);
 
@@ -44,8 +45,6 @@ export function MyPlace() {
   const isOwner = state.role === 'owner';
   const isManager = state.role === 'manager';
   const isTenant = state.role === 'tenant';
-  const delinquent = getDelinquent(state);
-  const juneLate = state.showDelinquent;
 
   // Live mode: identity comes from the signed-in member's profile + membership.
   // Demo mode: keep the scripted owner/tenant/manager scenario labels.
@@ -62,11 +61,24 @@ export function MyPlace() {
         : '#27 Alder Way · Owner · here since 2021';
   const displayName = member?.name ?? 'Alex Rivera';
   const displayInitial = member?.initial ?? 'A';
-  const duesLabel = state.paid ? 'Paid · Jul 1' : state.planActive ? 'Plan active' : delinquent ? '30 days late' : 'Due Jul 3';
+  // Dues stat tile — data-driven off the member's dues (empty for a fresh member).
+  const duesStatus: DuesStatus | null = dues.current?.status ?? (dues.history[0] ? 'paid' : null);
+  const duesLabel =
+    duesStatus === 'paid' ? 'Paid · Jul 1'
+      : duesStatus === 'plan' ? 'Plan active'
+        : duesStatus === 'past_due' ? '30 days late'
+          : duesStatus === 'due' ? 'Due Jul 3'
+            : '—';
   const statOneLabel = isTenant ? 'Lease' : isManager ? 'Role' : 'Dues';
   const statOneValue = isTenant ? 'Active' : isManager ? 'Manager' : duesLabel;
-  const duesBg = state.paid ? 'rgb(var(--mint))' : state.planActive ? 'rgb(var(--skypale))' : 'rgb(var(--blush))';
-  const duesColor = state.paid ? 'rgb(var(--sagedark))' : state.planActive ? 'rgb(var(--skydeep))' : 'rgb(var(--terracotta))';
+  const duesBg = duesStatus === 'paid' ? 'rgb(var(--mint))'
+    : duesStatus === 'plan' ? 'rgb(var(--skypale))'
+      : duesStatus === 'due' || duesStatus === 'past_due' ? 'rgb(var(--blush))'
+        : 'rgb(var(--paper))';
+  const duesColor = duesStatus === 'paid' ? 'rgb(var(--sagedark))'
+    : duesStatus === 'plan' ? 'rgb(var(--skydeep))'
+      : duesStatus === 'due' || duesStatus === 'past_due' ? 'rgb(var(--terracotta))'
+        : 'rgb(var(--stone))';
   const myBookings = reservation.booked && reservation.summary ? '1 upcoming' : 'None yet';
   const myCirclesCount = Object.values(groups).filter((g) => !g.isGroupChat && g.joined).length;
 
@@ -81,30 +93,22 @@ export function MyPlace() {
 
   // Payments card (owner only)
   const mpApLabel = state.apPaused ? 'Autopay paused' : 'Autopay · the 3rd';
-  const mpJulyStatus = state.paid
-    ? 'Paid Jul 1 · #P-2231'
-    : state.planActive
-      ? 'In plan · 3 × $190'
-      : delinquent
-        ? 'Past due'
-        : 'Due Jul 3';
-  const mpJulyBg = state.paid ? 'rgb(var(--mint))' : state.planActive ? 'rgb(var(--skypale))' : delinquent ? 'rgb(var(--blush))' : 'rgb(var(--goldpale))';
-  const mpJulyColor = state.paid ? 'rgb(var(--sagedark))' : state.planActive ? 'rgb(var(--skydeep))' : delinquent ? 'rgb(var(--terracotta))' : 'rgb(var(--golddark))';
-  const mpJuneStatus = !juneLate
-    ? 'Paid Jun 3 · #P-2168'
-    : state.paid
-      ? 'Paid Jul 1'
-      : state.planActive
-        ? 'In plan'
-        : 'Past due · 30 days';
-  const mpJuneBg = !juneLate || state.paid ? 'rgb(var(--mint))' : state.planActive ? 'rgb(var(--skypale))' : 'rgb(var(--blush))';
-  const mpJuneColor = !juneLate || state.paid ? 'rgb(var(--sagedark))' : state.planActive ? 'rgb(var(--skydeep))' : 'rgb(var(--terracotta))';
 
   const statusPill = (label: string, bg: string, color: string) => (
     <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0" style={{ background: bg, color }}>
       {label}
     </span>
   );
+
+  // Payments history rows come straight from the member's dues (empty in live).
+  const duesPillBg: Record<DuesStatus, string> = {
+    paid: 'rgb(var(--mint))', plan: 'rgb(var(--skypale))',
+    past_due: 'rgb(var(--blush))', due: 'rgb(var(--goldpale))',
+  };
+  const duesPillColor: Record<DuesStatus, string> = {
+    paid: 'rgb(var(--sagedark))', plan: 'rgb(var(--skydeep))',
+    past_due: 'rgb(var(--terracotta))', due: 'rgb(var(--golddark))',
+  };
 
   const payRow = (label: string, pill: ReactNode, last?: boolean, idx?: number) => (
     <div
@@ -327,10 +331,18 @@ export function MyPlace() {
               <Toggle on={!state.apPaused} onToggle={() => setApConfirm(true)} />
             )}
           </div>
-          {payRow('July 2026 · $285', statusPill(mpJulyStatus, mpJulyBg, mpJulyColor), false, 0)}
-          {payRow('June 2026 · $285', statusPill(mpJuneStatus, mpJuneBg, mpJuneColor), false, 1)}
-          {payRow('May 2026 · $285', statusPill('Paid May 3 · #P-2103', 'rgb(var(--mint))', 'rgb(var(--sagedark))'), false, 2)}
-          {payRow('April 2026 · $285', statusPill('Paid Apr 3 · #P-2041', 'rgb(var(--mint))', 'rgb(var(--sagedark))'), true, 3)}
+          {dues.history.length === 0 ? (
+            <p className="m-0 py-2 text-[12.5px] font-semibold text-stone">No payments yet.</p>
+          ) : (
+            dues.history.map((d, i) =>
+              payRow(
+                `${d.period} 2026 · ${d.amountLabel}`,
+                statusPill(d.statusLabel, duesPillBg[d.status], duesPillColor[d.status]),
+                i === dues.history.length - 1,
+                i,
+              ),
+            )
+          )}
         </div>
       )}
 

@@ -31,6 +31,17 @@ export function useMember() {
 }
 
 /**
+ * The member's dues (Today card + MyPlace history). In the demo this is derived
+ * from the store's scenario flags, so screens that call this must already
+ * subscribe to the store (they do, via usePavStore) to re-render on DemoPanel
+ * toggles; the repo snapshot is memoized so the reference stays stable.
+ */
+export function useDues() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getDues());
+}
+
+/**
  * Reads a domain slice through the repository. Seeds initial state from the
  * synchronous snapshot when the backend offers one (the mock → no loading
  * flicker in the demo), then reconciles with the async result. When the
