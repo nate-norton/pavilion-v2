@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { usePavStore } from '../store/store';
+import { AppToast } from './AppToast';
 import { Commons } from '../screens/Commons';
 import { Hoa } from '../screens/Hoa';
 import { Reserve } from '../screens/Reserve';
@@ -41,6 +42,7 @@ export function PhoneFrame() {
         </div>
         <Overlays />
         <NavDock />
+        <AppToast />
       </ErrorBoundary>
     </div>
   );

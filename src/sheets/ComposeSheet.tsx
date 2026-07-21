@@ -31,7 +31,7 @@ export function ComposeSheet() {
     void repo.createFeedPost(text).then(() => {
       setPosted(true);
       setTimeout(close, 1600);
-    });
+    }).catch(() => {}); // failure surfaced via the app toast
   };
 
   return (
