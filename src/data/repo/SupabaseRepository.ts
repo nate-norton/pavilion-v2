@@ -517,7 +517,7 @@ export class SupabaseRepository implements Repository {
     if (error || !groups || groups.length === 0) { this.cache.groups = {}; return; }
     const ids = groups.map((g) => g.id);
     const [members, messages, polls, events, pins, mutes] = await Promise.all([
-      this.client.from('group_members').select('group_id, profiles(name, initial, color)').in('group_id', ids),
+      this.client.from('group_members').select('group_id, profile_id, profiles(name, initial, color)').in('group_id', ids),
       this.client.from('group_messages').select('*').in('group_id', ids).order('created_at'),
       this.client.from('group_polls').select('*, group_poll_votes(profile_id, option)').in('group_id', ids),
       this.client.from('group_events').select('*, group_event_rsvps(profile_id)').in('group_id', ids),
