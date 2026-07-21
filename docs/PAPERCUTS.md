@@ -25,12 +25,12 @@ how much they'd embarrass us in front of a real community.
 
 ## Open — high
 
-- **Write errors are silent.** A failed insert still shows success UI.
-  Needs a small error surface (toast/inline) on every repo write.
+- ✅ ~~Write errors are silent~~ — error bus + toast; RLS zero-row updates
+  detected; sheets skip success UI on failure
+- ✅ ~~Report entry point only in Commons~~ — added to HOA Known issues card
+  and Today's quiet list
 - **Amenities have no live domain** — Reserve shows the empty state until an
   `amenities` table + board config tooling exists.
-- **Report entry point** only exists in the Commons feed; add a "Report"
-  affordance on the HOA tab (near Known issues) and Today.
 - **Messages/chat is demo-only** — live directory is empty and DMs have no
   tables; decide whether chat ships in v1 or hides in live.
 
