@@ -1,0 +1,26 @@
+{
+  "pkg": "pavilion-v2",
+  "globalName": "PavilionDS",
+  "projectId": "025b7697-73fe-4a90-a2a5-5986f53f3d8c",
+  "shape": "package",
+  "buildCmd": "npm run build && node .design-sync/make-css.mjs",
+  "entry": "./.design-sync/pavilion-entry.tsx",
+  "srcDir": "src",
+  "tsconfig": "tsconfig.app.json",
+  "cssEntry": ".design-sync/style/pavilion.css",
+  "guidelinesGlob": [],
+  "readmeHeader": ".design-sync/conventions.md",
+  "componentSrcMap": {
+    "Avatar": "src/components/Avatar.tsx",
+    "BackButton": "src/components/BackButton.tsx",
+    "Chip": "src/components/Chip.tsx",
+    "Pill": "src/components/Pill.tsx",
+    "ProgressBar": "src/components/ProgressBar.tsx",
+    "SegmentedControl": "src/components/SegmentedControl.tsx",
+    "StatusTimeline": "src/components/StatusTimeline.tsx",
+    "Toggle": "src/components/Toggle.tsx",
+    "TypingDots": "src/components/TypingDots.tsx",
+    "PhotoPlaceholder": "src/components/PhotoPlaceholder.tsx",
+    "PhIcon": "src/components/PhIcon.tsx"
+  }
+}
