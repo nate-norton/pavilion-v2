@@ -36,10 +36,9 @@ how much they'd embarrass us in front of a real community.
 
 ## Open — medium
 
-- Feed timestamps are stored labels ("Just now" forever); compute from
-  `created_at` at read time.
-- Every write triggers a full `refresh()` (~12 queries); hydrate only the
-  touched domain.
+- ✅ ~~Feed timestamps stored labels~~ — computed from `created_at`
+  (Just now / 5m / 3h / 2d)
+- ✅ ~~Full refresh on every write~~ — writes hydrate only their domain
 - Issue/decision detail sheets are demo-keyed; live rows aren't tappable.
 - Group archive semantics (matrix: creator/board archive, no hard delete) —
   no archive UI or policy yet.
@@ -51,7 +50,6 @@ how much they'd embarrass us in front of a real community.
 
 - Feed like/comment counts on demo posts are scripted; live generic cards
   have no reactions yet.
-- Meeting screen is demo-gated but `meetingOpen` persists in localStorage;
-  add a live guard for belt-and-braces.
+- ✅ ~~Meeting screen stale-flag risk~~ — hard live guard added
 - Onboarding flow is demo-only; live onboarding = magic link + invite (fine
   for now, revisit with invite tooling).
