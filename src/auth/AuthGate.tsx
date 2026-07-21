@@ -19,6 +19,8 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
   const supabase = getSupabaseClient();
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
+  // null = still checking; true/false = whether the user belongs to a community.
+  const [hasCommunity, setHasCommunity] = useState<boolean | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => { setSession(data.session); setReady(true); });
@@ -26,9 +28,63 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
     return () => sub.subscription.unsubscribe();
   }, [supabase]);
 
+  useEffect(() => {
+    if (!session) { setHasCommunity(null); return; }
+    let alive = true;
+    (async () => {
+      try {
+        const { data: profile } = await supabase.from('profiles').select('id').eq('user_id', session.user.id).maybeSingle();
+        if (!profile) { if (alive) setHasCommunity(false); return; }
+        const { count } = await supabase.from('memberships')
+          .select('id', { count: 'exact', head: true })
+          .eq('profile_id', profile.id).eq('status', 'active');
+        if (alive) setHasCommunity((count ?? 0) > 0);
+      } catch {
+        if (alive) setHasCommunity(false); // treat any failure as "no community"
+      }
+    })();
+    return () => { alive = false; };
+  }, [session, supabase]);
+
   if (!ready) return null;
   if (!session) return <LiveSignIn />;
+  if (hasCommunity === null) return null;              // resolving membership
+  if (!hasCommunity) return <NoCommunity email={session.user.email ?? ''} />;
   return <>{children}</>;
+}
+
+/** A signed-in user who isn't a member of any community yet. */
+function NoCommunity({ email }: { email: string }) {
+  return (
+    <div
+      className="min-h-dvh flex items-center justify-center p-6"
+      style={{ background: 'radial-gradient(120% 90% at 50% 0%, rgb(var(--creamtint)) 0%, rgb(var(--sandtint)) 60%, rgb(var(--sanddeep)) 100%)' }}
+    >
+      <div className="w-full max-w-[380px] bg-paper rounded-[24px] p-7 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)', boxShadow: '0 18px 50px rgb(var(--scrim) / 0.12)' }}>
+        <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto" style={{ background: 'rgb(var(--navy) / 0.06)' }}>
+          <PhIcon name="ph-fill ph-house-line" size={26} color="rgb(var(--navy))" />
+        </div>
+        <h1 className="m-0 mb-2 font-serif text-[23px] text-navy">You’re signed in</h1>
+        <p className="m-0 mb-4 text-[13.5px] font-semibold leading-[1.55]" style={{ color: 'rgb(var(--taupe))' }}>
+          <span className="text-navy">{email}</span> isn’t part of a community yet. Pavilion is
+          invite-based — your HOA board adds you to your community.
+        </p>
+        <div className="rounded-2xl px-4 py-3.5 mb-5 text-left" style={{ background: 'rgb(var(--parchment))', border: '1px solid rgb(var(--navy) / 0.08)' }}>
+          <p className="m-0 mb-1 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.1em' }}>What’s next</p>
+          <p className="m-0 text-[13px] font-semibold text-bark leading-[1.5]">
+            Ask your board or manager to invite this email. Once you’re added, you’ll land right in your community.
+          </p>
+        </div>
+        <button
+          onClick={() => void signOutLive()}
+          className="w-full bg-transparent rounded-xl py-3 text-[13px] font-bold cursor-pointer"
+          style={{ border: '1px solid rgb(var(--navy) / 0.14)', color: 'rgb(var(--navy))' }}
+        >
+          Sign out
+        </button>
+      </div>
+    </div>
+  );
 }
 
 /** Sign out of the live session (no-op in demo mode). */
