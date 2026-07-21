@@ -23,7 +23,9 @@ export function ReportSheet() {
     if (!canReport) return;
     if (demo) { submitReport(); return; }
     void repo.createReport({ kind: state.reportType ?? 'Other', description: state.reportDesc })
-      .then(() => set({ reportSubmitted: true, reportDesc: '' }));
+      .then(() => set({ reportSubmitted: true, reportDesc: '' }))
+      .catch(() => {}); // failure surfaced via the app toast
+
   };
 
   return (

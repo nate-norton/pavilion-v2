@@ -7,6 +7,7 @@ import type {
 } from '../types';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
+import { emitAppError } from '../../lib/errorBus';
 import type { ArcState, ArcStep, BoardArcItem, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, DuesStatus, FeedPost, KnownIssue, MemberContext, NewArcRequest, NewGroup, NewReport, NewReservation, NewVote, ReservationState, Repository, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
@@ -65,6 +66,27 @@ export class SupabaseRepository implements Repository {
     this.client.auth.onAuthStateChange(() => { void this.refresh(); });
   }
 
+  /**
+   * Surface a failed write to the user. Returns true when there was an error
+   * (so callers can bail); `fatal` additionally throws so awaited success
+   * paths in sheets don't run. RLS-filtered updates don't error — they match
+   * zero rows — so update-writes pair this with a returned-row check.
+   */
+  private failed(action: string, error: { message?: string } | null, fatal = false): boolean {
+    if (!error) return false;
+    const raw = error.message || '';
+    // Translate database jargon into member-facing language.
+    const human = /row-level security|permission denied|42501/i.test(raw)
+      ? 'you may not have permission.'
+      : /Failed to fetch|network|timeout/i.test(raw)
+        ? 'check your connection and try again.'
+        : raw || 'something went wrong. Try again.';
+    const msg = `Couldn't ${action} — ${human}`;
+    emitAppError(msg);
+    if (fatal) throw new Error(msg);
+    return true;
+  }
+
   subscribe = (listener: () => void): (() => void) => {
     this.listeners.add(listener);
     if (!this.hydrated) { this.hydrated = true; void this.refresh(); }
@@ -112,13 +134,14 @@ export class SupabaseRepository implements Repository {
   createReport = async ({ kind, description }: NewReport) => {
     if (!this.communityId || !this.profileId) return;
     const unitLabel = this.cache.member?.unitLabel;
-    await this.client.from('reports').insert({
+    const { error } = await this.client.from('reports').insert({
       community_id: this.communityId,
       reporter_profile_id: this.profileId,
       title: description.trim() ? `${kind} · ${description.trim().slice(0, 80)}` : kind,
       reporter_label: `Reported privately${unitLabel ? ` by ${unitLabel}` : ''} · ${kind}`,
       kind,
     });
+    this.failed('send your report', error, true);
     await this.refresh();
   };
 
@@ -128,7 +151,10 @@ export class SupabaseRepository implements Repository {
       const existing = this.cache.triageItems.find((t) => t.id === id);
       if (!existing?.ref) patch.ref = `#M-${100 + this.cache.triageItems.length + 1}`;
     }
-    await this.client.from('reports').update(patch).eq('id', id);
+    const { data, error } = await this.client.from('reports').update(patch).eq('id', id).select('id');
+    if (!this.failed('update the report', error) && (data ?? []).length === 0) {
+      emitAppError("Couldn't update the report — you may not have permission.");
+    }
     await this.refresh();
   };
 
@@ -192,7 +218,7 @@ export class SupabaseRepository implements Repository {
   createFeedPost = async (body: string) => {
     if (!this.communityId || !this.cache.member) return;
     const m = this.cache.member;
-    await this.client.from('feed_posts').insert({
+    const { error } = await this.client.from('feed_posts').insert({
       community_id: this.communityId,
       author_name: m.name,
       author_initial: m.initial,
@@ -204,6 +230,7 @@ export class SupabaseRepository implements Repository {
       body: body.trim(),
       sort_order: -Math.floor(Date.now() / 1000),  // newest first under order(sort_order)
     });
+    this.failed('publish your post', error, true);
     await this.refresh();
   };
 
@@ -232,7 +259,7 @@ export class SupabaseRepository implements Repository {
     if (!this.communityId || !this.unitId) return;
     const { count } = await this.client.from('arc_requests')
       .select('id', { count: 'exact', head: true }).eq('community_id', this.communityId);
-    await this.client.from('arc_requests').insert({
+    const { error } = await this.client.from('arc_requests').insert({
       community_id: this.communityId,
       unit_id: this.unitId,
       ref: `#A-${100 + (count ?? 0) + 1}`,
@@ -245,12 +272,13 @@ export class SupabaseRepository implements Repository {
         { label: 'Decision', state: 'pending' },
       ],
     });
+    this.failed('submit your request', error, true);
     await this.refresh();
   };
 
   decideArc = async (id: string, approve: boolean) => {
     const item = this.cache.boardArc.find((r) => r.id === id);
-    await this.client.from('arc_requests').update({
+    const { data, error } = await this.client.from('arc_requests').update({
       approved: approve,
       status: approve ? 'approved' : 'declined',
       status_label: approve ? 'Approved' : 'Declined',
@@ -259,8 +287,10 @@ export class SupabaseRepository implements Repository {
         { label: 'Board review', state: 'done' },
         { label: approve ? 'Approved' : 'Declined', state: 'done' },
       ],
-    }).eq('id', id);
-    if (item && this.communityId) {
+    }).eq('id', id).select('id');
+    const denied = this.failed('decide the request', error) || (data ?? []).length === 0;
+    if (denied && !error) emitAppError("Couldn't decide the request — you may not have permission.");
+    if (!denied && item && this.communityId) {
       const dateLabel = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
       await this.client.from('decisions').insert({
         community_id: this.communityId,
@@ -327,7 +357,11 @@ export class SupabaseRepository implements Repository {
   markViolationFixed = async () => {
     const v = this.cache.violation;
     if (!v) return;
-    await this.client.from('violations').update({ status: 'fixed' }).eq('id', v.id);
+    const { data, error } = await this.client.from('violations')
+      .update({ status: 'fixed' }).eq('id', v.id).select('id');
+    if (!this.failed('mark it fixed', error) && (data ?? []).length === 0) {
+      emitAppError("Couldn't mark it fixed — you may not have permission.");
+    }
     await this.refresh();
   };
 
@@ -369,8 +403,10 @@ export class SupabaseRepository implements Repository {
 
   castVote = async (voteId: string, choice: VoteChoice) => {
     if (!this.profileId) return;
-    await this.client.from('vote_ballots')
+    const { error } = await this.client.from('vote_ballots')
       .insert({ vote_id: voteId, profile_id: this.profileId, choice });
+    // duplicate ballot = already voted; anything else is worth surfacing
+    if (error && !`${error.message}`.includes('duplicate')) this.failed('record your ballot', error);
     await this.refresh();
   };
 
@@ -379,7 +415,7 @@ export class SupabaseRepository implements Repository {
     const { count } = await this.client.from('memberships')
       .select('id', { count: 'exact', head: true })
       .eq('community_id', this.communityId).eq('status', 'active');
-    await this.client.from('votes').insert({
+    const { error } = await this.client.from('votes').insert({
       community_id: this.communityId,
       title: question.trim(),
       subtitle: 'Opened by the board · one ballot per household',
@@ -390,6 +426,7 @@ export class SupabaseRepository implements Repository {
       receipt: `#R-${String(Math.floor(Math.random() * 9000) + 1000)}`,
       status: 'open',
     });
+    this.failed('open the ballot', error, true);
     await this.refresh();
   };
 
@@ -474,7 +511,7 @@ export class SupabaseRepository implements Repository {
 
   createReservation = async ({ amenity, day, slot, hours }: NewReservation) => {
     if (!this.communityId || !this.profileId) return;
-    await this.client.from('reservations').insert({
+    const { error } = await this.client.from('reservations').insert({
       community_id: this.communityId,
       profile_id: this.profileId,
       amenity,
@@ -483,13 +520,15 @@ export class SupabaseRepository implements Repository {
       hours,
       summary: `${amenity} · ${day} · ${slot}${hours === 2 ? ' · 2h' : ''}`,
     });
+    this.failed('book it', error);
     await this.refresh();
   };
 
   cancelReservation = async () => {
     if (!this.profileId) return;
-    await this.client.from('reservations').update({ status: 'cancelled' })
+    const { error } = await this.client.from('reservations').update({ status: 'cancelled' })
       .eq('profile_id', this.profileId).eq('status', 'booked');
+    this.failed('cancel the booking', error);
     await this.refresh();
   };
 
@@ -577,12 +616,15 @@ export class SupabaseRepository implements Repository {
 
   createGroup = async ({ name, description, icon, color }: NewGroup): Promise<string> => {
     if (!this.communityId) return '';
-    const { data } = await this.client.from('groups')
+    const { data, error } = await this.client.from('groups')
       .insert({ community_id: this.communityId, name, description, icon, color, is_group_chat: false, member_count: 1 })
       .select('id').single();
+    this.failed('create the group', error, true);
     const id = data?.id ?? '';
     if (id && this.profileId) {
-      await this.client.from('group_members').insert({ group_id: id, profile_id: this.profileId });
+      const { error: memberErr } = await this.client.from('group_members')
+        .insert({ group_id: id, profile_id: this.profileId });
+      this.failed('join your new group', memberErr);
     }
     await this.refresh();
     return id;
