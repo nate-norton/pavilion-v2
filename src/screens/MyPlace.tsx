@@ -172,8 +172,8 @@ export function MyPlace() {
         </div>
       </div>
 
-      {/* Owner: board desk entry */}
-      {isOwner && (
+      {/* Board desk entry — live gates on the real membership role */}
+      {(isLiveMode ? member?.role === 'board' : isOwner) && (
         <div
           onClick={() => set({ boardMode: true, myPlaceOpen: false })}
           className="bg-navy rounded-[18px] flex items-center gap-[13px] cursor-pointer mb-3"
@@ -301,6 +301,7 @@ export function MyPlace() {
       {isOwner && (
         <div style={CARD}>
           <p className="m-0 mb-[11px] font-serif text-base text-navy">Payments</p>
+          {!isLiveMode && (
           <div
             className="flex items-center gap-2.5"
             style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
@@ -332,6 +333,7 @@ export function MyPlace() {
               <Toggle on={!state.apPaused} onToggle={() => setApConfirm(true)} />
             )}
           </div>
+          )}
           {dues.history.length === 0 ? (
             <p className="m-0 py-2 text-[12.5px] font-semibold text-stone">No payments yet.</p>
           ) : (
@@ -347,7 +349,8 @@ export function MyPlace() {
         </div>
       )}
 
-      {/* Household */}
+      {/* Household (demo-only until a household domain exists) */}
+      {!isLiveMode && (
       <div style={CARD}>
         <div className="flex items-center justify-between gap-2.5 mb-[11px]">
           <p className="m-0 font-serif text-base text-navy">Household</p>
@@ -412,8 +415,10 @@ export function MyPlace() {
           </div>
         )}
       </div>
+      )}
 
-      {/* Vehicles & pets */}
+      {/* Vehicles & pets (demo-only until a registry domain exists) */}
+      {!isLiveMode && (
       <div style={CARD}>
         <p className="m-0 mb-[3px] font-serif text-base text-navy">Vehicles &amp; pets</p>
         <p className="m-0 mb-3 text-[11.5px] font-semibold text-stone">
@@ -488,6 +493,7 @@ export function MyPlace() {
           )}
         </div>
       </div>
+      )}
 
       {/* My requests */}
       <div style={CARD}>
