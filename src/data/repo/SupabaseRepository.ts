@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
-import type { ArcState, ArcStep, DuesState, DuesStatement, DuesStatus, MemberContext, NewGroup, NewReservation, ReservationState, Repository, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcState, ArcStep, CommunityEvent, DuesState, DuesStatement, DuesStatus, FeedPost, MemberContext, NewGroup, NewReservation, ReservationState, Repository, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -45,6 +45,8 @@ export class SupabaseRepository implements Repository {
     violation: null as ViolationNotice | null,
     assessment: null as SpecialAssessment | null,
     arc: { requests: [], unseenApproval: null } as ArcState,
+    events: [] as CommunityEvent[],
+    feed: [] as FeedPost[],
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
     chats: {} as MockChatMap,
@@ -84,8 +86,30 @@ export class SupabaseRepository implements Repository {
     await this.hydrateVotes();
     await this.hydrateCompliance();
     await this.hydrateArc();
+    await this.hydrateSocial();
     await this.hydrateGroups();
     this.notify();
+  }
+
+  // ── Social (events + feed; empty for a fresh community) ─────────────────────
+  getEvents = () => this.cache.events;
+  getFeed = () => this.cache.feed;
+
+  private async hydrateSocial() {
+    if (!this.communityId) { this.cache.events = []; this.cache.feed = []; return; }
+    const [events, feed] = await Promise.all([
+      this.client.from('events').select('*').eq('community_id', this.communityId).order('sort_order'),
+      this.client.from('feed_posts').select('*').eq('community_id', this.communityId).order('sort_order'),
+    ]);
+    this.cache.events = (events.data ?? []).map((e) => ({
+      id: e.id, title: e.title, whenLabel: e.when_label, whereLabel: e.where_label,
+      going: e.going, photoLabel: e.photo_label, tagLabel: e.tag_label, featured: e.featured,
+    }));
+    this.cache.feed = (feed.data ?? []).map((p) => ({
+      id: p.id, authorName: p.author_name, authorInitial: p.author_initial, authorColor: p.author_color,
+      unitLabel: p.unit_label, timeLabel: p.time_label, kind: p.kind, tagLabel: p.tag_label,
+      body: p.body, photoLabel: p.photo_label,
+    }));
   }
 
   // ── ARC (real, per-unit; empty for a fresh member) ──────────────────────────

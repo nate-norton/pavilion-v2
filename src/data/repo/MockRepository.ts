@@ -3,7 +3,7 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { ArcRequest, ArcState, DuesState, DuesStatement, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcRequest, ArcState, CommunityEvent, DuesState, DuesStatement, FeedPost, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
 import { usePavStore } from '../../store/store';
@@ -13,6 +13,17 @@ const DEMO_MEMBER: MemberContext = {
   name: 'Alex Rivera', initial: 'A', color: '#1A3352', role: 'board',
   communityName: 'Juniper Ridge', unitLabel: '#27 Alder Way',
 };
+
+/** Demo events + feed — always-on ambient content (stable refs). Empty in live. */
+const DEMO_EVENTS: CommunityEvent[] = [
+  { id: 'taco', title: 'Taco cart at the clubhouse', whenLabel: 'Today · 5–8 PM', whereLabel: 'Clubhouse', going: 12, photoLabel: '', tagLabel: '', featured: true },
+  { id: 'movie', title: 'Movie on the lawn', whenLabel: 'Sat, Jul 5 · Dusk · The Green', whereLabel: 'The Green', going: 23, photoLabel: 'event photo — movie night', tagLabel: 'Social Committee', featured: false },
+];
+const DEMO_FEED: FeedPost[] = [
+  { id: 'maria', authorName: 'Maria R.', authorInitial: 'M', authorColor: '#C75A31', unitLabel: '#7', timeLabel: '2h', kind: 'shoutout', tagLabel: 'Shoutout', body: 'Huge thanks to Tom at #18 for helping clear my gutters before Sunday’s storm.', photoLabel: 'photo — clean gutters, proud Tom' },
+  { id: 'dev', authorName: 'Dev P.', authorInitial: 'D', authorColor: '#4A90E2', unitLabel: '#23', timeLabel: '5h', kind: 'borrow', tagLabel: 'Help & Borrow', body: 'Anyone have an 8-ft ladder I could borrow Sunday?', photoLabel: '' },
+  { id: 'movie', authorName: 'Social Committee', authorInitial: 'S', authorColor: '#1A3352', unitLabel: '', timeLabel: '', kind: 'event', tagLabel: 'Social Committee', body: 'Movie on the lawn', photoLabel: 'event photo — movie night' },
+];
 
 /** Clock label matching the store's original format (e.g. "3:07 PM"). */
 function now(): string {
@@ -33,6 +44,9 @@ export class MockRepository implements Repository, SnapshotReadable {
   subscribe = mockDomain.subscribe;
 
   getMember = () => DEMO_MEMBER;
+
+  getEvents = () => DEMO_EVENTS;
+  getFeed = () => DEMO_FEED;
 
   // Dues are derived from the demo scenario flags so the DemoPanel keeps
   // driving the cards. Memoized on the flags so useSyncExternalStore gets a

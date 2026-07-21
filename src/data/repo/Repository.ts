@@ -62,6 +62,32 @@ export interface DuesState {
   history: DuesStatement[];
 }
 
+/** A community event (Today's featured card, the calendar, the Commons event). */
+export interface CommunityEvent {
+  id: string;
+  title: string;
+  whenLabel: string;   // 'Today · 5–8 PM'
+  whereLabel: string;
+  going: number;
+  photoLabel: string;
+  tagLabel: string;
+  featured: boolean;
+}
+
+/** A Commons feed post. Kinds render differently but share these fields. */
+export interface FeedPost {
+  id: string;
+  authorName: string;
+  authorInitial: string;
+  authorColor: string;
+  unitLabel: string;
+  timeLabel: string;
+  kind: string;        // shoutout | borrow | event | post
+  tagLabel: string;
+  body: string;
+  photoLabel: string;
+}
+
 /** One architectural-review request on the member's unit. */
 export interface ArcStep {
   label: string;
@@ -159,6 +185,11 @@ export interface Repository {
 
   /** The member's ARC requests + any unseen approval (empty for a fresh member). */
   getArc(): ArcState;
+
+  /** Community events (empty for a fresh community). */
+  getEvents(): CommunityEvent[];
+  /** Commons feed posts (empty for a fresh community). */
+  getFeed(): FeedPost[];
 
   // Reservations
   listAmenities(): Promise<Amenity[]>;

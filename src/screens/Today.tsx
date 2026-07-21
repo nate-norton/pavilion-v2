@@ -1,5 +1,5 @@
 import { PhIcon } from '../components/PhIcon';
-import { useArc, useAssessment, useDues, useMember, useNotifications, usePortfolio, useReservation, useViolation, useVotes } from '../data/repo';
+import { useArc, useAssessment, useDues, useEvents, useMember, useNotifications, usePortfolio, useReservation, useViolation, useVotes } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 const ROW = 'flex items-center gap-[13px] cursor-pointer';
@@ -23,6 +23,9 @@ export function Today() {
   const violation = useViolation();
   const assessment = useAssessment();
   const arc = useArc();
+  const events = useEvents();
+  const featuredEvent = events.find((e) => e.featured) ?? null;
+  const hasNeighborhood = events.length > 0;
 
   const isOwner = state.role === 'owner';
   const isTenant = state.role === 'tenant';
@@ -56,7 +59,7 @@ export function Today() {
   const hasNotifBadge = notifBadge > 0;
 
   const rsvpFood = state.rsvpFood;
-  const tacoGoing = 12 + (rsvpFood ? 1 : 0);
+  const tacoGoing = (featuredEvent?.going ?? 0) + (rsvpFood ? 1 : 0);
 
   const hasBooking = reservation.booked && !!reservation.summary;
 
@@ -231,7 +234,7 @@ export function Today() {
       </div>
 
       {/* AI nudge: one quiet line */}
-      {showNudge && (
+      {showNudge && hasNeighborhood && (
         <div className="flex gap-[9px] items-start" style={{ padding: '14px 6px 0' }}>
           <PhIcon name="ph-fill ph-sparkle" size={13} color="rgb(var(--terracotta))" className="mt-[3px] flex-shrink-0" />
           <p className="m-0 flex-1 text-xs leading-[1.5] font-semibold text-stone">
@@ -247,7 +250,8 @@ export function Today() {
         </div>
       )}
 
-      {/* Around the neighborhood */}
+      {/* Around the neighborhood — ambient content; hidden for an empty community */}
+      {hasNeighborhood && (<>
       <div className="flex items-baseline justify-between gap-2.5" style={{ margin: '28px 0 12px' }}>
         <h2 className="m-0 font-serif font-normal text-[19px] text-navy">Around the neighborhood</h2>
         <button
@@ -263,9 +267,9 @@ export function Today() {
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
-              Today · 5–8 PM
+              {featuredEvent?.whenLabel}
             </p>
-            <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.2]">Taco cart at the clubhouse</p>
+            <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.2]">{featuredEvent?.title}</p>
             <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
               {tacoGoing} neighbors going
             </p>
@@ -322,6 +326,7 @@ export function Today() {
           </button>
         </div>
       </div>
+      </>)}
     </div>
   );
 }

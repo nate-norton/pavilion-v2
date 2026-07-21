@@ -65,6 +65,18 @@ export function useArc() {
   return useSyncExternalStore(repo.subscribe, () => repo.getArc());
 }
 
+/** Community events (empty for a fresh community). */
+export function useEvents() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getEvents());
+}
+
+/** Commons feed posts (empty for a fresh community). */
+export function useFeed() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getFeed());
+}
+
 /**
  * Reads a domain slice through the repository. Seeds initial state from the
  * synchronous snapshot when the backend offers one (the mock → no loading

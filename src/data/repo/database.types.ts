@@ -143,6 +143,22 @@ export type Database = {
           { foreignKeyName: "dues_statements_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
         ]
       }
+      events: {
+        Row: { community_id: string; created_at: string; featured: boolean; going: number; id: string; photo_label: string; sort_order: number; tag_label: string; title: string; when_label: string; where_label: string }
+        Insert: { community_id: string; created_at?: string; featured?: boolean; going?: number; id?: string; photo_label?: string; sort_order?: number; tag_label?: string; title: string; when_label?: string; where_label?: string }
+        Update: { community_id?: string; created_at?: string; featured?: boolean; going?: number; id?: string; photo_label?: string; sort_order?: number; tag_label?: string; title?: string; when_label?: string; where_label?: string }
+        Relationships: [
+          { foreignKeyName: "events_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
+      }
+      feed_posts: {
+        Row: { author_color: string; author_initial: string; author_name: string; body: string; community_id: string; created_at: string; id: string; kind: string; photo_label: string; sort_order: number; tag_label: string; time_label: string; unit_label: string }
+        Insert: { author_color?: string; author_initial?: string; author_name: string; body?: string; community_id: string; created_at?: string; id?: string; kind?: string; photo_label?: string; sort_order?: number; tag_label?: string; time_label?: string; unit_label?: string }
+        Update: { author_color?: string; author_initial?: string; author_name?: string; body?: string; community_id?: string; created_at?: string; id?: string; kind?: string; photo_label?: string; sort_order?: number; tag_label?: string; time_label?: string; unit_label?: string }
+        Relationships: [
+          { foreignKeyName: "feed_posts_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
+      }
       group_event_rsvps: {
         Row: { created_at: string; event_id: string; id: string; profile_id: string }
         Insert: { created_at?: string; event_id: string; id?: string; profile_id: string }
