@@ -351,6 +351,14 @@ export function Hoa() {
             </div>
           ))
         )}
+        <button
+          onClick={() => set({ reportOpen: true })}
+          className="w-full mt-3 rounded-xl py-[11px] text-[13px] font-extrabold cursor-pointer bg-transparent text-navy flex items-center justify-center gap-2"
+          style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+        >
+          <PhIcon name="ph-fill ph-shield-check" size={15} />
+          Report an issue — privately, to the board
+        </button>
       </div>
 
       {/* Decisions log */}
