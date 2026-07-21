@@ -126,7 +126,7 @@ export function Today() {
             title="My Place"
             className="w-[34px] h-[34px] rounded-full border-none bg-navy flex items-center justify-center text-cream font-extrabold text-[13px] cursor-pointer ml-1.5"
           >
-            A
+            {member?.initial ?? 'A'}
           </button>
         </div>
       </div>
