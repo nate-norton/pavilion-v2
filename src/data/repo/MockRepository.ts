@@ -3,7 +3,7 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { ArcRequest, ArcState, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, FeedPost, KnownIssue, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcRequest, ArcState, BoardArcItem, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, FeedPost, KnownIssue, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
 import { usePavStore } from '../../store/store';
@@ -32,6 +32,10 @@ const DEMO_DECISIONS: Decision[] = [
   { id: 'bumps', dateLabel: 'MAY 12', text: 'Speed bumps on Alder Way', pillLabel: 'Declined 48–71', passed: false },
 ];
 
+/** Stable empty refs for the live-only board queues (demo renders scripted cards). */
+const EMPTY_TRIAGE_ITEMS: TriageItem[] = [];
+const EMPTY_BOARD_ARC: BoardArcItem[] = [];
+
 /** Clock label matching the store's original format (e.g. "3:07 PM"). */
 function now(): string {
   const d = new Date();
@@ -55,6 +59,20 @@ export class MockRepository implements Repository, SnapshotReadable {
   getMember = () => DEMO_MEMBER;
 
   getDecisions = () => DEMO_DECISIONS;
+
+  // Write paths delegate to the scripted store actions, so the presenter demo
+  // behaves exactly as before. The live board queues stay empty — the demo's
+  // Board Desk renders its own scripted triage/queue cards instead.
+  createReport = async () => { usePavStore.getState().submitReport(); };
+  setReportStatus = async () => {};
+  getTriageItems = () => EMPTY_TRIAGE_ITEMS;
+  getMyReports = () => EMPTY_TRIAGE_ITEMS;
+  createArcRequest = async () => { usePavStore.getState().submitArc(); };
+  decideArc = async () => {};
+  getBoardArcQueue = () => EMPTY_BOARD_ARC;
+  createFeedPost = async () => {};
+  openVote = async () => { usePavStore.getState().postVote(); };
+  markViolationFixed = async () => { usePavStore.getState().set({ violFixed: true }); };
 
   // Known issues derived from the demo triage flags so the board's actions
   // (create ticket, schedule vendor) reflect on the resident-facing HOA list.

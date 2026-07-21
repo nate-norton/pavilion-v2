@@ -2,16 +2,23 @@ import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { Chip } from '../components/Chip';
 import { usePavStore } from '../store/store';
-import { useArcTypes } from '../data/repo';
+import { useArcTypes, useRepository } from '../data/repo';
 
 /** ARC request sheet — ported from prototype lines 1358-1397. */
 export function ArcSheet() {
   const state = usePavStore();
   const { set, submitArc } = state;
   const ARC_TYPES = useArcTypes();
+  const repo = useRepository();
 
   const closeArc = () => set({ arcSheetOpen: false });
   const canSubmit = !!state.arcType;
+  const submit = () => {
+    if (!canSubmit) return;
+    if (repo.isDemo()) { submitArc(); return; }
+    void repo.createArcRequest({ type: state.arcType ?? 'Exterior update', description: state.arcDesc })
+      .then(() => set({ arcSheetOpen: false, arcDesc: '', arcType: null }));
+  };
 
   return (
     <Sheet open={state.arcSheetOpen} onClose={closeArc} maxHeight="86%">
@@ -93,6 +100,7 @@ export function ArcSheet() {
         </button>
       </div>
 
+      {repo.isDemo() && (
       <div
         className="rounded-[13px] p-[11px_13px] flex gap-2.5 items-start mb-4"
         style={{ background: 'rgb(var(--blush))' }}
@@ -103,9 +111,10 @@ export function ArcSheet() {
           usually fast-tracked.
         </p>
       </div>
+      )}
 
       <button
-        onClick={submitArc}
+        onClick={submit}
         className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold font-sans"
         style={{
           background: canSubmit ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',

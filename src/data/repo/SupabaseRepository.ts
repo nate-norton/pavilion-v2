@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
-import type { ArcState, ArcStep, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, DuesStatus, FeedPost, KnownIssue, MemberContext, NewGroup, NewReservation, ReservationState, Repository, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcState, ArcStep, BoardArcItem, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, DuesStatus, FeedPost, KnownIssue, MemberContext, NewArcRequest, NewGroup, NewReport, NewReservation, NewVote, ReservationState, Repository, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -50,6 +50,9 @@ export class SupabaseRepository implements Repository {
     triage: { openCount: 0, summary: 'Triage queue is clear', hasItems: false } as BoardTriage,
     issues: [] as KnownIssue[],
     decisions: [] as Decision[],
+    triageItems: [] as TriageItem[],
+    myReports: [] as TriageItem[],
+    boardArc: [] as BoardArcItem[],
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
     chats: {} as MockChatMap,
@@ -92,6 +95,8 @@ export class SupabaseRepository implements Repository {
     await this.hydrateSocial();
     await this.hydrateTriage();
     await this.hydrateDecisions();
+    await this.hydrateBoardArc();
+    await this.hydrateReservation();
     await this.hydrateGroups();
     this.notify();
   }
@@ -101,19 +106,52 @@ export class SupabaseRepository implements Repository {
   // ── Board triage + known issues (reports; empty for a fresh community) ──────
   getBoardTriage = () => this.cache.triage;
   getIssues = () => this.cache.issues;
+  getTriageItems = () => this.cache.triageItems;
+  getMyReports = () => this.cache.myReports;
+
+  createReport = async ({ kind, description }: NewReport) => {
+    if (!this.communityId || !this.profileId) return;
+    const unitLabel = this.cache.member?.unitLabel;
+    await this.client.from('reports').insert({
+      community_id: this.communityId,
+      reporter_profile_id: this.profileId,
+      title: description.trim() ? `${kind} · ${description.trim().slice(0, 80)}` : kind,
+      reporter_label: `Reported privately${unitLabel ? ` by ${unitLabel}` : ''} · ${kind}`,
+      kind,
+    });
+    await this.refresh();
+  };
+
+  setReportStatus = async (id: string, status: 'ticketed' | 'resolved') => {
+    const patch: { status: string; ref?: string } = { status };
+    if (status === 'ticketed') {
+      const existing = this.cache.triageItems.find((t) => t.id === id);
+      if (!existing?.ref) patch.ref = `#M-${100 + this.cache.triageItems.length + 1}`;
+    }
+    await this.client.from('reports').update(patch).eq('id', id);
+    await this.refresh();
+  };
 
   private async hydrateTriage() {
     if (!this.communityId) {
       this.cache.triage = { openCount: 0, summary: 'Triage queue is clear', hasItems: false };
       this.cache.issues = [];
+      this.cache.triageItems = [];
+      this.cache.myReports = [];
       return;
     }
     const { data } = await this.client.from('reports')
-      .select('id, title, status, vendor')
+      .select('id, title, status, vendor, kind, reporter_label, ref, reporter_profile_id')
       .eq('community_id', this.communityId)
       .order('created_at', { ascending: false })
       .limit(20);
     const rows = data ?? [];
+    this.cache.triageItems = rows.map((r) => ({
+      id: r.id, title: r.title, sub: r.reporter_label, status: r.status, ref: r.ref,
+    }));
+    this.cache.myReports = rows
+      .filter((r) => r.reporter_profile_id === this.profileId)
+      .map((r) => ({ id: r.id, title: r.title, sub: r.reporter_label, status: r.status, ref: r.ref }));
     const openCount = rows.filter((r) => r.status !== 'resolved').length;
     this.cache.triage = {
       openCount,
@@ -151,6 +189,24 @@ export class SupabaseRepository implements Repository {
   getEvents = () => this.cache.events;
   getFeed = () => this.cache.feed;
 
+  createFeedPost = async (body: string) => {
+    if (!this.communityId || !this.cache.member) return;
+    const m = this.cache.member;
+    await this.client.from('feed_posts').insert({
+      community_id: this.communityId,
+      author_name: m.name,
+      author_initial: m.initial,
+      author_color: m.color,
+      unit_label: m.unitLabel,
+      time_label: 'Just now',
+      kind: 'post',
+      tag_label: '',
+      body: body.trim(),
+      sort_order: -Math.floor(Date.now() / 1000),  // newest first under order(sort_order)
+    });
+    await this.refresh();
+  };
+
   private async hydrateSocial() {
     if (!this.communityId) { this.cache.events = []; this.cache.feed = []; return; }
     const [events, feed] = await Promise.all([
@@ -170,6 +226,65 @@ export class SupabaseRepository implements Repository {
 
   // ── ARC (real, per-unit; empty for a fresh member) ──────────────────────────
   getArc = () => this.cache.arc;
+  getBoardArcQueue = () => this.cache.boardArc;
+
+  createArcRequest = async ({ type, description }: NewArcRequest) => {
+    if (!this.communityId || !this.unitId) return;
+    const { count } = await this.client.from('arc_requests')
+      .select('id', { count: 'exact', head: true }).eq('community_id', this.communityId);
+    await this.client.from('arc_requests').insert({
+      community_id: this.communityId,
+      unit_id: this.unitId,
+      ref: `#A-${100 + (count ?? 0) + 1}`,
+      title: description.trim() ? `${type} — ${description.trim().slice(0, 60)}` : type,
+      status: 'review',
+      status_label: 'In review',
+      steps: [
+        { label: 'Submitted', state: 'done' },
+        { label: 'Board review', state: 'active' },
+        { label: 'Decision', state: 'pending' },
+      ],
+    });
+    await this.refresh();
+  };
+
+  decideArc = async (id: string, approve: boolean) => {
+    const item = this.cache.boardArc.find((r) => r.id === id);
+    await this.client.from('arc_requests').update({
+      approved: approve,
+      status: approve ? 'approved' : 'declined',
+      status_label: approve ? 'Approved' : 'Declined',
+      steps: [
+        { label: 'Submitted', state: 'done' },
+        { label: 'Board review', state: 'done' },
+        { label: approve ? 'Approved' : 'Declined', state: 'done' },
+      ],
+    }).eq('id', id);
+    if (item && this.communityId) {
+      const dateLabel = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+      await this.client.from('decisions').insert({
+        community_id: this.communityId,
+        date_label: dateLabel,
+        text: `ARC ${item.ref} ${approve ? 'approved' : 'declined'} — ${item.title}`,
+        pill_label: approve ? 'Approved' : 'Declined',
+        passed: approve,
+        sort_order: -Math.floor(Date.now() / 1000),
+      });
+    }
+    await this.refresh();
+  };
+
+  private async hydrateBoardArc() {
+    if (!this.communityId || this.cache.member?.role !== 'board') { this.cache.boardArc = []; return; }
+    const { data } = await this.client.from('arc_requests')
+      .select('id, ref, title, approved, units(label)')
+      .eq('community_id', this.communityId)
+      .order('created_at', { ascending: false }).limit(20);
+    this.cache.boardArc = (data ?? []).map((r) => ({
+      id: r.id, ref: r.ref, title: r.title, approved: r.approved,
+      unitLabel: (r as unknown as { units: { label: string } | null }).units?.label ?? '',
+    }));
+  }
 
   private async hydrateArc() {
     if (!this.unitId) { this.cache.arc = { requests: [], unseenApproval: null }; return; }
@@ -207,6 +322,14 @@ export class SupabaseRepository implements Repository {
       ? { id: sa.data.id, title: sa.data.title, sub: sa.data.sub, paid: false }
       : null;
   }
+
+  /** Member marks their own courtesy notice fixed (self-cure policy). */
+  markViolationFixed = async () => {
+    const v = this.cache.violation;
+    if (!v) return;
+    await this.client.from('violations').update({ status: 'fixed' }).eq('id', v.id);
+    await this.refresh();
+  };
 
   // ── Votes (real, community-scoped; empty until the board opens a ballot) ────
   getVotes = () => this.cache.votes;
@@ -248,6 +371,25 @@ export class SupabaseRepository implements Repository {
     if (!this.profileId) return;
     await this.client.from('vote_ballots')
       .insert({ vote_id: voteId, profile_id: this.profileId, choice });
+    await this.refresh();
+  };
+
+  openVote = async ({ question, yesLabel, noLabel }: NewVote) => {
+    if (!this.communityId) return;
+    const { count } = await this.client.from('memberships')
+      .select('id', { count: 'exact', head: true })
+      .eq('community_id', this.communityId).eq('status', 'active');
+    await this.client.from('votes').insert({
+      community_id: this.communityId,
+      title: question.trim(),
+      subtitle: 'Opened by the board · one ballot per household',
+      closes_label: 'Open vote · closes in 7 days',
+      quorum_total: count ?? 0,
+      yes_label: yesLabel.trim() || 'Yes',
+      no_label: noLabel.trim() || 'No',
+      receipt: `#R-${String(Math.floor(Math.random() * 9000) + 1000)}`,
+      status: 'open',
+    });
     await this.refresh();
   };
 
@@ -327,10 +469,37 @@ export class SupabaseRepository implements Repository {
   getSearchIndex = async (): Promise<SearchItem[]> => [];
   getChatSeed = async (): Promise<ChatSeed> => ({});
 
-  // ── Reservations (table lands in a later slice) ─────────────────────────────
+  // ── Reservations (real, per-member; no-ops until the table migration lands) ─
   getReservation = () => this.cache.reservation;
-  createReservation = async (_input: NewReservation) => { void _input; /* TODO: reservations slice */ };
-  cancelReservation = async () => { /* TODO: reservations slice */ };
+
+  createReservation = async ({ amenity, day, slot, hours }: NewReservation) => {
+    if (!this.communityId || !this.profileId) return;
+    await this.client.from('reservations').insert({
+      community_id: this.communityId,
+      profile_id: this.profileId,
+      amenity,
+      day_label: day,
+      slot_label: slot,
+      hours,
+      summary: `${amenity} · ${day} · ${slot}${hours === 2 ? ' · 2h' : ''}`,
+    });
+    await this.refresh();
+  };
+
+  cancelReservation = async () => {
+    if (!this.profileId) return;
+    await this.client.from('reservations').update({ status: 'cancelled' })
+      .eq('profile_id', this.profileId).eq('status', 'booked');
+    await this.refresh();
+  };
+
+  private async hydrateReservation() {
+    if (!this.profileId) { this.cache.reservation = { booked: false, summary: null }; return; }
+    const { data } = await this.client.from('reservations')
+      .select('summary').eq('profile_id', this.profileId).eq('status', 'booked')
+      .order('created_at', { ascending: false }).limit(1).maybeSingle();
+    this.cache.reservation = data ? { booked: true, summary: data.summary } : { booked: false, summary: null };
+  }
 
   // ── Feed comments (table lands in a later slice) ────────────────────────────
   getComments = () => this.cache.comments;

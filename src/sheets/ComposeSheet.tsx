@@ -3,11 +3,13 @@ import { Sheet } from '../components/Sheet';
 import { PhIcon } from '../components/PhIcon';
 import { Confetti } from '../components/Confetti';
 import { usePavStore } from '../store/store';
+import { useRepository } from '../data/repo';
 
 export function ComposeSheet() {
   const composeOpen = usePavStore((s) => s.composeOpen);
   const composePhoto = usePavStore((s) => s.composePhoto);
   const set = usePavStore((s) => s.set);
+  const repo = useRepository();
   const [text, setText] = useState('');
   const [posted, setPosted] = useState(false);
 
@@ -21,8 +23,15 @@ export function ComposeSheet() {
 
   const post = () => {
     if (!text.trim()) return;
-    setPosted(true);
-    setTimeout(close, 1600);
+    if (repo.isDemo()) {
+      setPosted(true);
+      setTimeout(close, 1600);
+      return;
+    }
+    void repo.createFeedPost(text).then(() => {
+      setPosted(true);
+      setTimeout(close, 1600);
+    });
   };
 
   return (

@@ -176,6 +176,44 @@ export interface Decision {
   passed: boolean;
 }
 
+/** A report in the board's live triage queue (empty in demo — the demo
+ * renders its scripted triage cards instead). */
+export interface TriageItem {
+  id: string;
+  title: string;
+  sub: string;        // 'Reported privately by #27 · Maintenance'
+  status: string;     // open | ticketed | assigned | resolved
+  ref: string;        // '#M-92' once ticketed
+}
+
+/** An ARC request in the board's live queue, across all units. */
+export interface BoardArcItem {
+  id: string;
+  ref: string;
+  title: string;
+  unitLabel: string;
+  approved: boolean;
+}
+
+/** Resident-submitted report (private to the board). */
+export interface NewReport {
+  kind: string;        // 'Maintenance' | 'Safety' | …
+  description: string;
+}
+
+/** Resident-submitted ARC request. */
+export interface NewArcRequest {
+  type: string;        // 'Paint' | 'Fence' | …
+  description: string;
+}
+
+/** Board-opened community ballot. */
+export interface NewVote {
+  question: string;
+  yesLabel: string;
+  noLabel: string;
+}
+
 /** The signed-in member's identity + their place in the community. */
 export interface MemberContext {
   name: string;
@@ -228,6 +266,34 @@ export interface Repository {
 
   /** The board's decisions log (empty for a fresh community). */
   getDecisions(): Decision[];
+
+  // Write paths. In live these insert/update real rows and re-hydrate; in the
+  // demo they drive the same scripted store flags the sheets always set, so
+  // the presenter flow is unchanged.
+  /** File a private report to the board. */
+  createReport(input: NewReport): Promise<void>;
+  /** Board: advance a report (create ticket / resolve). */
+  setReportStatus(id: string, status: 'ticketed' | 'resolved'): Promise<void>;
+  /** The board's live triage rows (empty in demo — scripted cards render instead). */
+  getTriageItems(): TriageItem[];
+  /** The member's own reports (live MyPlace "My requests"; empty in demo). */
+  getMyReports(): TriageItem[];
+
+  /** Submit an ARC request for the member's unit. */
+  createArcRequest(input: NewArcRequest): Promise<void>;
+  /** Board: approve (or decline) an ARC request; approval logs a decision. */
+  decideArc(id: string, approve: boolean): Promise<void>;
+  /** The board's live ARC queue across all units (empty in demo). */
+  getBoardArcQueue(): BoardArcItem[];
+
+  /** Post to the Commons feed as the signed-in member. */
+  createFeedPost(body: string): Promise<void>;
+
+  /** Board: open a community ballot. */
+  openVote(input: NewVote): Promise<void>;
+
+  /** Member marks their own courtesy notice fixed (self-cure). */
+  markViolationFixed(): Promise<void>;
 
   /** Community events (empty for a fresh community). */
   getEvents(): CommunityEvent[];
