@@ -138,7 +138,11 @@ function useRepoRead<T>(
 }
 
 // Reservations
-export const useAmenities = () => useRepoRead('amenities', (r) => r.listAmenities(), []);
+/** Reactive: live re-renders when amenities hydrate after auth resolves. */
+export function useAmenities() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getAmenities());
+}
 export const useReservationSlots = () => useRepoRead('reservationSlots', (r) => r.getReservationSlots(), []);
 export const useReservationDays = () => useRepoRead('reservationDays', (r) => r.getReservationDays(), []);
 

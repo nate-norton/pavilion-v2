@@ -63,6 +63,7 @@ export class SupabaseRepository implements Repository {
     triageItems: [] as TriageItem[],
     myReports: [] as TriageItem[],
     boardArc: [] as BoardArcItem[],
+    amenities: [] as Amenity[],
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
     chats: {} as MockChatMap,
@@ -127,6 +128,7 @@ export class SupabaseRepository implements Repository {
     await this.hydrateTriage();
     await this.hydrateDecisions();
     await this.hydrateBoardArc();
+    await this.hydrateAmenities();
     await this.hydrateReservation();
     await this.hydrateGroups();
     this.notify();
@@ -501,7 +503,7 @@ export class SupabaseRepository implements Repository {
   getAiQA = async (): Promise<QAType> => ({});
 
   // ── Community reference data (no tables yet → empty states) ─────────────────
-  listAmenities = async (): Promise<Amenity[]> => [];
+  listAmenities = async (): Promise<Amenity[]> => this.cache.amenities;
   listVendors = async (): Promise<Vendor[]> => [];
   listDirectory = async (): Promise<DirEntry[]> => [];
   listFreeItems = async (): Promise<FreeItem[]> => [];
@@ -514,6 +516,19 @@ export class SupabaseRepository implements Repository {
   listMapPins = async (): Promise<Pin[]> => [];
   getSearchIndex = async (): Promise<SearchItem[]> => [];
   getChatSeed = async (): Promise<ChatSeed> => ({});
+
+  // ── Amenities (real, community-scoped; empty until the board adds them) ─────
+  getAmenities = () => this.cache.amenities;
+
+  private async hydrateAmenities() {
+    if (!this.communityId) { this.cache.amenities = []; return; }
+    const { data } = await this.client.from('amenities')
+      .select('*').eq('community_id', this.communityId).eq('active', true).order('sort_order');
+    this.cache.amenities = (data ?? []).map((a) => ({
+      name: a.name, sub: a.sub, icon: a.icon, rules: a.rules,
+      avail: a.avail_label, occ: a.occ_label, occColor: '#A39B8B', taken: [],
+    }));
+  }
 
   // ── Reservations (real, per-member; no-ops until the table migration lands) ─
   getReservation = () => this.cache.reservation;

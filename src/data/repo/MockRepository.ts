@@ -271,6 +271,7 @@ export class MockRepository implements Repository, SnapshotReadable {
     return value;
   };
 
+  getAmenities = () => AMENS;
   listAmenities = async () => AMENS;
   getReservationSlots = async () => SLOTS;
   getReservationDays = async () => DAYS;

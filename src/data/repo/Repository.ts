@@ -301,6 +301,8 @@ export interface Repository {
   getFeed(): FeedPost[];
 
   // Reservations
+  /** The community's bookable amenities, reactive (empty for a fresh community). */
+  getAmenities(): Amenity[];
   listAmenities(): Promise<Amenity[]>;
   getReservationSlots(): Promise<string[]>;
   getReservationDays(): Promise<string[]>;
