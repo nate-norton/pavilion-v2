@@ -320,7 +320,7 @@ export function Commons() {
                             {g.muted && <PhIcon name="ph-fill ph-bell-slash" size={11} color="rgb(var(--stonelight))" />}
                           </p>
                           <p className="m-0 text-[11.5px] text-stone font-semibold overflow-hidden text-ellipsis whitespace-nowrap">
-                            {lastMsg ? lastMsg.text : `${g.memberCount} members`}
+                            {lastMsg ? lastMsg.text : `${g.memberCount} ${g.memberCount === 1 ? "member" : "members"}`}
                           </p>
                           {(openPolls > 0 || upcomingEvents > 0) && (
                             <div className="flex gap-2 mt-1">
@@ -368,7 +368,7 @@ export function Commons() {
                         <div className="flex-1 min-w-0">
                           <p className="m-0 mb-px text-sm font-bold text-navy">{g.name}</p>
                           <p className="m-0 text-[11.5px] text-stone font-semibold">
-                            {g.memberCount} members{nextEvent ? ` · ${nextEvent.title}` : ''}
+                            {g.memberCount} {g.memberCount === 1 ? "member" : "members"}{nextEvent ? ` · ${nextEvent.title}` : ''}
                           </p>
                         </div>
                         <button
@@ -415,19 +415,31 @@ export function Commons() {
             <div className="flex-1">
               <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Messages</p>
               <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
-                3 unread from your neighbors
+                {repo.isDemo() ? '3 unread from your neighbors' : 'Chat privately with your neighbors'}
               </p>
             </div>
+            {repo.isDemo() && (
             <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 bg-ember">
               3
             </span>
+            )}
           </div>
           <div className="flex items-start gap-1.5 mx-1 mb-3.5">
             <PhIcon name="ph-fill ph-lock-simple" size={12} color="rgb(var(--stone))" className="mt-0.5" />
             <p className="m-0 text-[11.5px] text-stone font-bold">
-              Only neighbors who opt in appear here. You&apos;re visible as &quot;Alex · #27&quot;.
+              Only neighbors who opt in appear here. You&apos;re visible as &quot;
+              {repo.isDemo() ? 'Alex · #27' : [member?.name, member?.unitLabel].filter(Boolean).join(' · ')}&quot;.
             </p>
           </div>
+          {DIR.length === 0 && (
+            <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+              <PhIcon name="ph-fill ph-users-three" size={26} color="rgb(var(--claypale))" />
+              <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No neighbors here yet</p>
+              <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
+                Neighbors appear as they join and opt in to the directory.
+              </p>
+            </div>
+          )}
           <div className="flex flex-col gap-2.5">
             {DIR.map((d) => {
               return (
@@ -475,6 +487,15 @@ export function Commons() {
               Give it away, don&apos;t throw it away. Claimed items get picked up from the porch.
             </p>
           </div>
+          {FREE.length === 0 && (
+            <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+              <PhIcon name="ph-fill ph-gift" size={26} color="rgb(var(--claypale))" />
+              <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">Nothing listed right now</p>
+              <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
+                Have something to give away? Listings are on the way.
+              </p>
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-2.5">
             {FREE.map((f) => {
               const claimed = !!state.claimed[f.key];

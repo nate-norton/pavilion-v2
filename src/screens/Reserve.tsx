@@ -226,10 +226,11 @@ export function Reserve() {
         <p className="m-0 mb-3.5 text-[13.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
           Amenities, booked in two taps. One active booking per household.
         </p>
+        {repo.isDemo() && (
         <div
           onClick={() => set({ passOpen: true })}
           className="rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5 bg-navy"
-        >
+>
           <PhIcon name="ph-fill ph-qr-code" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
           <div className="flex-1">
             <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Expecting visitors?</p>
@@ -241,6 +242,7 @@ export function Reserve() {
             Pass →
           </span>
         </div>
+        )}
 
         {hasBooking && (
           <div
@@ -264,6 +266,15 @@ export function Reserve() {
           </div>
         )}
 
+        {AMENS.length === 0 && (
+          <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+            <PhIcon name="ph-fill ph-calendar-check" size={26} color="rgb(var(--claypale))" />
+            <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No amenities set up yet</p>
+            <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
+              When your board adds the clubhouse, pool, or courts, you&apos;ll book them here.
+            </p>
+          </div>
+        )}
         <div className="flex flex-col gap-2.5">
           {AMENS.map((a, i) => (
             <div
