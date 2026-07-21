@@ -13,6 +13,15 @@ import type { ArcState, ArcStep, BoardArcItem, BoardTriage, CommunityEvent, Deci
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
 
+/** Relative age for feed posts: 'Just now' → '5m' → '3h' → '2d'. */
+function relTime(iso: string): string {
+  const s = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (s < 90) return 'Just now';
+  if (s < 3600) return `${Math.floor(s / 60)}m`;
+  if (s < 86400) return `${Math.floor(s / 3600)}h`;
+  return `${Math.floor(s / 86400)}d`;
+}
+
 function timeLabel(iso: string): string {
   const d = new Date(iso);
   let h = d.getHours();
@@ -142,7 +151,7 @@ export class SupabaseRepository implements Repository {
       kind,
     });
     this.failed('send your report', error, true);
-    await this.refresh();
+    await this.hydrateTriage(); this.notify();
   };
 
   setReportStatus = async (id: string, status: 'ticketed' | 'resolved') => {
@@ -155,7 +164,7 @@ export class SupabaseRepository implements Repository {
     if (!this.failed('update the report', error) && (data ?? []).length === 0) {
       emitAppError("Couldn't update the report — you may not have permission.");
     }
-    await this.refresh();
+    await this.hydrateTriage(); this.notify();
   };
 
   private async hydrateTriage() {
@@ -231,7 +240,7 @@ export class SupabaseRepository implements Repository {
       sort_order: -Math.floor(Date.now() / 1000),  // newest first under order(sort_order)
     });
     this.failed('publish your post', error, true);
-    await this.refresh();
+    await this.hydrateSocial(); this.notify();
   };
 
   private async hydrateSocial() {
@@ -246,7 +255,7 @@ export class SupabaseRepository implements Repository {
     }));
     this.cache.feed = (feed.data ?? []).map((p) => ({
       id: p.id, authorName: p.author_name, authorInitial: p.author_initial, authorColor: p.author_color,
-      unitLabel: p.unit_label, timeLabel: p.time_label, kind: p.kind, tagLabel: p.tag_label,
+      unitLabel: p.unit_label, timeLabel: relTime(p.created_at), kind: p.kind, tagLabel: p.tag_label,
       body: p.body, photoLabel: p.photo_label,
     }));
   }
@@ -273,7 +282,7 @@ export class SupabaseRepository implements Repository {
       ],
     });
     this.failed('submit your request', error, true);
-    await this.refresh();
+    await this.hydrateArc(); await this.hydrateBoardArc(); this.notify();
   };
 
   decideArc = async (id: string, approve: boolean) => {
@@ -301,7 +310,7 @@ export class SupabaseRepository implements Repository {
         sort_order: -Math.floor(Date.now() / 1000),
       });
     }
-    await this.refresh();
+    await this.hydrateArc(); await this.hydrateBoardArc(); await this.hydrateDecisions(); this.notify();
   };
 
   private async hydrateBoardArc() {
@@ -362,7 +371,7 @@ export class SupabaseRepository implements Repository {
     if (!this.failed('mark it fixed', error) && (data ?? []).length === 0) {
       emitAppError("Couldn't mark it fixed — you may not have permission.");
     }
-    await this.refresh();
+    await this.hydrateCompliance(); this.notify();
   };
 
   // ── Votes (real, community-scoped; empty until the board opens a ballot) ────
@@ -407,7 +416,7 @@ export class SupabaseRepository implements Repository {
       .insert({ vote_id: voteId, profile_id: this.profileId, choice });
     // duplicate ballot = already voted; anything else is worth surfacing
     if (error && !`${error.message}`.includes('duplicate')) this.failed('record your ballot', error);
-    await this.refresh();
+    await this.hydrateVotes(); this.notify();
   };
 
   openVote = async ({ question, yesLabel, noLabel }: NewVote) => {
@@ -427,7 +436,7 @@ export class SupabaseRepository implements Repository {
       status: 'open',
     });
     this.failed('open the ballot', error, true);
-    await this.refresh();
+    await this.hydrateVotes(); this.notify();
   };
 
   // ── Dues (real, per-unit; empty until the board issues statements) ──────────
@@ -521,7 +530,7 @@ export class SupabaseRepository implements Repository {
       summary: `${amenity} · ${day} · ${slot}${hours === 2 ? ' · 2h' : ''}`,
     });
     this.failed('book it', error);
-    await this.refresh();
+    await this.hydrateReservation(); this.notify();
   };
 
   cancelReservation = async () => {
@@ -529,7 +538,7 @@ export class SupabaseRepository implements Repository {
     const { error } = await this.client.from('reservations').update({ status: 'cancelled' })
       .eq('profile_id', this.profileId).eq('status', 'booked');
     this.failed('cancel the booking', error);
-    await this.refresh();
+    await this.hydrateReservation(); this.notify();
   };
 
   private async hydrateReservation() {
