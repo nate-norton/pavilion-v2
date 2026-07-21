@@ -62,6 +62,22 @@ export interface DuesState {
   history: DuesStatement[];
 }
 
+/** A courtesy notice / violation on the member's unit (null when compliant). */
+export interface ViolationNotice {
+  id: string;
+  title: string;   // 'Courtesy notice: trash bins'
+  sub: string;     // 'No fee · auto-closes if fixed by Jul 8'
+  fixed: boolean;
+}
+
+/** A one-time special assessment on the member's unit (null when none). */
+export interface SpecialAssessment {
+  id: string;
+  title: string;   // 'Roof-reserve assessment · $450'
+  sub: string;     // 'Due Aug 1 · pay now or split into 3'
+  paid: boolean;
+}
+
 /** A community's single open ballot, plus this member's cast vote (if any). */
 export type VoteChoice = 'yes' | 'no';
 export interface OpenVote {
@@ -114,6 +130,11 @@ export interface Repository {
   getVotes(): VotesState;
   /** Cast this member's ballot on the open vote. */
   castVote(voteId: string, choice: VoteChoice): Promise<void>;
+
+  /** The member's open courtesy notice / violation (null when compliant). */
+  getViolation(): ViolationNotice | null;
+  /** The member's one-time special assessment (null when none). */
+  getAssessment(): SpecialAssessment | null;
 
   // Reservations
   listAmenities(): Promise<Amenity[]>;

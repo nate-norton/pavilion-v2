@@ -3,7 +3,7 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { DuesState, DuesStatement, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, VoteChoice, VotesState } from './Repository';
+import type { DuesState, DuesStatement, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
 import { usePavStore } from '../../store/store';
@@ -108,6 +108,37 @@ export class MockRepository implements Repository, SnapshotReadable {
   };
   castVote = async (_voteId: string, choice: VoteChoice) => {
     usePavStore.getState().set({ voted: choice });
+  };
+
+  // Compliance derived from the demo scenario flags (memoized for stable refs).
+  private violCache: { sig: string; value: ViolationNotice | null } | null = null;
+  getViolation = (): ViolationNotice | null => {
+    const { showViolation, violFixed } = usePavStore.getState();
+    const sig = `${showViolation}|${violFixed}`;
+    if (this.violCache?.sig === sig) return this.violCache.value;
+    const value: ViolationNotice | null = !showViolation ? null : {
+      id: 'trash-bins',
+      title: 'Courtesy notice: trash bins',
+      sub: 'No fee · auto-closes if fixed by Jul 8',
+      fixed: violFixed,
+    };
+    this.violCache = { sig, value };
+    return value;
+  };
+
+  private saCache: { sig: string; value: SpecialAssessment | null } | null = null;
+  getAssessment = (): SpecialAssessment | null => {
+    const { showSpecialAssessment, saPaid } = usePavStore.getState();
+    const sig = `${showSpecialAssessment}|${saPaid}`;
+    if (this.saCache?.sig === sig) return this.saCache.value;
+    const value: SpecialAssessment | null = !showSpecialAssessment ? null : {
+      id: 'roof-reserve',
+      title: 'Roof-reserve assessment · $450',
+      sub: 'Due Aug 1 · pay now or split into 3',
+      paid: saPaid,
+    };
+    this.saCache = { sig, value };
+    return value;
   };
 
   listAmenities = async () => AMENS;

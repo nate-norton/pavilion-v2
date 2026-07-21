@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
-import type { DuesState, DuesStatement, DuesStatus, MemberContext, NewGroup, NewReservation, ReservationState, Repository, VoteChoice, VotesState } from './Repository';
+import type { DuesState, DuesStatement, DuesStatus, MemberContext, NewGroup, NewReservation, ReservationState, Repository, SpecialAssessment, ViolationNotice, VoteChoice, VotesState } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -42,6 +42,8 @@ export class SupabaseRepository implements Repository {
     member: null as MemberContext | null,
     dues: { current: null, cardTitle: '', cardSub: '', cardBtn: '', history: [] } as DuesState,
     votes: { open: null } as VotesState,
+    violation: null as ViolationNotice | null,
+    assessment: null as SpecialAssessment | null,
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
     chats: {} as MockChatMap,
@@ -79,8 +81,29 @@ export class SupabaseRepository implements Repository {
     await this.hydrateMember();
     await this.hydrateDues();
     await this.hydrateVotes();
+    await this.hydrateCompliance();
     await this.hydrateGroups();
     this.notify();
+  }
+
+  // ── Compliance (violation + special assessment; empty for a fresh member) ───
+  getViolation = () => this.cache.violation;
+  getAssessment = () => this.cache.assessment;
+
+  private async hydrateCompliance() {
+    if (!this.unitId) { this.cache.violation = null; this.cache.assessment = null; return; }
+    const [viol, sa] = await Promise.all([
+      this.client.from('violations').select('*').eq('unit_id', this.unitId)
+        .neq('status', 'resolved').order('created_at', { ascending: false }).limit(1).maybeSingle(),
+      this.client.from('special_assessments').select('*').eq('unit_id', this.unitId)
+        .eq('status', 'open').order('created_at', { ascending: false }).limit(1).maybeSingle(),
+    ]);
+    this.cache.violation = viol.data
+      ? { id: viol.data.id, title: viol.data.title, sub: viol.data.sub, fixed: viol.data.status === 'fixed' }
+      : null;
+    this.cache.assessment = sa.data
+      ? { id: sa.data.id, title: sa.data.title, sub: sa.data.sub, paid: false }
+      : null;
   }
 
   // ── Votes (real, community-scoped; empty until the board opens a ballot) ────

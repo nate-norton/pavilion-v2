@@ -1,5 +1,5 @@
 import { PhIcon } from '../components/PhIcon';
-import { useDues, useMember, useNotifications, usePortfolio, useReservation, useVotes } from '../data/repo';
+import { useAssessment, useDues, useMember, useNotifications, usePortfolio, useReservation, useViolation, useVotes } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 const ROW = 'flex items-center gap-[13px] cursor-pointer';
@@ -20,6 +20,8 @@ export function Today() {
   const firstName = member?.name.split(' ')[0] ?? '';
   const dues = useDues();
   const { open: vote } = useVotes();
+  const violation = useViolation();
+  const assessment = useAssessment();
 
   const isOwner = state.role === 'owner';
   const isTenant = state.role === 'tenant';
@@ -28,9 +30,9 @@ export function Today() {
   const showPayCardRole = !!dues.current && isOwner;
   const showArcCardRole = !state.arcSeen && isOwner;
   const showVoteCardRole = !!vote && !vote.myVote && (isOwner || isManager);
-  const saCardShow = state.showSpecialAssessment && !state.saPaid;
-  const violPendingCard = state.showViolation && !state.violFixed;
-  const violFixedCard = state.showViolation && state.violFixed;
+  const saCardShow = !!assessment && !assessment.paid;
+  const violPendingCard = !!violation && !violation.fixed;
+  const violFixedCard = !!violation && violation.fixed;
 
   // "Needs you" counter — data-driven off the repo domains (empty for a fresh
   // member). Dues + ARC are owner tasks; the open vote is owner/manager.
@@ -154,8 +156,8 @@ export function Today() {
           <div onClick={() => set({ saSheetOpen: true })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
             <div className="flex-1 min-w-0">
-              <p className={ROW_TITLE}>Roof-reserve assessment · $450</p>
-              <p className={ROW_SUB}>Due Aug 1 · pay now or split into 3</p>
+              <p className={ROW_TITLE}>{assessment?.title}</p>
+              <p className={ROW_SUB}>{assessment?.sub}</p>
             </div>
             {CARET}
           </div>
@@ -189,8 +191,8 @@ export function Today() {
           <div onClick={() => set({ violSheetOpen: true })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--gold))' }} />
             <div className="flex-1 min-w-0">
-              <p className={ROW_TITLE}>Courtesy notice: trash bins</p>
-              <p className={ROW_SUB}>No fee · auto-closes if fixed by Jul 8</p>
+              <p className={ROW_TITLE}>{violation?.title}</p>
+              <p className={ROW_SUB}>{violation?.sub}</p>
             </div>
             {CARET}
           </div>

@@ -286,6 +286,24 @@ export type Database = {
           },
         ]
       }
+      special_assessments: {
+        Row: { community_id: string; created_at: string; id: string; status: string; sub: string; title: string; unit_id: string }
+        Insert: { community_id: string; created_at?: string; id?: string; status?: string; sub?: string; title: string; unit_id: string }
+        Update: { community_id?: string; created_at?: string; id?: string; status?: string; sub?: string; title?: string; unit_id?: string }
+        Relationships: [
+          { foreignKeyName: "special_assessments_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "special_assessments_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
+        ]
+      }
+      violations: {
+        Row: { community_id: string; created_at: string; id: string; status: string; sub: string; title: string; unit_id: string }
+        Insert: { community_id: string; created_at?: string; id?: string; status?: string; sub?: string; title: string; unit_id: string }
+        Update: { community_id?: string; created_at?: string; id?: string; status?: string; sub?: string; title?: string; unit_id?: string }
+        Relationships: [
+          { foreignKeyName: "violations_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "violations_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
+        ]
+      }
       vote_ballots: {
         Row: { choice: string; created_at: string; id: string; profile_id: string; vote_id: string }
         Insert: { choice: string; created_at?: string; id?: string; profile_id: string; vote_id: string }

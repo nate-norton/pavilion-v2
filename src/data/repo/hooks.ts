@@ -47,6 +47,18 @@ export function useVotes() {
   return useSyncExternalStore(repo.subscribe, () => repo.getVotes());
 }
 
+/** The member's open courtesy notice / violation (null when compliant). */
+export function useViolation() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getViolation());
+}
+
+/** The member's one-time special assessment (null when none). */
+export function useAssessment() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getAssessment());
+}
+
 /**
  * Reads a domain slice through the repository. Seeds initial state from the
  * synchronous snapshot when the backend offers one (the mock → no loading

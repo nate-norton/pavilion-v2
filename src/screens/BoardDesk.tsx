@@ -4,7 +4,7 @@ import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { usePavStore } from '../store/store';
 import { getTriage, getBoardOpenCount } from '../store/selectors';
-import { useVendors, useAging, useVotes } from '../data/repo';
+import { useVendors, useAging, useVotes, useAssessment } from '../data/repo';
 
 const BOARD_SEGS = [
   { key: 'desk', label: 'Desk' },
@@ -30,6 +30,7 @@ export function BoardDesk() {
   const { open: vote } = useVotes();
   const quorum = { count: vote?.quorumCount ?? 0, pct: vote?.quorumPct ?? 0 };
   const quorumTotal = vote?.quorumTotal ?? 136;
+  const assessment = useAssessment();
 
   const arcNewTitle = state.arcType || 'Exterior update';
   const arcDescTrim = state.arcDesc.trim();
@@ -569,7 +570,7 @@ export function BoardDesk() {
             </div>
           </div>
 
-          {state.showSpecialAssessment && (
+          {assessment && (
             <>
               <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
                 Special assessment · roof reserve
