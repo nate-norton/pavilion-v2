@@ -327,6 +327,12 @@ export function Today() {
           <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
         </div>
 
+        <div onClick={() => set({ reportOpen: true })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
+          <PhIcon name="ph ph-shield-check" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
+          <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">See a problem? Report it privately</p>
+          <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
+        </div>
+
         {demo && (
         <div className="flex items-center gap-3" style={ROW_PAD}>
           <PhIcon name="ph ph-hand-waving" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
