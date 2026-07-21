@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
-import type { NewGroup, NewReservation, ReservationState, Repository } from './Repository';
+import type { MemberContext, NewGroup, NewReservation, ReservationState, Repository } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -38,6 +38,7 @@ export class SupabaseRepository implements Repository {
   private hydrated = false;
 
   private cache = {
+    member: null as MemberContext | null,
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
     chats: {} as MockChatMap,
@@ -71,8 +72,32 @@ export class SupabaseRepository implements Repository {
   /** Re-read the current user's context + domain slices, then notify. */
   private async refresh() {
     await this.resolveContext();
+    await this.hydrateMember();
     await this.hydrateGroups();
     this.notify();
+  }
+
+  // ── Member identity (real, from profile + membership) ───────────────────────
+  getMember = () => this.cache.member;
+
+  private async hydrateMember() {
+    if (!this.profileId) { this.cache.member = null; return; }
+    const { data: profile } = await this.client.from('profiles')
+      .select('name, initial, color').eq('id', this.profileId).maybeSingle();
+    if (!profile) { this.cache.member = null; return; }
+    const { data: membership } = await this.client.from('memberships')
+      .select('role, communities(name), units(label)')
+      .eq('profile_id', this.profileId).eq('status', 'active').maybeSingle();
+    const community = (membership as { communities: { name: string } | null } | null)?.communities;
+    const unit = (membership as { units: { label: string } | null } | null)?.units;
+    this.cache.member = {
+      name: profile.name,
+      initial: profile.initial,
+      color: profile.color,
+      role: (membership?.role as 'resident' | 'board') ?? 'resident',
+      communityName: community?.name ?? '',
+      unitLabel: unit?.label ?? '',
+    };
   }
 
   // ── Static config (backend-agnostic) ───────────────────────────────────────

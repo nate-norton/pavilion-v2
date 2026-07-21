@@ -3,9 +3,15 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { NewGroup, NewReservation, Repository, RepositorySnapshot, SnapshotReadable } from './Repository';
+import type { MemberContext, NewGroup, NewReservation, Repository, RepositorySnapshot, SnapshotReadable } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
+
+/** The demo persona (stable reference for useSyncExternalStore). */
+const DEMO_MEMBER: MemberContext = {
+  name: 'Alex Rivera', initial: 'A', color: '#1A3352', role: 'board',
+  communityName: 'Juniper Ridge', unitLabel: '#27 Alder Way',
+};
 
 /** Clock label matching the store's original format (e.g. "3:07 PM"). */
 function now(): string {
@@ -24,6 +30,8 @@ function now(): string {
  */
 export class MockRepository implements Repository, SnapshotReadable {
   subscribe = mockDomain.subscribe;
+
+  getMember = () => DEMO_MEMBER;
 
   listAmenities = async () => AMENS;
   getReservationSlots = async () => SLOTS;

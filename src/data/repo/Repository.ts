@@ -37,6 +37,16 @@ export interface NewReservation {
   hours: 1 | 2;
 }
 
+/** The signed-in member's identity + their place in the community. */
+export interface MemberContext {
+  name: string;
+  initial: string;
+  color: string;
+  role: 'resident' | 'board';
+  communityName: string;
+  unitLabel: string;
+}
+
 export interface Repository {
   /**
    * Subscribe to mutable-domain changes (bookings, groups, …). Returns an
@@ -44,6 +54,9 @@ export interface Repository {
    * useSyncExternalStore so writes re-render the UI.
    */
   subscribe(listener: () => void): () => void;
+
+  /** The current member's identity/community. null until resolved (live mode). */
+  getMember(): MemberContext | null;
 
   // Reservations
   listAmenities(): Promise<Amenity[]>;

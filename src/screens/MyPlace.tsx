@@ -4,7 +4,7 @@ import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
 import { getDelinquent } from '../store/selectors';
-import { usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
+import { useMember, usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
 import { isLiveMode, signOutLive } from '../auth/AuthGate';
 
 const CARD: CSSProperties = {
@@ -35,6 +35,7 @@ export function MyPlace() {
   const PORTFOLIO = usePortfolio();
   const reservation = useReservation();
   const groups = useGroups();
+  const member = useMember();
 
   const [apConfirm, setApConfirm] = useState(false);
 
@@ -46,11 +47,21 @@ export function MyPlace() {
   const delinquent = getDelinquent(state);
   const juneLate = state.showDelinquent;
 
-  const roleLabel = isTenant
-    ? 'Renter · #27 Alder Way'
-    : isManager
-      ? 'Property manager · Cedar Hill Mgmt'
-      : '#27 Alder Way · Owner · here since 2021';
+  // Live mode: identity comes from the signed-in member's profile + membership.
+  // Demo mode: keep the scripted owner/tenant/manager scenario labels.
+  const liveRoleLabel = [
+    member?.unitLabel,
+    member?.role === 'board' ? 'Board member' : 'Resident',
+  ].filter(Boolean).join(' · ');
+  const roleLabel = isLiveMode
+    ? liveRoleLabel
+    : isTenant
+      ? 'Renter · #27 Alder Way'
+      : isManager
+        ? 'Property manager · Cedar Hill Mgmt'
+        : '#27 Alder Way · Owner · here since 2021';
+  const displayName = member?.name ?? 'Alex Rivera';
+  const displayInitial = member?.initial ?? 'A';
   const duesLabel = state.paid ? 'Paid · Jul 1' : state.planActive ? 'Plan active' : delinquent ? '30 days late' : 'Due Jul 3';
   const statOneLabel = isTenant ? 'Lease' : isManager ? 'Role' : 'Dues';
   const statOneValue = isTenant ? 'Active' : isManager ? 'Manager' : duesLabel;
@@ -116,10 +127,10 @@ export function MyPlace() {
 
       <div className="flex items-center gap-3.5 mb-[18px]">
         <div className="w-[58px] h-[58px] rounded-full bg-navy flex items-center justify-center text-cream font-extrabold text-[22px] flex-shrink-0">
-          A
+          {displayInitial}
         </div>
         <div>
-          <h1 className="m-0 mb-0.5 font-serif font-normal text-2xl text-navy">Alex Rivera</h1>
+          <h1 className="m-0 mb-0.5 font-serif font-normal text-2xl text-navy">{displayName}</h1>
           <p className="m-0 text-[12.5px] font-bold text-stone">
             {roleLabel}
           </p>

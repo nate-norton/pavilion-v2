@@ -24,6 +24,12 @@ export function useGroups() {
   return useSyncExternalStore(repo.subscribe, () => repo.getGroups());
 }
 
+/** The signed-in member's identity/community. null until resolved (live mode). */
+export function useMember() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getMember());
+}
+
 /**
  * Reads a domain slice through the repository. Seeds initial state from the
  * synchronous snapshot when the backend offers one (the mock → no loading

@@ -1,5 +1,5 @@
 import { PhIcon } from '../components/PhIcon';
-import { useNotifications, usePortfolio, useReservation } from '../data/repo';
+import { useMember, useNotifications, usePortfolio, useReservation } from '../data/repo';
 import { usePavStore } from '../store/store';
 import { getAttention, getDelinquent, getQuorum } from '../store/selectors';
 
@@ -17,6 +17,8 @@ export function Today() {
   const NOTIFS = useNotifications();
   const PORTFOLIO = usePortfolio();
   const reservation = useReservation();
+  const member = useMember();
+  const firstName = member?.name.split(' ')[0] ?? '';
   const { n, summary: attnSummary } = getAttention(state);
   const { pct: quorumPct } = getQuorum(state);
   const delinquent = getDelinquent(state);
@@ -86,11 +88,11 @@ export function Today() {
       )}
 
       <p className="m-0 mb-1.5 text-[11px] font-bold uppercase text-stonelight" style={{ letterSpacing: '0.14em' }}>
-        Tuesday, July 1 · Juniper Ridge
+        {member?.communityName ? `Tuesday, July 1 · ${member.communityName}` : 'Tuesday, July 1'}
       </p>
       <div className="flex items-start justify-between gap-3 mb-1.5">
         <h1 className="m-0 font-serif font-normal text-[32px] text-navy leading-[1.1]" style={{ letterSpacing: '-0.01em' }}>
-          Morning, Alex.
+          {firstName ? `Morning, ${firstName}.` : 'Morning.'}
         </h1>
         <div className="flex items-center gap-0.5 flex-shrink-0 mt-0.5">
           <button
