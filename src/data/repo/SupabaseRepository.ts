@@ -96,6 +96,7 @@ export class SupabaseRepository implements Repository {
     await this.hydrateTriage();
     await this.hydrateDecisions();
     await this.hydrateBoardArc();
+    await this.hydrateReservation();
     await this.hydrateGroups();
     this.notify();
   }
@@ -322,6 +323,14 @@ export class SupabaseRepository implements Repository {
       : null;
   }
 
+  /** Member marks their own courtesy notice fixed (self-cure policy). */
+  markViolationFixed = async () => {
+    const v = this.cache.violation;
+    if (!v) return;
+    await this.client.from('violations').update({ status: 'fixed' }).eq('id', v.id);
+    await this.refresh();
+  };
+
   // ── Votes (real, community-scoped; empty until the board opens a ballot) ────
   getVotes = () => this.cache.votes;
 
@@ -460,10 +469,37 @@ export class SupabaseRepository implements Repository {
   getSearchIndex = async (): Promise<SearchItem[]> => [];
   getChatSeed = async (): Promise<ChatSeed> => ({});
 
-  // ── Reservations (table lands in a later slice) ─────────────────────────────
+  // ── Reservations (real, per-member; no-ops until the table migration lands) ─
   getReservation = () => this.cache.reservation;
-  createReservation = async (_input: NewReservation) => { void _input; /* TODO: reservations slice */ };
-  cancelReservation = async () => { /* TODO: reservations slice */ };
+
+  createReservation = async ({ amenity, day, slot, hours }: NewReservation) => {
+    if (!this.communityId || !this.profileId) return;
+    await this.client.from('reservations').insert({
+      community_id: this.communityId,
+      profile_id: this.profileId,
+      amenity,
+      day_label: day,
+      slot_label: slot,
+      hours,
+      summary: `${amenity} · ${day} · ${slot}${hours === 2 ? ' · 2h' : ''}`,
+    });
+    await this.refresh();
+  };
+
+  cancelReservation = async () => {
+    if (!this.profileId) return;
+    await this.client.from('reservations').update({ status: 'cancelled' })
+      .eq('profile_id', this.profileId).eq('status', 'booked');
+    await this.refresh();
+  };
+
+  private async hydrateReservation() {
+    if (!this.profileId) { this.cache.reservation = { booked: false, summary: null }; return; }
+    const { data } = await this.client.from('reservations')
+      .select('summary').eq('profile_id', this.profileId).eq('status', 'booked')
+      .order('created_at', { ascending: false }).limit(1).maybeSingle();
+    this.cache.reservation = data ? { booked: true, summary: data.summary } : { booked: false, summary: null };
+  }
 
   // ── Feed comments (table lands in a later slice) ────────────────────────────
   getComments = () => this.cache.comments;

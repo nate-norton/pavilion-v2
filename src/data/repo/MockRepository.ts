@@ -72,6 +72,7 @@ export class MockRepository implements Repository, SnapshotReadable {
   getBoardArcQueue = () => EMPTY_BOARD_ARC;
   createFeedPost = async () => {};
   openVote = async () => { usePavStore.getState().postVote(); };
+  markViolationFixed = async () => { usePavStore.getState().set({ violFixed: true }); };
 
   // Known issues derived from the demo triage flags so the board's actions
   // (create ticket, schedule vendor) reflect on the resident-facing HOA list.

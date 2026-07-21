@@ -364,6 +364,15 @@ export type Database = {
           { foreignKeyName: "reports_reporter_profile_id_fkey"; columns: ["reporter_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
         ]
       }
+      reservations: {
+        Row: { amenity: string; community_id: string; created_at: string; day_label: string; hours: number; id: string; profile_id: string; slot_label: string; status: string; summary: string }
+        Insert: { amenity: string; community_id: string; created_at?: string; day_label: string; hours?: number; id?: string; profile_id: string; slot_label: string; status?: string; summary?: string }
+        Update: { amenity?: string; community_id?: string; created_at?: string; day_label?: string; hours?: number; id?: string; profile_id?: string; slot_label?: string; status?: string; summary?: string }
+        Relationships: [
+          { foreignKeyName: "reservations_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "reservations_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
       special_assessments: {
         Row: { community_id: string; created_at: string; id: string; status: string; sub: string; title: string; unit_id: string }
         Insert: { community_id: string; created_at?: string; id?: string; status?: string; sub?: string; title: string; unit_id: string }

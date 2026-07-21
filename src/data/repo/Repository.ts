@@ -292,6 +292,9 @@ export interface Repository {
   /** Board: open a community ballot. */
   openVote(input: NewVote): Promise<void>;
 
+  /** Member marks their own courtesy notice fixed (self-cure). */
+  markViolationFixed(): Promise<void>;
+
   /** Community events (empty for a fresh community). */
   getEvents(): CommunityEvent[];
   /** Commons feed posts (empty for a fresh community). */
