@@ -12,11 +12,15 @@ React 19 + TypeScript + Vite + Zustand + Tailwind SPA with a dual backend:
 
 ## Branches & deploys
 
-- `dev` → Vercel production = the **presenter demo** (demo mode).
-- `staging` → live mode against the `pavilion-dev` Supabase project.
-  `.env.production` (VITE_APP_MODE=live + Supabase creds) exists **only on
+- `staging` → Vercel project `pavilion-v2` = **the product**, live mode against
+  the `pavilion-dev` Supabase project → https://app.pavilion.community
+- `dev` → Vercel project `pavilion-v2-demo` = **the presenter demo** (demo
+  mode) → https://demo.pavilion.community
+- `.env.production` (VITE_APP_MODE=live + Supabase creds) exists **only on
   `staging`** — never merge `staging` into `dev`, merge the feature branch
   into each instead.
+- The marketing site (separate repo, project `pavilion-website`) serves
+  https://pavilion.community.
 
 ## Architecture — the Repository seam
 
