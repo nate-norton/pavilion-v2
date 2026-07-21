@@ -3,7 +3,7 @@ import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { usePavStore } from '../store/store';
-import { useVendors, useAging, useVotes, useAssessment, useBoardTriage } from '../data/repo';
+import { useVendors, useAging, useVotes, useAssessment, useBoardTriage, useRepository } from '../data/repo';
 
 const BOARD_SEGS = [
   { key: 'desk', label: 'Desk' },
@@ -20,16 +20,19 @@ export function BoardDesk() {
   const { set } = state;
 
   const [voteConfirm, setVoteConfirm] = useState(false);
+  const triage = useBoardTriage();
+  const { open: vote } = useVotes();
+  const assessment = useAssessment();
+  // Requests/Money/Comms are scripted demo tooling with no live domain yet —
+  // a live board sees honest "coming soon" states instead of fabricated numbers.
+  const demo = useRepository().isDemo();
 
   if (!state.boardMode) return null;
 
   const exitBoard = () => set({ boardMode: false });
-  const triage = useBoardTriage();
   const boardOpenN = triage.openCount;
-  const { open: vote } = useVotes();
   const quorum = { count: vote?.quorumCount ?? 0, pct: vote?.quorumPct ?? 0 };
   const quorumTotal = vote?.quorumTotal ?? 136;
-  const assessment = useAssessment();
 
   const arcNewTitle = state.arcType || 'Exterior update';
   const arcDescTrim = state.arcDesc.trim();
@@ -95,7 +98,7 @@ export function BoardDesk() {
           <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
             Collected
           </p>
-          <p className="m-0 font-serif text-lg text-navy">96%</p>
+          <p className="m-0 font-serif text-lg text-navy">{demo ? '96%' : '—'}</p>
         </div>
       </div>
 
@@ -304,7 +307,16 @@ export function BoardDesk() {
         </div>
       )}
 
-      {state.boardTab === 'req' && (
+      {state.boardTab === 'req' && !demo && (
+        <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+          <PhIcon name="ph-fill ph-tray" size={22} color="rgb(var(--claypale))" />
+          <p className="m-0 mt-2 text-[13px] font-bold text-navy">No requests yet</p>
+          <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
+            ARC requests and maintenance reports land here as residents submit them.
+          </p>
+        </div>
+      )}
+      {state.boardTab === 'req' && demo && (
         <div className="animate-fadeup">
           <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
             ARC queue
@@ -477,7 +489,16 @@ export function BoardDesk() {
         </div>
       )}
 
-      {state.boardTab === 'money' && (
+      {state.boardTab === 'money' && !demo && (
+        <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+          <PhIcon name="ph-fill ph-coins" size={22} color="rgb(var(--claypale))" />
+          <p className="m-0 mt-2 text-[13px] font-bold text-navy">No financials yet</p>
+          <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
+            Collections, budget tracking, and the aging report switch on once dues are issued.
+          </p>
+        </div>
+      )}
+      {state.boardTab === 'money' && demo && (
         <div className="animate-fadeup">
           <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
             July collections
@@ -661,7 +682,16 @@ export function BoardDesk() {
         </div>
       )}
 
-      {state.boardTab === 'comms' && (
+      {state.boardTab === 'comms' && !demo && (
+        <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+          <PhIcon name="ph-fill ph-broadcast" size={22} color="rgb(var(--claypale))" />
+          <p className="m-0 mt-2 text-[13px] font-bold text-navy">Comms tools are on the way</p>
+          <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
+            Broadcasts, the Friday digest, and community votes will run from here.
+          </p>
+        </div>
+      )}
+      {state.boardTab === 'comms' && demo && (
         <div className="animate-fadeup">
           <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
             Broadcast

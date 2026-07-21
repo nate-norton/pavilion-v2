@@ -86,6 +86,14 @@ export type Database = {
         }
         Relationships: []
       }
+      decisions: {
+        Row: { community_id: string; created_at: string; date_label: string; id: string; passed: boolean; pill_label: string; sort_order: number; text: string }
+        Insert: { community_id: string; created_at?: string; date_label: string; id?: string; passed?: boolean; pill_label?: string; sort_order?: number; text: string }
+        Update: { community_id?: string; created_at?: string; date_label?: string; id?: string; passed?: boolean; pill_label?: string; sort_order?: number; text?: string }
+        Relationships: [
+          { foreignKeyName: "decisions_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
+      }
       dues_statements: {
         Row: {
           amount_cents: number

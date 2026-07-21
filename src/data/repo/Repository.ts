@@ -156,6 +156,26 @@ export interface VotesState {
   open: OpenVote | null;
 }
 
+/** A community-visible maintenance issue row (HOA "Known issues"). */
+export interface KnownIssue {
+  id: string;
+  icon: string;        // phosphor icon name
+  iconColor: string;   // css color for the icon
+  title: string;
+  statusLabel: string; // 'In triage' / 'BrightPath · assigned' / 'Fixed Jun 24'
+  tone: 'gold' | 'mint' | 'sand';  // pill styling: pending / handled / closed
+  resolved: boolean;
+}
+
+/** One line of the board's decisions log. */
+export interface Decision {
+  id: string;
+  dateLabel: string;   // 'JUN 18'
+  text: string;
+  pillLabel: string;   // 'Passed 91–22'
+  passed: boolean;
+}
+
 /** The signed-in member's identity + their place in the community. */
 export interface MemberContext {
   name: string;
@@ -173,6 +193,13 @@ export interface Repository {
    * useSyncExternalStore so writes re-render the UI.
    */
   subscribe(listener: () => void): () => void;
+
+  /**
+   * Whether this backend serves the scripted presenter demo. Screens use it to
+   * gate demo-flavor panels (finance breakdowns, meeting prep, digest drafts)
+   * that have no live data domain yet — live shows honest empty states instead.
+   */
+  isDemo(): boolean;
 
   /** The current member's identity/community. null until resolved (live mode). */
   getMember(): MemberContext | null;
@@ -195,6 +222,12 @@ export interface Repository {
 
   /** The board's triage queue summary (empty for a fresh community). */
   getBoardTriage(): BoardTriage;
+
+  /** Community-visible maintenance issues (from the board's queue; empty when none). */
+  getIssues(): KnownIssue[];
+
+  /** The board's decisions log (empty for a fresh community). */
+  getDecisions(): Decision[];
 
   /** Community events (empty for a fresh community). */
   getEvents(): CommunityEvent[];
