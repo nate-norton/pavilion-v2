@@ -1,7 +1,7 @@
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { useVotes } from '../data/repo';
+import { useVotes, useRepository } from '../data/repo';
 
 const AGENDA = [
   '2027 budget ratification',
@@ -18,8 +18,11 @@ export function Meeting() {
   const { set } = state;
   const { open: vote } = useVotes();
   const quorum = { count: vote?.quorumCount ?? 0, pct: vote?.quorumPct ?? 0 };
+  // Scripted meeting content is demo-only; a stale persisted meetingOpen flag
+  // must not surface it in live.
+  const demo = useRepository().isDemo();
 
-  if (!state.meetingOpen) return null;
+  if (!state.meetingOpen || !demo) return null;
 
   return (
     <div
