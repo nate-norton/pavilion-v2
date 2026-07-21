@@ -14,6 +14,14 @@ export type Database = {
   }
   public: {
     Tables: {
+      amenities: {
+        Row: { active: boolean; avail_label: string; community_id: string; created_at: string; icon: string; id: string; name: string; occ_label: string; rules: string; sort_order: number; sub: string }
+        Insert: { active?: boolean; avail_label?: string; community_id: string; created_at?: string; icon?: string; id?: string; name: string; occ_label?: string; rules?: string; sort_order?: number; sub?: string }
+        Update: { active?: boolean; avail_label?: string; community_id?: string; created_at?: string; icon?: string; id?: string; name?: string; occ_label?: string; rules?: string; sort_order?: number; sub?: string }
+        Relationships: [
+          { foreignKeyName: "amenities_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
+      }
       arc_requests: {
         Row: {
           approved: boolean
