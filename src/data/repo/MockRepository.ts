@@ -374,6 +374,8 @@ export class MockRepository implements Repository, SnapshotReadable {
   };
 
   listDirectory = async () => DIR;
+  getDirectory = () => DIR;
+  getChatIndex = () => CHAT_SEED;
   listCircles = async () => CIRC;
   listFreeItems = async () => FREE;
   getChatSeed = async () => CHAT_SEED;
