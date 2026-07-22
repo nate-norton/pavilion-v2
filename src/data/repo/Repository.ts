@@ -319,6 +319,12 @@ export interface Repository {
   addComment(text: string): Promise<void>;
 
   // Direct messages
+  /** Reactive chat index: who you can message + last-message preview.
+   * Demo: the scripted seed. Live: every other community member, with real
+   * thread previews merged in (keys are profile ids). */
+  getChatIndex(): ChatSeed;
+  /** Reactive community directory (live: fellow members; demo: seed). */
+  getDirectory(): DirEntry[];
   getChats(): Record<string, ChatMsg[]>;
   /** `reply` (default true) triggers the scripted neighbor reply; photos pass false. */
   sendChatMessage(chatKey: string, text: string, reply?: boolean): Promise<void>;

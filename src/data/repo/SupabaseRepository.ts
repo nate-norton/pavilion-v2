@@ -66,6 +66,9 @@ export class SupabaseRepository implements Repository {
     amenities: [] as Amenity[],
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
+    directory: [] as DirEntry[],
+    chatIndex: {} as ChatSeed,
+    dmThreads: {} as Record<string, string>,  // other profile id → thread id
     chats: {} as MockChatMap,
     groups: {} as GroupMap,
   };
@@ -130,6 +133,8 @@ export class SupabaseRepository implements Repository {
     await this.hydrateBoardArc();
     await this.hydrateAmenities();
     await this.hydrateReservation();
+    await this.hydrateDirectory();
+    await this.hydrateDms();
     await this.hydrateGroups();
     this.notify();
   }
@@ -505,7 +510,7 @@ export class SupabaseRepository implements Repository {
   // ── Community reference data (no tables yet → empty states) ─────────────────
   listAmenities = async (): Promise<Amenity[]> => this.cache.amenities;
   listVendors = async (): Promise<Vendor[]> => [];
-  listDirectory = async (): Promise<DirEntry[]> => [];
+  listDirectory = async (): Promise<DirEntry[]> => this.cache.directory;
   listFreeItems = async (): Promise<FreeItem[]> => [];
   listDocuments = async (): Promise<Doc[]> => [];
   listDocSections = async (): Promise<DocSection[]> => [];
@@ -515,7 +520,7 @@ export class SupabaseRepository implements Repository {
   listNotifications = async (): Promise<Notif[]> => [];
   listMapPins = async (): Promise<Pin[]> => [];
   getSearchIndex = async (): Promise<SearchItem[]> => [];
-  getChatSeed = async (): Promise<ChatSeed> => ({});
+  getChatSeed = async (): Promise<ChatSeed> => this.cache.chatIndex;
 
   // ── Amenities (real, community-scoped; empty until the board adds them) ─────
   getAmenities = () => this.cache.amenities;
@@ -593,7 +598,78 @@ export class SupabaseRepository implements Repository {
 
   // ── Direct messages (table lands in a later slice) ──────────────────────────
   getChats = () => this.cache.chats;
-  sendChatMessage = async (_k: string, _t: string, _reply?: boolean) => { void _k; void _t; void _reply; };
+  getDirectory = () => this.cache.directory;
+  getChatIndex = () => this.cache.chatIndex;
+
+  /** Fellow community members (everyone active except yourself). */
+  private async hydrateDirectory() {
+    if (!this.communityId || !this.profileId) { this.cache.directory = []; return; }
+    const { data } = await this.client.from('memberships')
+      .select('profile_id, profiles(name, initial, color), units(label)')
+      .eq('community_id', this.communityId).eq('status', 'active');
+    this.cache.directory = (data ?? [])
+      .filter((m) => m.profile_id !== this.profileId)
+      .flatMap((m) => {
+        const p = (m as unknown as { profiles: { name: string; initial: string; color: string } | null }).profiles;
+        const u = (m as unknown as { units: { label: string } | null }).units;
+        return p ? [{
+          key: m.profile_id, name: p.name, initial: p.initial, color: p.color,
+          unit: u?.label ?? '', tags: [], note: '',
+        }] : [];
+      });
+  }
+
+  /** Threads + messages, keyed by the other member's profile id; the chat
+   * index lists every neighbor so a first message needs no setup. */
+  private async hydrateDms() {
+    if (!this.profileId) { this.cache.chats = {}; this.cache.chatIndex = {}; this.cache.dmThreads = {}; return; }
+    const me = this.profileId;
+    const { data: threads } = await this.client.from('dm_threads')
+      .select('id, a_profile_id, b_profile_id')
+      .or(`a_profile_id.eq.${me},b_profile_id.eq.${me}`);
+    const threadIds = (threads ?? []).map((t) => t.id);
+    const { data: msgs } = threadIds.length
+      ? await this.client.from('dm_messages').select('*').in('thread_id', threadIds).order('created_at')
+      : { data: [] };
+    const chats: MockChatMap = {};
+    const threadByOther: Record<string, string> = {};
+    for (const t of threads ?? []) {
+      const other = t.a_profile_id === me ? t.b_profile_id : t.a_profile_id;
+      threadByOther[other] = t.id;
+      chats[other] = (msgs ?? []).filter((x) => x.thread_id === t.id)
+        .map((x) => ({ me: x.sender_profile_id === me, text: x.body, time: timeLabel(x.created_at) }));
+    }
+    const index: ChatSeed = {};
+    for (const d of this.cache.directory) {
+      const thread = chats[d.key];
+      const last = thread?.[thread.length - 1];
+      index[d.key] = {
+        name: d.name, unit: d.unit, color: d.color, initial: d.initial,
+        seed: last?.text ?? 'Say hello 👋', time: last?.time ?? '', unread: 0,
+      };
+    }
+    this.cache.chats = chats;
+    this.cache.chatIndex = index;
+    this.cache.dmThreads = threadByOther;
+  }
+
+  sendChatMessage = async (chatKey: string, text: string, _reply?: boolean) => {
+    void _reply; // scripted replies are demo-only
+    if (!this.profileId || !this.communityId || !text.trim()) return;
+    let threadId = this.cache.dmThreads[chatKey];
+    if (!threadId) {
+      const { data, error } = await this.client.from('dm_threads')
+        .insert({ community_id: this.communityId, a_profile_id: this.profileId, b_profile_id: chatKey })
+        .select('id').single();
+      if (this.failed('start the conversation', error)) return;
+      threadId = data?.id ?? '';
+      if (!threadId) return;
+    }
+    const { error } = await this.client.from('dm_messages')
+      .insert({ thread_id: threadId, sender_profile_id: this.profileId, body: text.trim() });
+    this.failed('send your message', error);
+    await this.hydrateDms(); this.notify();
+  };
 
   // ── Groups (real, community-scoped) ─────────────────────────────────────────
   getGroups = () => this.cache.groups;

@@ -102,6 +102,25 @@ export type Database = {
           { foreignKeyName: "decisions_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
         ]
       }
+      dm_messages: {
+        Row: { body: string; created_at: string; id: string; sender_profile_id: string; thread_id: string }
+        Insert: { body: string; created_at?: string; id?: string; sender_profile_id: string; thread_id: string }
+        Update: { body?: string; created_at?: string; id?: string; sender_profile_id?: string; thread_id?: string }
+        Relationships: [
+          { foreignKeyName: "dm_messages_thread_id_fkey"; columns: ["thread_id"]; isOneToOne: false; referencedRelation: "dm_threads"; referencedColumns: ["id"] },
+          { foreignKeyName: "dm_messages_sender_profile_id_fkey"; columns: ["sender_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      dm_threads: {
+        Row: { a_profile_id: string; b_profile_id: string; community_id: string; created_at: string; id: string }
+        Insert: { a_profile_id: string; b_profile_id: string; community_id: string; created_at?: string; id?: string }
+        Update: { a_profile_id?: string; b_profile_id?: string; community_id?: string; created_at?: string; id?: string }
+        Relationships: [
+          { foreignKeyName: "dm_threads_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "dm_threads_a_profile_id_fkey"; columns: ["a_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+          { foreignKeyName: "dm_threads_b_profile_id_fkey"; columns: ["b_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
       dues_statements: {
         Row: {
           amount_cents: number
