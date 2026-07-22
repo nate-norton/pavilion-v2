@@ -128,7 +128,7 @@ export function BoardDesk() {
         </button>
         <div className="flex flex-col items-end gap-1.5">
           <span className="rounded-full px-3 py-[5px] text-[10.5px] font-bold bg-navy text-cream" style={{ letterSpacing: '0.1em' }}>
-            TREASURER
+            {demo ? 'TREASURER' : 'BOARD'}
           </span>
           {!demo && (
             <button
@@ -804,7 +804,7 @@ export function BoardDesk() {
             Vote monitor
           </p>
           <div className="bg-navy rounded-[20px] p-[18px] mb-[22px] text-cream">
-            <p className="m-0 mb-1 font-serif text-base">{vote.title} · closes Thu</p>
+            <p className="m-0 mb-1 font-serif text-base">{demo ? `${vote.title} · closes Thu` : vote.title}</p>
             <div className="flex items-center justify-between my-2.5 mb-1.5">
               <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
                 QUORUM

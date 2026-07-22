@@ -123,8 +123,8 @@ export function MyPlace() {
 
   const payRow = (label: string, pill: ReactNode, last?: boolean, idx?: number) => (
     <div
-      onClick={idx != null ? () => set({ paymentDetailIdx: idx }) : undefined}
-      className={`flex items-center gap-2.5${idx != null ? ' cursor-pointer' : ''}`}
+      onClick={idx != null && !isLiveMode ? () => set({ paymentDetailIdx: idx }) : undefined}
+      className={`flex items-center gap-2.5${idx != null && !isLiveMode ? ' cursor-pointer' : ''}`}
       style={last ? undefined : { paddingBottom: 10, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 10 }}
     >
       <span className="flex-1 text-[13px] font-bold text-navy">{label}</span>
@@ -154,7 +154,7 @@ export function MyPlace() {
 
       {/* Stat tiles */}
       <div className="grid grid-cols-3 gap-[9px] mb-3.5">
-        <div onClick={() => set({ paySheetOpen: true })} className="rounded-[15px] text-center cursor-pointer" style={{ background: duesBg, padding: '12px 10px' }}>
+        <div onClick={() => (isLiveMode ? set({ myPlaceOpen: false, tab: 'hoa' }) : set({ paySheetOpen: true }))} className="rounded-[15px] text-center cursor-pointer" style={{ background: duesBg, padding: '12px 10px' }}>
           <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: duesColor }}>
             {statOneLabel}
           </p>
@@ -718,9 +718,11 @@ export function MyPlace() {
           <PhIcon name="ph-fill ph-bell" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13px] font-bold text-navy">
             Notifications{' '}
-            <span className="font-semibold text-stonelight">
-              · Digest + urgent only
-            </span>
+            {!isLiveMode && (
+              <span className="font-semibold text-stonelight">
+                · Digest + urgent only
+              </span>
+            )}
           </p>
           <PhIcon name="ph ph-caret-right" size={14} color="rgb(var(--stonelight))" />
         </div>
