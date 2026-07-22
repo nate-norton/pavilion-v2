@@ -104,7 +104,13 @@ export function Today() {
       </p>
       <div className="flex items-start justify-between gap-3 mb-1.5">
         <h1 className="m-0 font-serif font-normal text-[32px] text-navy leading-[1.1]" style={{ letterSpacing: '-0.01em' }}>
-          {firstName ? `Morning, ${firstName}.` : 'Morning.'}
+          {(() => {
+            // The demo is scripted to Tuesday, July 1 in the morning; live
+            // greets by actual time of day.
+            const h = new Date().getHours();
+            const word = demo ? 'Morning' : h < 5 ? 'Up late' : h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : 'Evening';
+            return firstName ? `${word}, ${firstName}.` : `${word}.`;
+          })()}
         </h1>
         <div className="flex items-center gap-0.5 flex-shrink-0 mt-0.5">
           <button
