@@ -75,6 +75,7 @@ export class MockRepository implements Repository, SnapshotReadable {
   openVote = async () => { usePavStore.getState().postVote(); };
   markViolationFixed = async () => { usePavStore.getState().set({ violFixed: true }); };
   getInvites = () => EMPTY_INVITES;
+  markChatRead = () => {};   // demo unread badges are scripted
   createInvite = async () => {};
   revokeInvite = async () => {};
 

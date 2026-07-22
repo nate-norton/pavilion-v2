@@ -32,7 +32,8 @@ how much they'd embarrass us in front of a real community.
 - ✅ ~~Amenities have no live domain~~ — amenities table applied + board
   "Manage amenities" sheet on Reserve (add/retire)
 - ✅ ~~Messages/chat demo-only~~ — real DMs (participant-only RLS), live
-  directory from memberships; unread counts + realtime still open
+  directory from memberships; unread badges (per-device read marks) and
+  realtime delivery (publication migration pending apply) now in
 
 ## Open — medium
 
