@@ -15,6 +15,10 @@ export function Chat() {
   const chatKey = state.chatWith;
   const thread = chatKey ? chats[chatKey] : undefined;
 
+  useEffect(() => {
+    if (chatKey) repo.markChatRead(chatKey);
+  }, [chatKey, thread, repo]);
+
   const sendChatMessage = () => {
     const t = state.chatInput.trim();
     if (!t || !chatKey) return;

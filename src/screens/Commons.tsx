@@ -3,7 +3,7 @@ import { Avatar } from '../components/Avatar';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
-import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember, useRepository } from '../data/repo';
+import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember, useChatSeed, useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 const SEG_OPTIONS = [
@@ -24,6 +24,8 @@ export function Commons() {
   const groups = useGroups();
   const feed = useFeed();
   const member = useMember();
+  const chatIndex = useChatSeed();
+  const unreadTotal = Object.values(chatIndex).reduce((n, e) => n + (e.unread || 0), 0);
 
   const addComment = () => {
     const t = state.commentInput.trim();
@@ -415,12 +417,16 @@ export function Commons() {
             <div className="flex-1">
               <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Messages</p>
               <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
-                {repo.isDemo() ? '3 unread from your neighbors' : 'Chat privately with your neighbors'}
+                {repo.isDemo()
+                  ? '3 unread from your neighbors'
+                  : unreadTotal > 0
+                    ? `${unreadTotal} unread from your neighbors`
+                    : 'Chat privately with your neighbors'}
               </p>
             </div>
-            {repo.isDemo() && (
+            {(repo.isDemo() || unreadTotal > 0) && (
             <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 bg-ember">
-              3
+              {repo.isDemo() ? 3 : unreadTotal}
             </span>
             )}
           </div>
