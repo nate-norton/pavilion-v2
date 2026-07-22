@@ -458,12 +458,16 @@ export function Commons() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span
-                      className="flex-1 text-[11.5px] font-bold rounded-lg px-2.5 py-1.5"
-                      style={{ color: 'rgb(var(--skydeep))', background: 'rgb(var(--skypale))' }}
-                    >
-                      {d.tags.join(' · ')}
-                    </span>
+                    {d.tags.length > 0 ? (
+                      <span
+                        className="flex-1 text-[11.5px] font-bold rounded-lg px-2.5 py-1.5"
+                        style={{ color: 'rgb(var(--skydeep))', background: 'rgb(var(--skypale))' }}
+                      >
+                        {d.tags.join(' · ')}
+                      </span>
+                    ) : (
+                      <span className="flex-1" />
+                    )}
                     <button
                       onClick={() => set({ chatWith: d.key })}
                       className="border-none rounded-full px-3 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"

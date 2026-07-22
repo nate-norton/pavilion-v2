@@ -1,7 +1,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useRepository } from './context';
 import { hasSnapshot, type Repository, type RepositorySnapshot } from './Repository';
-import type { ChatSeed, QA } from '../types';
+import type { QA } from '../types';
 
 /** Reactive read of mutable domain state — re-renders when the repo mutates. */
 export function useReservation() {
@@ -147,10 +147,18 @@ export const useReservationSlots = () => useRepoRead('reservationSlots', (r) => 
 export const useReservationDays = () => useRepoRead('reservationDays', (r) => r.getReservationDays(), []);
 
 // Community / people
-export const useDirectory = () => useRepoRead('directory', (r) => r.listDirectory(), []);
+/** Reactive: live re-renders as the community directory hydrates. */
+export function useDirectory() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getDirectory());
+}
 export const useCircles = () => useRepoRead('circles', (r) => r.listCircles(), []);
 export const useFreeItems = () => useRepoRead('freeItems', (r) => r.listFreeItems(), []);
-export const useChatSeed = () => useRepoRead<ChatSeed>('chatSeed', (r) => r.getChatSeed(), {});
+/** Reactive chat index (see Repository.getChatIndex). */
+export function useChatSeed() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getChatIndex());
+}
 
 // HOA / board
 export const useVendors = () => useRepoRead('vendors', (r) => r.listVendors(), []);
