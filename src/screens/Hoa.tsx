@@ -4,7 +4,8 @@ import { ProgressBar } from '../components/ProgressBar';
 import { StatusTimeline } from '../components/StatusTimeline';
 import { Confetti } from '../components/Confetti';
 import { usePavStore } from '../store/store';
-import { useVotes, useArc, useIssues, useDecisions, useRepository } from '../data/repo';
+import { useVotes, useArc, useIssues, useDecisions, useMeetings, useRepository } from '../data/repo';
+import type { OpenVote } from '../data/repo';
 
 const DUES_LEGEND = [
   { label: 'Landscaping', amount: '$78', color: 'rgb(var(--sage))' },
@@ -34,18 +35,13 @@ export function Hoa() {
   const state = usePavStore();
   const { set } = state;
   const repo = useRepository();
-  const { open: vote } = useVotes();
+  const { openAll, closed } = useVotes();
   const [forecastOpen, setForecastOpen] = useState(false);
-
-  const notVoted = !!vote && !vote.myVote;
-  const hasVoted = !!vote?.myVote;
-  const votedLabel = vote?.myVote === 'yes' ? vote.yesLabel : vote?.noLabel ?? '';
-  const voteYes = () => { if (vote) repo.castVote(vote.id, 'yes'); };
-  const voteNo = () => { if (vote) repo.castVote(vote.id, 'no'); };
 
   const arc = useArc();
   const issues = useIssues();
   const decisions = useDecisions();
+  const meetings = useMeetings();
   // Demo-flavor panels (finance breakdown, meeting) have no live data domain
   // yet — a live community hides them rather than showing fabricated numbers.
   const demo = repo.isDemo();
@@ -57,98 +53,9 @@ export function Hoa() {
         Every dollar, vote, and decision — visible to every household.
       </p>
 
-      {/* Open vote */}
-      {vote ? (
-        <div className="bg-navy rounded-[20px] p-[18px] mb-3.5 text-cream">
-          <p
-            className="m-0 mb-1.5 text-[11px] font-bold uppercase"
-            style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}
-          >
-            {vote.closesLabel}
-          </p>
-          <p className="m-0 mb-1 font-serif text-[18px] leading-[1.3]">{vote.title}</p>
-          <p className="m-0 mb-3.5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
-            {vote.subtitle}
-          </p>
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
-              QUORUM
-            </span>
-            <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
-              {vote.quorumCount} of {vote.quorumTotal} households
-            </span>
-          </div>
-          <div className="mb-3.5">
-            <ProgressBar pct={vote.quorumPct} height={8} track="rgb(var(--cream) / 0.15)" gradient />
-          </div>
-
-          {notVoted && (
-            <div className="flex gap-2.5">
-              <button
-                onClick={voteYes}
-                className="flex-1 border-none rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-                style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
-              >
-                {vote.yesLabel}
-              </button>
-              <button
-                onClick={voteNo}
-                className="flex-1 bg-transparent rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-                style={{ border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))' }}
-              >
-                {vote.noLabel}
-              </button>
-            </div>
-          )}
-
-          {hasVoted && (
-            <div className="animate-fadeup">
-              <div
-                className="relative rounded-[13px] px-3.5 py-3 flex items-center gap-2.5"
-                style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}
-              >
-                <Confetti />
-                <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sagebright))" className="flex-shrink-0" />
-                <p className="m-0 text-[13px] font-bold text-cream">
-                  You voted <strong>{votedLabel}</strong> · ballot receipt {vote.receipt} · secret ballot
-                </p>
-              </div>
-              <div className="mt-3.5">
-                <div className="flex items-center gap-2 mb-[7px]">
-                  <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
-                    YES
-                  </span>
-                  <div className="flex-1">
-                    <ProgressBar pct={vote.yesPct} height={9} track="rgb(var(--cream) / 0.12)" gradient />
-                  </div>
-                  <span
-                    className="w-[62px] text-right text-[11px] font-bold"
-                    style={{ color: 'rgb(var(--cream) / 0.85)' }}
-                  >
-                    {vote.yesCount} · {vote.yesPct}%
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
-                    NO
-                  </span>
-                  <div className="flex-1">
-                    <ProgressBar pct={100 - vote.yesPct} height={9} track="rgb(var(--cream) / 0.12)" color="rgb(var(--cream) / 0.55)" />
-                  </div>
-                  <span
-                    className="w-[62px] text-right text-[11px] font-bold"
-                    style={{ color: 'rgb(var(--cream) / 0.85)' }}
-                  >
-                    {vote.noCount} · {100 - vote.yesPct}%
-                  </span>
-                </div>
-                <p className="mt-[9px] mb-0 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.55)' }}>
-                  Live tally · needs 50% of {vote.quorumTotal} households by Thursday
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
+      {/* Open votes (live can carry several at once; the demo has its one) */}
+      {openAll.length > 0 ? (
+        <>{openAll.map((v) => <VoteCard key={v.id} vote={v} demo={demo} />)}</>
       ) : (
         <div
           className="bg-paper rounded-[20px] p-[18px] mb-3.5 text-center"
@@ -182,6 +89,52 @@ export function Hoa() {
           Preview →
         </span>
       </div>
+      )}
+
+      {/* Live meetings — board-scheduled, minutes downloadable */}
+      {!demo && meetings.length > 0 && (
+        <div className="bg-paper rounded-[18px] p-4 mb-3.5" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+          <p className="m-0 mb-2 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+            Meetings
+          </p>
+          {meetings.map((m, i) => (
+            <div key={m.id} className="py-2" style={i < meetings.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}>
+              <div className="flex items-center gap-2">
+                <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">{m.title}</p>
+                {m.minutesUrl ? (
+                  <a href={m.minutesUrl} target="_blank" rel="noreferrer" className="text-[12px] font-extrabold no-underline" style={{ color: 'rgb(var(--terracotta))' }}>
+                    Minutes →
+                  </a>
+                ) : (
+                  <span className="text-[11px] font-bold text-stone">{m.status === 'past' ? 'Held' : 'Upcoming'}</span>
+                )}
+              </div>
+              <p className="m-0 text-[12px] font-semibold text-stone">
+                {[m.whenLabel, m.whereLabel].filter(Boolean).join(' · ')}
+              </p>
+              {m.agenda.length > 0 && m.status !== 'past' && (
+                <p className="m-0 mt-1 text-[12px] font-semibold text-stone">
+                  Agenda: {m.agenda.join(' · ')}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Past votes — the results archive */}
+      {closed.length > 0 && (
+        <div className="bg-paper rounded-[18px] p-4 mb-3.5" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+          <p className="m-0 mb-2 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+            Past votes
+          </p>
+          {closed.map((c, i) => (
+            <div key={c.id} className="py-2" style={i < closed.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}>
+              <p className="m-0 text-[13px] font-bold text-navy">{c.title}</p>
+              <p className="m-0 text-[12px] font-semibold text-stone">{c.resultLabel} · {c.dateLabel}</p>
+            </div>
+          ))}
+        </div>
       )}
 
       {/* Where dues go (demo-only until a finance domain exists) */}
@@ -427,6 +380,212 @@ export function Hoa() {
           </p>
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * One open ballot. Yes/no ballots keep the classic two-button card the demo
+ * ships; options ballots render N choices (single tap, or multi-select with a
+ * cast button). Live voters can change their ballot while it's open.
+ */
+function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
+  const repo = useRepository();
+  const [changing, setChanging] = useState(false);
+  const [picks, setPicks] = useState<string[]>([]);
+
+  const isOptions = vote.kind === 'options';
+  const hasVoted = isOptions ? vote.myOptionIds.length > 0 : !!vote.myVote;
+  const showBallot = !hasVoted || changing;
+  const votedLabel = vote.myVote === 'yes' ? vote.yesLabel : vote.noLabel;
+
+  const castYesNo = (choice: 'yes' | 'no') => {
+    void repo.castVote(vote.id, choice).then(() => setChanging(false));
+  };
+  const castOptions = (ids: string[]) => {
+    if (!ids.length) return;
+    void repo.castOptionVote(vote.id, ids).then(() => { setChanging(false); setPicks([]); });
+  };
+  const optionTotal = vote.options.reduce((n, o) => n + o.tally, 0);
+
+  return (
+    <div className="bg-navy rounded-[20px] p-[18px] mb-3.5 text-cream">
+      <p
+        className="m-0 mb-1.5 text-[11px] font-bold uppercase"
+        style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}
+      >
+        {vote.closesLabel}
+      </p>
+      <p className="m-0 mb-1 font-serif text-[18px] leading-[1.3]">{vote.title}</p>
+      <p className="m-0 mb-3.5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+        {vote.subtitle}
+      </p>
+      <div className="flex items-center justify-between mb-1.5">
+        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+          QUORUM
+        </span>
+        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+          {vote.quorumCount} of {vote.quorumTotal} households
+        </span>
+      </div>
+      <div className="mb-3.5">
+        <ProgressBar pct={vote.quorumPct} height={8} track="rgb(var(--cream) / 0.15)" gradient />
+      </div>
+
+      {/* Ballot — yes/no */}
+      {!isOptions && showBallot && (
+        <div className="flex gap-2.5">
+          <button
+            onClick={() => castYesNo('yes')}
+            className="flex-1 border-none rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
+            style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
+          >
+            {vote.yesLabel}
+          </button>
+          <button
+            onClick={() => castYesNo('no')}
+            className="flex-1 bg-transparent rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
+            style={{ border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))' }}
+          >
+            {vote.noLabel}
+          </button>
+        </div>
+      )}
+
+      {/* Ballot — options */}
+      {isOptions && showBallot && (
+        <div className="flex flex-col gap-2">
+          {vote.options.map((o) => {
+            const picked = picks.includes(o.id);
+            return (
+              <button
+                key={o.id}
+                onClick={() => {
+                  if (vote.multi) {
+                    setPicks(picked ? picks.filter((p) => p !== o.id) : [...picks, o.id]);
+                  } else {
+                    castOptions([o.id]);
+                  }
+                }}
+                className="w-full rounded-[13px] py-3 px-3.5 text-left text-sm font-extrabold cursor-pointer"
+                style={picked
+                  ? { background: 'rgb(var(--ember))', border: '1.5px solid rgb(var(--ember))', color: 'rgb(var(--white))' }
+                  : { background: 'transparent', border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))' }}
+              >
+                {vote.multi && <span className="mr-2">{picked ? '☑' : '☐'}</span>}
+                {o.label}
+              </button>
+            );
+          })}
+          {vote.multi && (
+            <button
+              onClick={() => castOptions(picks)}
+              className="w-full border-none rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
+              style={{ background: picks.length ? 'rgb(var(--ember))' : 'rgb(var(--cream) / 0.15)', color: 'rgb(var(--white))' }}
+            >
+              Cast ballot{picks.length > 1 ? ` · ${picks.length} picks` : ''}
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Voted — yes/no tally */}
+      {!isOptions && hasVoted && !changing && (
+        <div className="animate-fadeup">
+          <div
+            className="relative rounded-[13px] px-3.5 py-3 flex items-center gap-2.5"
+            style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}
+          >
+            <Confetti />
+            <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sagebright))" className="flex-shrink-0" />
+            <p className="m-0 text-[13px] font-bold text-cream">
+              You voted <strong>{votedLabel}</strong> · ballot receipt {vote.receipt} · secret ballot
+            </p>
+          </div>
+          <div className="mt-3.5">
+            <div className="flex items-center gap-2 mb-[7px]">
+              <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+                YES
+              </span>
+              <div className="flex-1">
+                <ProgressBar pct={vote.yesPct} height={9} track="rgb(var(--cream) / 0.12)" gradient />
+              </div>
+              <span
+                className="w-[62px] text-right text-[11px] font-bold"
+                style={{ color: 'rgb(var(--cream) / 0.85)' }}
+              >
+                {vote.yesCount} · {vote.yesPct}%
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+                NO
+              </span>
+              <div className="flex-1">
+                <ProgressBar pct={100 - vote.yesPct} height={9} track="rgb(var(--cream) / 0.12)" color="rgb(var(--cream) / 0.55)" />
+              </div>
+              <span
+                className="w-[62px] text-right text-[11px] font-bold"
+                style={{ color: 'rgb(var(--cream) / 0.85)' }}
+              >
+                {vote.noCount} · {100 - vote.yesPct}%
+              </span>
+            </div>
+            <p className="mt-[9px] mb-0 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.55)' }}>
+              Live tally · needs 50% of {vote.quorumTotal} households by Thursday
+            </p>
+          </div>
+          {!demo && (
+            <button
+              onClick={() => setChanging(true)}
+              className="mt-2.5 bg-transparent border-none p-0 text-[12px] font-extrabold cursor-pointer underline"
+              style={{ color: 'rgb(var(--cream) / 0.7)' }}
+            >
+              Change my vote
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Voted — options tally */}
+      {isOptions && hasVoted && !changing && (
+        <div className="animate-fadeup">
+          <div
+            className="relative rounded-[13px] px-3.5 py-3 flex items-center gap-2.5 mb-3.5"
+            style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}
+          >
+            <Confetti />
+            <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sagebright))" className="flex-shrink-0" />
+            <p className="m-0 text-[13px] font-bold text-cream">
+              Ballot received · receipt {vote.receipt} · secret ballot
+            </p>
+          </div>
+          {vote.options.map((o) => {
+            const pct = optionTotal ? Math.round((o.tally / optionTotal) * 100) : 0;
+            const mine = vote.myOptionIds.includes(o.id);
+            return (
+              <div key={o.id} className="flex items-center gap-2 mb-[7px]">
+                <span className="flex-1 text-[12px] font-bold truncate" style={{ color: 'rgb(var(--cream) / 0.85)' }}>
+                  {mine ? '✓ ' : ''}{o.label}
+                </span>
+                <div className="w-[110px]">
+                  <ProgressBar pct={pct} height={9} track="rgb(var(--cream) / 0.12)" gradient={mine} color={mine ? undefined : 'rgb(var(--cream) / 0.55)'} />
+                </div>
+                <span className="w-[52px] text-right text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.85)' }}>
+                  {o.tally} · {pct}%
+                </span>
+              </div>
+            );
+          })}
+          <button
+            onClick={() => { setChanging(true); setPicks(vote.myOptionIds); }}
+            className="mt-2 bg-transparent border-none p-0 text-[12px] font-extrabold cursor-pointer underline"
+            style={{ color: 'rgb(var(--cream) / 0.7)' }}
+          >
+            Change my vote
+          </button>
+        </div>
+      )}
     </div>
   );
 }

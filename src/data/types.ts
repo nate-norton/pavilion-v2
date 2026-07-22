@@ -8,6 +8,12 @@ export interface Amenity {
   occ: string;
   occColor: string;
   rules: string;
+  // Live booking configuration (demo seed uses the screen's constants)
+  openHour?: number;
+  closeHour?: number;
+  slotMinutes?: number;
+  capacity?: number;
+  maxDaysAhead?: number;
 }
 
 export interface SearchItem {
@@ -137,6 +143,9 @@ export interface Doc {
   title: string;
   sub: string;
   icon: string;
+  id?: string;       // live rows carry the db id (board can delete)
+  url?: string;      // signed download URL (live)
+  section?: string;  // live grouping (demo uses its scripted sections)
 }
 
 export interface DocSection {
@@ -153,6 +162,8 @@ export interface ChatMsg {
   me: boolean;
   text: string;
   time: string;
+  id?: string;        // live rows carry the db id (deletable)
+  photos?: string[];  // signed image URLs (live)
 }
 
 export interface Comment {

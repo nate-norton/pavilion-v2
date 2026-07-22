@@ -1,8 +1,8 @@
-import { type CSSProperties } from 'react';
+import { useRef, useState, type CSSProperties } from 'react';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { useDocuments, useDocSections } from '../data/repo';
+import { useDocuments, useDocSections, useMember, useRepository } from '../data/repo';
 
 const DOC_CONTENT: Record<string, { sections: { tag: string; name: string; body: string }[] }> = {
   bylaws: {
@@ -49,6 +49,13 @@ export function Documents() {
   const { set, askAiDocsSummary } = state;
   const DOCS = useDocuments();
   const DOC_SECTIONS = useDocSections();
+  const repo = useRepository();
+  const member = useMember();
+  const canManage = !repo.isDemo() && member?.role === 'board';
+  const [upName, setUpName] = useState('');
+  const [upSection, setUpSection] = useState('Governing documents');
+  const [upBusy, setUpBusy] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   if (!state.docsOpen) return null;
 
@@ -93,7 +100,10 @@ export function Documents() {
               <div
                 key={d.key}
                 onClick={() => {
-                  set({ docReader: true, docReaderKey: d.key, docQ: '', diffOpen: false });
+                  // Live docs are real files — open them; demo docs open the
+                  // scripted reader.
+                  if (d.url) window.open(d.url, '_blank', 'noreferrer');
+                  else set({ docReader: true, docReaderKey: d.key, docQ: '', diffOpen: false });
                 }}
                 className="flex items-center gap-3 cursor-pointer"
                 style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: 14 }}
@@ -107,10 +117,71 @@ export function Documents() {
                     {d.sub}
                   </p>
                 </div>
-                <PhIcon name="ph ph-caret-right" size={14} color="rgb(var(--stonelight))" />
+                {canManage && d.id ? (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); void repo.deleteDocument(d.id!); }}
+                    title="Remove document"
+                    className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-50"
+                  >
+                    <PhIcon name="ph-fill ph-trash" size={14} color="rgb(var(--stone))" />
+                  </button>
+                ) : (
+                  <PhIcon name="ph ph-caret-right" size={14} color="rgb(var(--stonelight))" />
+                )}
               </div>
             ))}
           </div>
+
+          {/* Board: publish a document into the community library */}
+          {canManage && (
+            <div className="mt-3.5 bg-paper rounded-[16px] p-3.5" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+              <p className="m-0 mb-2 text-[13px] font-bold text-navy">Publish a document</p>
+              <input
+                value={upName}
+                onChange={(e) => setUpName(e.target.value)}
+                placeholder="Name — e.g. CC&Rs (rev. 2026)"
+                className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+              />
+              <div className="flex gap-1.5 flex-wrap mb-2.5">
+                {['Governing documents', 'Financials', 'Minutes', 'Forms', 'General'].map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setUpSection(s)}
+                    className="rounded-full px-3 py-1.5 text-[11px] font-extrabold cursor-pointer"
+                    style={upSection === s
+                      ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                      : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+              <input
+                ref={fileRef}
+                type="file"
+                accept=".pdf,.doc,.docx,.xls,.xlsx,image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (!f || upBusy) return;
+                  setUpBusy(true);
+                  void repo.uploadDocument({ file: f, name: upName || f.name, section: upSection })
+                    .then(() => setUpName(''))
+                    .catch(() => {})
+                    .finally(() => { setUpBusy(false); if (fileRef.current) fileRef.current.value = ''; });
+                }}
+              />
+              <button
+                onClick={() => fileRef.current?.click()}
+                disabled={upBusy}
+                className="w-full border-0 rounded-[13px] py-3 text-[13px] font-extrabold cursor-pointer text-cream"
+                style={{ background: upBusy ? 'rgb(var(--sandpale))' : 'rgb(var(--navy))' }}
+              >
+                {upBusy ? 'Uploading…' : 'Choose file & publish'}
+              </button>
+            </div>
+          )}
         </div>
       ) : state.docReaderKey === 'ccrs' ? (
         <div className="animate-fadeup">

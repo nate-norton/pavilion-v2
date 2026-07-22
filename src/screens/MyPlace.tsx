@@ -3,8 +3,8 @@ import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
-import { useArc, useDues, useMember, useMyReports, usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
-import type { DuesStatus } from '../data/repo';
+import { useArc, useDues, useMember, useMyReports, usePortfolio, useReservation, useGroups, useRepository, resetDemoData } from '../data/repo';
+import type { DuesStatus, ThreadComment } from '../data/repo';
 import { isLiveMode, signOutLive } from '../auth/AuthGate';
 
 const CARD: CSSProperties = {
@@ -41,6 +41,16 @@ export function MyPlace() {
   const myReports = useMyReports();
 
   const [apConfirm, setApConfirm] = useState(false);
+  const repo = useRepository();
+  const [profileEditOpen, setProfileEditOpen] = useState(false);
+  const [pfName, setPfName] = useState('');
+  const [pfPhone, setPfPhone] = useState('');
+  const [pfHide, setPfHide] = useState(false);
+  const [pfBusy, setPfBusy] = useState(false);
+  const [openReportId, setOpenReportId] = useState<string | null>(null);
+  const [reportThread, setReportThread] = useState<ThreadComment[]>([]);
+  const [reportReply, setReportReply] = useState('');
+  const [openArcId, setOpenArcId] = useState<string | null>(null);
 
   if (!state.myPlaceOpen) return null;
 
@@ -506,34 +516,110 @@ export function MyPlace() {
           </Row>
         )}
         {isLiveMode && myReports.map((r) => (
-          <Row key={r.id} divider>
-            <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--terracotta))" className="flex-shrink-0" />
-            <p className="m-0 flex-1 text-[13px] font-bold text-navy">{r.title}{r.ref ? ` · ${r.ref}` : ''}</p>
-            {r.status === 'resolved'
-              ? statusPill('Resolved', 'rgb(var(--mint))', 'rgb(var(--sagedark))')
-              : r.status === 'open'
-                ? statusPill('In triage', 'rgb(var(--blush))', 'rgb(var(--terracotta))')
-                : statusPill('Ticketed', 'rgb(var(--goldpale))', 'rgb(var(--golddark))')}
-          </Row>
+          <div key={r.id}>
+            <Row divider onClick={() => {
+              const next = openReportId === r.id ? null : r.id;
+              setOpenReportId(next);
+              setReportThread([]);
+              if (next) void repo.listReportComments(r.id).then(setReportThread);
+            }}>
+              <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--terracotta))" className="flex-shrink-0" />
+              <p className="m-0 flex-1 text-[13px] font-bold text-navy">{r.title}{r.ref ? ` · ${r.ref}` : ''}</p>
+              {r.status === 'resolved'
+                ? statusPill('Resolved', 'rgb(var(--mint))', 'rgb(var(--sagedark))')
+                : r.status === 'open'
+                  ? statusPill('In triage', 'rgb(var(--blush))', 'rgb(var(--terracotta))')
+                  : r.status === 'in_progress'
+                    ? statusPill(r.vendor ? `${r.vendor} · working` : 'In progress', 'rgb(var(--skypale))', 'rgb(var(--skydeep))')
+                    : statusPill('Ticketed', 'rgb(var(--goldpale))', 'rgb(var(--golddark))')}
+            </Row>
+            {openReportId === r.id && (
+              <div className="mb-2.5 animate-fadeup" style={{ paddingLeft: 27 }}>
+                {reportThread.map((c) => (
+                  <p key={c.id} className="m-0 mb-1 text-[12px] font-semibold text-navy">
+                    <strong>{c.me ? 'You' : c.authorName}:</strong> {c.body}{' '}
+                    <span className="text-stone" style={{ fontSize: 10.5 }}>· {c.time}</span>
+                  </p>
+                ))}
+                <div className="flex gap-2 mt-1">
+                  <input
+                    value={reportReply}
+                    onChange={(e) => setReportReply(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && reportReply.trim()) {
+                        void repo.addReportComment(r.id, reportReply)
+                          .then(() => { setReportReply(''); return repo.listReportComments(r.id); })
+                          .then(setReportThread)
+                          .catch(() => {});
+                      }
+                    }}
+                    placeholder="Message the board about this…"
+                    className="flex-1 rounded-full px-3 py-2 text-[12px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         ))}
         {arc.requests.length === 0 && !hasReportRows ? (
           <p className="m-0 text-[12.5px] font-semibold text-stone">No requests yet.</p>
         ) : (
           arc.requests.map((r, i) => (
-            <Row key={r.id} divider={i < arc.requests.length - 1} onClick={() => set({ arcDetailId: r.id })}>
-              <PhIcon
-                name={r.approved ? 'ph-fill ph-seal-check' : 'ph-fill ph-pencil-ruler'}
-                size={17}
-                color={r.approved ? 'rgb(var(--sage))' : 'rgb(var(--skydeep))'}
-                className="flex-shrink-0"
-              />
-              <p className="m-0 flex-1 text-[13px] font-bold text-navy">{r.title} · {r.ref}</p>
-              {statusPill(
-                r.statusLabel,
-                r.approved ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
-                r.approved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
+            <div key={r.id}>
+              <Row
+                divider={i < arc.requests.length - 1}
+                onClick={() => (isLiveMode ? setOpenArcId(openArcId === r.id ? null : r.id) : set({ arcDetailId: r.id }))}
+              >
+                <PhIcon
+                  name={r.approved ? 'ph-fill ph-seal-check' : 'ph-fill ph-pencil-ruler'}
+                  size={17}
+                  color={r.approved ? 'rgb(var(--sage))' : 'rgb(var(--skydeep))'}
+                  className="flex-shrink-0"
+                />
+                <p className="m-0 flex-1 text-[13px] font-bold text-navy">{r.title} · {r.ref}</p>
+                {statusPill(
+                  r.statusLabel,
+                  r.approved ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
+                  r.approved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
+                )}
+              </Row>
+              {isLiveMode && openArcId === r.id && (
+                <div className="mb-2.5 animate-fadeup" style={{ paddingLeft: 27 }}>
+                  {r.conditions && (
+                    <p className="m-0 mb-1 text-[12px] font-semibold text-navy">
+                      <strong>Conditions:</strong> {r.conditions}
+                    </p>
+                  )}
+                  {r.decisionNote && (
+                    <p className="m-0 mb-1 text-[12px] font-semibold text-navy">
+                      <strong>{r.status === 'info_requested' ? 'The board needs:' : 'Board note:'}</strong> {r.decisionNote}
+                    </p>
+                  )}
+                  {(r.attachmentUrls ?? []).length > 0 && (
+                    <p className="m-0 mb-1 text-[12px] font-semibold text-navy">
+                      {r.attachmentUrls!.map((u, j) => (
+                        <a key={u} href={u} target="_blank" rel="noreferrer" className="font-extrabold mr-2" style={{ color: 'rgb(var(--terracotta))' }}>
+                          Attachment {j + 1}
+                        </a>
+                      ))}
+                    </p>
+                  )}
+                  {r.status === 'info_requested' && (
+                    <button
+                      onClick={() => set({ arcSheetOpen: true })}
+                      className="mt-1 rounded-full px-3 py-1.5 text-[11.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                      style={{ border: '1.5px solid rgb(var(--navy) / 0.2)' }}
+                    >
+                      Submit an updated request
+                    </button>
+                  )}
+                  {!r.conditions && !r.decisionNote && (r.attachmentUrls ?? []).length === 0 && r.status !== 'info_requested' && (
+                    <p className="m-0 text-[12px] font-semibold text-stone">No board notes on this request.</p>
+                  )}
+                </div>
               )}
-            </Row>
+            </div>
           ))
         )}
       </div>
@@ -568,6 +654,62 @@ export function MyPlace() {
       {/* Settings */}
       <div style={{ ...CARD, marginBottom: 0 }}>
         <p className="m-0 mb-[11px] font-serif text-base text-navy">Settings</p>
+        {isLiveMode && (
+          <div
+            className="flex flex-col"
+            style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
+          >
+            <div
+              onClick={() => {
+                if (!profileEditOpen) { setPfName(member?.name ?? ''); setPfPhone(member?.phone ?? ''); setPfHide(member?.hideDirectory ?? false); }
+                setProfileEditOpen(!profileEditOpen);
+              }}
+              className="flex items-center gap-2.5 cursor-pointer"
+            >
+              <PhIcon name="ph-fill ph-user-circle" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
+              <p className="m-0 flex-1 text-[13px] font-bold text-navy">
+                Profile <span className="font-semibold text-stonelight">· name, phone, privacy</span>
+              </p>
+              <PhIcon name={profileEditOpen ? 'ph ph-caret-up' : 'ph ph-caret-right'} size={14} color="rgb(var(--stonelight))" />
+            </div>
+            {profileEditOpen && (
+              <div className="mt-2.5 animate-fadeup">
+                <input
+                  value={pfName}
+                  onChange={(e) => setPfName(e.target.value)}
+                  placeholder="Display name"
+                  className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                />
+                <input
+                  value={pfPhone}
+                  onChange={(e) => setPfPhone(e.target.value)}
+                  placeholder="Phone (optional — neighbors never see it)"
+                  className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                />
+                <div className="flex items-center gap-2.5 mb-2.5">
+                  <p className="m-0 flex-1 text-[12.5px] font-bold text-navy">Hide me from the directory</p>
+                  <Toggle on={pfHide} onToggle={() => setPfHide(!pfHide)} />
+                </div>
+                <button
+                  onClick={() => {
+                    if (pfBusy) return;
+                    setPfBusy(true);
+                    void repo.updateProfile({ name: pfName, phone: pfPhone, hideDirectory: pfHide })
+                      .then(() => setProfileEditOpen(false))
+                      .catch(() => {})
+                      .finally(() => setPfBusy(false));
+                  }}
+                  className="w-full border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
+                  style={{ background: pfName.trim() && !pfBusy ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                >
+                  {pfBusy ? 'Saving…' : 'Save profile'}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
         <div
           onClick={() => set({ notifOpen: true, myPlaceOpen: false })}
           className="flex items-center gap-2.5 cursor-pointer"
