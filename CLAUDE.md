@@ -44,9 +44,10 @@ Rules when adding features:
 3. The presenter demo must stay byte-for-byte unchanged unless asked.
 4. Supabase DDL: write a migration in `supabase/migrations/`, hand-add the
    table types to `src/data/repo/database.types.ts` (alphabetical, compact
-   single-line style), and **ask before applying** migrations to the project.
-   RLS helpers live in the non-API `private` schema (`is_member`, `is_board`,
-   `owns_unit`, `current_profile_id`).
+   single-line style), then apply directly to `pavilion-dev` (standing grant
+   in `.claude/settings.json`) and run the advisor check after. RLS helpers
+   live in the non-API `private` schema (`is_member`, `is_board`, `owns_unit`,
+   `current_profile_id`).
 
 Other landmarks:
 

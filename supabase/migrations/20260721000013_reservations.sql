@@ -1,9 +1,6 @@
 -- Phase 2 — reservations. One active amenity booking per household drives the
 -- Reserve screen and the Today booking card. Member books/cancels their own;
 -- the board can see and manage all of the community's bookings.
---
--- NOT YET APPLIED. Until it is, live booking writes no-op and the Reserve
--- screen keeps its empty state.
 
 create table public.reservations (
   id           uuid primary key default gen_random_uuid(),

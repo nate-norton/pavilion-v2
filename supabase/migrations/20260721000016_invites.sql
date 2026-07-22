@@ -1,8 +1,6 @@
 -- Phase 2 — invites. The board invites a neighbor by email; when that email
 -- signs in, claim_invite() converts the pending invite into an active
 -- membership (finding or creating the unit) — no hand-run SQL to join.
---
--- NOT YET APPLIED.
 
 create table public.invites (
   id           uuid primary key default gen_random_uuid(),
