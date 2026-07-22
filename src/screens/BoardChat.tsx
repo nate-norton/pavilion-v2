@@ -304,6 +304,7 @@ export function BoardChat() {
               {input({ value: msg, onChange: setMsg, placeholder: `Message ${topic}…`, onEnter: () => send(msg, topic) })}
               <button
                 onClick={() => send(msg, topic)}
+                aria-label="Send"
                 className="w-10 h-10 border-none rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
                 style={{ background: (msg.trim() || photos.length) && !busy ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
               >

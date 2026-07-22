@@ -4,13 +4,14 @@ import { DemoPanel } from './components/DemoPanel';
 import { ThemeProvider } from './theme/ThemeProvider';
 import { brandTokens } from './theme/themes';
 import { usePavStore } from './store/store';
-import { AuthGate } from './auth/AuthGate';
+import { AuthGate, isLiveMode } from './auth/AuthGate';
 
 export default function App() {
   const [showPanel, setShowPanel] = useState(false);
   const brandTheme = usePavStore((s) => s.brandTheme);
 
   useEffect(() => {
+    if (isLiveMode) return; // presenter controls are demo-only
     const handler = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
         e.preventDefault();
@@ -29,8 +30,8 @@ export default function App() {
       style={{ background: 'radial-gradient(120% 90% at 50% 0%, rgb(var(--creamtint)) 0%, rgb(var(--sandtint)) 60%, rgb(var(--sanddeep)) 100%)' }}
     >
       <PhoneFrame />
-      {showPanel && <DemoPanel />}
-      {!showPanel && (
+      {showPanel && !isLiveMode && <DemoPanel />}
+      {!showPanel && !isLiveMode && (
         <button
           type="button"
           onClick={() => setShowPanel(true)}

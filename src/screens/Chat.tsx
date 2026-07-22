@@ -72,7 +72,7 @@ export function Chat() {
             </span>
           </p>
           <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
-            Neighbor · usually replies fast
+            {demo ? 'Neighbor · usually replies fast' : 'Neighbor'}
           </p>
         </div>
       </div>

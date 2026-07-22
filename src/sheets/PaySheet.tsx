@@ -4,12 +4,15 @@ import { Toggle } from '../components/Toggle';
 import { Confetti } from '../components/Confetti';
 import { usePavStore } from '../store/store';
 import { getDelinquent } from '../store/selectors';
+import { useRepository } from '../data/repo';
 
 /** Pay-dues sheet — ported from prototype lines 1280-1356. */
 export function PaySheet() {
   const state = usePavStore();
   const { set } = state;
   const delinquent = usePavStore(getDelinquent);
+  // Scripted amounts and payment method — must never render in live.
+  if (!useRepository().isDemo()) return null;
 
   const closePay = () => set({ paySheetOpen: false });
   const doPay = () => set({ paid: true });
