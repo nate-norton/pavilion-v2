@@ -8,7 +8,7 @@ import type {
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
 import { emitAppError } from '../../lib/errorBus';
-import type { ArcState, ArcStep, BoardArcItem, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, DuesStatus, FeedPost, KnownIssue, MemberContext, NewArcRequest, NewGroup, NewReport, NewReservation, NewVote, ReservationState, Repository, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcState, ArcStep, BoardArcItem, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, DuesStatus, FeedPost, Invite, KnownIssue, MemberContext, NewArcRequest, NewGroup, NewReport, NewReservation, NewVote, ReservationState, Repository, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -63,6 +63,7 @@ export class SupabaseRepository implements Repository {
     triageItems: [] as TriageItem[],
     myReports: [] as TriageItem[],
     boardArc: [] as BoardArcItem[],
+    invites: [] as Invite[],
     amenities: [] as Amenity[],
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
@@ -131,6 +132,7 @@ export class SupabaseRepository implements Repository {
     await this.hydrateTriage();
     await this.hydrateDecisions();
     await this.hydrateBoardArc();
+    await this.hydrateInvites();
     await this.hydrateAmenities();
     await this.hydrateReservation();
     await this.hydrateDirectory();
@@ -319,6 +321,42 @@ export class SupabaseRepository implements Repository {
     }
     await this.hydrateArc(); await this.hydrateBoardArc(); await this.hydrateDecisions(); this.notify();
   };
+
+  // ── Invites (board-managed; the claim side lives in AuthGate via RPC) ───────
+  getInvites = () => this.cache.invites;
+
+  createInvite = async ({ email, unitLabel, role }: { email: string; unitLabel: string; role: 'resident' | 'board' }) => {
+    if (!this.communityId || !this.profileId) return;
+    const { error } = await this.client.from('invites').insert({
+      community_id: this.communityId,
+      email: email.trim().toLowerCase(),
+      unit_label: unitLabel.trim(),
+      role,
+      invited_by: this.profileId,
+    });
+    this.failed('send the invite', error, true);
+    await this.hydrateInvites(); this.notify();
+  };
+
+  revokeInvite = async (id: string) => {
+    const { data, error } = await this.client.from('invites')
+      .update({ status: 'revoked' }).eq('id', id).eq('status', 'pending').select('id');
+    if (!this.failed('revoke the invite', error) && (data ?? []).length === 0) {
+      emitAppError("Couldn't revoke the invite — it may already be accepted.");
+    }
+    await this.hydrateInvites(); this.notify();
+  };
+
+  private async hydrateInvites() {
+    if (!this.communityId || this.cache.member?.role !== 'board') { this.cache.invites = []; return; }
+    const { data } = await this.client.from('invites')
+      .select('id, email, unit_label, role, status')
+      .eq('community_id', this.communityId).neq('status', 'revoked')
+      .order('created_at', { ascending: false }).limit(20);
+    this.cache.invites = (data ?? []).map((i) => ({
+      id: i.id, email: i.email, unitLabel: i.unit_label, role: i.role, status: i.status,
+    }));
+  }
 
   private async hydrateBoardArc() {
     if (!this.communityId || this.cache.member?.role !== 'board') { this.cache.boardArc = []; return; }

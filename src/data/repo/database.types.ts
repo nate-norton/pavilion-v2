@@ -178,6 +178,15 @@ export type Database = {
           { foreignKeyName: "dues_statements_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
         ]
       }
+      invites: {
+        Row: { accepted_at: string | null; community_id: string; created_at: string; email: string; id: string; invited_by: string | null; role: "resident" | "board"; status: string; unit_label: string }
+        Insert: { accepted_at?: string | null; community_id: string; created_at?: string; email: string; id?: string; invited_by?: string | null; role?: "resident" | "board"; status?: string; unit_label?: string }
+        Update: { accepted_at?: string | null; community_id?: string; created_at?: string; email?: string; id?: string; invited_by?: string | null; role?: "resident" | "board"; status?: string; unit_label?: string }
+        Relationships: [
+          { foreignKeyName: "invites_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "invites_invited_by_fkey"; columns: ["invited_by"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
       events: {
         Row: { community_id: string; created_at: string; featured: boolean; going: number; id: string; photo_label: string; sort_order: number; tag_label: string; title: string; when_label: string; where_label: string }
         Insert: { community_id: string; created_at?: string; featured?: boolean; going?: number; id?: string; photo_label?: string; sort_order?: number; tag_label?: string; title: string; when_label?: string; where_label?: string }
@@ -485,7 +494,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      claim_invite: { Args: Record<PropertyKey, never>; Returns: boolean }
     }
     Enums: {
       member_role: "resident" | "board"
