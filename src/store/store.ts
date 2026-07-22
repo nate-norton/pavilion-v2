@@ -146,6 +146,9 @@ export interface PavData {
   decisionDetailIdx: number | null;
   composeOpen: boolean;
   manageAmenOpen: boolean;
+  boardChatOpen: boolean;
+  /** Topic thread the board chat sheet opens on; null = topic list. */
+  boardChatTopic: string | null;
   vehicleAdded: boolean;
   petAdded: boolean;
   arcNeedsInfo: boolean;
@@ -315,6 +318,8 @@ export const dataDefaults: PavData = {
   decisionDetailIdx: null,
   composeOpen: false,
   manageAmenOpen: false,
+  boardChatOpen: false,
+  boardChatTopic: null,
   vehicleAdded: false,
   petAdded: false,
   arcNeedsInfo: false,
