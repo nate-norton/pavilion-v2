@@ -3,7 +3,7 @@ import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { usePavStore } from '../store/store';
-import { useVendors, useAging, useVotes, useAssessment, useBoardTriage, useTriageItems, useBoardArcQueue, useInvites, useRepository } from '../data/repo';
+import { useVendors, useAging, useVotes, useAssessment, useBoardTriage, useTriageItems, useBoardArcQueue, useInvites, useBoardChat, useRepository } from '../data/repo';
 
 const BOARD_SEGS = [
   { key: 'desk', label: 'Desk' },
@@ -24,7 +24,10 @@ export function BoardDesk() {
   const [invUnit, setInvUnit] = useState('');
   const [invRole, setInvRole] = useState<'resident' | 'board'>('resident');
   const [invBusy, setInvBusy] = useState(false);
+  const [bcMsg, setBcMsg] = useState('');
+  const [bcBusy, setBcBusy] = useState(false);
   const invites = useInvites();
+  const boardChat = useBoardChat();
   const triage = useBoardTriage();
   const { open: vote } = useVotes();
   const assessment = useAssessment();
@@ -328,6 +331,64 @@ export function BoardDesk() {
 
           {!demo && (
             <div className="mb-[22px]">
+              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+                Board chat
+              </p>
+              <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+                <div className="flex items-center gap-2 mb-2.5">
+                  <PhIcon name="ph-fill ph-lock-simple" size={13} color="rgb(var(--stone))" className="flex-shrink-0" />
+                  <p className="m-0 text-[11.5px] font-bold text-stone">
+                    Private to board members — residents never see this.
+                  </p>
+                </div>
+                {boardChat.length > 0 && (
+                  <div className="pav-scroll flex flex-col gap-2.5 mb-3 overflow-y-auto" style={{ maxHeight: 260 }}>
+                    {boardChat.map((m) => (
+                      <div key={m.id} className="flex gap-2.5 items-start">
+                        <span
+                          className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-extrabold text-white flex-shrink-0"
+                          style={{ background: m.authorColor }}
+                        >
+                          {m.authorInitial}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="m-0 text-[11px] font-bold text-stone">
+                            {m.me ? 'You' : m.authorName} <span className="font-semibold" style={{ color: 'rgb(var(--stonelight))' }}>· {m.time}</span>
+                          </p>
+                          <p className="m-0 text-[13px] leading-[1.45] font-semibold text-navy">{m.text}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <input
+                    value={bcMsg}
+                    onChange={(e) => setBcMsg(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && bcMsg.trim() && !bcBusy) {
+                        setBcBusy(true);
+                        void repo.sendBoardMessage(bcMsg).then(() => setBcMsg('')).finally(() => setBcBusy(false));
+                      }
+                    }}
+                    placeholder="Message the board…"
+                    className="flex-1 rounded-full px-3.5 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                  <button
+                    onClick={() => {
+                      if (!bcMsg.trim() || bcBusy) return;
+                      setBcBusy(true);
+                      void repo.sendBoardMessage(bcMsg).then(() => setBcMsg('')).finally(() => setBcBusy(false));
+                    }}
+                    className="w-10 h-10 border-none rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
+                    style={{ background: bcMsg.trim() && !bcBusy ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                  >
+                    <PhIcon name="ph-fill ph-paper-plane-right" size={15} color="rgb(var(--cream))" />
+                  </button>
+                </div>
+              </div>
+
               <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
                 Members
               </p>

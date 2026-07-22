@@ -214,6 +214,17 @@ export interface NewVote {
   noLabel: string;
 }
 
+/** One message in the board's private channel (Board Desk chat). */
+export interface BoardMessage {
+  id: string;
+  authorName: string;
+  authorInitial: string;
+  authorColor: string;
+  me: boolean;
+  text: string;
+  time: string;
+}
+
 /** A pending/accepted invitation to join the community (board-managed). */
 export interface Invite {
   id: string;
@@ -303,6 +314,10 @@ export interface Repository {
 
   /** Member marks their own courtesy notice fixed (self-cure). */
   markViolationFixed(): Promise<void>;
+
+  // Board chat (private board channel; live only)
+  getBoardChat(): BoardMessage[];
+  sendBoardMessage(text: string): Promise<void>;
 
   // Invites (board-managed; live only — the demo has no join flow)
   getInvites(): Invite[];
