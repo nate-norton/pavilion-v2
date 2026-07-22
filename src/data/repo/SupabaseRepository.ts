@@ -78,6 +78,13 @@ export class SupabaseRepository implements Repository {
   constructor(client?: SupabaseClient<Database>) {
     this.client = client ?? getSupabaseClient();
     this.client.auth.onAuthStateChange(() => { void this.refresh(); });
+    // Realtime DM delivery (RLS-gated server-side; harmless no-op until the
+    // dm_messages table is added to the realtime publication).
+    this.client.channel('dm-live')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'dm_messages' }, () => {
+        void this.hydrateDms().then(() => this.notify());
+      })
+      .subscribe();
   }
 
   /**
@@ -669,13 +676,17 @@ export class SupabaseRepository implements Repository {
     const { data: msgs } = threadIds.length
       ? await this.client.from('dm_messages').select('*').in('thread_id', threadIds).order('created_at')
       : { data: [] };
+    const reads = this.readMarks();
     const chats: MockChatMap = {};
     const threadByOther: Record<string, string> = {};
+    const unreadByOther: Record<string, number> = {};
     for (const t of threads ?? []) {
       const other = t.a_profile_id === me ? t.b_profile_id : t.a_profile_id;
       threadByOther[other] = t.id;
-      chats[other] = (msgs ?? []).filter((x) => x.thread_id === t.id)
-        .map((x) => ({ me: x.sender_profile_id === me, text: x.body, time: timeLabel(x.created_at) }));
+      const rows = (msgs ?? []).filter((x) => x.thread_id === t.id);
+      chats[other] = rows.map((x) => ({ me: x.sender_profile_id === me, text: x.body, time: timeLabel(x.created_at) }));
+      const lastRead = reads[other] ? Date.parse(reads[other]) : 0;
+      unreadByOther[other] = rows.filter((x) => x.sender_profile_id !== me && Date.parse(x.created_at) > lastRead).length;
     }
     const index: ChatSeed = {};
     for (const d of this.cache.directory) {
@@ -683,13 +694,29 @@ export class SupabaseRepository implements Repository {
       const last = thread?.[thread.length - 1];
       index[d.key] = {
         name: d.name, unit: d.unit, color: d.color, initial: d.initial,
-        seed: last?.text ?? 'Say hello 👋', time: last?.time ?? '', unread: 0,
+        seed: last?.text ?? 'Say hello 👋', time: last?.time ?? '', unread: unreadByOther[d.key] ?? 0,
       };
     }
     this.cache.chats = chats;
     this.cache.chatIndex = index;
     this.cache.dmThreads = threadByOther;
   }
+
+  /** Per-device read marks (client-side v1; a dm_reads table can replace it). */
+  private readMarks(): Record<string, string> {
+    try { return JSON.parse(localStorage.getItem('pav-dm-reads') ?? '{}'); } catch { return {}; }
+  }
+
+  markChatRead = (chatKey: string) => {
+    const reads = this.readMarks();
+    reads[chatKey] = new Date().toISOString();
+    try { localStorage.setItem('pav-dm-reads', JSON.stringify(reads)); } catch { /* private mode */ }
+    const entry = this.cache.chatIndex[chatKey];
+    if (entry && entry.unread > 0) {
+      this.cache.chatIndex = { ...this.cache.chatIndex, [chatKey]: { ...entry, unread: 0 } };
+      this.notify();
+    }
+  };
 
   sendChatMessage = async (chatKey: string, text: string, _reply?: boolean) => {
     void _reply; // scripted replies are demo-only

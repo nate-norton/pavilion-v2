@@ -340,6 +340,8 @@ export interface Repository {
   /** Reactive community directory (live: fellow members; demo: seed). */
   getDirectory(): DirEntry[];
   getChats(): Record<string, ChatMsg[]>;
+  /** Mark a thread read (clears its unread badge; demo no-op). */
+  markChatRead(chatKey: string): void;
   /** `reply` (default true) triggers the scripted neighbor reply; photos pass false. */
   sendChatMessage(chatKey: string, text: string, reply?: boolean): Promise<void>;
 
