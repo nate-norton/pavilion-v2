@@ -1,9 +1,10 @@
-import { type KeyboardEvent } from 'react';
+import { useState, type KeyboardEvent } from 'react';
 import { Avatar } from '../components/Avatar';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember, useChatSeed, useRepository } from '../data/repo';
+import type { FeedPost, ThreadComment } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 const SEG_OPTIONS = [
@@ -88,29 +89,8 @@ export function Commons() {
                 </p>
               </div>
             ) : !repo.isDemo() ? (
-              // Live: real feed posts as generic cards (the demo renders its
-              // bespoke scripted posts below).
-              feed.map((p) => (
-                <div key={p.id} className="bg-paper rounded-[18px] p-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-                  <div className="flex items-center gap-2.5 mb-2.5">
-                    <Avatar initial={p.authorInitial} color={p.authorColor} size={36} />
-                    <div className="flex-1">
-                      <p className="m-0 text-[13.5px] font-bold text-navy">
-                        {p.authorName}{' '}
-                        <span className="font-semibold text-stonelight">
-                          {p.unitLabel ? `· ${p.unitLabel} ` : ''}· {p.timeLabel}
-                        </span>
-                      </p>
-                      {p.tagLabel && (
-                        <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--terracotta))' }}>
-                          {p.tagLabel}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <p className="m-0 text-[13.5px] leading-[1.55] font-semibold text-bark">{p.body}</p>
-                </div>
-              ))
+              // Live: real feed posts with reactions, comments, photos, pins.
+              feed.map((p) => <LivePostCard key={p.id} post={p} isBoard={member?.role === 'board'} />)
             ) : (<>
             {(
               <div
@@ -532,6 +512,120 @@ export function Commons() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * One live feed post: pinned badge, photos, hearts, a comment thread that
+ * expands in place, delete-own (board can delete/pin any).
+ */
+function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }) {
+  const repo = useRepository();
+  const [open, setOpen] = useState(false);
+  const [thread, setThread] = useState<ThreadComment[]>([]);
+  const [reply, setReply] = useState('');
+
+  const loadThread = () => { void repo.listPostComments(p.id).then(setThread); };
+  const toggleComments = () => { if (!open) loadThread(); setOpen(!open); };
+  const sendReply = () => {
+    if (!reply.trim()) return;
+    void repo.addPostComment(p.id, reply).then(() => { setReply(''); loadThread(); }).catch(() => {});
+  };
+
+  return (
+    <div className="bg-paper rounded-[18px] p-4" style={{ border: p.pinned ? '1.5px solid rgb(var(--gold) / 0.5)' : '1px solid rgb(var(--navy) / 0.08)' }}>
+      {p.pinned && (
+        <p className="m-0 mb-2 text-[10.5px] font-extrabold uppercase flex items-center gap-1" style={{ letterSpacing: '0.1em', color: 'rgb(var(--golddark))' }}>
+          <PhIcon name="ph-fill ph-push-pin" size={11} color="rgb(var(--golddark))" /> Pinned by the board
+        </p>
+      )}
+      <div className="flex items-center gap-2.5 mb-2.5">
+        <Avatar initial={p.authorInitial} color={p.authorColor} size={36} />
+        <div className="flex-1 min-w-0">
+          <p className="m-0 text-[13.5px] font-bold text-navy">
+            {p.authorName}{' '}
+            <span className="font-semibold text-stonelight">
+              {p.unitLabel ? `· ${p.unitLabel} ` : ''}· {p.timeLabel}
+            </span>
+          </p>
+          {p.tagLabel && (
+            <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--terracotta))' }}>
+              {p.tagLabel}
+            </p>
+          )}
+        </div>
+        {isBoard && (
+          <button
+            onClick={() => void repo.togglePinPost(p.id)}
+            title={p.pinned ? 'Unpin' : 'Pin to top'}
+            className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0"
+          >
+            <PhIcon name={p.pinned ? 'ph-fill ph-push-pin-slash' : 'ph ph-push-pin'} size={14} color="rgb(var(--stone))" />
+          </button>
+        )}
+        {(p.mine || isBoard) && (
+          <button
+            onClick={() => void repo.deleteFeedPost(p.id)}
+            title="Delete post"
+            className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-50"
+          >
+            <PhIcon name="ph-fill ph-trash" size={13} color="rgb(var(--stone))" />
+          </button>
+        )}
+      </div>
+      {p.body && <p className="m-0 text-[13.5px] leading-[1.55] font-semibold text-bark">{p.body}</p>}
+      {(p.photoUrls ?? []).map((u) => (
+        <img key={u} src={u} alt="" className="mt-2.5 rounded-[13px] w-full block" style={{ maxHeight: 260, objectFit: 'cover' }} />
+      ))}
+      <div className="flex items-center gap-4 mt-3">
+        <button
+          onClick={() => void repo.togglePostLike(p.id)}
+          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+        >
+          <PhIcon
+            name={p.likedByMe ? 'ph-fill ph-heart' : 'ph ph-heart'}
+            size={18}
+            color={p.likedByMe ? 'rgb(var(--terracotta))' : 'rgb(var(--stone))'}
+            className={p.likedByMe ? 'animate-heartpop' : undefined}
+          />
+          <span className="text-xs font-bold text-stone">{p.likes || ''}</span>
+        </button>
+        <button
+          onClick={toggleComments}
+          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+        >
+          <PhIcon name="ph ph-chat-circle" size={18} color="rgb(var(--stone))" />
+          <span className="text-xs font-bold text-stone">{p.commentCount || ''}</span>
+        </button>
+      </div>
+      {open && (
+        <div className="mt-2.5 animate-fadeup" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)', paddingTop: 10 }}>
+          {thread.map((c) => (
+            <p key={c.id} className="m-0 mb-1 text-[12.5px] font-semibold text-navy">
+              <strong>{c.me ? 'You' : c.authorName}:</strong> {c.body}{' '}
+              <span className="text-stone" style={{ fontSize: 10.5 }}>· {c.time}</span>
+            </p>
+          ))}
+          <div className="flex gap-2 mt-1.5">
+            <input
+              value={reply}
+              onChange={(e) => setReply(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') sendReply(); }}
+              placeholder="Add a comment…"
+              className="flex-1 rounded-full px-3 py-2 text-[12.5px] font-bold text-navy outline-none min-w-0"
+              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+            />
+            <button
+              onClick={sendReply}
+              className="w-8 h-8 border-0 rounded-full cursor-pointer flex items-center justify-center flex-shrink-0"
+              style={{ background: reply.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+            >
+              <PhIcon name="ph-fill ph-paper-plane-right" size={12} color="rgb(var(--cream))" />
+            </button>
           </div>
         </div>
       )}

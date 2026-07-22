@@ -42,6 +42,10 @@ export function BoardDesk() {
   const [meetWhere, setMeetWhere] = useState('');
   const [meetAgenda, setMeetAgenda] = useState('');
   const minutesFileRef = useRef<HTMLInputElement>(null);
+  const [evDraftOpen, setEvDraftOpen] = useState(false);
+  const [evTitle, setEvTitle] = useState('');
+  const [evWhen, setEvWhen] = useState('');
+  const [evWhere, setEvWhere] = useState('');
   const boardViolations = useBoardViolations();
   const units = useUnits();
   const adminMembers = useAdminMembers();
@@ -1527,6 +1531,72 @@ export function BoardDesk() {
               </div>
             </>
           )}
+
+          {/* Community event */}
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+            Events
+          </p>
+          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+            {!evDraftOpen ? (
+              <button
+                onClick={() => setEvDraftOpen(true)}
+                className="w-full rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                style={{ border: '1.5px dashed rgb(var(--navy) / 0.25)' }}
+              >
+                + Create a community event
+              </button>
+            ) : (
+              <div className="animate-fadeup">
+                <input
+                  value={evTitle}
+                  onChange={(e) => setEvTitle(e.target.value)}
+                  placeholder="Title — e.g. Summer BBQ at the clubhouse"
+                  className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                />
+                <div className="flex gap-2 mb-2">
+                  <input
+                    value={evWhen}
+                    onChange={(e) => setEvWhen(e.target.value)}
+                    placeholder="When — Sat Aug 9 · 5 PM"
+                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                  <input
+                    value={evWhere}
+                    onChange={(e) => setEvWhere(e.target.value)}
+                    placeholder="Where"
+                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setEvDraftOpen(false)}
+                    className="flex-1 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                    style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!evTitle.trim()) return;
+                      void repo.createEvent({ title: evTitle, whenLabel: evWhen, whereLabel: evWhere })
+                        .then(() => { setEvDraftOpen(false); setEvTitle(''); setEvWhen(''); setEvWhere(''); })
+                        .catch(() => {});
+                    }}
+                    className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
+                    style={{ background: evTitle.trim() ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))' }}
+                  >
+                    Publish event
+                  </button>
+                </div>
+              </div>
+            )}
+            <p className="mt-2.5 mb-0 text-[11px] font-semibold text-stone">
+              Shows on every resident&apos;s Today screen with one-tap RSVP.
+            </p>
+          </div>
         </div>
       )}
       {state.boardTab === 'comms' && demo && (
