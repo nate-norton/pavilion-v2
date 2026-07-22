@@ -31,8 +31,8 @@ how much they'd embarrass us in front of a real community.
   and Today's quiet list
 - ✅ ~~Amenities have no live domain~~ — amenities table applied + board
   "Manage amenities" sheet on Reserve (add/retire)
-- **Messages/chat is demo-only** — live directory is empty and DMs have no
-  tables; decide whether chat ships in v1 or hides in live.
+- ✅ ~~Messages/chat demo-only~~ — real DMs (participant-only RLS), live
+  directory from memberships; unread counts + realtime still open
 
 ## Open — medium
 

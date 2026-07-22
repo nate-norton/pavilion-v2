@@ -31,7 +31,11 @@ export function Chat() {
   const p = CHAT_SEED[chatKey];
   if (!p) return null;
 
-  const msgs = [{ me: false, text: p.seed, time: p.time }, ...(chats[chatKey] || [])];
+  // The demo prepends the neighbor's scripted opener; live threads are only
+  // real messages (the index's `seed` is just the list preview there).
+  const msgs = repo.isDemo()
+    ? [{ me: false, text: p.seed, time: p.time }, ...(chats[chatKey] || [])]
+    : (chats[chatKey] || []);
 
   return (
     <div
