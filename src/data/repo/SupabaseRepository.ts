@@ -525,10 +525,33 @@ export class SupabaseRepository implements Repository {
     const { data } = await this.client.from('amenities')
       .select('*').eq('community_id', this.communityId).eq('active', true).order('sort_order');
     this.cache.amenities = (data ?? []).map((a) => ({
-      name: a.name, sub: a.sub, icon: a.icon, rules: a.rules,
+      id: a.id, name: a.name, sub: a.sub, icon: a.icon, rules: a.rules,
       avail: a.avail_label, occ: a.occ_label, occColor: '#A39B8B', taken: [],
     }));
   }
+
+  createAmenity = async ({ name, sub, rules, icon }: { name: string; sub: string; rules: string; icon: string }) => {
+    if (!this.communityId) return;
+    const { error } = await this.client.from('amenities').insert({
+      community_id: this.communityId,
+      name: name.trim(),
+      sub: sub.trim(),
+      rules: rules.trim(),
+      icon,
+      sort_order: this.cache.amenities.length,
+    });
+    this.failed('add the amenity', error, true);
+    await this.hydrateAmenities(); this.notify();
+  };
+
+  retireAmenity = async (id: string) => {
+    const { data, error } = await this.client.from('amenities')
+      .update({ active: false }).eq('id', id).select('id');
+    if (!this.failed('retire the amenity', error) && (data ?? []).length === 0) {
+      emitAppError("Couldn't retire the amenity — you may not have permission.");
+    }
+    await this.hydrateAmenities(); this.notify();
+  };
 
   // ── Reservations (real, per-member; no-ops until the table migration lands) ─
   getReservation = () => this.cache.reservation;

@@ -304,6 +304,10 @@ export interface Repository {
   /** The community's bookable amenities, reactive (empty for a fresh community). */
   getAmenities(): Amenity[];
   listAmenities(): Promise<Amenity[]>;
+  /** Board: add a bookable amenity. */
+  createAmenity(input: { name: string; sub: string; rules: string; icon: string }): Promise<void>;
+  /** Board: retire an amenity (soft — it stops showing, history survives). */
+  retireAmenity(id: string): Promise<void>;
   getReservationSlots(): Promise<string[]>;
   getReservationDays(): Promise<string[]>;
   getReservation(): ReservationState;

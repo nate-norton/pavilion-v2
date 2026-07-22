@@ -1,6 +1,7 @@
 import { PhIcon } from '../components/PhIcon';
-import { useAmenities, useReservationSlots, useReservationDays, useReservation, useRepository } from '../data/repo';
+import { useAmenities, useMember, useReservationSlots, useReservationDays, useReservation, useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
+import { isLiveMode } from '../auth/AuthGate';
 
 /** Reserve screen — ported from prototype lines 523-628. */
 export function Reserve() {
@@ -11,6 +12,8 @@ export function Reserve() {
   const SLOTS = useReservationSlots();
   const DAYS = useReservationDays();
   const reservation = useReservation();
+  const member = useMember();
+  const canManage = isLiveMode && member?.role === 'board';
 
   const amen = state.amenIdx != null ? AMENS[state.amenIdx] : null;
   const hasBooking = reservation.booked && !!reservation.summary;
@@ -274,6 +277,16 @@ export function Reserve() {
               When your board adds the clubhouse, pool, or courts, you&apos;ll book them here.
             </p>
           </div>
+        )}
+        {canManage && (
+          <button
+            onClick={() => set({ manageAmenOpen: true })}
+            className="w-full mt-3 mb-1 rounded-xl py-[11px] text-[13px] font-extrabold cursor-pointer bg-transparent text-navy flex items-center justify-center gap-2"
+            style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+          >
+            <PhIcon name="ph-fill ph-gear-six" size={15} />
+            Manage amenities
+          </button>
         )}
         <div className="flex flex-col gap-2.5">
           {AMENS.map((a, i) => (

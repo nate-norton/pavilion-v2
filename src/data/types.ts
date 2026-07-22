@@ -1,4 +1,5 @@
 export interface Amenity {
+  id?: string;      // live rows carry the db id (demo seed has none)
   name: string;
   sub: string;
   icon: string;
