@@ -223,6 +223,8 @@ export interface BoardMessage {
   me: boolean;
   text: string;
   time: string;
+  /** Named thread this message belongs to; null = the pinned General thread. */
+  topic: string | null;
 }
 
 /** A pending/accepted invitation to join the community (board-managed). */
@@ -317,7 +319,8 @@ export interface Repository {
 
   // Board chat (private board channel; live only)
   getBoardChat(): BoardMessage[];
-  sendBoardMessage(text: string): Promise<void>;
+  /** topic null/omitted posts to the pinned General thread. */
+  sendBoardMessage(text: string, topic?: string | null): Promise<void>;
 
   // Invites (board-managed; live only — the demo has no join flow)
   getInvites(): Invite[];
