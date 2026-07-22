@@ -273,6 +273,8 @@ export class MockRepository implements Repository, SnapshotReadable {
 
   getAmenities = () => AMENS;
   listAmenities = async () => AMENS;
+  createAmenity = async () => {};   // board amenity tooling is live-only
+  retireAmenity = async () => {};
   getReservationSlots = async () => SLOTS;
   getReservationDays = async () => DAYS;
   getReservation = () => mockDomain.get().reservation;

@@ -145,6 +145,7 @@ export interface PavData {
   paymentDetailIdx: number | null;
   decisionDetailIdx: number | null;
   composeOpen: boolean;
+  manageAmenOpen: boolean;
   vehicleAdded: boolean;
   petAdded: boolean;
   arcNeedsInfo: boolean;
@@ -313,6 +314,7 @@ export const dataDefaults: PavData = {
   paymentDetailIdx: null,
   decisionDetailIdx: null,
   composeOpen: false,
+  manageAmenOpen: false,
   vehicleAdded: false,
   petAdded: false,
   arcNeedsInfo: false,
