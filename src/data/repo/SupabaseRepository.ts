@@ -171,28 +171,39 @@ export class SupabaseRepository implements Repository {
     this.unitId = membership?.unit_id ?? null;
   }
 
-  /** Re-read the current user's context + domain slices, then notify. */
+  /** Re-read the current user's context + domain slices. Notifies after the
+   * member context and then after each wave, so the first paint (greeting,
+   * shell) never waits on the long tail of domain queries. */
   private async refresh() {
     await this.resolveContext();
     await this.hydrateMember();
-    await this.hydrateDues();
-    await this.hydrateVotes();
-    await this.hydrateCompliance();
-    await this.hydrateArc();
-    await this.hydrateSocial();
-    await this.hydrateTriage();
-    await this.hydrateDecisions();
-    await this.hydrateBoardArc();
-    await this.hydrateInvites();
-    await this.hydrateBoardChat();
-    await this.hydrateAmenities();
-    await this.hydrateReservation();
-    await this.hydrateDirectory();
-    await this.hydrateDms();
-    await this.hydrateGroups();
-    await this.hydrateDocs();
-    await this.hydrateMeetings();
-    await this.hydrateBoardOps();
+    this.notify();
+    await Promise.all([
+      this.hydrateDues(),
+      this.hydrateVotes(),
+      this.hydrateCompliance(),
+      this.hydrateArc(),
+      this.hydrateSocial(),
+      this.hydrateTriage(),
+      this.hydrateDecisions(),
+    ]);
+    this.notify();
+    await Promise.all([
+      this.hydrateBoardArc(),
+      this.hydrateInvites(),
+      this.hydrateBoardChat(),
+      this.hydrateAmenities(),
+      this.hydrateReservation(),
+      this.hydrateDocs(),
+      this.hydrateMeetings(),
+    ]);
+    this.notify();
+    await this.hydrateDirectory();   // dms depend on the directory
+    await Promise.all([
+      this.hydrateDms(),
+      this.hydrateGroups(),
+      this.hydrateBoardOps(),
+    ]);
     this.notify();
   }
 
