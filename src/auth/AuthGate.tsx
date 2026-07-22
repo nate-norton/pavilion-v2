@@ -38,7 +38,16 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
         const { count } = await supabase.from('memberships')
           .select('id', { count: 'exact', head: true })
           .eq('profile_id', profile.id).eq('status', 'active');
-        if (alive) setHasCommunity((count ?? 0) > 0);
+        if ((count ?? 0) > 0) { if (alive) setHasCommunity(true); return; }
+        // No membership yet — a pending invite for this email joins them now.
+        const { data: claimed } = await supabase.rpc('claim_invite');
+        if (claimed === true) {
+          // nudge an auth event so the repository re-hydrates with the new membership
+          void supabase.auth.refreshSession();
+          if (alive) setHasCommunity(true);
+          return;
+        }
+        if (alive) setHasCommunity(false);
       } catch {
         if (alive) setHasCommunity(false); // treat any failure as "no community"
       }

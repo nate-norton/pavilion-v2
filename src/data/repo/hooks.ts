@@ -95,6 +95,12 @@ export function useMyReports() {
   return useSyncExternalStore(repo.subscribe, () => repo.getMyReports());
 }
 
+/** The board's invites (live only; empty in demo). */
+export function useInvites() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getInvites());
+}
+
 /** The board's live ARC queue across all units (empty in demo). */
 export function useBoardArcQueue() {
   const repo = useRepository();
