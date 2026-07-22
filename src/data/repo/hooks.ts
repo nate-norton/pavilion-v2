@@ -107,6 +107,48 @@ export function useInvites() {
   return useSyncExternalStore(repo.subscribe, () => repo.getInvites());
 }
 
+/** The board's open violations across units (live only; empty in demo). */
+export function useBoardViolations() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getBoardViolations());
+}
+
+/** The community's units for board pickers (live only; empty in demo). */
+export function useUnits() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getUnits());
+}
+
+/** The board's member-admin roster (live only; empty in demo). */
+export function useAdminMembers() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getAdminMembers());
+}
+
+/** The board's audit trail (live only; empty in demo). */
+export function useAuditLog() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getAuditLog());
+}
+
+/** All active bookings across the community (board; live only). */
+export function useBoardBookings() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getBoardBookings());
+}
+
+/** Community meetings (live; the demo's meeting prep is scripted). */
+export function useMeetings() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getMeetings());
+}
+
+/** Board chat topics archived away (live only). */
+export function useArchivedBoardTopics() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getArchivedBoardTopics());
+}
+
 /** The board's live ARC queue across all units (empty in demo). */
 export function useBoardArcQueue() {
   const repo = useRepository();
@@ -174,7 +216,11 @@ export function useChatSeed() {
 
 // HOA / board
 export const useVendors = () => useRepoRead('vendors', (r) => r.listVendors(), []);
-export const useDocuments = () => useRepoRead('documents', (r) => r.listDocuments(), []);
+/** Reactive: live re-renders as the board uploads/removes documents. */
+export function useDocuments() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getDocs());
+}
 export const useDocSections = () => useRepoRead('docSections', (r) => r.listDocSections(), []);
 export const useArcTypes = () => useRepoRead('arcTypes', (r) => r.listArcTypes(), []);
 export const usePortfolio = () => useRepoRead('portfolio', (r) => r.listPortfolio(), []);

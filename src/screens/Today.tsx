@@ -17,7 +17,8 @@ export function Today() {
   const PORTFOLIO = usePortfolio();
   const reservation = useReservation();
   const member = useMember();
-  const demo = useRepository().isDemo();
+  const repo = useRepository();
+  const demo = repo.isDemo();
   const firstName = member?.name.split(' ')[0] ?? '';
   const dues = useDues();
   const { open: vote } = useVotes();
@@ -60,7 +61,9 @@ export function Today() {
   const hasNotifBadge = notifBadge > 0;
 
   const rsvpFood = state.rsvpFood;
-  const tacoGoing = (featuredEvent?.going ?? 0) + (rsvpFood ? 1 : 0);
+  // Live counts include this member's RSVP in `going` (trigger-maintained);
+  // the demo adds the scripted flag on top.
+  const tacoGoing = (featuredEvent?.going ?? 0) + (demo && rsvpFood ? 1 : 0);
 
   const hasBooking = reservation.booked && !!reservation.summary;
 
@@ -287,9 +290,9 @@ export function Today() {
               {tacoGoing} neighbors going
             </p>
           </div>
-          {rsvpFood ? (
+          {(demo ? rsvpFood : featuredEvent?.rsvpd) ? (
             <button
-              onClick={() => set({ rsvpFood: !state.rsvpFood })}
+              onClick={() => (demo ? set({ rsvpFood: !state.rsvpFood }) : void repo.toggleEventRsvp(featuredEvent!.id))}
               className="border-none text-white rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 flex items-center gap-1.5 bg-sage"
             >
               <PhIcon name="ph-fill ph-check" size={14} />
@@ -297,7 +300,7 @@ export function Today() {
             </button>
           ) : (
             <button
-              onClick={() => set({ rsvpFood: !state.rsvpFood })}
+              onClick={() => (demo ? set({ rsvpFood: !state.rsvpFood }) : void repo.toggleEventRsvp(featuredEvent!.id))}
               className="border-none text-white rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 bg-ember"
             >
               I&apos;m in

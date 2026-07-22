@@ -15,12 +15,23 @@ export function AuthGate({ children }: { children: ReactNode }) {
   return <LiveAuthGate>{children}</LiveAuthGate>;
 }
 
+/** Stash an invite code from the URL (?invite=…) so it survives the
+ * magic-link round trip; claimed after sign-in, cleared on success. */
+function stashInviteCode() {
+  try {
+    const code = new URLSearchParams(window.location.search).get('invite');
+    if (code) localStorage.setItem('pav-invite-code', code);
+  } catch { /* no-op */ }
+}
+
 function LiveAuthGate({ children }: { children: ReactNode }) {
   const supabase = getSupabaseClient();
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
   // null = still checking; true/false = whether the user belongs to a community.
   const [hasCommunity, setHasCommunity] = useState<boolean | null>(null);
+
+  useEffect(() => { stashInviteCode(); }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => { setSession(data.session); setReady(true); });
@@ -46,6 +57,17 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
           void supabase.auth.refreshSession();
           if (alive) setHasCommunity(true);
           return;
+        }
+        // Or a copied invite link (?invite=CODE) works for any email.
+        const code = localStorage.getItem('pav-invite-code');
+        if (code) {
+          const { data: codeClaimed } = await supabase.rpc('claim_invite_code', { invite_code: code });
+          if (codeClaimed === true) {
+            localStorage.removeItem('pav-invite-code');
+            void supabase.auth.refreshSession();
+            if (alive) setHasCommunity(true);
+            return;
+          }
         }
         if (alive) setHasCommunity(false);
       } catch {
