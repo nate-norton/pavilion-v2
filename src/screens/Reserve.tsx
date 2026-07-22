@@ -91,7 +91,7 @@ export function Reserve() {
             All amenities
           </button>
           <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">{amen.name}</h1>
-          <p className="m-0 mb-2.5 text-[13px] text-taupe font-semibold">{amen.sub} · free for residents</p>
+          <p className="m-0 mb-2.5 text-[13px] text-taupe font-semibold">{demo ? `${amen.sub} · free for residents` : amen.sub}</p>
           <div
             className="bg-paper rounded-[13px] px-3.5 py-2.5 flex gap-2.5 items-start mb-[18px]"
             style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}

@@ -532,7 +532,9 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
               </span>
             </div>
             <p className="mt-[9px] mb-0 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.55)' }}>
-              Live tally · needs 50% of {vote.quorumTotal} households by Thursday
+              {demo
+                ? `Live tally · needs 50% of ${vote.quorumTotal} households by Thursday`
+                : `Live tally · one ballot per household · ${vote.quorumTotal} households`}
             </p>
           </div>
           {!demo && (

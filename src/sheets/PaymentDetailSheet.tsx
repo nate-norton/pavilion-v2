@@ -1,6 +1,7 @@
 import { Sheet } from '../components/Sheet';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
+import { useRepository } from '../data/repo';
 
 const DUES_LEGEND = [
   { label: 'Landscaping', amount: '$78', color: 'rgb(var(--sage))' },
@@ -55,6 +56,8 @@ export function PaymentDetailSheet() {
   const paid = usePavStore((s) => s.paid);
   const showDelinquent = usePavStore((s) => s.showDelinquent);
   const set = usePavStore((s) => s.set);
+  // Scripted payment history — must never render in live.
+  if (!useRepository().isDemo()) return null;
 
   if (paymentDetailIdx == null) return null;
 

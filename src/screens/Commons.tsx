@@ -584,6 +584,7 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
       <div className="flex items-center gap-4 mt-3">
         <button
           onClick={() => void repo.togglePostLike(p.id)}
+          aria-label={p.likedByMe ? 'Unlike' : 'Like'}
           className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
         >
           <PhIcon
@@ -596,6 +597,7 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
         </button>
         <button
           onClick={toggleComments}
+          aria-label="Comments"
           className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
         >
           <PhIcon name="ph ph-chat-circle" size={18} color="rgb(var(--stone))" />

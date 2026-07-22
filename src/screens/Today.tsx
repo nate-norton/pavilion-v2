@@ -194,7 +194,7 @@ export function Today() {
         )}
 
         {showPayCardRole && (
-          <div onClick={() => set({ paySheetOpen: true })} className={ROW} style={ROW_PAD}>
+          <div onClick={() => (demo ? set({ paySheetOpen: true }) : set({ tab: 'hoa' }))} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{payCardTitle}</p>

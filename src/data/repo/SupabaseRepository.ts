@@ -144,6 +144,10 @@ export class SupabaseRepository implements Repository {
     return map;
   }
 
+  /** Ids with a write in flight — guards double-taps on actions that also
+   * insert side-effect rows (decisions, documents). */
+  private inflight = new Set<string>();
+
   /** Fire-and-forget board-action audit entry. */
   private audit(action: string, detail = '') {
     if (!this.communityId || !this.profileId) return;
@@ -528,6 +532,16 @@ export class SupabaseRepository implements Repository {
   };
 
   decideArc = async (id: string, decision: ArcDecision, note = '', conditions = '') => {
+    if (this.inflight.has(id)) return;
+    this.inflight.add(id);
+    try {
+      await this.decideArcInner(id, decision, note, conditions);
+    } finally {
+      this.inflight.delete(id);
+    }
+  };
+
+  private decideArcInner = async (id: string, decision: ArcDecision, note = '', conditions = '') => {
     const item = this.cache.boardArc.find((r) => r.id === id);
     const approve = decision === 'approved';
     const label = approve ? 'Approved' : decision === 'declined' ? 'Declined' : 'Info requested';
@@ -924,6 +938,16 @@ export class SupabaseRepository implements Repository {
   };
 
   closeVote = async (voteId: string) => {
+    if (this.inflight.has(voteId)) return;
+    this.inflight.add(voteId);
+    try {
+      await this.closeVoteInner(voteId);
+    } finally {
+      this.inflight.delete(voteId);
+    }
+  };
+
+  private closeVoteInner = async (voteId: string) => {
     const vote = this.cache.votes.openAll.find((v) => v.id === voteId);
     const { data, error } = await this.client.from('votes')
       .update({ status: 'closed' }).eq('id', voteId).select('id');
@@ -1229,6 +1253,16 @@ export class SupabaseRepository implements Repository {
   };
 
   publishMinutes = async (meetingId: string, file: File) => {
+    if (this.inflight.has(meetingId)) return;
+    this.inflight.add(meetingId);
+    try {
+      await this.publishMinutesInner(meetingId, file);
+    } finally {
+      this.inflight.delete(meetingId);
+    }
+  };
+
+  private publishMinutesInner = async (meetingId: string, file: File) => {
     const meeting = this.cache.meetings.find((m) => m.id === meetingId);
     const paths = await this.uploadFiles([file], 'documents');
     if (!paths.length) throw new Error('upload failed');
