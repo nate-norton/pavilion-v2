@@ -3,7 +3,7 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { ArcRequest, ArcState, BoardArcItem, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, FeedPost, Invite, KnownIssue, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcRequest, ArcState, BoardArcItem, BoardMessage, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, FeedPost, Invite, KnownIssue, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
 import { usePavStore } from '../../store/store';
@@ -36,6 +36,7 @@ const DEMO_DECISIONS: Decision[] = [
 const EMPTY_TRIAGE_ITEMS: TriageItem[] = [];
 const EMPTY_BOARD_ARC: BoardArcItem[] = [];
 const EMPTY_INVITES: Invite[] = [];
+const EMPTY_BOARD_CHAT: BoardMessage[] = [];
 
 /** Clock label matching the store's original format (e.g. "3:07 PM"). */
 function now(): string {
@@ -75,6 +76,8 @@ export class MockRepository implements Repository, SnapshotReadable {
   openVote = async () => { usePavStore.getState().postVote(); };
   markViolationFixed = async () => { usePavStore.getState().set({ violFixed: true }); };
   getInvites = () => EMPTY_INVITES;
+  getBoardChat = () => EMPTY_BOARD_CHAT;   // board chat is live-only
+  sendBoardMessage = async () => {};
   markChatRead = () => {};   // demo unread badges are scripted
   createInvite = async () => {};
   revokeInvite = async () => {};

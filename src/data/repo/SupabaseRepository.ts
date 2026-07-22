@@ -8,7 +8,7 @@ import type {
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
 import { emitAppError } from '../../lib/errorBus';
-import type { ArcState, ArcStep, BoardArcItem, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, DuesStatus, FeedPost, Invite, KnownIssue, MemberContext, NewArcRequest, NewGroup, NewReport, NewReservation, NewVote, ReservationState, Repository, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcState, ArcStep, BoardArcItem, BoardMessage, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, DuesStatus, FeedPost, Invite, KnownIssue, MemberContext, NewArcRequest, NewGroup, NewReport, NewReservation, NewVote, ReservationState, Repository, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -64,6 +64,7 @@ export class SupabaseRepository implements Repository {
     myReports: [] as TriageItem[],
     boardArc: [] as BoardArcItem[],
     invites: [] as Invite[],
+    boardChat: [] as BoardMessage[],
     amenities: [] as Amenity[],
     reservation: { booked: false, summary: null } as ReservationState,
     comments: [] as Comment[],
@@ -83,6 +84,9 @@ export class SupabaseRepository implements Repository {
     this.client.channel('dm-live')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'dm_messages' }, () => {
         void this.hydrateDms().then(() => this.notify());
+      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'board_messages' }, () => {
+        void this.hydrateBoardChat().then(() => this.notify());
       })
       .subscribe();
   }
@@ -140,6 +144,7 @@ export class SupabaseRepository implements Repository {
     await this.hydrateDecisions();
     await this.hydrateBoardArc();
     await this.hydrateInvites();
+    await this.hydrateBoardChat();
     await this.hydrateAmenities();
     await this.hydrateReservation();
     await this.hydrateDirectory();
@@ -342,7 +347,8 @@ export class SupabaseRepository implements Repository {
       invited_by: this.profileId,
     });
     this.failed('send the invite', error, true);
-    await this.hydrateInvites(); this.notify();
+    await this.hydrateInvites();
+    await this.hydrateBoardChat(); this.notify();
   };
 
   revokeInvite = async (id: string) => {
@@ -351,7 +357,8 @@ export class SupabaseRepository implements Repository {
     if (!this.failed('revoke the invite', error) && (data ?? []).length === 0) {
       emitAppError("Couldn't revoke the invite — it may already be accepted.");
     }
-    await this.hydrateInvites(); this.notify();
+    await this.hydrateInvites();
+    await this.hydrateBoardChat(); this.notify();
   };
 
   private async hydrateInvites() {
@@ -363,6 +370,36 @@ export class SupabaseRepository implements Repository {
     this.cache.invites = (data ?? []).map((i) => ({
       id: i.id, email: i.email, unitLabel: i.unit_label, role: i.role, status: i.status,
     }));
+  }
+
+  // ── Board chat (private board channel) ──────────────────────────────────────
+  getBoardChat = () => this.cache.boardChat;
+
+  sendBoardMessage = async (text: string) => {
+    if (!this.communityId || !this.profileId || !text.trim()) return;
+    const { error } = await this.client.from('board_messages')
+      .insert({ community_id: this.communityId, sender_profile_id: this.profileId, body: text.trim() });
+    this.failed('send your message', error);
+    await this.hydrateBoardChat(); this.notify();
+  };
+
+  private async hydrateBoardChat() {
+    if (!this.communityId || this.cache.member?.role !== 'board') { this.cache.boardChat = []; return; }
+    const { data } = await this.client.from('board_messages')
+      .select('id, body, created_at, sender_profile_id, profiles(name, initial, color)')
+      .eq('community_id', this.communityId).order('created_at').limit(100);
+    this.cache.boardChat = (data ?? []).map((m) => {
+      const p = (m as unknown as { profiles: { name: string; initial: string; color: string } | null }).profiles;
+      return {
+        id: m.id,
+        authorName: p?.name ?? 'Board member',
+        authorInitial: p?.initial ?? 'B',
+        authorColor: p?.color ?? '#1A3352',
+        me: m.sender_profile_id === this.profileId,
+        text: m.body,
+        time: timeLabel(m.created_at),
+      };
+    });
   }
 
   private async hydrateBoardArc() {
