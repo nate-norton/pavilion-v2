@@ -24,8 +24,6 @@ export function BoardDesk() {
   const [invUnit, setInvUnit] = useState('');
   const [invRole, setInvRole] = useState<'resident' | 'board'>('resident');
   const [invBusy, setInvBusy] = useState(false);
-  const [bcMsg, setBcMsg] = useState('');
-  const [bcBusy, setBcBusy] = useState(false);
   const invites = useInvites();
   const boardChat = useBoardChat();
   const triage = useBoardTriage();
@@ -37,6 +35,18 @@ export function BoardDesk() {
   const demo = repo.isDemo();
   const triageItems = useTriageItems();
   const boardArcQueue = useBoardArcQueue();
+
+  // Board chat card rows: General pinned first, then topics by latest activity.
+  const topicMap = new Map<string, typeof boardChat>([['General', []]]);
+  boardChat.forEach((m) => {
+    const k = m.topic ?? 'General';
+    if (!topicMap.has(k)) topicMap.set(k, []);
+    topicMap.get(k)!.push(m);
+  });
+  const [generalThread, ...restThreads] = [...topicMap.entries()];
+  restThreads.sort((a, b) =>
+    boardChat.lastIndexOf(b[1][b[1].length - 1]) - boardChat.lastIndexOf(a[1][a[1].length - 1]));
+  const boardTopics = [generalThread, ...restThreads];
 
   if (!state.boardMode) return null;
 
@@ -83,9 +93,21 @@ export function BoardDesk() {
           <PhIcon name="ph-bold ph-arrow-left" size={14} />
           Resident view
         </button>
-        <span className="rounded-full px-3 py-[5px] text-[10.5px] font-bold bg-navy text-cream" style={{ letterSpacing: '0.1em' }}>
-          TREASURER
-        </span>
+        <div className="flex flex-col items-end gap-1.5">
+          <span className="rounded-full px-3 py-[5px] text-[10.5px] font-bold bg-navy text-cream" style={{ letterSpacing: '0.1em' }}>
+            TREASURER
+          </span>
+          {!demo && (
+            <button
+              onClick={() => set({ boardChatOpen: true, boardChatTopic: null })}
+              className="flex items-center gap-1.5 rounded-full px-3 py-[5px] text-[11px] font-extrabold cursor-pointer bg-paper text-navy"
+              style={{ border: '1px solid rgb(var(--navy) / 0.15)' }}
+            >
+              <PhIcon name="ph-fill ph-chats-circle" size={13} color="rgb(var(--navy))" />
+              Board chat
+            </button>
+          )}
+        </div>
       </div>
       <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">Board desk</h1>
       <p className="m-0 mb-3.5 text-[13.5px] font-semibold text-taupe">
@@ -335,58 +357,48 @@ export function BoardDesk() {
                 Board chat
               </p>
               <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-                <div className="flex items-center gap-2 mb-2.5">
+                <div className="flex items-center gap-2 mb-1">
                   <PhIcon name="ph-fill ph-lock-simple" size={13} color="rgb(var(--stone))" className="flex-shrink-0" />
                   <p className="m-0 text-[11.5px] font-bold text-stone">
                     Private to board members — residents never see this.
                   </p>
                 </div>
-                {boardChat.length > 0 && (
-                  <div className="pav-scroll flex flex-col gap-2.5 mb-3 overflow-y-auto" style={{ maxHeight: 260 }}>
-                    {boardChat.map((m) => (
-                      <div key={m.id} className="flex gap-2.5 items-start">
-                        <span
-                          className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-extrabold text-white flex-shrink-0"
-                          style={{ background: m.authorColor }}
-                        >
-                          {m.authorInitial}
-                        </span>
-                        <div className="flex-1 min-w-0">
-                          <p className="m-0 text-[11px] font-bold text-stone">
-                            {m.me ? 'You' : m.authorName} <span className="font-semibold" style={{ color: 'rgb(var(--stonelight))' }}>· {m.time}</span>
-                          </p>
-                          <p className="m-0 text-[13px] leading-[1.45] font-semibold text-navy">{m.text}</p>
-                        </div>
+                {boardTopics.map(([name, msgs]) => {
+                  const last = msgs[msgs.length - 1];
+                  return (
+                    <button
+                      key={name}
+                      onClick={() => set({ boardChatOpen: true, boardChatTopic: name })}
+                      className="w-full flex items-center gap-2.5 py-2.5 px-0 border-0 bg-transparent cursor-pointer text-left"
+                      style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}
+                    >
+                      <div
+                        className="w-8 h-8 rounded-[11px] flex items-center justify-center flex-shrink-0"
+                        style={{ background: name === 'General' ? 'rgb(var(--navy))' : 'rgb(var(--parchment))' }}
+                      >
+                        <PhIcon
+                          name={name === 'General' ? 'ph-fill ph-push-pin' : 'ph-fill ph-hash'}
+                          size={13}
+                          color={name === 'General' ? 'rgb(var(--cream))' : 'rgb(var(--navy))'}
+                        />
                       </div>
-                    ))}
-                  </div>
-                )}
-                <div className="flex gap-2">
-                  <input
-                    value={bcMsg}
-                    onChange={(e) => setBcMsg(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && bcMsg.trim() && !bcBusy) {
-                        setBcBusy(true);
-                        void repo.sendBoardMessage(bcMsg).then(() => setBcMsg('')).finally(() => setBcBusy(false));
-                      }
-                    }}
-                    placeholder="Message the board…"
-                    className="flex-1 rounded-full px-3.5 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
-                  />
-                  <button
-                    onClick={() => {
-                      if (!bcMsg.trim() || bcBusy) return;
-                      setBcBusy(true);
-                      void repo.sendBoardMessage(bcMsg).then(() => setBcMsg('')).finally(() => setBcBusy(false));
-                    }}
-                    className="w-10 h-10 border-none rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
-                    style={{ background: bcMsg.trim() && !bcBusy ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
-                  >
-                    <PhIcon name="ph-fill ph-paper-plane-right" size={15} color="rgb(var(--cream))" />
-                  </button>
-                </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="m-0 text-[13px] font-bold text-navy">{name}</p>
+                        <p className="m-0 text-[11.5px] font-semibold text-stone truncate">
+                          {last ? `${last.me ? 'You' : last.authorName}: ${last.text}` : 'No messages yet'}
+                        </p>
+                      </div>
+                      <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--stonelight))" className="flex-shrink-0" />
+                    </button>
+                  );
+                })}
+                <button
+                  onClick={() => set({ boardChatOpen: true, boardChatTopic: null })}
+                  className="w-full rounded-full py-2.5 mt-2.5 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                  style={{ border: '1.5px dashed rgb(var(--navy) / 0.25)' }}
+                >
+                  + New topic
+                </button>
               </div>
 
               <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>

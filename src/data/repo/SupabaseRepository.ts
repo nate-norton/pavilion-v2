@@ -375,10 +375,10 @@ export class SupabaseRepository implements Repository {
   // ── Board chat (private board channel) ──────────────────────────────────────
   getBoardChat = () => this.cache.boardChat;
 
-  sendBoardMessage = async (text: string) => {
+  sendBoardMessage = async (text: string, topic?: string | null) => {
     if (!this.communityId || !this.profileId || !text.trim()) return;
     const { error } = await this.client.from('board_messages')
-      .insert({ community_id: this.communityId, sender_profile_id: this.profileId, body: text.trim() });
+      .insert({ community_id: this.communityId, sender_profile_id: this.profileId, body: text.trim(), topic: topic?.trim() || null });
     this.failed('send your message', error);
     await this.hydrateBoardChat(); this.notify();
   };
@@ -386,8 +386,8 @@ export class SupabaseRepository implements Repository {
   private async hydrateBoardChat() {
     if (!this.communityId || this.cache.member?.role !== 'board') { this.cache.boardChat = []; return; }
     const { data } = await this.client.from('board_messages')
-      .select('id, body, created_at, sender_profile_id, profiles(name, initial, color)')
-      .eq('community_id', this.communityId).order('created_at').limit(100);
+      .select('id, body, created_at, sender_profile_id, topic, profiles(name, initial, color)')
+      .eq('community_id', this.communityId).order('created_at').limit(200);
     this.cache.boardChat = (data ?? []).map((m) => {
       const p = (m as unknown as { profiles: { name: string; initial: string; color: string } | null }).profiles;
       return {
@@ -398,6 +398,7 @@ export class SupabaseRepository implements Repository {
         me: m.sender_profile_id === this.profileId,
         text: m.body,
         time: timeLabel(m.created_at),
+        topic: m.topic,
       };
     });
   }

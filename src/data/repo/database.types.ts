@@ -68,9 +68,9 @@ export type Database = {
         ]
       }
       board_messages: {
-        Row: { body: string; community_id: string; created_at: string; id: string; sender_profile_id: string }
-        Insert: { body: string; community_id: string; created_at?: string; id?: string; sender_profile_id: string }
-        Update: { body?: string; community_id?: string; created_at?: string; id?: string; sender_profile_id?: string }
+        Row: { body: string; community_id: string; created_at: string; id: string; sender_profile_id: string; topic: string | null }
+        Insert: { body: string; community_id: string; created_at?: string; id?: string; sender_profile_id: string; topic?: string | null }
+        Update: { body?: string; community_id?: string; created_at?: string; id?: string; sender_profile_id?: string; topic?: string | null }
         Relationships: [
           { foreignKeyName: "board_messages_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
           { foreignKeyName: "board_messages_sender_profile_id_fkey"; columns: ["sender_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
