@@ -14,6 +14,13 @@ const ICON_OPTIONS = [
   { key: 'ph-fill ph-barbell', label: 'Gym' },
 ];
 
+/** Hour choices for open/close selects (6 AM – 11 PM). */
+const HOURS = Array.from({ length: 18 }, (_, i) => {
+  const v = i + 6;
+  const h = v % 12 === 0 ? 12 : v % 12;
+  return { v, label: `${h} ${v < 12 ? 'AM' : 'PM'}` };
+});
+
 /** Board-only: add or retire the community's bookable amenities (live mode). */
 export function ManageAmenitiesSheet() {
   const open = usePavStore((s) => s.manageAmenOpen);
@@ -24,6 +31,10 @@ export function ManageAmenitiesSheet() {
   const [sub, setSub] = useState('');
   const [rules, setRules] = useState('');
   const [icon, setIcon] = useState(ICON_OPTIONS[0].key);
+  const [openHour, setOpenHour] = useState(8);
+  const [closeHour, setCloseHour] = useState(21);
+  const [slotMinutes, setSlotMinutes] = useState<number>(60);
+  const [daysAhead, setDaysAhead] = useState<number>(7);
   const [busy, setBusy] = useState(false);
 
   if (!open) return null;
@@ -34,7 +45,7 @@ export function ManageAmenitiesSheet() {
     if (!canAdd) return;
     setBusy(true);
     try {
-      await repo.createAmenity({ name, sub, rules, icon });
+      await repo.createAmenity({ name, sub, rules, icon, openHour, closeHour, slotMinutes, maxDaysAhead: daysAhead });
       setName(''); setSub(''); setRules('');
     } catch { /* failure surfaced via the app toast */ }
     setBusy(false);
@@ -97,9 +108,42 @@ export function ManageAmenitiesSheet() {
         className="w-full rounded-[13px] px-3.5 py-3 text-[13px] font-semibold text-navy outline-none font-sans resize-none mb-3"
         style={{ minHeight: 60, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))' }}
       />
-      <div className="flex gap-1.5 flex-wrap mb-4">
+      <div className="flex gap-1.5 flex-wrap mb-3">
         {ICON_OPTIONS.map((o) => (
           <Chip key={o.key} label={o.label} active={icon === o.key} onClick={() => setIcon(o.key)} size="md" />
+        ))}
+      </div>
+
+      {/* Booking configuration */}
+      <p className="m-0 mb-2 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+        Booking hours & slots
+      </p>
+      <div className="flex gap-2 mb-2.5">
+        <select
+          value={openHour}
+          onChange={(e) => setOpenHour(Number(e.target.value))}
+          className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none"
+          style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))' }}
+        >
+          {HOURS.map((h) => <option key={h.v} value={h.v}>Opens {h.label}</option>)}
+        </select>
+        <select
+          value={closeHour}
+          onChange={(e) => setCloseHour(Number(e.target.value))}
+          className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none"
+          style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))' }}
+        >
+          {HOURS.map((h) => <option key={h.v} value={h.v}>Closes {h.label}</option>)}
+        </select>
+      </div>
+      <div className="flex gap-1.5 flex-wrap mb-2.5">
+        {([['30 min', 30], ['1 hr', 60], ['2 hr', 120]] as const).map(([label, v]) => (
+          <Chip key={v} label={`Slots: ${label}`} active={slotMinutes === v} onClick={() => setSlotMinutes(v)} size="md" />
+        ))}
+      </div>
+      <div className="flex gap-1.5 flex-wrap mb-4">
+        {([['1 week', 7], ['2 weeks', 14], ['30 days', 30]] as const).map(([label, v]) => (
+          <Chip key={v} label={`Book ahead: ${label}`} active={daysAhead === v} onClick={() => setDaysAhead(v)} size="md" />
         ))}
       </div>
       <button

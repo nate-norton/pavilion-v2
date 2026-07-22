@@ -9,8 +9,10 @@ export function Chat() {
   const CHAT_SEED = useChatSeed();
   const { set } = state;
   const repo = useRepository();
+  const demo = repo.isDemo();
   const chats = useChats();
   const listRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const chatKey = state.chatWith;
   const thread = chatKey ? chats[chatKey] : undefined;
@@ -77,18 +79,32 @@ export function Chat() {
 
       <div ref={listRef} className="pav-scroll flex-1 overflow-y-auto flex flex-col gap-2.5" style={{ padding: '16px 18px' }}>
         {msgs.map((m, i) => (
-          <div key={i} className="flex flex-col" style={{ alignItems: m.me ? 'flex-end' : 'flex-start' }}>
-            <div
-              style={{
-                maxWidth: '80%',
-                background: m.me ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                color: m.me ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
-                border: m.me ? 'none' : '1px solid rgb(var(--navy) / 0.08)',
-                borderRadius: m.me ? '18px 18px 6px 18px' : '18px 18px 18px 6px',
-                padding: '10px 13px',
-              }}
-            >
-              <p className="m-0 text-[13.5px] leading-[1.45] font-semibold">{m.text}</p>
+          <div key={m.id ?? i} className="flex flex-col group" style={{ alignItems: m.me ? 'flex-end' : 'flex-start' }}>
+            <div className="flex items-center gap-1.5" style={{ flexDirection: m.me ? 'row' : 'row-reverse' }}>
+              {m.me && !demo && m.id && (
+                <button
+                  onClick={() => void repo.deleteChatMessage(chatKey, m.id!)}
+                  title="Delete message"
+                  className="border-0 bg-transparent p-0.5 cursor-pointer opacity-30"
+                >
+                  <PhIcon name="ph-bold ph-x" size={10} color="rgb(var(--stone))" />
+                </button>
+              )}
+              <div
+                style={{
+                  maxWidth: '80%',
+                  background: m.me ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
+                  color: m.me ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
+                  border: m.me ? 'none' : '1px solid rgb(var(--navy) / 0.08)',
+                  borderRadius: m.me ? '18px 18px 6px 18px' : '18px 18px 18px 6px',
+                  padding: '10px 13px',
+                }}
+              >
+                {m.text && <p className="m-0 text-[13.5px] leading-[1.45] font-semibold">{m.text}</p>}
+                {(m.photos ?? []).map((u) => (
+                  <img key={u} src={u} alt="" className="mt-1 rounded-[11px] block" style={{ maxWidth: 200, maxHeight: 220, objectFit: 'cover' }} />
+                ))}
+              </div>
             </div>
             <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--claygray))' }}>
               {m.time || ''}
@@ -98,10 +114,25 @@ export function Chat() {
       </div>
 
       <div className="flex gap-[9px] items-center" style={{ padding: '10px 18px 26px' }}>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f && chatKey) void repo.sendChatMessage(chatKey, '', false, [f]);
+            if (fileRef.current) fileRef.current.value = '';
+          }}
+        />
         <button
           type="button"
           title="Send a photo"
-          onClick={() => { if (chatKey) repo.sendChatMessage(chatKey, '📷 Photo', false); }}
+          onClick={() => {
+            if (!chatKey) return;
+            if (demo) { void repo.sendChatMessage(chatKey, '📷 Photo', false); return; }
+            fileRef.current?.click();
+          }}
           className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
           style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))' }}
         >

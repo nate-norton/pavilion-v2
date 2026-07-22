@@ -3,7 +3,7 @@ import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
-import { useArc, useDues, useMember, useMyReports, usePortfolio, useReservation, useGroups, resetDemoData } from '../data/repo';
+import { useArc, useDues, useMember, useMyReports, usePortfolio, useReservation, useGroups, useRepository, resetDemoData } from '../data/repo';
 import type { DuesStatus } from '../data/repo';
 import { isLiveMode, signOutLive } from '../auth/AuthGate';
 
@@ -41,6 +41,12 @@ export function MyPlace() {
   const myReports = useMyReports();
 
   const [apConfirm, setApConfirm] = useState(false);
+  const repo = useRepository();
+  const [profileEditOpen, setProfileEditOpen] = useState(false);
+  const [pfName, setPfName] = useState('');
+  const [pfPhone, setPfPhone] = useState('');
+  const [pfHide, setPfHide] = useState(false);
+  const [pfBusy, setPfBusy] = useState(false);
 
   if (!state.myPlaceOpen) return null;
 
@@ -568,6 +574,62 @@ export function MyPlace() {
       {/* Settings */}
       <div style={{ ...CARD, marginBottom: 0 }}>
         <p className="m-0 mb-[11px] font-serif text-base text-navy">Settings</p>
+        {isLiveMode && (
+          <div
+            className="flex flex-col"
+            style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
+          >
+            <div
+              onClick={() => {
+                if (!profileEditOpen) { setPfName(member?.name ?? ''); setPfPhone(member?.phone ?? ''); setPfHide(member?.hideDirectory ?? false); }
+                setProfileEditOpen(!profileEditOpen);
+              }}
+              className="flex items-center gap-2.5 cursor-pointer"
+            >
+              <PhIcon name="ph-fill ph-user-circle" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
+              <p className="m-0 flex-1 text-[13px] font-bold text-navy">
+                Profile <span className="font-semibold text-stonelight">· name, phone, privacy</span>
+              </p>
+              <PhIcon name={profileEditOpen ? 'ph ph-caret-up' : 'ph ph-caret-right'} size={14} color="rgb(var(--stonelight))" />
+            </div>
+            {profileEditOpen && (
+              <div className="mt-2.5 animate-fadeup">
+                <input
+                  value={pfName}
+                  onChange={(e) => setPfName(e.target.value)}
+                  placeholder="Display name"
+                  className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                />
+                <input
+                  value={pfPhone}
+                  onChange={(e) => setPfPhone(e.target.value)}
+                  placeholder="Phone (optional — neighbors never see it)"
+                  className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                />
+                <div className="flex items-center gap-2.5 mb-2.5">
+                  <p className="m-0 flex-1 text-[12.5px] font-bold text-navy">Hide me from the directory</p>
+                  <Toggle on={pfHide} onToggle={() => setPfHide(!pfHide)} />
+                </div>
+                <button
+                  onClick={() => {
+                    if (pfBusy) return;
+                    setPfBusy(true);
+                    void repo.updateProfile({ name: pfName, phone: pfPhone, hideDirectory: pfHide })
+                      .then(() => setProfileEditOpen(false))
+                      .catch(() => {})
+                      .finally(() => setPfBusy(false));
+                  }}
+                  className="w-full border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
+                  style={{ background: pfName.trim() && !pfBusy ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                >
+                  {pfBusy ? 'Saving…' : 'Save profile'}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
         <div
           onClick={() => set({ notifOpen: true, myPlaceOpen: false })}
           className="flex items-center gap-2.5 cursor-pointer"

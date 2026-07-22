@@ -3,26 +3,56 @@ import { useAmenities, useMember, useReservationSlots, useReservationDays, useRe
 import { usePavStore } from '../store/store';
 import { isLiveMode } from '../auth/AuthGate';
 
+/** "9:00 AM" style label for an hour+minute pair. */
+function slotLabel(mins: number): string {
+  let h = Math.floor(mins / 60);
+  const m = mins % 60;
+  const ap = h < 12 ? 'AM' : 'PM';
+  h = h % 12; if (h === 0) h = 12;
+  return `${h}:${String(m).padStart(2, '0')} ${ap}`;
+}
+
 /** Reserve screen — ported from prototype lines 523-628. */
 export function Reserve() {
   const state = usePavStore();
   const { set } = state;
   const repo = useRepository();
   const AMENS = useAmenities();
-  const SLOTS = useReservationSlots();
-  const DAYS = useReservationDays();
+  const DEMO_SLOTS = useReservationSlots();
+  const DEMO_DAYS = useReservationDays();
   const reservation = useReservation();
   const member = useMember();
   const canManage = isLiveMode && member?.role === 'board';
+  const demo = repo.isDemo();
 
   const amen = state.amenIdx != null ? AMENS[state.amenIdx] : null;
+
+  // Live: the booking grid comes from the amenity's own configuration
+  // (hours, slot length, booking window). Demo keeps its scripted grid.
+  const SLOTS = demo || !amen ? DEMO_SLOTS : (() => {
+    const out: string[] = [];
+    const step = amen.slotMinutes ?? 60;
+    for (let t = (amen.openHour ?? 8) * 60; t + step <= (amen.closeHour ?? 21) * 60; t += step) out.push(slotLabel(t));
+    return out;
+  })();
+  const DAYS = demo ? DEMO_DAYS : (() => {
+    const out: string[] = [];
+    for (let i = 0; i < (amen?.maxDaysAhead ?? 7); i++) {
+      const d = new Date(Date.now() + i * 86400_000);
+      out.push(i === 0
+        ? `Today · ${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+        : d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).replace(',', ' ·'));
+    }
+    return out;
+  })();
+
   const hasBooking = reservation.booked && !!reservation.summary;
   const canBook = state.slotIdx != null;
   const notCalAdded = !state.calAdded;
 
   const book = () => {
     if (state.slotIdx == null || amen == null) return;
-    const day = DAYS[state.dayIdx].split(' · ')[0];
+    const day = demo ? DAYS[state.dayIdx].split(' · ')[0] : DAYS[state.dayIdx] ?? DAYS[0];
     repo.createReservation({ amenity: amen.name, day, slot: SLOTS[state.slotIdx], hours: state.durIdx === 1 ? 2 : 1 });
     set({ bookingConfirmed: true, calAdded: false });
   };
