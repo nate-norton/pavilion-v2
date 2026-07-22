@@ -95,6 +95,12 @@ export function useMyReports() {
   return useSyncExternalStore(repo.subscribe, () => repo.getMyReports());
 }
 
+/** The board's private chat (live only; empty in demo). */
+export function useBoardChat() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getBoardChat());
+}
+
 /** The board's invites (live only; empty in demo). */
 export function useInvites() {
   const repo = useRepository();
