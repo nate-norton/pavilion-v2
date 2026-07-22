@@ -3,7 +3,7 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { ArcRequest, ArcState, BoardArcItem, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, FeedPost, KnownIssue, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { ArcRequest, ArcState, BoardArcItem, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, FeedPost, Invite, KnownIssue, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
 import { usePavStore } from '../../store/store';
@@ -35,6 +35,7 @@ const DEMO_DECISIONS: Decision[] = [
 /** Stable empty refs for the live-only board queues (demo renders scripted cards). */
 const EMPTY_TRIAGE_ITEMS: TriageItem[] = [];
 const EMPTY_BOARD_ARC: BoardArcItem[] = [];
+const EMPTY_INVITES: Invite[] = [];
 
 /** Clock label matching the store's original format (e.g. "3:07 PM"). */
 function now(): string {
@@ -73,6 +74,9 @@ export class MockRepository implements Repository, SnapshotReadable {
   createFeedPost = async () => {};
   openVote = async () => { usePavStore.getState().postVote(); };
   markViolationFixed = async () => { usePavStore.getState().set({ violFixed: true }); };
+  getInvites = () => EMPTY_INVITES;
+  createInvite = async () => {};
+  revokeInvite = async () => {};
 
   // Known issues derived from the demo triage flags so the board's actions
   // (create ticket, schedule vendor) reflect on the resident-facing HOA list.

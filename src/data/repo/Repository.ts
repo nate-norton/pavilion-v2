@@ -214,6 +214,15 @@ export interface NewVote {
   noLabel: string;
 }
 
+/** A pending/accepted invitation to join the community (board-managed). */
+export interface Invite {
+  id: string;
+  email: string;
+  unitLabel: string;
+  role: 'resident' | 'board';
+  status: string;   // pending | accepted | revoked
+}
+
 /** The signed-in member's identity + their place in the community. */
 export interface MemberContext {
   name: string;
@@ -294,6 +303,11 @@ export interface Repository {
 
   /** Member marks their own courtesy notice fixed (self-cure). */
   markViolationFixed(): Promise<void>;
+
+  // Invites (board-managed; live only — the demo has no join flow)
+  getInvites(): Invite[];
+  createInvite(input: { email: string; unitLabel: string; role: 'resident' | 'board' }): Promise<void>;
+  revokeInvite(id: string): Promise<void>;
 
   /** Community events (empty for a fresh community). */
   getEvents(): CommunityEvent[];

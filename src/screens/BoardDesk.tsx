@@ -3,7 +3,7 @@ import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { usePavStore } from '../store/store';
-import { useVendors, useAging, useVotes, useAssessment, useBoardTriage, useTriageItems, useBoardArcQueue, useRepository } from '../data/repo';
+import { useVendors, useAging, useVotes, useAssessment, useBoardTriage, useTriageItems, useBoardArcQueue, useInvites, useRepository } from '../data/repo';
 
 const BOARD_SEGS = [
   { key: 'desk', label: 'Desk' },
@@ -20,6 +20,11 @@ export function BoardDesk() {
   const { set } = state;
 
   const [voteConfirm, setVoteConfirm] = useState(false);
+  const [invEmail, setInvEmail] = useState('');
+  const [invUnit, setInvUnit] = useState('');
+  const [invRole, setInvRole] = useState<'resident' | 'board'>('resident');
+  const [invBusy, setInvBusy] = useState(false);
+  const invites = useInvites();
   const triage = useBoardTriage();
   const { open: vote } = useVotes();
   const assessment = useAssessment();
@@ -320,6 +325,87 @@ export function BoardDesk() {
             </div>
             </>)}
           </div>
+
+          {!demo && (
+            <div className="mb-[22px]">
+              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+                Members
+              </p>
+              <div className="bg-paper rounded-[18px] p-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+                <p className="m-0 mb-2.5 text-[13.5px] font-bold text-navy">Invite a neighbor</p>
+                <input
+                  value={invEmail}
+                  onChange={(e) => setInvEmail(e.target.value)}
+                  placeholder="Email address"
+                  type="email"
+                  className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                />
+                <div className="flex gap-2 mb-2.5">
+                  <input
+                    value={invUnit}
+                    onChange={(e) => setInvUnit(e.target.value)}
+                    placeholder="Unit — e.g. #14 Alder Way"
+                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                  <button
+                    onClick={() => setInvRole(invRole === 'resident' ? 'board' : 'resident')}
+                    className="rounded-[11px] px-3 py-2.5 text-[12px] font-extrabold cursor-pointer bg-transparent text-navy flex-shrink-0"
+                    style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                  >
+                    {invRole === 'resident' ? 'Resident' : 'Board'}
+                  </button>
+                </div>
+                <button
+                  onClick={() => {
+                    if (!invEmail.trim() || invBusy) return;
+                    setInvBusy(true);
+                    void repo.createInvite({ email: invEmail, unitLabel: invUnit, role: invRole })
+                      .then(() => { setInvEmail(''); setInvUnit(''); setInvRole('resident'); })
+                      .catch(() => {})
+                      .finally(() => setInvBusy(false));
+                  }}
+                  className="w-full border-0 rounded-[11px] py-2.5 text-[12.5px] font-extrabold cursor-pointer"
+                  style={{
+                    background: invEmail.trim() && !invBusy ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
+                    color: invEmail.trim() && !invBusy ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
+                  }}
+                >
+                  {invBusy ? 'Inviting…' : 'Send invite'}
+                </button>
+                {invites.length > 0 && (
+                  <div className="mt-3 pt-2" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)' }}>
+                    {invites.map((inv) => (
+                      <div key={inv.id} className="flex items-center gap-2 py-1.5">
+                        <div className="flex-1 min-w-0">
+                          <p className="m-0 text-[12.5px] font-bold text-navy truncate">{inv.email}</p>
+                          <p className="m-0 text-[11px] font-semibold text-stone">
+                            {[inv.unitLabel, inv.role === 'board' ? 'Board' : 'Resident'].filter(Boolean).join(' · ')}
+                          </p>
+                        </div>
+                        {inv.status === 'pending' ? (
+                          <button
+                            onClick={() => void repo.revokeInvite(inv.id)}
+                            className="border-none bg-transparent text-[11.5px] font-extrabold cursor-pointer p-1 text-stone"
+                          >
+                            Revoke
+                          </button>
+                        ) : (
+                          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sage))' }}>
+                            Joined ✓
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <p className="mt-2.5 mb-0 text-[11px] font-semibold text-stone">
+                  They sign in at app.pavilion.community with this email and land in the community automatically.
+                </p>
+              </div>
+            </div>
+          )}
 
           {vote && (<>
           <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
