@@ -2,9 +2,6 @@
 -- this trigger keeps the votes table's denormalized tally/quorum columns in
 -- sync on every ballot insert, so members (who can only read their own ballot
 -- under RLS) still see a live community-wide tally on the votes row.
---
--- NOT YET APPLIED. Until it is, live tallies stay at their initial values
--- even as ballots land.
 
 create or replace function private.bump_vote_tally()
 returns trigger

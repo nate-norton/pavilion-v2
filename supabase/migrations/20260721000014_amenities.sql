@@ -1,8 +1,6 @@
 -- Phase 2 — amenities. The community's bookable spaces drive the Reserve tab.
 -- Members read; the board manages the list. Empty for a fresh community (the
 -- Reserve tab shows its empty state until the board adds amenities).
---
--- NOT YET APPLIED. Until it is, live amenities read fails soft to empty.
 
 create table public.amenities (
   id           uuid primary key default gen_random_uuid(),

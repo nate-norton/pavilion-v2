@@ -1,8 +1,6 @@
 -- Phase 2 — direct messages. Private 1:1 threads between community members.
 -- Strictest RLS in the app: only the two participants can see a thread or its
 -- messages — not the board, not neighbors (matrix: complaints-grade privacy).
---
--- NOT YET APPLIED. Until it is, live DMs fail soft (empty threads, no sends).
 
 create table public.dm_threads (
   id           uuid primary key default gen_random_uuid(),
