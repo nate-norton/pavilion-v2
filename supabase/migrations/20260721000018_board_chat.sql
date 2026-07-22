@@ -1,8 +1,6 @@
 -- Phase 2 — board chat. A private channel for the community's board members,
 -- inside the Board Desk. Residents can neither read nor write it (is_board
 -- gates both); realtime delivery included.
---
--- NOT YET APPLIED.
 
 create table public.board_messages (
   id                uuid primary key default gen_random_uuid(),

@@ -2,7 +2,5 @@
 -- Supabase Realtime; RLS still gates who receives which events, so only
 -- thread participants see them. Without this the app still works —
 -- messages just appear on the next hydrate instead of instantly.
---
--- NOT YET APPLIED.
 
 alter publication supabase_realtime add table public.dm_messages;
