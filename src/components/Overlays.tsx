@@ -23,6 +23,7 @@ import { IssueDetailSheet } from '../sheets/IssueDetailSheet';
 import { PaymentDetailSheet } from '../sheets/PaymentDetailSheet';
 import { DecisionDetailSheet } from '../sheets/DecisionDetailSheet';
 import { ComposeSheet } from '../sheets/ComposeSheet';
+import { ManageAmenitiesSheet } from '../sheets/ManageAmenitiesSheet';
 import { CreateGroupSheet } from '../sheets/CreateGroupSheet';
 import { GroupDetail } from '../screens/GroupDetail';
 import { Onboarding } from '../screens/Onboarding';
@@ -64,6 +65,7 @@ export function Overlays() {
       <PaymentDetailSheet />
       <DecisionDetailSheet />
       <ComposeSheet />
+      <ManageAmenitiesSheet />
       <CreateGroupSheet />
 
       {/* Top-level overlays (z 95-97) */}

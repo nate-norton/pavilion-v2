@@ -29,8 +29,8 @@ how much they'd embarrass us in front of a real community.
   detected; sheets skip success UI on failure
 - ✅ ~~Report entry point only in Commons~~ — added to HOA Known issues card
   and Today's quiet list
-- **Amenities have no live domain** — Reserve shows the empty state until an
-  `amenities` table + board config tooling exists.
+- ✅ ~~Amenities have no live domain~~ — amenities table applied + board
+  "Manage amenities" sheet on Reserve (add/retire)
 - **Messages/chat is demo-only** — live directory is empty and DMs have no
   tables; decide whether chat ships in v1 or hides in live.
 
