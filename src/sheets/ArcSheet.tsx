@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { Chip } from '../components/Chip';
@@ -10,17 +11,22 @@ export function ArcSheet() {
   const { set, submitArc } = state;
   const ARC_TYPES = useArcTypes();
   const repo = useRepository();
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [busy, setBusy] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const closeArc = () => set({ arcSheetOpen: false });
-  const canSubmit = !!state.arcType;
+  const canSubmit = !!state.arcType && !busy;
   const submit = () => {
     if (!canSubmit) return;
     if (repo.isDemo()) { submitArc(); return; }
-    void repo.createArcRequest({ type: state.arcType ?? 'Exterior update', description: state.arcDesc })
-      .then(() => set({ arcSheetOpen: false, arcDesc: '', arcType: null }))
-      .catch(() => {}); // failure surfaced via the app toast
-
+    setBusy(true);
+    void repo.createArcRequest({ type: state.arcType ?? 'Exterior update', description: state.arcDesc, attachments })
+      .then(() => { set({ arcSheetOpen: false, arcDesc: '', arcType: null }); setAttachments([]); })
+      .catch(() => {}) // failure surfaced via the app toast
+      .finally(() => setBusy(false));
   };
+  const demo = repo.isDemo();
 
   return (
     <Sheet open={state.arcSheetOpen} onClose={closeArc} maxHeight="86%">
@@ -67,6 +73,36 @@ export function ArcSheet() {
       >
         Photos
       </p>
+      {/* Live: real files (plans, photos, paint chips). Demo: scripted toggles. */}
+      {!demo && (
+        <>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*,.pdf"
+            multiple
+            className="hidden"
+            onChange={(e) => setAttachments([...attachments, ...Array.from(e.target.files ?? [])].slice(0, 6))}
+          />
+          <button
+            type="button"
+            onClick={() => fileRef.current?.click()}
+            className="w-full flex items-center justify-center gap-2 mb-4 cursor-pointer"
+            style={{
+              height: 70,
+              border: attachments.length ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
+              borderRadius: 13,
+              background: attachments.length ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--creamdim)) 0 8px,rgb(var(--parchment)) 8px 16px)',
+            }}
+          >
+            <PhIcon name={attachments.length ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={attachments.length ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
+            <span className="font-mono text-[10px]" style={{ color: attachments.length ? 'rgb(var(--sagedark))' : 'rgb(var(--stone))' }}>
+              {attachments.length ? `${attachments.length} file${attachments.length > 1 ? 's' : ''} added ✓ · tap for more` : 'photos, plans, paint chips (PDF ok)'}
+            </span>
+          </button>
+        </>
+      )}
+      {demo && (
       <div className="grid grid-cols-2 gap-2.5 mb-4">
         <button
           type="button"
@@ -101,8 +137,9 @@ export function ArcSheet() {
           </span>
         </button>
       </div>
+      )}
 
-      {repo.isDemo() && (
+      {demo && (
       <div
         className="rounded-[13px] p-[11px_13px] flex gap-2.5 items-start mb-4"
         style={{ background: 'rgb(var(--blush))' }}
