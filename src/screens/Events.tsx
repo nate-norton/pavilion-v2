@@ -186,13 +186,13 @@ export function Events() {
         </div>
 
         {/* Annual meeting */}
-        <div onClick={() => set({ meetingOpen: true })} className="flex items-center gap-3 cursor-pointer" style={cardStyle}>
+        <button type="button" onClick={() => set({ meetingOpen: true })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={cardStyle}>
           <EventIcon bg="rgb(var(--skypale))" icon="ph-fill ph-users-four" color="rgb(var(--skydeep))" />
           <EventTitle title="Annual meeting · Tue Jul 15, 7 PM" sub="Clubhouse + Zoom · 2 board seats open" />
           <span className="text-[12.5px] font-extrabold flex-shrink-0" style={{ color: 'rgb(var(--terracotta))' }}>
             Preview →
           </span>
-        </div>
+        </button>
 
         {/* Pool party */}
         <div className="flex items-center gap-3" style={cardStyle}>

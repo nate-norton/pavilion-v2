@@ -57,15 +57,15 @@ export function Commons() {
 
       {state.commonsView === 'feed' && (
         <div>
-          <div
+          <button type="button"
             onClick={() => set({ composeOpen: true })}
-            className="bg-paper rounded-2xl px-3.5 py-3 mb-2 flex items-center gap-2.5 cursor-pointer"
+            className="w-full border-none font-sans text-left bg-paper rounded-2xl px-3.5 py-3 mb-2 flex items-center gap-2.5 cursor-pointer"
             style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
           >
             <Avatar initial={member?.initial ?? 'A'} color={member?.color ?? 'rgb(var(--navy))'} size={32} />
             <span className="flex-1 text-[13.5px] text-stonelight font-semibold">Share something…</span>
             <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--stonelight))" />
-          </div>
+          </button>
           <button
             onClick={() => set({ reportOpen: true })}
             className="flex items-center gap-1.5 mb-4 border-none bg-transparent cursor-pointer px-1 py-0.5 text-left"
@@ -368,9 +368,9 @@ export function Commons() {
               </>
             )}
 
-            <div
+            <button type="button"
               onClick={() => set({ createGroupOpen: true })}
-              className="rounded-[18px] p-4 flex items-center gap-3 cursor-pointer"
+              className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-4 flex items-center gap-3 cursor-pointer"
               style={{ border: '1.5px dashed rgb(var(--navy) / 0.2)' }}
             >
               <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-sand">
@@ -382,16 +382,16 @@ export function Commons() {
                   Any interest counts — 5 neighbors makes it official
                 </p>
               </div>
-            </div>
+            </button>
           </div>
         );
       })()}
 
       {state.commonsView === 'dir' && (
         <div className="animate-fadeup">
-          <div
+          <button type="button"
             onClick={() => set({ msgsOpen: true })}
-            className="bg-navy rounded-2xl px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
+            className="w-full border-none font-sans text-left bg-navy rounded-2xl px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
           >
             <PhIcon name="ph-fill ph-chats-circle" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
             <div className="flex-1">
@@ -405,11 +405,11 @@ export function Commons() {
               </p>
             </div>
             {(repo.isDemo() || unreadTotal > 0) && (
-            <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 bg-ember">
+            <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 bg-emberdeep">
               {repo.isDemo() ? 3 : unreadTotal}
             </span>
             )}
-          </div>
+          </button>
           <div className="flex items-start gap-1.5 mx-1 mb-3.5">
             <PhIcon name="ph-fill ph-lock-simple" size={12} color="rgb(var(--stone))" className="mt-0.5" />
             <p className="m-0 text-[11.5px] text-stone font-bold">
@@ -434,7 +434,7 @@ export function Commons() {
                   className="bg-paper rounded-[18px] px-4 py-3.5"
                   style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
                 >
-                  <div onClick={() => set({ chatWith: d.key })} className="flex items-center gap-2.5 mb-2.5 cursor-pointer">
+                  <button type="button" onClick={() => set({ chatWith: d.key })} className="w-full flex items-center gap-2.5 mb-2.5 cursor-pointer border-none bg-transparent text-left font-sans">
                     <Avatar initial={d.initial} color={d.color} size={40} />
                     <div className="flex-1 min-w-0">
                       <p className="m-0 text-sm font-bold text-navy">
@@ -442,7 +442,7 @@ export function Commons() {
                       </p>
                       <p className="m-0 text-[11.5px] text-stone font-semibold">{d.note}</p>
                     </div>
-                  </div>
+                  </button>
                   <div className="flex items-center gap-2">
                     {d.tags.length > 0 ? (
                       <span
@@ -578,8 +578,14 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
         )}
       </div>
       {p.body && <p className="m-0 text-[13.5px] leading-[1.55] font-semibold text-bark">{p.body}</p>}
-      {(p.photoUrls ?? []).map((u) => (
-        <img key={u} src={u} alt="" className="mt-2.5 rounded-[13px] w-full block" style={{ maxHeight: 260, objectFit: 'cover' }} />
+      {(p.photoUrls ?? []).map((u, i, arr) => (
+        <img
+          key={u}
+          src={u}
+          alt={arr.length > 1 ? `Photo ${i + 1} of ${arr.length} from ${p.authorName}'s post` : `Photo from ${p.authorName}'s post`}
+          className="mt-2.5 rounded-[13px] w-full block"
+          style={{ maxHeight: 260, objectFit: 'cover' }}
+        />
       ))}
       <div className="flex items-center gap-4 mt-3">
         <button
@@ -622,6 +628,8 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
               style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
             />
             <button
+              type="button"
+              aria-label="Send reply"
               onClick={sendReply}
               className="w-8 h-8 border-0 rounded-full cursor-pointer flex items-center justify-center flex-shrink-0"
               style={{ background: reply.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}

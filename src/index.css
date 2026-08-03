@@ -17,23 +17,43 @@
   --sand: 237 230 214;
   --parchment: 249 245 236;
   --ember: 224 106 62;
+  /*
+   * Decorative vs. text-bearing accent. --ember is a fill: status dots,
+   * progress, gradients, large display type. Anything that carries text —
+   * a CTA background under white, or ember-colored copy on a light bed —
+   * uses --emberdeep, which clears 4.5:1 both ways (white on it: 5.33;
+   * it on blush: 4.65). Swapping one for the other reintroduces the
+   * WCAG 1.4.3 failure the audit found on every primary button.
+   */
+  --emberdeep: 172 80 45;
   --terracotta: 199 90 49;
   --blush: 251 237 228;
   --peach: 232 167 136;
   --sage: 42 157 92;
   --mint: 233 246 238;
-  --sagedark: 34 128 73;
+  /* Text-bearing variants: sage/gold are fills. Sage text on mint was
+   * 3.11:1 and gold text on goldpale 2.03:1 — the darks below clear
+   * 4.9:1 and 4.56:1 on those beds. */
+  --sagedark: 32 120 71;
   --gold: 217 164 65;
   --goldpale: 251 243 224;
-  --golddark: 168 123 31;
+  --golddark: 140 105 40;
   --sky: 74 144 226;
   --skydeep: 58 115 181;
   --skypale: 234 243 253;
   --ink: 62 76 99;
-  --stone: 138 131 117;
-  --stonelight: 163 155 139;
+  /*
+   * Secondary-text ramp. Every step clears 4.5:1 on cream (the lightest
+   * page bg is paper, so cream is the worst case): stonelight 4.52,
+   * stone 5.32, taupe 5.79, bark 6.50. The ramp is compressed compared
+   * with its original 163→91 spread because anything lighter than ~115
+   * cannot reach AA on a warm background — the four steps stay
+   * distinguishable, just closer together.
+   */
+  --stone: 107 101 89;
+  --stonelight: 115 109 97;
   --bark: 91 85 74;
-  --taupe: 122 115 101;
+  --taupe: 99 93 82;
   --red: 199 64 46;
 
   /*
@@ -95,6 +115,25 @@
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+/*
+ * Focus (WCAG 2.4.7). Keyboard users get a visible ring everywhere; pointer
+ * users never see it. Declared once at the global layer so it survives the
+ * `outline-none` utilities scattered through the screens — those kill the
+ * default ring, and :focus-visible here restores an intentional one.
+ * The ring is emberdeep against a cream offset so it reads on both the
+ * paper surfaces and the navy dock.
+ */
+:focus-visible {
+  outline: 2px solid rgb(var(--emberdeep));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* On navy surfaces the ember ring loses contrast — invert to cream there. */
+.bg-navy :focus-visible,
+[data-on-navy] :focus-visible {
+  outline-color: rgb(var(--cream));
+}
 html, body { margin: 0; padding: 0; background: rgb(var(--color-bg)); }
 body { font-family: 'Nunito Sans', system-ui, sans-serif; }
 .pav-scroll::-webkit-scrollbar { display: none; }
@@ -120,6 +159,27 @@ div[class*="cursor-pointer"] {
   transition: transform 0.12s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
 
+/*
+ * Desktop board shell (live mode only — see PhoneFrame). At ≥1024px the frame
+ * stops pretending to be a handset while the board surface is open: it takes
+ * the window's height and widens to a working column. Board Desk's content is
+ * capped at 880px so rows don't stretch into unreadable full-width bands on a
+ * wide monitor; the cap is what keeps this an honest adaptation rather than a
+ * stretched phone.
+ */
+@media (min-width: 1024px) {
+  .pav-frame[data-desk-board] {
+    width: min(1040px, 92vw);
+    height: min(920px, calc(100vh - 48px));
+    max-height: calc(100vh - 48px);
+    border-radius: 28px;
+  }
+  .pav-frame[data-desk-board] [data-testid='board-desk'] > * {
+    max-width: 880px;
+    margin-inline: auto;
+  }
+}
+
 /* Card hover lift */
 @media (hover: hover) {
   div[class*="cursor-pointer"]:hover {
@@ -127,4 +187,34 @@ div[class*="cursor-pointer"] {
   }
 }
 
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }
+/*
+ * Reduced motion: substitute, don't delete. Zeroing every duration removes
+ * the movement *and* the feedback — sheets teleport, tab changes become
+ * indistinguishable, and the app loses its spatial logic for exactly the
+ * users who need the most orientation. Instead every animation that moves
+ * something is redefined as a short opacity fade: the state change stays
+ * legible, the vestibular trigger goes away.
+ */
+@media (prefers-reduced-motion: reduce) {
+  @keyframes scPop { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scFadeUp { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes sheetUp { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideLeft { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideRight { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes msgBubble { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes heartPop { from { opacity: 0.6; } to { opacity: 1; } }
+  @keyframes typingBounce { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+  /* Purely decorative motion has no state to convey — remove it outright. */
+  @keyframes confettiPop { from { opacity: 0; } to { opacity: 0; } }
+
+  /* Keep transitions perceptible but brief, and drop the press-scale. */
+  *, *::before, *::after {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.12s !important;
+  }
+  button[class*="cursor-pointer"]:active,
+  div[class*="cursor-pointer"]:active {
+    transform: none;
+  }
+}

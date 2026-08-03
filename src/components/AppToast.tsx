@@ -19,9 +19,9 @@ export function AppToast() {
   if (!message) return null;
 
   return (
-    <div
+    <button type="button"
       onClick={() => setMessage(null)}
-      className="absolute left-4 right-4 z-[95] flex items-start gap-2.5 cursor-pointer animate-fadeup"
+      className="w-full border-none font-sans bg-transparent text-left absolute left-4 right-4 z-[95] flex items-start gap-2.5 cursor-pointer animate-fadeup"
       style={{
         bottom: 96,
         background: 'rgb(var(--blush))',
@@ -35,6 +35,6 @@ export function AppToast() {
       <p className="m-0 flex-1 text-[12.5px] font-bold leading-[1.45]" style={{ color: 'rgb(var(--brown))' }}>
         {message}
       </p>
-    </div>
+    </button>
   );
 }

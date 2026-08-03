@@ -297,8 +297,8 @@ export function GroupDetail() {
                         >
                           {poll.myVote && (
                             <div
-                              className="absolute inset-0 rounded-xl"
-                              style={{ background: 'rgb(var(--navy))', opacity: 0.06, width: pct + '%', transition: 'width 0.4s ease' }}
+                              className="absolute inset-0 rounded-xl origin-left"
+                              style={{ background: 'rgb(var(--navy))', opacity: 0.06, transform: `scaleX(${pct / 100})`, transition: 'transform 0.4s ease' }}
                             />
                           )}
                           <div className="relative flex items-center justify-between">
@@ -420,7 +420,7 @@ export function GroupDetail() {
                         type="button"
                         onClick={() => rsvpGroupEvent(group.key, evt.id)}
                         className="border-none text-white rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans flex-shrink-0"
-                        style={{ background: 'rgb(var(--ember))', padding: '9px 14px' }}
+                        style={{ background: 'rgb(var(--emberdeep))', padding: '9px 14px' }}
                       >
                         I&apos;m in
                       </button>

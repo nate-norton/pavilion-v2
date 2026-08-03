@@ -176,7 +176,7 @@ function LiveSignIn() {
               onClick={sendLink}
               disabled={busy || !email.trim()}
               className="w-full border-none rounded-xl py-3 text-[14px] font-extrabold cursor-pointer"
-              style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))', opacity: busy || !email.trim() ? 0.6 : 1 }}
+              style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))', opacity: busy || !email.trim() ? 0.6 : 1 }}
             >
               {busy ? 'Sending…' : 'Send sign-in link'}
             </button>

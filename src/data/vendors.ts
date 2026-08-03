@@ -1,9 +1,9 @@
 import type { Vendor } from './types';
 
 export const VENDORS: Vendor[] = [
-  { name: 'GreenScape', sub: 'Landscaping · contract thru 2027', last: 'irrigation valve, Jun 24', ins: true, icon: 'ph-fill ph-plant', color: '#2A9D5C', bg: '#E9F6EE' },
-  { name: 'AquaFix', sub: 'Pool & spa service', last: 'gate latch, Thu Jul 3', ins: true, icon: 'ph-fill ph-swimming-pool', color: '#4A90E2', bg: '#EAF3FD' },
-  { name: 'BrightPath Electric', sub: 'Electrical & lighting', last: 'streetlight #M-88', ins: false, icon: 'ph-fill ph-lightning', color: '#D9A441', bg: '#FBF3E0' },
+  { name: 'GreenScape', sub: 'Landscaping · contract thru 2027', last: 'irrigation valve, Jun 24', ins: true, icon: 'ph-fill ph-plant', color: 'rgb(var(--sage))', bg: 'rgb(var(--mint))' },
+  { name: 'AquaFix', sub: 'Pool & spa service', last: 'gate latch, Thu Jul 3', ins: true, icon: 'ph-fill ph-swimming-pool', color: 'rgb(var(--sky))', bg: 'rgb(var(--skypale))' },
+  { name: 'BrightPath Electric', sub: 'Electrical & lighting', last: 'streetlight #M-88', ins: false, icon: 'ph-fill ph-lightning', color: 'rgb(var(--gold))', bg: 'rgb(var(--goldpale))' },
 ];
 
 export const SLOTS: string[] = ['8–10 AM', '10–12 PM', '12–2 PM', '2–4 PM', '4–6 PM', '6–8 PM'];

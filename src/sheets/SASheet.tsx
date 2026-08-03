@@ -66,7 +66,7 @@ export function SASheet() {
           <button
             onClick={paySA}
             className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold cursor-pointer text-white mb-2.5"
-            style={{ background: 'rgb(var(--ember))' }}
+            style={{ background: 'rgb(var(--emberdeep))' }}
           >
             Pay $450.00
           </button>

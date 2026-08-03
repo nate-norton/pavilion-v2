@@ -215,9 +215,9 @@ function GroupRow({ group, preview, time, onClick }: {
   const upcomingEvents = group.events.filter((e) => !e.rsvped).length;
 
   return (
-    <div
+    <button type="button"
       onClick={onClick}
-      className="flex items-center gap-3 cursor-pointer"
+      className="w-full border-none font-sans bg-transparent text-left flex items-center gap-3 cursor-pointer"
       style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '13px 14px' }}
     >
       <div
@@ -259,7 +259,7 @@ function GroupRow({ group, preview, time, onClick }: {
           Join
         </span>
       )}
-    </div>
+    </button>
   );
 }
 

@@ -137,6 +137,8 @@ export function BoardChat() {
         )}
         {topic === null && (
           <button
+            type="button"
+            aria-label="Close board chat"
             onClick={close}
             className="w-8 h-8 rounded-full border-0 bg-paper cursor-pointer flex items-center justify-center"
           >
@@ -259,7 +261,7 @@ export function BoardChat() {
                     </p>
                     {m.text && <p className="m-0 text-[13.5px] leading-[1.45] font-semibold text-navy">{m.text}</p>}
                     {m.photoUrls.map((u) => (
-                      <img key={u} src={u} alt="" className="mt-1.5 rounded-[13px] max-w-[220px] block" style={{ maxHeight: 240, objectFit: 'cover' }} />
+                      <img key={u} src={u} alt="Photo in message" className="mt-1.5 rounded-[13px] max-w-[220px] block" style={{ maxHeight: 240, objectFit: 'cover' }} />
                     ))}
                   </div>
                   {m.me && (

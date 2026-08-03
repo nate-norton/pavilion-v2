@@ -90,7 +90,7 @@ export function CircleDetail() {
               type="button"
               onClick={() => set({ rsvpGarden: true })}
               className="border-none text-white rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans flex-shrink-0"
-              style={{ background: 'rgb(var(--ember))', padding: '9px 14px' }}
+              style={{ background: 'rgb(var(--emberdeep))', padding: '9px 14px' }}
             >
               I&apos;m in
             </button>

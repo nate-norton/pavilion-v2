@@ -13,6 +13,7 @@ export default {
         sand: 'rgb(var(--sand) / <alpha-value>)',
         parchment: 'rgb(var(--parchment) / <alpha-value>)',
         ember: 'rgb(var(--ember) / <alpha-value>)',
+        emberdeep: 'rgb(var(--emberdeep) / <alpha-value>)',
         terracotta: 'rgb(var(--terracotta) / <alpha-value>)',
         blush: 'rgb(var(--blush) / <alpha-value>)',
         peach: 'rgb(var(--peach) / <alpha-value>)',

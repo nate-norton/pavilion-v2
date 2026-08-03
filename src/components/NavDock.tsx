@@ -2,7 +2,10 @@ import { usePavStore } from '../store/store';
 import { PhIcon } from './PhIcon';
 
 const ACTIVE = 'rgb(var(--cream))';
-const INACTIVE = 'rgb(var(--cream) / 0.45)';
+// 0.45 measured 3.55:1 against navy — below AA for these 10px labels.
+// 0.62 clears it at 5.34:1 while staying clearly quieter than the
+// active state's 11.28:1.
+const INACTIVE = 'rgb(var(--cream) / 0.62)';
 
 const TABS: { key: string; icon: string; label: string }[] = [
   { key: 'today', icon: 'ph-fill ph-sun-horizon', label: 'Today' },

@@ -71,9 +71,9 @@ export function Hoa() {
 
       {/* Annual meeting (demo-only until a meetings domain exists) */}
       {demo && (
-      <div
+      <button type="button"
         onClick={() => set({ meetingOpen: true })}
-        className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
+        className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
         style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
       >
         <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-goldpale">
@@ -88,7 +88,7 @@ export function Hoa() {
         <span className="text-[13px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--terracotta))' }}>
           Preview →
         </span>
-      </div>
+      </button>
       )}
 
       {/* Live meetings — board-scheduled, minutes downloadable */}
@@ -180,9 +180,9 @@ export function Hoa() {
           </div>
         </div>
         <div className="mt-3.5 pt-[13px]" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)' }}>
-          <div
+          <button type="button"
             onClick={() => setForecastOpen(!forecastOpen)}
-            className="flex items-center justify-between gap-2 cursor-pointer"
+            className="w-full border-none font-sans bg-transparent text-left flex items-center justify-between gap-2 cursor-pointer"
           >
             <p className="m-0 text-[12.5px] font-bold text-navy">Funding forecast</p>
             <div className="flex items-center gap-1.5">
@@ -194,7 +194,7 @@ export function Hoa() {
               </span>
               <PhIcon name={forecastOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'} size={13} color="rgb(var(--stonelight))" />
             </div>
-          </div>
+          </button>
           {forecastOpen && (
             <div className="animate-fadeup mt-2.5">
               <div className="relative h-[78px]">
@@ -357,9 +357,9 @@ export function Hoa() {
 
       {/* Docs + AI */}
       <div className="grid grid-cols-2 gap-2.5">
-        <div
+        <button type="button"
           onClick={() => set({ docsOpen: true, docReader: false })}
-          className="bg-paper rounded-[18px] p-[15px] cursor-pointer"
+          className="w-full border-none font-sans text-left bg-paper rounded-[18px] p-[15px] cursor-pointer"
           style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
         >
           <PhIcon name="ph-fill ph-files" size={22} color="rgb(var(--navy))" />
@@ -367,10 +367,10 @@ export function Hoa() {
           <p className="m-0 text-[11.5px] font-semibold text-stone">
             CC&amp;Rs · Bylaws · Budget · Minutes
           </p>
-        </div>
-        <div
+        </button>
+        <button type="button"
           onClick={() => set({ aiOpen: true })}
-          className="rounded-[18px] p-[15px] cursor-pointer text-white"
+          className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-[15px] cursor-pointer text-white"
           style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}
         >
           <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--white))" />
@@ -378,7 +378,7 @@ export function Hoa() {
           <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.85)' }}>
             &quot;Can I paint my fence black?&quot;
           </p>
-        </div>
+        </button>
       </div>
     </div>
   );
@@ -438,7 +438,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
           <button
             onClick={() => castYesNo('yes')}
             className="flex-1 border-none rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-            style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
+            style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
           >
             {vote.yesLabel}
           </button>
@@ -469,7 +469,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
                 }}
                 className="w-full rounded-[13px] py-3 px-3.5 text-left text-sm font-extrabold cursor-pointer"
                 style={picked
-                  ? { background: 'rgb(var(--ember))', border: '1.5px solid rgb(var(--ember))', color: 'rgb(var(--white))' }
+                  ? { background: 'rgb(var(--emberdeep))', border: '1.5px solid rgb(var(--emberdeep))', color: 'rgb(var(--white))' }
                   : { background: 'transparent', border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))' }}
               >
                 {vote.multi && <span className="mr-2">{picked ? '☑' : '☐'}</span>}
@@ -481,7 +481,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             <button
               onClick={() => castOptions(picks)}
               className="w-full border-none rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-              style={{ background: picks.length ? 'rgb(var(--ember))' : 'rgb(var(--cream) / 0.15)', color: 'rgb(var(--white))' }}
+              style={{ background: picks.length ? 'rgb(var(--emberdeep))' : 'rgb(var(--cream) / 0.15)', color: 'rgb(var(--white))' }}
             >
               Cast ballot{picks.length > 1 ? ` · ${picks.length} picks` : ''}
             </button>

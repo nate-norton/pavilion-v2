@@ -1460,7 +1460,7 @@ export function BoardDesk() {
                     onClick={() => canPostVote && setVoteConfirm(true)}
                     disabled={!canPostVote}
                     className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                    style={{ background: canPostVote ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
+                    style={{ background: canPostVote ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
                   >
                     Open the ballot
                   </button>
@@ -1482,7 +1482,7 @@ export function BoardDesk() {
                           .catch(() => {}); // failure surfaced via the app toast
                       }}
                       className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                      style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
+                      style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
                     >
                       Confirm — open to all households
                     </button>
@@ -1624,7 +1624,7 @@ export function BoardDesk() {
                   onClick={sendBroadcast}
                   disabled={!canBc}
                   className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold"
-                  style={{ background: canBc ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canBc ? 'rgb(var(--white))' : 'rgb(var(--stonelight))', cursor: canBc ? 'pointer' : 'default' }}
+                  style={{ background: canBc ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canBc ? 'rgb(var(--white))' : 'rgb(var(--stonelight))', cursor: canBc ? 'pointer' : 'default' }}
                 >
                   Send to 136 households
                 </button>
@@ -1690,7 +1690,7 @@ export function BoardDesk() {
                         onClick={() => canPostVote && setVoteConfirm(true)}
                         disabled={!canPostVote}
                         className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                        style={{ background: canPostVote ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
+                        style={{ background: canPostVote ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
                       >
                         Open the ballot
                       </button>
@@ -1699,7 +1699,7 @@ export function BoardDesk() {
                         <button
                           onClick={() => { postVote(); setVoteConfirm(false); }}
                           className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                          style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
+                          style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
                         >
                           Confirm — open to 136 households
                         </button>
@@ -1952,7 +1952,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
             <div className="flex gap-2 mb-3 overflow-x-auto pav-scroll">
               {t.photoUrls.map((u) => (
                 <a key={u} href={u} target="_blank" rel="noreferrer" className="flex-shrink-0">
-                  <img src={u} alt="" className="rounded-[11px] block" style={{ height: 84, width: 84, objectFit: 'cover' }} />
+                  <img src={u} alt="Attached photo" className="rounded-[11px] block" style={{ height: 84, width: 84, objectFit: 'cover' }} />
                 </a>
               ))}
             </div>
@@ -2006,6 +2006,8 @@ function TriageCard({ item: t }: { item: TriageItem }) {
               style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
             />
             <button
+              type="button"
+              aria-label="Send reply"
               onClick={sendReply}
               className="w-8 h-8 border-0 rounded-full cursor-pointer flex items-center justify-center flex-shrink-0"
               style={{ background: reply.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}

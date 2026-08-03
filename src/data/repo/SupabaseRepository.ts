@@ -703,7 +703,7 @@ export class SupabaseRepository implements Repository {
         id: m.id,
         authorName: p?.name ?? 'Board member',
         authorInitial: p?.initial ?? 'B',
-        authorColor: p?.color ?? '#1A3352',
+        authorColor: p?.color ?? 'rgb(var(--navy))',
         me: m.sender_profile_id === this.profileId,
         text: m.body,
         time: timeLabel(m.created_at),
@@ -1312,7 +1312,7 @@ export class SupabaseRepository implements Repository {
       .select('*').eq('community_id', this.communityId).eq('active', true).order('sort_order');
     this.cache.amenities = (data ?? []).map((a) => ({
       id: a.id, name: a.name, sub: a.sub, icon: a.icon, rules: a.rules,
-      avail: a.avail_label, occ: a.occ_label, occColor: '#A39B8B', taken: [],
+      avail: a.avail_label, occ: a.occ_label, occColor: 'rgb(var(--stonelight))', taken: [],
       openHour: a.open_hour, closeHour: a.close_hour, slotMinutes: a.slot_minutes,
       capacity: a.capacity, maxDaysAhead: a.max_days_ahead,
     }));

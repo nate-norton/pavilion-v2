@@ -260,9 +260,9 @@ export function Reserve() {
           Amenities, booked in two taps. One active booking per household.
         </p>
         {repo.isDemo() && (
-        <div
+        <button type="button"
           onClick={() => set({ passOpen: true })}
-          className="rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5 bg-navy"
+          className="w-full border-none font-sans text-left rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5 bg-navy"
 >
           <PhIcon name="ph-fill ph-qr-code" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
           <div className="flex-1">
@@ -274,7 +274,7 @@ export function Reserve() {
           <span className="text-[13px] font-extrabold" style={{ color: 'rgb(var(--peach))' }}>
             Pass →
           </span>
-        </div>
+        </button>
         )}
 
         {hasBooking && (

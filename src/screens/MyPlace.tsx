@@ -17,12 +17,25 @@ const CARD: CSSProperties = {
 };
 
 function Row({ children, divider, onClick }: { children: ReactNode; divider?: boolean; onClick?: () => void }) {
+  const style = divider
+    ? { paddingBottom: 10, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 10 }
+    : undefined;
+  // Interactive rows render as real buttons so they take keyboard focus;
+  // static rows stay divs rather than becoming unfocusable buttons.
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="w-full flex items-center gap-2.5 cursor-pointer border-none bg-transparent text-left font-sans"
+        style={style}
+      >
+        {children}
+      </button>
+    );
+  }
   return (
-    <div
-      onClick={onClick}
-      className={`flex items-center gap-2.5${onClick ? ' cursor-pointer' : ''}`}
-      style={divider ? { paddingBottom: 10, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 10 } : undefined}
-    >
+    <div className="flex items-center gap-2.5" style={style}>
       {children}
     </div>
   );
@@ -121,16 +134,30 @@ export function MyPlace() {
     past_due: 'rgb(var(--terracotta))', due: 'rgb(var(--golddark))',
   };
 
-  const payRow = (label: string, pill: ReactNode, last?: boolean, idx?: number) => (
-    <div
-      onClick={idx != null && !isLiveMode ? () => set({ paymentDetailIdx: idx }) : undefined}
-      className={`flex items-center gap-2.5${idx != null && !isLiveMode ? ' cursor-pointer' : ''}`}
-      style={last ? undefined : { paddingBottom: 10, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 10 }}
-    >
-      <span className="flex-1 text-[13px] font-bold text-navy">{label}</span>
-      {pill}
-    </div>
-  );
+  const payRow = (label: string, pill: ReactNode, last?: boolean, idx?: number) => {
+    const style = last ? undefined : { paddingBottom: 10, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 10 };
+    const body = (
+      <>
+        <span className="flex-1 text-[13px] font-bold text-navy">{label}</span>
+        {pill}
+      </>
+    );
+    // Only demo rows open a payment detail; live rows are static text.
+    return idx != null && !isLiveMode ? (
+      <button
+        type="button"
+        onClick={() => set({ paymentDetailIdx: idx })}
+        className="w-full flex items-center gap-2.5 cursor-pointer border-none bg-transparent text-left font-sans"
+        style={style}
+      >
+        {body}
+      </button>
+    ) : (
+      <div className="flex items-center gap-2.5" style={style}>
+        {body}
+      </div>
+    );
+  };
 
   return (
     <div
@@ -154,39 +181,39 @@ export function MyPlace() {
 
       {/* Stat tiles */}
       <div className="grid grid-cols-3 gap-[9px] mb-3.5">
-        <div onClick={() => (isLiveMode ? set({ myPlaceOpen: false, tab: 'hoa' }) : set({ paySheetOpen: true }))} className="rounded-[15px] text-center cursor-pointer" style={{ background: duesBg, padding: '12px 10px' }}>
+        <button type="button" onClick={() => (isLiveMode ? set({ myPlaceOpen: false, tab: 'hoa' }) : set({ paySheetOpen: true }))} className="w-full rounded-[15px] text-center cursor-pointer border-none font-sans" style={{ background: duesBg, padding: '12px 10px' }}>
           <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: duesColor }}>
             {statOneLabel}
           </p>
           <p className="m-0 text-[12.5px] font-bold text-navy">{statOneValue}</p>
-        </div>
-        <div
+        </button>
+        <button type="button"
           onClick={() => set({ myPlaceOpen: false, tab: 'reserve' })}
-          className="rounded-[15px] text-center cursor-pointer"
+          className="w-full border-none font-sans bg-transparent rounded-[15px] text-center cursor-pointer"
           style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', padding: '12px 10px' }}
         >
           <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
             Bookings
           </p>
           <p className="m-0 text-[12.5px] font-bold text-navy">{myBookings}</p>
-        </div>
-        <div
+        </button>
+        <button type="button"
           onClick={() => set({ myPlaceOpen: false, tab: 'commons', commonsView: 'circles' })}
-          className="rounded-[15px] text-center cursor-pointer"
+          className="w-full border-none font-sans bg-transparent rounded-[15px] text-center cursor-pointer"
           style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', padding: '12px 10px' }}
         >
           <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
             Groups
           </p>
           <p className="m-0 text-[12.5px] font-bold text-navy">{myCirclesCount} joined</p>
-        </div>
+        </button>
       </div>
 
       {/* Board desk entry — live gates on the real membership role */}
       {(isLiveMode ? member?.role === 'board' : isOwner) && (
-        <div
+        <button type="button"
           onClick={() => set({ boardMode: true, myPlaceOpen: false })}
-          className="bg-navy rounded-[18px] flex items-center gap-[13px] cursor-pointer mb-3"
+          className="w-full border-none font-sans text-left bg-navy rounded-[18px] flex items-center gap-[13px] cursor-pointer mb-3"
           style={{ padding: '15px 16px' }}
         >
           <div
@@ -212,14 +239,14 @@ export function MyPlace() {
           <span className="text-[13px] font-extrabold flex-shrink-0" style={{ color: 'rgb(var(--peach))' }}>
             Open →
           </span>
-        </div>
+        </button>
       )}
 
       {/* Manager: portfolio entry */}
       {isManager && (
-        <div
+        <button type="button"
           onClick={() => set({ portfolioOpen: true, myPlaceOpen: false })}
-          className="bg-navy rounded-[18px] flex items-center gap-[13px] cursor-pointer mb-3"
+          className="w-full border-none font-sans text-left bg-navy rounded-[18px] flex items-center gap-[13px] cursor-pointer mb-3"
           style={{ padding: '15px 16px' }}
         >
           <div
@@ -237,7 +264,7 @@ export function MyPlace() {
           <span className="text-[13px] font-extrabold flex-shrink-0" style={{ color: 'rgb(var(--peach))' }}>
             Open →
           </span>
-        </div>
+        </button>
       )}
 
       {/* Tenant: lease + registration */}
@@ -659,19 +686,19 @@ export function MyPlace() {
             className="flex flex-col"
             style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
           >
-            <div
+            <button type="button"
               onClick={() => {
                 if (!profileEditOpen) { setPfName(member?.name ?? ''); setPfPhone(member?.phone ?? ''); setPfHide(member?.hideDirectory ?? false); }
                 setProfileEditOpen(!profileEditOpen);
               }}
-              className="flex items-center gap-2.5 cursor-pointer"
+              className="w-full border-none font-sans bg-transparent text-left flex items-center gap-2.5 cursor-pointer"
             >
               <PhIcon name="ph-fill ph-user-circle" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">
                 Profile <span className="font-semibold text-stonelight">· name, phone, privacy</span>
               </p>
               <PhIcon name={profileEditOpen ? 'ph ph-caret-up' : 'ph ph-caret-right'} size={14} color="rgb(var(--stonelight))" />
-            </div>
+            </button>
             {profileEditOpen && (
               <div className="mt-2.5 animate-fadeup">
                 <input
@@ -710,9 +737,9 @@ export function MyPlace() {
             )}
           </div>
         )}
-        <div
+        <button type="button"
           onClick={() => set({ notifOpen: true, myPlaceOpen: false })}
-          className="flex items-center gap-2.5 cursor-pointer"
+          className="w-full border-none font-sans bg-transparent text-left flex items-center gap-2.5 cursor-pointer"
           style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
         >
           <PhIcon name="ph-fill ph-bell" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
@@ -725,7 +752,7 @@ export function MyPlace() {
             )}
           </p>
           <PhIcon name="ph ph-caret-right" size={14} color="rgb(var(--stonelight))" />
-        </div>
+        </button>
         <div
           className="flex items-center gap-2.5"
           style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
@@ -738,9 +765,9 @@ export function MyPlace() {
           className="flex flex-col"
           style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
         >
-          <div
+          <button type="button"
             onClick={() => set({ langOpen: !state.langOpen })}
-            className="flex items-center gap-2.5 cursor-pointer"
+            className="w-full border-none font-sans bg-transparent text-left flex items-center gap-2.5 cursor-pointer"
           >
             <PhIcon name="ph-fill ph-translate" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13px] font-bold text-navy">
@@ -750,7 +777,7 @@ export function MyPlace() {
               </span>
             </p>
             <PhIcon name={state.langOpen ? 'ph ph-caret-up' : 'ph ph-caret-right'} size={14} color="rgb(var(--stonelight))" />
-          </div>
+          </button>
           {state.langOpen && (
             <div className="mt-2.5 ml-[29px] flex flex-col gap-1.5 animate-fadeup">
               {['English', 'Español', '中文'].map((lang) => (

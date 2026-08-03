@@ -52,9 +52,9 @@ export function ViolSheet() {
               )}
               {(viol.photoUrls ?? []).length > 0 && (
                 <div className="flex gap-2 mt-2.5 overflow-x-auto pav-scroll">
-                  {viol.photoUrls!.map((u) => (
+                  {viol.photoUrls!.map((u, i) => (
                     <a key={u} href={u} target="_blank" rel="noreferrer" className="flex-shrink-0">
-                      <img src={u} alt="" className="rounded-[11px] block" style={{ height: 76, width: 76, objectFit: 'cover' }} />
+                      <img src={u} alt={`Evidence photo ${i + 1}`} className="rounded-[11px] block" style={{ height: 76, width: 76, objectFit: 'cover' }} />
                     </a>
                   ))}
                 </div>

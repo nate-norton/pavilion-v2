@@ -102,7 +102,7 @@ export function Chat() {
               >
                 {m.text && <p className="m-0 text-[13.5px] leading-[1.45] font-semibold">{m.text}</p>}
                 {(m.photos ?? []).map((u) => (
-                  <img key={u} src={u} alt="" className="mt-1 rounded-[11px] block" style={{ maxWidth: 200, maxHeight: 220, objectFit: 'cover' }} />
+                  <img key={u} src={u} alt="Photo in message" className="mt-1 rounded-[11px] block" style={{ maxWidth: 200, maxHeight: 220, objectFit: 'cover' }} />
                 ))}
               </div>
             </div>

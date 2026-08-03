@@ -2,7 +2,10 @@ import { PhIcon } from '../components/PhIcon';
 import { useArc, useAssessment, useDues, useEvents, useMember, useNotifications, usePortfolio, useReservation, useRepository, useViolation, useVotes } from '../data/repo';
 import { usePavStore } from '../store/store';
 
-const ROW = 'flex items-center gap-[13px] cursor-pointer';
+// Rows are real buttons so they take keyboard focus and fire on Enter/Space.
+// The resets (w-full/border-none/bg-transparent/text-left/font-sans) keep the
+// button visually identical to the div it replaced.
+const ROW = 'w-full flex items-center gap-[13px] cursor-pointer border-none bg-transparent text-left font-sans';
 const ROW_PAD = { padding: '14px 0' } as const;
 const DOT = 'w-2 h-2 rounded-full flex-shrink-0';
 const ROW_TITLE = 'm-0 text-sm font-bold text-navy leading-[1.3]';
@@ -150,51 +153,51 @@ export function Today() {
       {/* Needs you: one card, one list */}
       <div className="bg-paper rounded-[20px] flex flex-col" style={{ border: '1px solid rgb(var(--navy) / 0.1)', padding: '6px 18px' }}>
         {isManager && (
-          <div onClick={() => set({ portfolioOpen: true, myPlaceOpen: false })} className={ROW} style={ROW_PAD}>
+          <button type="button" onClick={() => set({ portfolioOpen: true, myPlaceOpen: false })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--navy))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>Your portfolio</p>
               <p className={ROW_SUB}>3 communities · {pfDoors} doors · {pfOpen} open items</p>
             </div>
             {CARET}
-          </div>
+          </button>
         )}
 
         {isTenant && (
-          <div onClick={() => set({ myPlaceOpen: true })} className={ROW} style={ROW_PAD}>
+          <button type="button" onClick={() => set({ myPlaceOpen: true })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--claypale))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>Your lease &amp; amenities</p>
               <p className={ROW_SUB}>Rent goes to your landlord — Pavilion handles the rest</p>
             </div>
             {CARET}
-          </div>
+          </button>
         )}
 
         {saCardShow && (
-          <div onClick={() => set({ saSheetOpen: true })} className={ROW} style={ROW_PAD}>
+          <button type="button" onClick={() => set({ saSheetOpen: true })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{assessment?.title}</p>
               <p className={ROW_SUB}>{assessment?.sub}</p>
             </div>
             {CARET}
-          </div>
+          </button>
         )}
 
         {showVoteCardRole && (
-          <div onClick={() => set({ tab: 'hoa' })} className={ROW} style={ROW_PAD}>
+          <button type="button" onClick={() => set({ tab: 'hoa' })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{vote?.title ?? 'Open vote'}</p>
               <p className={ROW_SUB}>Closes Thursday · quorum at {quorumPct}%</p>
             </div>
             {CARET}
-          </div>
+          </button>
         )}
 
         {showPayCardRole && (
-          <div onClick={() => (demo ? set({ paySheetOpen: true }) : set({ tab: 'hoa' }))} className={ROW} style={ROW_PAD}>
+          <button type="button" onClick={() => (demo ? set({ paySheetOpen: true }) : set({ tab: 'hoa' }))} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{payCardTitle}</p>
@@ -203,18 +206,18 @@ export function Today() {
             <span className="rounded-full px-[10px] py-[5px] text-[12px] font-extrabold flex-shrink-0" style={{ background: 'rgb(var(--blush))', color: 'rgb(var(--terracotta))' }}>
               {payCardBtn}
             </span>
-          </div>
+          </button>
         )}
 
         {violPendingCard && (
-          <div onClick={() => set({ violSheetOpen: true })} className={ROW} style={ROW_PAD}>
+          <button type="button" onClick={() => set({ violSheetOpen: true })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--gold))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{violation?.title}</p>
               <p className={ROW_SUB}>{violation?.sub}</p>
             </div>
             {CARET}
-          </div>
+          </button>
         )}
 
         {violFixedCard && (
@@ -228,14 +231,14 @@ export function Today() {
         )}
 
         {showArcCardRole && (
-          <div onClick={() => set({ arcSeen: true, tab: 'hoa' })} className={ROW} style={ROW_PAD}>
+          <button type="button" onClick={() => set({ arcSeen: true, tab: 'hoa' })} className={ROW} style={ROW_PAD}>
             <span className={DOT} style={{ background: 'rgb(var(--claypale))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{arc.unseenApproval?.title}</p>
               <p className={ROW_SUB}>{arc.unseenApproval?.sub}</p>
             </div>
             {CARET}
-          </div>
+          </button>
         )}
 
         {showAllClear && (
@@ -301,7 +304,7 @@ export function Today() {
           ) : (
             <button
               onClick={() => (demo ? set({ rsvpFood: !state.rsvpFood }) : void repo.toggleEventRsvp(featuredEvent!.id))}
-              className="border-none text-white rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 bg-ember"
+              className="border-none text-white rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 bg-emberdeep"
             >
               I&apos;m in
             </button>
@@ -314,33 +317,33 @@ export function Today() {
       {/* Quiet neighborhood list — always on: booking + map are real surfaces */}
       <div className="bg-paper rounded-[20px]" style={{ border: '1px solid rgb(var(--navy) / 0.1)', padding: '6px 18px' }}>
         {hasBooking ? (
-          <div onClick={() => set({ tab: 'reserve' })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
+          <button type="button" onClick={() => set({ tab: 'reserve' })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
             <PhIcon name="ph-fill ph-calendar-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">Reserved: {reservation.summary}</p>
-          </div>
+          </button>
         ) : (
-          <div onClick={() => set({ tab: 'reserve' })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
+          <button type="button" onClick={() => set({ tab: 'reserve' })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
             <PhIcon name="ph ph-swimming-pool" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
               {demo ? 'Pool cabana open today · 4 slots left' : 'Reserve an amenity'}
             </p>
             <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
-          </div>
+          </button>
         )}
 
-        <div onClick={() => set({ mapOpen: true })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
+        <button type="button" onClick={() => set({ mapOpen: true })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
           <PhIcon name="ph ph-map-trifold" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
             {demo ? 'Neighborhood map · 5 pins today' : 'Neighborhood map'}
           </p>
           <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
-        </div>
+        </button>
 
-        <div onClick={() => set({ reportOpen: true })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
+        <button type="button" onClick={() => set({ reportOpen: true })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
           <PhIcon name="ph ph-shield-check" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">See a problem? Report it privately</p>
           <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
-        </div>
+        </button>
 
         {demo && (
         <div className="flex items-center gap-3" style={ROW_PAD}>

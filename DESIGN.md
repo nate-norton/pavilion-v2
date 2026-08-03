@@ -36,17 +36,59 @@ typography:
     fontSize: "17px"
     fontWeight: 400
     lineHeight: 1.3
+  subtitle:
+    fontFamily: "Young Serif, serif"
+    fontSize: "19px"
+    fontWeight: 400
+    lineHeight: 1.3
+  body-lg:
+    fontFamily: "Nunito Sans, system-ui, sans-serif"
+    fontSize: "14px"
+    fontWeight: 600
+    lineHeight: 1.5
   body:
+    fontFamily: "Nunito Sans, system-ui, sans-serif"
+    fontSize: "13.5px"
+    fontWeight: 700
+    lineHeight: 1.5
+  body-sm:
     fontFamily: "Nunito Sans, system-ui, sans-serif"
     fontSize: "13px"
     fontWeight: 700
     lineHeight: 1.5
+  meta:
+    fontFamily: "Nunito Sans, system-ui, sans-serif"
+    fontSize: "12.5px"
+    fontWeight: 700
+    lineHeight: 1.45
+  meta-sm:
+    fontFamily: "Nunito Sans, system-ui, sans-serif"
+    fontSize: "12px"
+    fontWeight: 700
+    lineHeight: 1.45
+  caption:
+    fontFamily: "Nunito Sans, system-ui, sans-serif"
+    fontSize: "11.5px"
+    fontWeight: 700
+    lineHeight: 1.4
   label:
     fontFamily: "Nunito Sans, system-ui, sans-serif"
     fontSize: "11px"
     fontWeight: 700
     letterSpacing: "0.12em"
+  label-sm:
+    fontFamily: "Nunito Sans, system-ui, sans-serif"
+    fontSize: "10.5px"
+    fontWeight: 800
+    letterSpacing: "0.1em"
+  micro:
+    fontFamily: "Nunito Sans, system-ui, sans-serif"
+    fontSize: "10px"
+    fontWeight: 800
+    letterSpacing: "0.08em"
 rounded:
+  focus: "4px"
+  bubble-tail: "6px"
   chip: "999px"
   sm: "11px"
   md: "13px"

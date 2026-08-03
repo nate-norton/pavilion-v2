@@ -130,7 +130,7 @@ export function PaySheet() {
           <button
             onClick={doPay}
             className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold cursor-pointer text-white"
-            style={{ background: 'rgb(var(--ember))' }}
+            style={{ background: 'rgb(var(--emberdeep))' }}
           >
             {payBtnLabel}
           </button>
