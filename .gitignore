@@ -5,3 +5,6 @@ playwright-report/
 test-results/
 *.stackdump
 .vercel/
+
+# Local agent skills (installed per-machine, not vendored)
+.claude/skills/
