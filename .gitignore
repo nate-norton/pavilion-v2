@@ -8,3 +8,4 @@ test-results/
 
 # Local agent skills (installed per-machine, not vendored)
 .claude/skills/
+.impeccable/
