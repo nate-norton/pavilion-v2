@@ -184,6 +184,9 @@ export function Gallery() {
               actionLabel="Add an amenity"
               onAction={() => {}}
             />
+            {/* The three states an absence can actually mean. */}
+            <EmptyState icon="ph-fill ph-calendar-check" title="No amenities set up yet" body="…" status="loading" />
+            <EmptyState icon="ph-fill ph-calendar-check" title="No amenities set up yet" body="…" status="error" />
           </div>
         </Section>
 

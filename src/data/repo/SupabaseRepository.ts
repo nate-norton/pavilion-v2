@@ -5,6 +5,7 @@ import type {
   PortfolioEntry, AgingBucket, Pin, MapLayer, SearchItem, ChatSeed, QA as QAType,
   HHOption, OnboardCircle, Comment, ChatMsg, GroupData,
 } from '../types';
+import type { LoadDomain, LoadState } from './Repository';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
 import { emitAppError } from '../../lib/errorBus';
@@ -148,6 +149,47 @@ export class SupabaseRepository implements Repository {
    * insert side-effect rows (decisions, documents). */
   private inflight = new Set<string>();
 
+  /**
+   * Per-domain hydration status. Everything starts `loading` so a first paint
+   * shows skeletons rather than "No open votes"; a hydrator that hits an
+   * error marks `error` so the screen can offer a retry instead of an empty
+   * state that lies about what exists.
+   */
+  private loadState: Partial<Record<LoadDomain, LoadState>> = {};
+
+  getLoadState = (domain: LoadDomain): LoadState => this.loadState[domain] ?? 'loading';
+
+  /** Record the outcome of a hydrator. `errors` are the discarded `error`
+   * fields from its queries — any one of them makes the domain untrustworthy. */
+  private mark(domain: LoadDomain, ...errors: ({ message?: string } | null | undefined)[]) {
+    this.loadState[domain] = errors.some(Boolean) ? 'error' : 'ready';
+  }
+
+
+  /**
+   * Run `fn` only if no write with this key is already in flight. Real users
+   * double-tap — on a slow connection the first response hasn't landed, the
+   * button is still live, and the second tap writes a second row. Reservations
+   * are the sharp case: no unique constraint backs them, so two taps meant two
+   * bookings for one slot, against the "one active booking per household" rule
+   * the Reserve screen states.
+   */
+  private async once(key: string, fn: () => Promise<void>) {
+    if (this.inflight.has(key)) return;
+    this.inflight.add(key);
+    try { await fn(); } finally { this.inflight.delete(key); }
+  }
+
+  retry = () => {
+    // Clear failed domains back to loading so the UI shows progress, not a
+    // stale error, while the refetch is in flight.
+    (Object.keys(this.loadState) as LoadDomain[]).forEach((k) => {
+      if (this.loadState[k] === 'error') this.loadState[k] = 'loading';
+    });
+    this.notify();
+    void this.refresh();
+  };
+
   /** Fire-and-forget board-action audit entry. */
   private audit(action: string, detail = '') {
     if (!this.communityId || !this.profileId) return;
@@ -231,7 +273,11 @@ export class SupabaseRepository implements Repository {
   getTriageItems = () => this.cache.triageItems;
   getMyReports = () => this.cache.myReports;
 
-  createReport = async ({ kind, description, urgency, location, photos }: NewReport) => {
+  createReport = async (input: NewReport) => {
+    await this.once('createReport', () => this.createReportInner(input));
+  };
+
+  private createReportInner = async ({ kind, description, urgency, location, photos }: NewReport) => {
     if (!this.communityId || !this.profileId) return;
     const unitLabel = this.cache.member?.unitLabel;
     const paths = await this.uploadFiles(photos, 'reports');
@@ -469,7 +515,7 @@ export class SupabaseRepository implements Repository {
   };
 
   private async hydrateSocial() {
-    if (!this.communityId) { this.cache.events = []; this.cache.feed = []; return; }
+    if (!this.communityId) { this.cache.events = []; this.cache.feed = []; this.mark('feed'); return; }
     const [events, feed, myRsvps] = await Promise.all([
       this.client.from('events').select('*').eq('community_id', this.communityId).order('sort_order'),
       this.client.from('feed_posts').select('*, post_reactions(profile_id), post_comments(id)').eq('community_id', this.communityId).order('sort_order'),
@@ -501,6 +547,7 @@ export class SupabaseRepository implements Repository {
       };
     });
     // Pinned announcements float to the top, then newest first.
+    this.mark('feed', events.error, feed.error);
     this.cache.feed = [...posts.filter((p) => p.pinned), ...posts.filter((p) => !p.pinned)];
   }
 
@@ -508,7 +555,11 @@ export class SupabaseRepository implements Repository {
   getArc = () => this.cache.arc;
   getBoardArcQueue = () => this.cache.boardArc;
 
-  createArcRequest = async ({ type, description, attachments }: NewArcRequest) => {
+  createArcRequest = async (input: NewArcRequest) => {
+    await this.once('createArcRequest', () => this.createArcRequestInner(input));
+  };
+
+  private createArcRequestInner = async ({ type, description, attachments }: NewArcRequest) => {
     if (!this.communityId || !this.unitId) return;
     const { count } = await this.client.from('arc_requests')
       .select('id', { count: 'exact', head: true }).eq('community_id', this.communityId);
@@ -848,8 +899,8 @@ export class SupabaseRepository implements Repository {
   getVotes = () => this.cache.votes;
 
   private async hydrateVotes() {
-    if (!this.communityId) { this.cache.votes = { open: null, openAll: [], closed: [] }; return; }
-    const [{ data: openRows }, { data: closedRows }] = await Promise.all([
+    if (!this.communityId) { this.cache.votes = { open: null, openAll: [], closed: [] }; this.mark('votes'); return; }
+    const [{ data: openRows, error: openErr }, { data: closedRows, error: closedErr }] = await Promise.all([
       this.client.from('votes').select('*, vote_options(id, label, position, tally)')
         .eq('community_id', this.communityId).eq('status', 'open')
         .order('created_at', { ascending: false }),
@@ -905,6 +956,7 @@ export class SupabaseRepository implements Repository {
         dateLabel: `Closed ${new Date(vote.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`,
       };
     });
+    this.mark('votes', openErr, closedErr);
     this.cache.votes = { open: openAll[0] ?? null, openAll, closed };
   }
 
@@ -1010,9 +1062,10 @@ export class SupabaseRepository implements Repository {
 
   private async hydrateDues() {
     const empty: DuesState = { current: null, cardTitle: '', cardSub: '', cardBtn: '', history: [] };
-    if (!this.unitId) { this.cache.dues = empty; return; }
-    const { data: rows } = await this.client.from('dues_statements')
+    if (!this.unitId) { this.cache.dues = empty; this.mark('dues'); return; }
+    const { data: rows, error: duesErr } = await this.client.from('dues_statements')
       .select('*').eq('unit_id', this.unitId).order('sort_order');
+    this.mark('dues', duesErr);
     if (!rows || rows.length === 0) { this.cache.dues = empty; return; }
     const toStatement = (r: Database['public']['Tables']['dues_statements']['Row']): DuesStatement => ({
       id: r.id,
@@ -1221,9 +1274,10 @@ export class SupabaseRepository implements Repository {
   };
 
   private async hydrateDocs() {
-    if (!this.communityId) { this.cache.docs = []; return; }
-    const { data } = await this.client.from('documents')
+    if (!this.communityId) { this.cache.docs = []; this.mark('docs'); return; }
+    const { data, error } = await this.client.from('documents')
       .select('*').eq('community_id', this.communityId).order('section').order('created_at', { ascending: false });
+    this.mark('docs', error);
     const rows = data ?? [];
     const urls = await this.signUrls(rows.map((d) => d.storage_path));
     this.cache.docs = rows.map((d) => ({
@@ -1307,9 +1361,10 @@ export class SupabaseRepository implements Repository {
   getAmenities = () => this.cache.amenities;
 
   private async hydrateAmenities() {
-    if (!this.communityId) { this.cache.amenities = []; return; }
-    const { data } = await this.client.from('amenities')
+    if (!this.communityId) { this.cache.amenities = []; this.mark('amenities'); return; }
+    const { data, error } = await this.client.from('amenities')
       .select('*').eq('community_id', this.communityId).eq('active', true).order('sort_order');
+    this.mark('amenities', error);
     this.cache.amenities = (data ?? []).map((a) => ({
       id: a.id, name: a.name, sub: a.sub, icon: a.icon, rules: a.rules,
       avail: a.avail_label, occ: a.occ_label, occColor: 'rgb(var(--stonelight))', taken: [],
@@ -1382,7 +1437,11 @@ export class SupabaseRepository implements Repository {
   // ── Reservations (real, per-member; no-ops until the table migration lands) ─
   getReservation = () => this.cache.reservation;
 
-  createReservation = async ({ amenity, day, slot, hours }: NewReservation) => {
+  createReservation = async (input: NewReservation) => {
+    await this.once(`reserve:${input.amenity}:${input.day}:${input.slot}`, () => this.createReservationInner(input));
+  };
+
+  private createReservationInner = async ({ amenity, day, slot, hours }: NewReservation) => {
     if (!this.communityId || !this.profileId) return;
     const { error } = await this.client.from('reservations').insert({
       community_id: this.communityId,

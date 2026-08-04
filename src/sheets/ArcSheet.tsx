@@ -63,6 +63,7 @@ export function ArcSheet() {
         value={state.arcDesc}
         onChange={(e) => set({ arcDesc: e.target.value })}
         placeholder="e.g. Repaint front door in Sage, per the approved palette"
+        maxLength={2000}
         className="w-full bg-[rgb(var(--paper))] rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans resize-none mb-4"
         style={{ minHeight: 72, border: '1px solid rgb(var(--navy) / 0.12)' }}
       />

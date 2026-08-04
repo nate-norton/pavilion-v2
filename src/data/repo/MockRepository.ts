@@ -66,6 +66,12 @@ export class MockRepository implements Repository, SnapshotReadable {
 
   isDemo = () => true;
 
+  // The demo derives everything synchronously from the store, so there is no
+  // in-flight window and nothing that can fail — an empty list here always
+  // means genuinely empty.
+  getLoadState = () => 'ready' as const;
+  retry = () => {};
+
   getMember = () => DEMO_MEMBER;
 
   getDecisions = () => DEMO_DECISIONS;

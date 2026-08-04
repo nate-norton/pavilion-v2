@@ -5,7 +5,7 @@ import { ProgressBar } from '../components/ProgressBar';
 import { StatusTimeline } from '../components/StatusTimeline';
 import { Confetti } from '../components/Confetti';
 import { usePavStore } from '../store/store';
-import { useVotes, useArc, useIssues, useDecisions, useMeetings, useMember, useRepository } from '../data/repo';
+import { useVotes, useArc, useIssues, useDecisions, useMeetings, useMember, useLoadState, useRepository } from '../data/repo';
 import type { OpenVote } from '../data/repo';
 
 const DUES_LEGEND = [
@@ -50,6 +50,7 @@ export function Hoa() {
   // Empty states are a dead end for the one person who can fill them, so the
   // board gets an action where residents get an honest wait.
   const isBoard = !demo && member?.role === 'board';
+  const votesLoad = useLoadState('votes');
 
   return (
     <div className="absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: '64px 18px 150px' }}>
@@ -71,6 +72,7 @@ export function Hoa() {
                 ? 'Put a decision to the community and every household sees the tally and quorum as it happens.'
                 : 'When your board opens a ballot, it’ll appear here.'
             }
+            status={votesLoad}
             actionLabel={isBoard ? 'Open a vote' : undefined}
             onAction={isBoard ? () => set({ boardMode: true, boardTab: 'desk', voteDraftOpen: true }) : undefined}
           />

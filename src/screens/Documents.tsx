@@ -3,7 +3,7 @@ import { BackButton } from '../components/BackButton';
 import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { useDocuments, useDocSections, useMember, useRepository } from '../data/repo';
+import { useDocuments, useDocSections, useMember, useLoadState, useRepository } from '../data/repo';
 
 const DOC_CONTENT: Record<string, { sections: { tag: string; name: string; body: string }[] }> = {
   bylaws: {
@@ -53,6 +53,7 @@ export function Documents() {
   const repo = useRepository();
   const member = useMember();
   const canManage = !repo.isDemo() && member?.role === 'board';
+  const docsLoad = useLoadState('docs');
   const [upName, setUpName] = useState('');
   const [upSection, setUpSection] = useState('Governing documents');
   const [upBusy, setUpBusy] = useState(false);
@@ -91,6 +92,7 @@ export function Documents() {
             <EmptyState
               icon="ph-fill ph-files"
               title="No documents yet"
+              status={docsLoad}
               body={
                 canManage
                   ? 'Start with the CC&Rs and bylaws — they answer the questions neighbors ask you most. Publish below.'
@@ -143,6 +145,7 @@ export function Documents() {
                 value={upName}
                 onChange={(e) => setUpName(e.target.value)}
                 placeholder="Name — e.g. CC&Rs (rev. 2026)"
+                maxLength={120}
                 className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
                 style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
               />

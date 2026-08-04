@@ -79,6 +79,7 @@ export function ReportSheet() {
             value={state.reportDesc}
             onChange={(e) => set({ reportDesc: e.target.value })}
             placeholder="e.g. Sprinkler head broken on the Green, spraying the sidewalk"
+            maxLength={2000}
             className="w-full bg-[rgb(var(--paper))] rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans resize-none mb-3.5"
             style={{ minHeight: 70, border: '1px solid rgb(var(--navy) / 0.12)' }}
           />
@@ -97,6 +98,7 @@ export function ReportSheet() {
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="Where? — e.g. the Green, by the mailboxes (optional)"
+                maxLength={120}
                 className="w-full bg-[rgb(var(--paper))] rounded-[13px] px-3.5 py-3 text-[13px] font-bold text-navy outline-none mb-3.5"
                 style={{ border: '1px solid rgb(var(--navy) / 0.12)' }}
               />

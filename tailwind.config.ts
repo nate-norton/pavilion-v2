@@ -52,6 +52,7 @@ export default {
         slideleft: 'slideLeft 0.3s cubic-bezier(0.22,1,0.36,1) both',
         slideright: 'slideRight 0.3s cubic-bezier(0.22,1,0.36,1) both',
         msgbubble: 'msgBubble 0.28s cubic-bezier(0.22,1,0.36,1) both',
+        skeleton: 'skeletonPulse 1.4s ease-in-out infinite',
       },
     },
   },

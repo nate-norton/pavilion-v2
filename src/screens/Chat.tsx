@@ -145,6 +145,7 @@ export function Chat() {
             if (e.key === 'Enter') sendChatMessage();
           }}
           placeholder="Message…"
+          maxLength={2000}
           className="flex-1 rounded-full text-[13.5px] font-semibold text-navy outline-none font-sans min-w-0"
           style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))', padding: '12px 16px' }}
         />

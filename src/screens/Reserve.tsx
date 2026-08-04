@@ -1,6 +1,6 @@
 import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
-import { useAmenities, useMember, useReservationSlots, useReservationDays, useReservation, useRepository } from '../data/repo';
+import { useAmenities, useMember, useReservationSlots, useReservationDays, useReservation, useLoadState, useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
 import { isLiveMode } from '../auth/AuthGate';
 
@@ -25,6 +25,7 @@ export function Reserve() {
   const member = useMember();
   const canManage = isLiveMode && member?.role === 'board';
   const demo = repo.isDemo();
+  const amenLoad = useLoadState('amenities');
 
   const amen = state.amenIdx != null ? AMENS[state.amenIdx] : null;
 
@@ -309,6 +310,7 @@ export function Reserve() {
                 ? 'Add the clubhouse, pool, or courts and neighbors book them themselves — no more sign-up sheet on the door.'
                 : 'When your board adds the clubhouse, pool, or courts, you’ll book them here.'
             }
+            status={amenLoad}
             actionLabel={canManage ? 'Add an amenity' : undefined}
             onAction={canManage ? () => set({ manageAmenOpen: true }) : undefined}
           />

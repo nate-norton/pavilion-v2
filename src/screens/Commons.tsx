@@ -4,7 +4,7 @@ import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
-import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember, useChatSeed, useRepository } from '../data/repo';
+import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember, useChatSeed, useLoadState, useRepository } from '../data/repo';
 import type { FeedPost, ThreadComment } from '../data/repo';
 import { usePavStore } from '../store/store';
 
@@ -29,6 +29,7 @@ export function Commons() {
   const chatIndex = useChatSeed();
   // Board members can fill the empty directory themselves; residents cannot.
   const isBoard = !repo.isDemo() && member?.role === 'board';
+  const feedLoad = useLoadState('feed');
   const unreadTotal = Object.values(chatIndex).reduce((n, e) => n + (e.unread || 0), 0);
 
   const addComment = () => {
@@ -88,6 +89,7 @@ export function Commons() {
                 icon="ph-fill ph-chats-circle"
                 title="Nothing shared yet"
                 body="Be the first to share something with your neighbors."
+                status={feedLoad}
                 actionLabel="Share something"
                 onAction={() => set({ composeOpen: true })}
               />

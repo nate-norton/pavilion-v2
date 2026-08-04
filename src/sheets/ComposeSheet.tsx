@@ -82,6 +82,7 @@ export function ComposeSheet() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="What's on your mind?"
+            maxLength={2000}
             className="w-full rounded-2xl border-none bg-cream px-4 py-3 text-[14px] font-semibold text-navy resize-none font-sans"
             style={{ minHeight: 100, outline: 'none' }}
           />
