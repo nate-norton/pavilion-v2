@@ -349,9 +349,9 @@ export type Database = {
         ]
       }
       profiles: {
-        Row: { avatar_url: string | null; color: string; created_at: string; hide_directory: boolean; id: string; initial: string; name: string; phone: string; user_id: string | null }
-        Insert: { avatar_url?: string | null; color?: string; created_at?: string; hide_directory?: boolean; id?: string; initial?: string; name: string; phone?: string; user_id?: string | null }
-        Update: { avatar_url?: string | null; color?: string; created_at?: string; hide_directory?: boolean; id?: string; initial?: string; name?: string; phone?: string; user_id?: string | null }
+        Row: { avatar_url: string | null; color: string; created_at: string; hide_directory: boolean; id: string; initial: string; name: string; onboarded_at: string | null; phone: string; user_id: string | null }
+        Insert: { avatar_url?: string | null; color?: string; created_at?: string; hide_directory?: boolean; id?: string; initial?: string; name: string; onboarded_at?: string | null; phone?: string; user_id?: string | null }
+        Update: { avatar_url?: string | null; color?: string; created_at?: string; hide_directory?: boolean; id?: string; initial?: string; name?: string; onboarded_at?: string | null; phone?: string; user_id?: string | null }
         Relationships: []
       }
       post_comments: {
