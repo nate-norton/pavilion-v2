@@ -83,7 +83,7 @@ export function MapScreen() {
       {/* Stylized map */}
       <div
         className="flex-1 relative rounded-[22px] overflow-hidden"
-        style={{ margin: '12px 14px 16px', background: 'rgb(var(--creamsand))', border: '1px solid rgb(var(--navy) / 0.08)' }}
+        style={{ margin: '12px 14px 16px', background: 'rgb(var(--sandtint))', border: '1px solid rgb(var(--navy) / 0.08)' }}
       >
         <div
           className="absolute left-0 right-0"

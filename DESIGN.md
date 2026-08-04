@@ -221,6 +221,19 @@ action, and a deep dusk blue for everything you read.
 - **Ink** (rgb 62 76 99): Long-form reading text where full Porch Shade would
   be too heavy.
 
+### Sequential scales
+
+Two groups of near-identical hues are **not** palette drift, and a consolidation
+pass should leave them alone — collapsing any step flattens a chart:
+
+- **Reserve-funding forecast** (six steps, lightest year to darkest):
+  Sagemist '26 → Sagesoft '27 → Sagecool '28 → Sagelight '29 → Sagemid '30 →
+  Sage '31. Grouped and commented as a block in `src/index.css`.
+- **Delinquency aging** (five steps, current to severe): Sage → Gold → Peach →
+  Terracotta → Reddeep. Note it deliberately climbs the severity ladder rather
+  than fading one hue, because the buckets mean escalating trouble, not more
+  of the same thing.
+
 ### Named Rules
 
 **The Porch Light Rule.** The ember accent appears on at most one primary

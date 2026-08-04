@@ -30,7 +30,7 @@ const FORECAST_BARS = [
 const ISSUE_TONES = {
   gold: { bg: 'rgb(var(--goldpale))', color: 'rgb(var(--golddark))' },
   mint: { bg: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' },
-  sand: { bg: 'rgb(var(--sand))', color: 'rgb(var(--barkgray))' },
+  sand: { bg: 'rgb(var(--sand))', color: 'rgb(var(--stone))' },
 } as const;
 
 

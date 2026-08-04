@@ -16,7 +16,7 @@ import { BRAND_THEMES, brandTokens } from '../theme/themes';
 
 /** Token groups — kept in sync with the :root definitions in src/index.css. */
 const RAW = ['navy', 'cream', 'paper', 'sand', 'parchment', 'ember', 'terracotta', 'blush', 'peach', 'sage', 'mint', 'sagedark', 'gold', 'goldpale', 'golddark', 'sky', 'skydeep', 'skypale', 'ink', 'stone', 'stonelight', 'bark', 'taupe', 'red'];
-const EXTENDED = ['sandpale', 'sanddim', 'taupepale', 'taupedim', 'claypale', 'stonegray', 'barkgray', 'creamlight', 'creamdim', 'creamtint', 'creamsand', 'sandtint', 'sanddeep', 'sandwarm', 'blushpale', 'blushdim', 'sagelight', 'sagebright', 'sagemid', 'sagepale', 'sagetint', 'sagewash', 'sagemist', 'sagesoft', 'sagecool', 'emberbright', 'brown', 'reddeep', 'goldmid', 'skytint', 'skydark', 'violet'];
+const EXTENDED = ['sandpale', 'sanddim', 'taupepale', 'taupedim', 'claypale', 'creamlight', 'creamdim', 'creamtint', 'sandtint', 'sanddeep', 'blushpale', 'blushdim', 'sagelight', 'sagebright', 'sagemid', 'sagepale', 'sagemist', 'sagesoft', 'sagecool', 'emberbright', 'brown', 'reddeep', 'skytint', 'skydark', 'violet'];
 const SEMANTIC = ['color-bg', 'color-surface', 'color-primary', 'color-text', 'color-muted', 'color-accent', 'color-danger', 'color-success'];
 
 function Swatch({ name }: { name: string }) {

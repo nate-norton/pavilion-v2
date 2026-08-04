@@ -68,30 +68,30 @@
   --taupepale: 213 207 191;
   --taupedim: 201 193 176;
   --claypale: 201 192 174;
-  --stonegray: 138 127 111;
-  --barkgray: 110 103 89;
   --creamlight: 247 243 234;
   --creamdim: 243 237 224;
   --creamtint: 242 235 220;
-  --creamsand: 239 232 214;
   --sandtint: 235 227 208;
   --sanddeep: 229 220 198;
-  --sandwarm: 228 220 200;
   --blushpale: 254 243 238;
   --blushdim: 251 228 224;
-  --sagelight: 116 185 146;
-  --sagebright: 111 211 156;
-  --sagemid: 85 172 124;
+  /*
+   * Sequential scale — reserve-funding forecast (Hoa.tsx FORECAST_BARS).
+   * Six steps of one hue, lightest year to darkest, ending on --sage. These
+   * look like duplicates in a flat token list and are not: collapsing any of
+   * them flattens a chart. Ordered here as they appear in the chart.
+   */
+  --sagemist: 191 220 201;   /* '26 */
+  --sagesoft: 169 210 184;   /* '27 */
+  --sagecool: 143 198 166;   /* '28 */
+  --sagelight: 116 185 146;  /* '29 */
+  --sagemid: 85 172 124;     /* '30 — '31 uses --sage */
+  /* Surfaces, not scale steps. */
   --sagepale: 220 233 221;
-  --sagetint: 226 242 232;
-  --sagewash: 213 228 214;
-  --sagemist: 191 220 201;
-  --sagesoft: 169 210 184;
-  --sagecool: 143 198 166;
+  --sagebright: 111 211 156;
   --emberbright: 249 123 75;
   --brown: 138 81 56;
   --reddeep: 178 58 43;
-  --goldmid: 184 135 46;
   --skytint: 216 230 244;
   --skydark: 58 100 145;
   --violet: 139 92 246;

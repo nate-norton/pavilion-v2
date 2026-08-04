@@ -982,14 +982,14 @@ export function BoardDesk() {
             <div className="flex items-center gap-[11px] py-[11px]" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
               <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#A-118 · Backyard pergola · #27</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--barkgray))' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--stone))' }}>
                 Jun 12
               </span>
             </div>
             <div className="flex items-center gap-[11px] py-[11px]">
               <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#A-115 · Fence stain, Cedar · #33</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--barkgray))' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--stone))' }}>
                 May 30
               </span>
             </div>
@@ -1893,7 +1893,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
   const urgencyPill = t.urgency === 'urgent'
     ? { label: 'URGENT', bg: 'rgb(var(--blush))', color: 'rgb(var(--terracotta))' }
     : t.urgency === 'low'
-      ? { label: 'LOW', bg: 'rgb(var(--sand))', color: 'rgb(var(--barkgray))' }
+      ? { label: 'LOW', bg: 'rgb(var(--sand))', color: 'rgb(var(--stone))' }
       : null;
 
   return (

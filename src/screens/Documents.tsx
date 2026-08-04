@@ -295,7 +295,7 @@ export function Documents() {
                     </span>
                   </p>
                   <p className="m-0 mb-2 text-[12.5px] font-bold" style={{ lineHeight: 1.55 }}>
-                    <span style={{ background: 'rgb(var(--sagetint))', color: 'rgb(var(--sagedark))', borderRadius: 3, padding: '1px 3px' }}>
+                    <span style={{ background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))', borderRadius: 3, padding: '1px 3px' }}>
                       Cedar, Slate Gray, White, Sage, Clay
                     </span>
                   </p>
