@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { reportedByDataLayer } from '../lib/errorBus';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
@@ -431,7 +432,7 @@ export function BoardDesk() {
                     setInvBusy(true);
                     void repo.createInvite({ email: invEmail, unitLabel: invUnit, role: invRole })
                       .then(() => { setInvEmail(''); setInvUnit(''); setInvRole('resident'); })
-                      .catch(() => {})
+                      .catch(reportedByDataLayer)
                       .finally(() => setInvBusy(false));
                   }}
                   className="w-full border-0 rounded-[11px] py-2.5 text-[12.5px] font-extrabold cursor-pointer"
@@ -653,7 +654,7 @@ export function BoardDesk() {
                           severity: violSeverity, fineCents: Math.round((parseFloat(violFine) || 0) * 100),
                         }).then(() => {
                           setViolDraftOpen(false); setViolTitle(''); setViolDesc(''); setViolUnitId(''); setViolFine(''); setViolSeverity('courtesy');
-                        }).catch(() => {});
+                        }).catch(reportedByDataLayer);
                       }}
                       className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
                       style={{ background: violUnitId && violTitle.trim() ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))' }}
@@ -706,7 +707,7 @@ export function BoardDesk() {
                         className="hidden"
                         onChange={(e) => {
                           const f = e.target.files?.[0];
-                          if (f) void repo.publishMinutes(m.id, f).catch(() => {});
+                          if (f) void repo.publishMinutes(m.id, f).catch(reportedByDataLayer);
                         }}
                       />
                       <button
@@ -773,7 +774,7 @@ export function BoardDesk() {
                         if (!meetTitle.trim()) return;
                         void repo.createMeeting({ title: meetTitle, whenLabel: meetWhen, whereLabel: meetWhere, agenda: meetAgenda.split(',') })
                           .then(() => { setMeetDraftOpen(false); setMeetTitle(''); setMeetWhen(''); setMeetWhere(''); setMeetAgenda(''); })
-                          .catch(() => {});
+                          .catch(reportedByDataLayer);
                       }}
                       className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
                       style={{ background: meetTitle.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
@@ -1486,7 +1487,7 @@ export function BoardDesk() {
                           closesAt: voteDays ? new Date(Date.now() + voteDays * 86400_000).toISOString() : null,
                         })
                           .then(() => set({ votePosted: true }))
-                          .catch(() => {}); // failure surfaced via the app toast
+                          .catch(reportedByDataLayer); // failure surfaced via the app toast
                       }}
                       className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
                       style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
@@ -1590,7 +1591,7 @@ export function BoardDesk() {
                       if (!evTitle.trim()) return;
                       void repo.createEvent({ title: evTitle, whenLabel: evWhen, whereLabel: evWhere })
                         .then(() => { setEvDraftOpen(false); setEvTitle(''); setEvWhen(''); setEvWhere(''); })
-                        .catch(() => {});
+                        .catch(reportedByDataLayer);
                     }}
                     className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
                     style={{ background: evTitle.trim() ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))' }}
@@ -1894,7 +1895,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
   const toggle = () => { if (!open) loadThread(); setOpen(!open); };
   const sendReply = () => {
     if (!reply.trim()) return;
-    void repo.addReportComment(t.id, reply).then(() => { setReply(''); loadThread(); }).catch(() => {});
+    void repo.addReportComment(t.id, reply).then(() => { setReply(''); loadThread(); }).catch(reportedByDataLayer);
   };
 
   const urgencyPill = t.urgency === 'urgent'

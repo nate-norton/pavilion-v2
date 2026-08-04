@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
+import { reportedByDataLayer } from '../lib/errorBus';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
@@ -577,7 +578,7 @@ export function MyPlace() {
                         void repo.addReportComment(r.id, reportReply)
                           .then(() => { setReportReply(''); return repo.listReportComments(r.id); })
                           .then(setReportThread)
-                          .catch(() => {});
+                          .catch(reportedByDataLayer);
                       }
                     }}
                     placeholder="Message the board about this…"
@@ -725,7 +726,7 @@ export function MyPlace() {
                     setPfBusy(true);
                     void repo.updateProfile({ name: pfName, phone: pfPhone, hideDirectory: pfHide })
                       .then(() => setProfileEditOpen(false))
-                      .catch(() => {})
+                      .catch(reportedByDataLayer)
                       .finally(() => setPfBusy(false));
                   }}
                   className="w-full border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"

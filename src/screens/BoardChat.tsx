@@ -4,7 +4,7 @@ import { useArchivedBoardTopics, useBoardChat, useRepository } from '../data/rep
 import type { BoardMessage } from '../data/repo';
 import { usePavStore } from '../store/store';
 import { confirmDestructive } from '../components/ConfirmSheet';
-import { emitAppSuccess } from '../lib/errorBus';
+import { emitAppSuccess, reportedByDataLayer } from '../lib/errorBus';
 
 /** The pinned thread every community always has. Stored as topic = null. */
 const GENERAL = 'General';
@@ -72,7 +72,7 @@ export function BoardChat() {
         setMsg(''); setNewName(''); setCreating(false); setPhotos([]);
         if (to !== topic) set({ boardChatTopic: to });
       })
-      .catch(() => {})
+      .catch(reportedByDataLayer)
       .finally(() => setBusy(false));
   };
 
@@ -81,13 +81,13 @@ export function BoardChat() {
     setBusy(true);
     repo.renameBoardTopic(topic, newName.trim())
       .then(() => { set({ boardChatTopic: newName.trim() }); setRenaming(false); setNewName(''); })
-      .catch(() => {})
+      .catch(reportedByDataLayer)
       .finally(() => setBusy(false));
   };
 
   const archive = () => {
     if (!topic || topic === GENERAL) return;
-    void repo.archiveBoardTopic(topic).then(() => set({ boardChatTopic: null })).catch(() => {});
+    void repo.archiveBoardTopic(topic).then(() => set({ boardChatTopic: null })).catch(reportedByDataLayer);
   };
 
   const input = (props: { value: string; onChange: (v: string) => void; placeholder: string; onEnter?: () => void; autoFocus?: boolean }) => (

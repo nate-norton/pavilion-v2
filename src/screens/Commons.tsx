@@ -8,7 +8,7 @@ import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember,
 import type { FeedPost, ThreadComment } from '../data/repo';
 import { usePavStore } from '../store/store';
 import { confirmDestructive } from '../components/ConfirmSheet';
-import { emitAppSuccess } from '../lib/errorBus';
+import { emitAppSuccess, reportedByDataLayer } from '../lib/errorBus';
 
 const SEG_OPTIONS = [
   { key: 'feed', label: 'Feed' },
@@ -544,7 +544,7 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
   const toggleComments = () => { if (!open) loadThread(); setOpen(!open); };
   const sendReply = () => {
     if (!reply.trim()) return;
-    void repo.addPostComment(p.id, reply).then(() => { setReply(''); loadThread(); }).catch(() => {});
+    void repo.addPostComment(p.id, reply).then(() => { setReply(''); loadThread(); }).catch(reportedByDataLayer);
   };
 
   return (

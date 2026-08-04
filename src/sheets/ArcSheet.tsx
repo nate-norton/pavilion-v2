@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { reportedByDataLayer } from '../lib/errorBus';
 import { PhIcon } from '../components/PhIcon';
 import { Hint } from '../components/Hint';
 import { Sheet } from '../components/Sheet';
@@ -24,7 +25,7 @@ export function ArcSheet() {
     setBusy(true);
     void repo.createArcRequest({ type: state.arcType ?? 'Exterior update', description: state.arcDesc, attachments })
       .then(() => { set({ arcSheetOpen: false, arcDesc: '', arcType: null }); setAttachments([]); })
-      .catch(() => {}) // failure surfaced via the app toast
+      .catch(reportedByDataLayer)
       .finally(() => setBusy(false));
   };
   const demo = repo.isDemo();

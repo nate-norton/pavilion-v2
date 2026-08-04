@@ -108,14 +108,21 @@ export function Reserve() {
           >
             Pick a day
           </p>
-          <div className="flex gap-1.5 mb-[18px]">
+          {/*
+            Seven 64px chips plus their gaps are 484px inside a 357px column,
+            so the row clipped its last days off the right edge with no way to
+            reach them — and live amenities can set maxDaysAhead higher still.
+            It scrolls now, and the chips hold their width instead of being
+            squeezed until the date labels wrap.
+          */}
+          <div className="flex gap-1.5 mb-[18px] overflow-x-auto pav-scroll">
             {DAYS.map((d, i) => {
               const on = state.dayIdx === i;
               return (
                 <button
                   key={d}
                   onClick={() => set({ dayIdx: i, slotIdx: null })}
-                  className="rounded-[13px] py-2.5 text-xs font-extrabold cursor-pointer text-center leading-[1.3]"
+                  className="rounded-[13px] py-2.5 text-xs font-extrabold cursor-pointer text-center leading-[1.3] flex-shrink-0"
                   style={{
                     width: 64,
                     border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { reportedByDataLayer } from '../lib/errorBus';
 import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { Chip } from '../components/Chip';
@@ -38,7 +39,7 @@ export function ReportSheet() {
     setBusy(true);
     void repo.createReport({ kind: state.reportType ?? 'Other', description: state.reportDesc, urgency, location, photos })
       .then(() => { set({ reportSubmitted: true, reportDesc: '' }); setPhotos([]); setLocation(''); setUrgency('normal'); })
-      .catch(() => {}) // failure surfaced via the app toast
+      .catch(reportedByDataLayer)
       .finally(() => setBusy(false));
   };
 

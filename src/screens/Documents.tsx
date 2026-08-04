@@ -5,7 +5,7 @@ import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 import { useDocuments, useDocSections, useMember, useLoadState, useRepository } from '../data/repo';
 import { confirmDestructive } from '../components/ConfirmSheet';
-import { emitAppSuccess } from '../lib/errorBus';
+import { emitAppSuccess, reportedByDataLayer } from '../lib/errorBus';
 
 const DOC_CONTENT: Record<string, { sections: { tag: string; name: string; body: string }[] }> = {
   bylaws: {
@@ -86,7 +86,8 @@ export function Documents() {
           <BackButton onClick={() => set({ docsOpen: false })} />
           <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Documents</h1>
           <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
-            {DOCS.length > 0
+            {/* Only the demo has an assistant that has read anything. */}
+            {DOCS.length > 0 && repo.isDemo()
               ? 'Every governing document, searchable. Your AI has read them all.'
               : 'Every governing document, in one place.'}
           </p>
@@ -191,7 +192,7 @@ export function Documents() {
                   setUpBusy(true);
                   void repo.uploadDocument({ file: f, name: upName || f.name, section: upSection })
                     .then(() => setUpName(''))
-                    .catch(() => {})
+                    .catch(reportedByDataLayer)
                     .finally(() => { setUpBusy(false); if (fileRef.current) fileRef.current.value = ''; });
                 }}
               />
