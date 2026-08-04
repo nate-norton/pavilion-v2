@@ -10,6 +10,7 @@ export { Chip } from '../src/components/Chip';
 export { Pill } from '../src/components/Pill';
 export { ProgressBar } from '../src/components/ProgressBar';
 export { SegmentedControl } from '../src/components/SegmentedControl';
+export { StackedCard, StackedCards, StackedPanel } from '../src/components/StackedCard';
 export { StatusTimeline } from '../src/components/StatusTimeline';
 export { Toggle } from '../src/components/Toggle';
 export { TypingDots } from '../src/components/TypingDots';
