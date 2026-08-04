@@ -388,8 +388,12 @@ export function Hoa() {
         )}
       </div>
 
-      {/* Docs + AI */}
-      <div className="grid grid-cols-2 gap-2.5">
+      {/*
+        Docs, and — in the demo, where the assistant actually answers — AI.
+        Live has no assistant, so the tile that would advertise one is gone and
+        Documents takes the full width rather than pairing with a dead card.
+      */}
+      <div className={demo ? 'grid grid-cols-2 gap-2.5' : ''}>
         <button type="button"
           onClick={() => set({ docsOpen: true, docReader: false })}
           className="w-full border-none font-sans text-left bg-paper rounded-[18px] p-[15px] cursor-pointer"
@@ -401,17 +405,19 @@ export function Hoa() {
             CC&amp;Rs · Bylaws · Budget · Minutes
           </p>
         </button>
-        <button type="button"
-          onClick={() => set({ aiOpen: true })}
-          className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-[15px] cursor-pointer text-white"
-          style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}
-        >
-          <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--white))" />
-          <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold">Ask AI</p>
-          <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.85)' }}>
-            &quot;Can I paint my fence black?&quot;
-          </p>
-        </button>
+        {demo && (
+          <button type="button"
+            onClick={() => set({ aiOpen: true })}
+            className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-[15px] cursor-pointer text-white"
+            style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}
+          >
+            <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--white))" />
+            <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold">Ask AI</p>
+            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.85)' }}>
+              &quot;Can I paint my fence black?&quot;
+            </p>
+          </button>
+        )}
       </div>
     </div>
   );

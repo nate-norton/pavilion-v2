@@ -251,15 +251,18 @@ export function Documents() {
             ))}
           </div>
 
-          <button
-            type="button"
-            onClick={askAiDocsSummary}
-            className="w-full border-none text-white rounded-[14px] text-[13.5px] font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3.5"
-            style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))', padding: '13px 0' }}
-          >
-            <PhIcon name="ph-fill ph-sparkle" size={15} />
-            Ask AI to summarize
-          </button>
+          {/* Demo only — live has no assistant to summarize with. */}
+          {repo.isDemo() && (
+            <button
+              type="button"
+              onClick={askAiDocsSummary}
+              className="w-full border-none text-white rounded-[14px] text-[13.5px] font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3.5"
+              style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))', padding: '13px 0' }}
+            >
+              <PhIcon name="ph-fill ph-sparkle" size={15} />
+              Ask AI to summarize
+            </button>
+          )}
 
           {showEx && (
             <div style={SECTION_CARD}>
