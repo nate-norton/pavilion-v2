@@ -11,6 +11,7 @@ import { TypingDots } from '../components/TypingDots';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
+import { StackedCard, StackedCards } from '../components/StackedCard';
 import { ThemeProvider } from '../theme/ThemeProvider';
 import { BRAND_THEMES, brandTokens } from '../theme/themes';
 
@@ -87,6 +88,13 @@ const MOTION = [
 const ICON_SAMPLE = ['house-line', 'users-three', 'calendar-check', 'chat-circle', 'sparkle', 'shield-check', 'swimming-pool', 'gavel', 'receipt', 'bell', 'map-trifold', 'heart'];
 
 /** Reads the resolved rgb triplet of a CSS var so swatches show real values. */
+// Self-contained warm placeholder for the stacked-card image slot (no network).
+const LANDSCAPE =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E8A788"/><stop offset="1" stop-color="#8A5138"/></linearGradient></defs><rect width="400" height="220" fill="url(#g)"/><circle cx="300" cy="60" r="46" fill="#D9A441" opacity="0.55"/><path d="M0 180 Q120 120 220 175 T400 165 V220 H0 Z" fill="#2A9D5C" opacity="0.45"/></svg>`,
+  );
+
 function useTokenRgb(token: string) {
   const ref = useRef<HTMLDivElement>(null);
   const [rgb, setRgb] = useState('');
@@ -388,6 +396,33 @@ export function DesignSystem() {
             <Spec name="Back button" use="Return from a sub-view or sheet">
               <BackButton onClick={() => {}} />
             </Spec>
+          </div>
+        </Section>
+
+        <Section title="Stacked cards" sub="Layered, big-radius editorial cards. Each overlaps the one below; warm washes replace the reference green. Full-bleed image anchors to the bottom edge.">
+          <div className="mx-auto max-w-[380px]">
+            <StackedCards overlap={22}>
+              <StackedCard
+                eyebrow="This week"
+                title="Study the pool schedule for summer"
+                tint="sage"
+                onClick={() => {}}
+              />
+              <StackedCard
+                title="Discuss dues at the next board meeting"
+                tint="paper"
+                onClick={() => {}}
+              />
+              <StackedCard
+                eyebrow="Spotlight"
+                title="Becoming a good neighbor"
+                body="I look out for the people on my street, show up for the commons, and leave the pavilion better than I found it."
+                tint="blush"
+                image={LANDSCAPE}
+                imageCaption="ADA LOVELACE"
+                imageAlt="Placeholder portrait"
+              />
+            </StackedCards>
           </div>
         </Section>
 
