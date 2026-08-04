@@ -11,6 +11,7 @@ import { TypingDots } from '../components/TypingDots';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
+import { StackedCard, StackedCards, StackedPanel } from '../components/StackedCard';
 import { ThemeProvider } from '../theme/ThemeProvider';
 import { BRAND_THEMES, brandTokens } from '../theme/themes';
 
@@ -85,6 +86,13 @@ const MOTION = [
 ];
 
 const ICON_SAMPLE = ['house-line', 'users-three', 'calendar-check', 'chat-circle', 'sparkle', 'shield-check', 'swimming-pool', 'gavel', 'receipt', 'bell', 'map-trifold', 'heart'];
+
+// Self-contained warm placeholder for the stacked-card image slot (no network).
+const LANDSCAPE =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E8A788"/><stop offset="1" stop-color="#8A5138"/></linearGradient></defs><rect width="400" height="220" fill="url(#g)"/><circle cx="300" cy="60" r="46" fill="#D9A441" opacity="0.55"/><path d="M0 180 Q120 120 220 175 T400 165 V220 H0 Z" fill="#2A9D5C" opacity="0.45"/></svg>`,
+  );
 
 /** Reads the resolved rgb triplet of a CSS var so swatches show real values. */
 function useTokenRgb(token: string) {
@@ -388,6 +396,48 @@ export function DesignSystem() {
             <Spec name="Back button" use="Return from a sub-view or sheet">
               <BackButton onClick={() => {}} />
             </Spec>
+          </div>
+        </Section>
+
+        <Section title="Stacked cards" sub="Layered, big-radius editorial cards. Each overlaps the one below; warm washes replace the reference green. Full-bleed image anchors to the bottom edge.">
+          <div className="mx-auto max-w-[380px]">
+            <StackedCards overlap={22}>
+              <StackedCard
+                eyebrow="This week"
+                title="Study the pool schedule for summer"
+                tint="sage"
+                onClick={() => {}}
+              />
+              <StackedCard
+                title="Discuss dues at the next board meeting"
+                tint="paper"
+                onClick={() => {}}
+              />
+              <StackedCard
+                eyebrow="Spotlight"
+                title="Becoming a good neighbor"
+                body="I look out for the people on my street, show up for the commons, and leave the pavilion better than I found it."
+                tint="blush"
+                image={LANDSCAPE}
+                imageCaption="ADA LOVELACE"
+                imageAlt="Placeholder portrait"
+              />
+            </StackedCards>
+
+            <p className="mt-6 mb-2 text-[12px] font-bold text-taupe">
+              StackedPanel — bare layered surface for existing rich content (used on Today &amp; HOA)
+            </p>
+            <StackedCards overlap={22}>
+              <StackedPanel tint="navy">
+                <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
+                  Tonight · 5–8 PM
+                </p>
+                <p className="m-0 font-serif text-[17px] leading-[1.2] text-cream">Taco cart at the clubhouse</p>
+              </StackedPanel>
+              <StackedPanel flush className="px-[18px] pb-3 pt-[22px]">
+                <p className="m-0 text-[13.5px] font-bold text-navy">Neighborhood map · 5 pins today</p>
+              </StackedPanel>
+            </StackedCards>
           </div>
         </Section>
 
