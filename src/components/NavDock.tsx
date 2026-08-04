@@ -41,7 +41,8 @@ export function NavDock() {
   };
 
   return (
-    <div
+    <nav
+      aria-label="Main"
       className="absolute left-3.5 right-3.5 z-[70]"
       style={{ bottom: 'calc(14px + env(safe-area-inset-bottom, 0px))' }}
     >
@@ -73,6 +74,6 @@ export function NavDock() {
         </div>
         {TABS_RIGHT.map(renderTab)}
       </div>
-    </div>
+    </nav>
   );
 }

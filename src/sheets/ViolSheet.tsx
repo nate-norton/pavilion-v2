@@ -26,7 +26,9 @@ export function ViolSheet() {
   // Live: a generic notice from the real violation row — no scripted #V-31 story.
   if (!repo.isDemo()) {
     return (
-      <Sheet open={state.violSheetOpen} onClose={closeViol} maxHeight="86%">
+      <Sheet
+      label="Courtesy notice"
+      open={state.violSheetOpen} onClose={closeViol} maxHeight="86%">
         {!viol ? (
           <div className="text-center pt-1.5 pb-1">
             <PhIcon name="ph-fill ph-check-circle" size={40} color="rgb(var(--sage))" />

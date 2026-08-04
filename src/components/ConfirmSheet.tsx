@@ -41,7 +41,9 @@ export function ConfirmSheet() {
   const close = useCallback(() => setReq(null), []);
 
   return (
-    <Sheet open={!!req} onClose={close}>
+    <Sheet
+      label="Confirm"
+      open={!!req} onClose={close}>
       {req && (
         <div>
           <p className="m-0 mb-1 font-serif text-xl text-navy">{req.title}</p>

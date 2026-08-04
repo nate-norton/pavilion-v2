@@ -4,6 +4,7 @@ description: Warm, plainspoken community software for self-managed HOAs
 colors:
   porch-shade: "rgb(26 51 82)"
   porch-light-ember: "rgb(224 106 62)"
+  porch-light-ember-deep: "rgb(172 80 45)"
   terracotta: "rgb(199 90 49)"
   blush: "rgb(251 237 228)"
   cream: "rgb(245 240 230)"
@@ -11,15 +12,17 @@ colors:
   parchment: "rgb(249 245 236)"
   sand: "rgb(237 230 214)"
   sage: "rgb(42 157 92)"
+  sagedark: "rgb(32 120 71)"
   mint: "rgb(233 246 238)"
   gold: "rgb(217 164 65)"
+  golddark: "rgb(140 105 40)"
   goldpale: "rgb(251 243 224)"
   red: "rgb(199 64 46)"
   ink: "rgb(62 76 99)"
-  stone: "rgb(138 131 117)"
-  stonelight: "rgb(163 155 139)"
+  stone: "rgb(107 101 89)"
+  stonelight: "rgb(115 109 97)"
   bark: "rgb(91 85 74)"
-  taupe: "rgb(122 115 101)"
+  taupe: "rgb(99 93 82)"
 typography:
   display:
     fontFamily: "Young Serif, serif"
@@ -104,7 +107,7 @@ spacing:
   xl: "24px"
 components:
   button-primary:
-    backgroundColor: "{colors.porch-light-ember}"
+    backgroundColor: "{colors.porch-light-ember-deep}"
     textColor: "{colors.paper}"
     rounded: "{rounded.md}"
     padding: "14px 18px"
@@ -185,10 +188,13 @@ action, and a deep dusk blue for everything you read.
   A deep dusk blue that reads warm against cream rather than corporate.
 
 ### Secondary
-- **Porch Light Ember** (rgb 224 106 62): The single warm glow. Primary CTAs,
-  the Ask AI button, urgent status dots, and quorum progress. Deepens to
-  **Terracotta** (rgb 199 90 49) for pressed states, dense text on light
-  backgrounds, and the second stop of the AI button's gradient.
+- **Porch Light Ember** (rgb 224 106 62): The single warm glow — but a *fill*
+  only: status dots, quorum progress, gradients, large display type. White on
+  it measures 3.33:1, so it may never carry text.
+- **Porch Light Ember Deep** (rgb 172 80 45): The same glow, text-safe. Every
+  primary CTA and every ember-coloured word uses this (white on it 5.33:1,
+  it on blush 4.65:1). Reaching for plain ember on a button reintroduces a
+  WCAG 1.4.3 failure.
 - **Blush** (rgb 251 237 228): The ember's whisper — pill backgrounds behind
   ember text, courtesy-notice panels, anything that needs the accent's warmth
   without its volume.
@@ -209,8 +215,8 @@ action, and a deep dusk blue for everything you read.
   panels — a half-step warmer than paper, used when something is recessed
   rather than raised.
 - **Sand** (rgb 237 230 214): Segmented-control tracks and quiet dividers.
-- **Bark** (rgb 91 85 74) / **Taupe** (rgb 122 115 101): Secondary body text.
-- **Stone** (rgb 138 131 117) / **Stonelight** (rgb 163 155 139): Labels,
+- **Bark** (rgb 91 85 74) / **Taupe** (rgb 99 93 82): Secondary body text.
+- **Stone** (rgb 107 101 89) / **Stonelight** (rgb 115 109 97): Labels,
   captions, inactive nav, and metadata.
 - **Ink** (rgb 62 76 99): Long-form reading text where full Porch Shade would
   be too heavy.
@@ -220,6 +226,11 @@ action, and a deep dusk blue for everything you read.
 **The Porch Light Rule.** The ember accent appears on at most one primary
 action per view. It is the light you walk toward; two lights and you don't know
 which porch is yours. Everything else uses paper, sand, or Porch Shade.
+
+**The Text-Bearing Accent Rule.** Ember is a fill; Ember Deep carries text.
+Any colour that sits under white, or is itself set as type, must clear 4.5:1 on
+every bed it lands on — which is why sage, gold and sky each have a dark
+variant and the bright ones never appear as words.
 
 **The No Gray Rule.** There is no neutral gray in this system. Every neutral is
 warmed with yellow — cream, sand, parchment, stone, taupe, bark. A `#888` gray
@@ -275,8 +286,10 @@ floating dock. Cards stack with 10–14px gaps; related rows inside a card
 separate with hairline dividers rather than whitespace.
 
 Spacing rhythm runs on a loose 4px grid, clustering at 6 / 10 / 14 / 18 / 24px.
-Density is intentionally low: a card row is ~44px minimum, and tap targets
-never fall below that.
+Density is intentionally low: a card row is ~44px minimum. Tap targets clear
+the WCAG 2.2 AA floor of 24×24 everywhere, and most reach 36px+, but several
+inline controls sit between 25px and 38px — the 44px platform convention is an
+aspiration here, not a rule the system currently keeps.
 
 **The Dock Clearance Rule.** The nav dock floats 14px above the safe-area
 inset. Every scrollable screen ends with at least 40px of padding so the last
@@ -361,8 +374,10 @@ smallest radius in the system is 5px, and that is a progress-bar cap.
 - **Style:** Parchment fill, hairline border at 14% Porch Shade, 13px radius,
   12×16px padding, semibold Porch Shade text
 - **Placeholder:** Stone
-- **Focus:** Outline removed in favor of the border; focus states are the
-  system's weakest area and are a known gap against the WCAG 2.2 AA commitment
+- **Focus:** A global `:focus-visible` ring (2px Porch Light Ember Deep, 2px
+  offset) applies everywhere and inverts to cream on Porch Shade surfaces. It
+  is declared at the global layer specifically so it survives the `outline-none`
+  utilities scattered through the screens
 
 ### Navigation
 - **Style:** A floating Porch Shade dock, 66px tall, 26px radius, spanning five

@@ -49,7 +49,7 @@ export function ComposeSheet() {
   };
 
   return (
-    <Sheet open onClose={close}>
+    <Sheet label="Share something with neighbors" open onClose={close}>
       {posted ? (
         <div className="text-center py-6 animate-fadeup">
           <Confetti />

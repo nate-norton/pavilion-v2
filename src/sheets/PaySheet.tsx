@@ -1,7 +1,6 @@
 import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { Toggle } from '../components/Toggle';
-import { Confetti } from '../components/Confetti';
 import { usePavStore } from '../store/store';
 import { getDelinquent } from '../store/selectors';
 import { useRepository } from '../data/repo';
@@ -32,7 +31,9 @@ export function PaySheet() {
   const payBtnLabel = state.autopay ? `${payAmountLabel} and turn on autopay` : payAmountLabel;
 
   return (
-    <Sheet open={state.paySheetOpen} onClose={closePay}>
+    <Sheet
+      label="Pay your assessment"
+      open={state.paySheetOpen} onClose={closePay}>
       {notPaid && (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">{payTitle}</p>
@@ -184,7 +185,6 @@ export function PaySheet() {
       )}
       {paid && (
         <div className="relative text-center pt-2 pb-1 animate-fadeup">
-          <Confetti />
           <PhIcon name="ph-fill ph-check-circle" size={52} color="rgb(var(--sage))" />
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-[22px] text-navy">
             Paid. Done in two taps.

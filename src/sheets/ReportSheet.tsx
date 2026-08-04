@@ -43,7 +43,9 @@ export function ReportSheet() {
   };
 
   return (
-    <Sheet open={state.reportOpen} onClose={closeReport} maxHeight="86%">
+    <Sheet
+      label="Report an issue to the board"
+      open={state.reportOpen} onClose={closeReport} maxHeight="86%">
       {!state.reportSubmitted ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">Report a problem</p>

@@ -46,9 +46,8 @@ export function AppToast() {
     <button
       type="button"
       onClick={() => setToast(null)}
-      role="status"
-      aria-live="polite"
-      className="w-full border-none font-sans bg-transparent text-left absolute left-4 right-4 z-[95] flex items-start gap-2.5 cursor-pointer animate-fadeup"
+      aria-label="Dismiss notification"
+      className="border-none font-sans bg-transparent text-left absolute left-4 right-4 z-[95] flex items-start gap-2.5 cursor-pointer animate-fadeup"
       style={{
         bottom: 96,
         background: tone.bg,
@@ -59,7 +58,17 @@ export function AppToast() {
       }}
     >
       <PhIcon name={tone.icon} size={17} color={tone.iconColor} className="flex-shrink-0 mt-px" />
-      <p className="m-0 flex-1 text-[12.5px] font-bold leading-[1.45]" style={{ color: tone.fg }}>
+      {/*
+        The live region sits inside the button rather than on it: role="status"
+        on a <button> replaces the button role, so assistive tech announced the
+        message but lost the "tap to dismiss" affordance entirely.
+      */}
+      <p
+        role="status"
+        aria-live="polite"
+        className="m-0 flex-1 text-[12.5px] font-bold leading-[1.45]"
+        style={{ color: tone.fg }}
+      >
         {toast.message}
       </p>
     </button>

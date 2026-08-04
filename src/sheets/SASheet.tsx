@@ -16,7 +16,9 @@ export function SASheet() {
   const saPaid = state.saPaid;
 
   return (
-    <Sheet open={state.saSheetOpen} onClose={closeSA} maxHeight="88%">
+    <Sheet
+      label="Special assessment"
+      open={state.saSheetOpen} onClose={closeSA} maxHeight="88%">
       {notSaPaid && (
         <div>
           <p className="m-0 mb-0.5 font-serif text-[22px] text-navy">Roof-reserve assessment</p>

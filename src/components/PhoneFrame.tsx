@@ -55,7 +55,7 @@ export function PhoneFrame() {
     >
       <ErrorBoundary>
         <div key={tab} className={`absolute inset-0 ${slideClass}`}>
-          <div className="pav-zoom w-full h-full relative">
+          <main className="pav-zoom w-full h-full relative">
           {tab === 'today' ? (
             <Today />
           ) : tab === 'commons' ? (
@@ -67,7 +67,7 @@ export function PhoneFrame() {
           ) : (
             <div className="pav-scroll absolute inset-0 overflow-y-auto" />
           )}
-          </div>
+          </main>
         </div>
         <Overlays />
         <NavDock />

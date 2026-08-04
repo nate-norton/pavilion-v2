@@ -30,7 +30,9 @@ export function ArcSheet() {
   const demo = repo.isDemo();
 
   return (
-    <Sheet open={state.arcSheetOpen} onClose={closeArc} maxHeight="86%">
+    <Sheet
+      label="New architectural request"
+      open={state.arcSheetOpen} onClose={closeArc} maxHeight="86%">
       <p className="m-0 mb-0.5 font-serif text-xl text-navy">New ARC request</p>
       <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
         Most requests get a decision within 7 days.
