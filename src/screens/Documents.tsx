@@ -1,5 +1,6 @@
 import { useRef, useState, type CSSProperties } from 'react';
 import { BackButton } from '../components/BackButton';
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 import { useDocuments, useDocSections, useMember, useRepository } from '../data/repo';
@@ -87,13 +88,15 @@ export function Documents() {
               : 'Every governing document, in one place.'}
           </p>
           {DOCS.length === 0 && (
-            <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-              <PhIcon name="ph-fill ph-files" size={26} color="rgb(var(--claypale))" />
-              <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No documents yet</p>
-              <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-                CC&amp;Rs, bylaws, budgets, and minutes appear here once your board publishes them.
-              </p>
-            </div>
+            <EmptyState
+              icon="ph-fill ph-files"
+              title="No documents yet"
+              body={
+                canManage
+                  ? 'Start with the CC&Rs and bylaws — they answer the questions neighbors ask you most. Publish below.'
+                  : 'CC&Rs, bylaws, budgets, and minutes appear here once your board publishes them.'
+              }
+            />
           )}
           <div className="flex flex-col gap-[9px]">
             {DOCS.map((d) => (

@@ -9,6 +9,7 @@ import { Toggle } from '../components/Toggle';
 import { TypingDots } from '../components/TypingDots';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { BackButton } from '../components/BackButton';
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { ThemeProvider } from '../theme/ThemeProvider';
 import { BRAND_THEMES, brandTokens } from '../theme/themes';
@@ -164,6 +165,25 @@ export function Gallery() {
             <button className="border-none rounded-2xl px-5 py-3 text-[14px] font-extrabold text-white cursor-pointer" style={{ background: 'rgb(var(--ember))' }}>Primary CTA</button>
             <button className="rounded-2xl px-5 py-3 text-[14px] font-extrabold cursor-pointer" style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: 'none' }}>Navy</button>
             <button className="rounded-2xl px-5 py-3 text-[14px] font-extrabold cursor-pointer bg-transparent" style={{ border: '1.5px solid rgb(var(--sagedark) / 0.35)', color: 'rgb(var(--sagedark))' }}>Ghost</button>
+          </div>
+        </Section>
+
+        <Section title="Empty states">
+          {/* Both roles side by side — the pair is the point: the same absence
+              reads as a wait for a resident and as a door for the board. */}
+          <div className="flex flex-col gap-4 max-w-[420px]">
+            <EmptyState
+              icon="ph-fill ph-calendar-check"
+              title="No amenities set up yet"
+              body="When your board adds the clubhouse, pool, or courts, you’ll book them here."
+            />
+            <EmptyState
+              icon="ph-fill ph-calendar-check"
+              title="No amenities set up yet"
+              body="Add the clubhouse, pool, or courts and neighbors book them themselves — no more sign-up sheet on the door."
+              actionLabel="Add an amenity"
+              onAction={() => {}}
+            />
           </div>
         </Section>
 

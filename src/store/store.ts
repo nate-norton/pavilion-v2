@@ -61,6 +61,8 @@ export interface PavData {
   arcSubmitted: boolean;
   arcApprovedByBoard: boolean;
   boardMode: boolean;
+  /** Board-only setup checklist hidden by hand; it also self-retires when complete. */
+  boardSetupDismissed: boolean;
   boardTab: string;
   reportTicketed: boolean;
   gateScheduled: boolean;
@@ -233,6 +235,7 @@ export const dataDefaults: PavData = {
   arcSubmitted: false,
   arcApprovedByBoard: false,
   boardMode: false,
+  boardSetupDismissed: false,
   boardTab: 'desk',
   reportTicketed: false,
   gateScheduled: false,

@@ -1,3 +1,4 @@
+import { BoardSetupCard } from '../components/BoardSetupCard';
 import { PhIcon } from '../components/PhIcon';
 import { useArc, useAssessment, useDues, useEvents, useMember, useNotifications, usePortfolio, useReservation, useRepository, useViolation, useVotes } from '../data/repo';
 import { usePavStore } from '../store/store';
@@ -149,6 +150,11 @@ export function Today() {
         </div>
       </div>
       <p className="m-0 mb-5 text-sm text-taupe font-semibold">{attnSummary}</p>
+
+      {/* Board activation — above "Needs you" because on a fresh community
+          there is nothing in "Needs you" yet, and this is the only thing
+          anyone can actually do. Renders itself null once setup is done. */}
+      <BoardSetupCard />
 
       {/* Needs you: one card, one list */}
       <div className="bg-paper rounded-[20px] flex flex-col" style={{ border: '1px solid rgb(var(--navy) / 0.1)', padding: '6px 18px' }}>

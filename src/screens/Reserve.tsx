@@ -1,3 +1,4 @@
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { useAmenities, useMember, useReservationSlots, useReservationDays, useReservation, useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
@@ -300,13 +301,17 @@ export function Reserve() {
         )}
 
         {AMENS.length === 0 && (
-          <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-            <PhIcon name="ph-fill ph-calendar-check" size={26} color="rgb(var(--claypale))" />
-            <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No amenities set up yet</p>
-            <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-              When your board adds the clubhouse, pool, or courts, you&apos;ll book them here.
-            </p>
-          </div>
+          <EmptyState
+            icon="ph-fill ph-calendar-check"
+            title="No amenities set up yet"
+            body={
+              canManage
+                ? 'Add the clubhouse, pool, or courts and neighbors book them themselves — no more sign-up sheet on the door.'
+                : 'When your board adds the clubhouse, pool, or courts, you’ll book them here.'
+            }
+            actionLabel={canManage ? 'Add an amenity' : undefined}
+            onAction={canManage ? () => set({ manageAmenOpen: true }) : undefined}
+          />
         )}
         {canManage && (
           <button

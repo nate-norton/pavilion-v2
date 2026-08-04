@@ -839,7 +839,7 @@ export function BoardDesk() {
       {state.boardTab === 'req' && !demo && (
         boardArcQueue.length === 0 ? (
           <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-            <PhIcon name="ph-fill ph-tray" size={22} color="rgb(var(--claypale))" />
+            <div className="flex justify-center"><PhIcon name="ph-fill ph-tray" size={22} color="rgb(var(--claypale))" /></div>
             <p className="m-0 mt-2 text-[13px] font-bold text-navy">No requests yet</p>
             <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
               ARC requests land here as residents submit them.
@@ -1121,7 +1121,7 @@ export function BoardDesk() {
 
       {state.boardTab === 'money' && !demo && (
         <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <PhIcon name="ph-fill ph-coins" size={22} color="rgb(var(--claypale))" />
+          <div className="flex justify-center"><PhIcon name="ph-fill ph-coins" size={22} color="rgb(var(--claypale))" /></div>
           <p className="m-0 mt-2 text-[13px] font-bold text-navy">No financials yet</p>
           <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
             Collections, budget tracking, and the aging report switch on once dues are issued.

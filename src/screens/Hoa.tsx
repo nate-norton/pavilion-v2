@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusTimeline } from '../components/StatusTimeline';
 import { Confetti } from '../components/Confetti';
 import { usePavStore } from '../store/store';
-import { useVotes, useArc, useIssues, useDecisions, useMeetings, useRepository } from '../data/repo';
+import { useVotes, useArc, useIssues, useDecisions, useMeetings, useMember, useRepository } from '../data/repo';
 import type { OpenVote } from '../data/repo';
 
 const DUES_LEGEND = [
@@ -45,6 +46,10 @@ export function Hoa() {
   // Demo-flavor panels (finance breakdown, meeting) have no live data domain
   // yet — a live community hides them rather than showing fabricated numbers.
   const demo = repo.isDemo();
+  const member = useMember();
+  // Empty states are a dead end for the one person who can fill them, so the
+  // board gets an action where residents get an honest wait.
+  const isBoard = !demo && member?.role === 'board';
 
   return (
     <div className="absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: '64px 18px 150px' }}>
@@ -57,15 +62,18 @@ export function Hoa() {
       {openAll.length > 0 ? (
         <>{openAll.map((v) => <VoteCard key={v.id} vote={v} demo={demo} />)}</>
       ) : (
-        <div
-          className="bg-paper rounded-[20px] p-[18px] mb-3.5 text-center"
-          style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
-        >
-          <PhIcon name="ph-fill ph-scales" size={26} color="rgb(var(--claypale))" />
-          <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No open votes</p>
-          <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-            When your board opens a ballot, it’ll appear here.
-          </p>
+        <div className="mb-3.5">
+          <EmptyState
+            icon="ph-fill ph-scales"
+            title="No open votes"
+            body={
+              isBoard
+                ? 'Put a decision to the community and every household sees the tally and quorum as it happens.'
+                : 'When your board opens a ballot, it’ll appear here.'
+            }
+            actionLabel={isBoard ? 'Open a vote' : undefined}
+            onAction={isBoard ? () => set({ boardMode: true, boardTab: 'desk', voteDraftOpen: true }) : undefined}
+          />
         </div>
       )}
 

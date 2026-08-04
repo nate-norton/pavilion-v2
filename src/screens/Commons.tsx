@@ -1,5 +1,6 @@
 import { useState, type KeyboardEvent } from 'react';
 import { Avatar } from '../components/Avatar';
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
@@ -26,6 +27,8 @@ export function Commons() {
   const feed = useFeed();
   const member = useMember();
   const chatIndex = useChatSeed();
+  // Board members can fill the empty directory themselves; residents cannot.
+  const isBoard = !repo.isDemo() && member?.role === 'board';
   const unreadTotal = Object.values(chatIndex).reduce((n, e) => n + (e.unread || 0), 0);
 
   const addComment = () => {
@@ -81,13 +84,13 @@ export function Commons() {
 
           <div className="flex flex-col gap-3">
             {feed.length === 0 ? (
-              <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-                <PhIcon name="ph-fill ph-chats-circle" size={26} color="rgb(var(--claypale))" />
-                <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">Nothing shared yet</p>
-                <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-                  Be the first to share something with your neighbors.
-                </p>
-              </div>
+              <EmptyState
+                icon="ph-fill ph-chats-circle"
+                title="Nothing shared yet"
+                body="Be the first to share something with your neighbors."
+                actionLabel="Share something"
+                onAction={() => set({ composeOpen: true })}
+              />
             ) : !repo.isDemo() ? (
               // Live: real feed posts with reactions, comments, photos, pins.
               feed.map((p) => <LivePostCard key={p.id} post={p} isBoard={member?.role === 'board'} />)
@@ -418,13 +421,17 @@ export function Commons() {
             </p>
           </div>
           {DIR.length === 0 && (
-            <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-              <PhIcon name="ph-fill ph-users-three" size={26} color="rgb(var(--claypale))" />
-              <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No neighbors here yet</p>
-              <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-                Neighbors appear as they join and opt in to the directory.
-              </p>
-            </div>
+            <EmptyState
+              icon="ph-fill ph-users-three"
+              title="No neighbors here yet"
+              body={
+                isBoard
+                  ? 'Invite your neighbors and the directory fills itself as they join and opt in.'
+                  : 'Neighbors appear as they join and opt in to the directory.'
+              }
+              actionLabel={isBoard ? 'Send invites' : undefined}
+              onAction={isBoard ? () => set({ boardMode: true, boardTab: 'desk' }) : undefined}
+            />
           )}
           <div className="flex flex-col gap-2.5">
             {DIR.map((d) => {
@@ -478,13 +485,11 @@ export function Commons() {
             </p>
           </div>
           {FREE.length === 0 && (
-            <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-              <PhIcon name="ph-fill ph-gift" size={26} color="rgb(var(--claypale))" />
-              <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">Nothing listed right now</p>
-              <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-                Have something to give away? Listings are on the way.
-              </p>
-            </div>
+            <EmptyState
+              icon="ph-fill ph-gift"
+              title="Nothing listed right now"
+              body="Have something to give away? Listings are on the way."
+            />
           )}
           <div className="grid grid-cols-2 gap-2.5">
             {FREE.map((f) => {
