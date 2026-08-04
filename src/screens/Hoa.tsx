@@ -5,6 +5,7 @@ import { emitAppSuccess } from '../lib/errorBus';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusTimeline } from '../components/StatusTimeline';
+import { StackedCards, StackedPanel } from '../components/StackedCard';
 import { usePavStore } from '../store/store';
 import { useVotes, useArc, useIssues, useDecisions, useMeetings, useMember, useLoadState, useRepository } from '../data/repo';
 import type { OpenVote } from '../data/repo';
@@ -79,9 +80,36 @@ export function Hoa() {
         Every dollar, vote, and decision — visible to every household.
       </p>
 
-      {/* Open votes (live can carry several at once; the demo has its one) */}
+      {/*
+       * Open votes (live can carry several at once; the demo has its one),
+       * with the annual meeting tucked under the last ballot. The empty state
+       * stays outside the stack — nothing to layer against.
+       */}
       {openAll.length > 0 ? (
-        <>{openAll.map((v) => <VoteCard key={v.id} vote={v} demo={demo} />)}</>
+        <StackedCards overlap={22} className="mb-3.5">
+          {openAll.map((v) => <VoteCard key={v.id} vote={v} demo={demo} />)}
+          {demo && (
+          <StackedPanel flush className="px-4 pb-3.5 pt-[22px]">
+            <button type="button"
+              onClick={() => set({ meetingOpen: true })}
+              className="w-full border-none bg-transparent font-sans text-left flex items-center gap-3 cursor-pointer"
+            >
+              <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-goldpale">
+                <PhIcon name="ph-fill ph-users-four" size={21} color="rgb(var(--gold))" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="m-0 mb-0.5 text-sm font-bold text-navy">Annual meeting · Tue, Jul 15</p>
+                <p className="m-0 text-xs font-semibold text-stone">
+                  7 PM · Clubhouse + Zoom · 2 board seats open
+                </p>
+              </div>
+              <span className="text-[13px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--terracotta))' }}>
+                Preview →
+              </span>
+            </button>
+          </StackedPanel>
+          )}
+        </StackedCards>
       ) : (
         <div className="mb-3.5">
           <EmptyState
@@ -99,8 +127,11 @@ export function Hoa() {
         </div>
       )}
 
-      {/* Annual meeting (demo-only until a meetings domain exists) */}
-      {demo && (
+      {/*
+       * Annual meeting (demo-only until a meetings domain exists). With an
+       * open ballot it renders tucked under the stack above instead.
+       */}
+      {demo && openAll.length === 0 && (
       <button type="button"
         onClick={() => set({ meetingOpen: true })}
         className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
@@ -459,7 +490,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
   const optionTotal = vote.options.reduce((n, o) => n + o.tally, 0);
 
   return (
-    <div className="bg-navy rounded-[20px] p-[18px] mb-3.5 text-cream">
+    <StackedPanel tint="navy" className="text-cream">
       <p
         className="m-0 mb-1.5 text-[11px] font-bold uppercase"
         style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}
@@ -647,6 +678,6 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
           </button>
         </div>
       )}
-    </div>
+    </StackedPanel>
   );
 }
