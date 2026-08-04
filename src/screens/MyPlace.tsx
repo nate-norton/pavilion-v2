@@ -229,7 +229,7 @@ export function MyPlace() {
                 className="rounded-full px-2 py-0.5 text-[9.5px] font-bold"
                 style={{ background: 'rgb(var(--peach) / 0.2)', color: 'rgb(var(--peach))', letterSpacing: '0.06em' }}
               >
-                TREASURER
+                BOARD
               </span>
             </div>
             <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>

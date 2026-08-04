@@ -55,9 +55,19 @@ export function Today() {
     n === 0
       ? 'All caught up — enjoy the sunshine.'
       : n === 1
-        ? 'One thing needs you before Thursday.'
-        : n + ' things need you before Thursday.';
+        ? 'One thing needs you.'
+        : n + ' things need you.';
   const quorumPct = vote?.quorumPct ?? 0;
+  /*
+   * The closing date comes off the ballot, never a literal. closesLabel reads
+   * 'Open vote · closes Thu, Jul 3'; the row only wants the closing clause,
+   * and a ballot with no deadline simply doesn't get one.
+   */
+  const voteCloses = (() => {
+    const clause = vote?.closesLabel?.split('·').pop()?.trim();
+    if (!clause) return null;
+    return clause.charAt(0).toUpperCase() + clause.slice(1);
+  })();
   const showAllClear = n === 0;
   const showAlert = state.showAlert && !state.alertDismissed;
   const showNudge = !state.nudgeDismissed;
@@ -224,7 +234,7 @@ export function Today() {
             <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{vote?.title ?? 'Open vote'}</p>
-              <p className={ROW_SUB}>Closes Thursday · quorum at {quorumPct}%</p>
+              <p className={ROW_SUB}>{voteCloses ? voteCloses + ' · ' : ''}quorum at {quorumPct}%</p>
             </div>
             {CARET}
           </button>

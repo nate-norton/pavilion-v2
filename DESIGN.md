@@ -5,7 +5,7 @@ colors:
   porch-shade: "rgb(26 51 82)"
   porch-light-ember: "rgb(224 106 62)"
   porch-light-ember-deep: "rgb(172 80 45)"
-  terracotta: "rgb(199 90 49)"
+  terracotta: "rgb(168 74 38)"
   blush: "rgb(251 237 228)"
   cream: "rgb(245 240 230)"
   paper: "rgb(255 254 250)"
@@ -15,7 +15,7 @@ colors:
   sagedark: "rgb(32 120 71)"
   mint: "rgb(233 246 238)"
   gold: "rgb(217 164 65)"
-  golddark: "rgb(140 105 40)"
+  golddark: "rgb(130 97 36)"
   goldpale: "rgb(251 243 224)"
   red: "rgb(199 64 46)"
   ink: "rgb(62 76 99)"
@@ -244,6 +244,23 @@ which porch is yours. Everything else uses paper, sand, or Porch Shade.
 Any colour that sits under white, or is itself set as type, must clear 4.5:1 on
 every bed it lands on — which is why sage, gold and sky each have a dark
 variant and the bright ones never appear as words.
+
+**Terracotta is text-bearing, and the rule's blind spot was that it never said
+so.** The rule above named ember, sage, gold and sky, so terracotta was left
+unguarded — and it is the token that per-community theming remaps, which makes
+it the one accent set as type on the most surfaces (~40, including the
+"Review & pay" pill on Today). At `199 90 49` it measured 3.75:1 on cream and
+3.72:1 on blush: the exact WCAG 1.4.3 failure the audit had already fixed on
+every primary button, re-entered through the side door. It is now `168 74 38`
+(cream 5.03, blush 4.99, paper 5.67, parchment 5.26, sand 4.60, white on it
+5.72). **A brand theme that overrides `terracotta` must clear the same floor
+against cream and against its own blush** — Meadow Park's `34 128 73` did not
+(4.44) and was darkened to `30 112 64`.
+
+The same audit found Gold Dark clearing goldpale (4.56) but failing cream at
+4.44 — and cream is the page every screen sits on, so gold metadata was below
+AA anywhere it sat outside a goldpale pill. It is now `130 97 36`. **Check a
+text-bearing colour against cream, not only against its own tinted pill.**
 
 **The No Gray Rule.** There is no neutral gray in this system. Every neutral is
 warmed with yellow — cream, sand, parchment, stone, taupe, bark. A `#888` gray

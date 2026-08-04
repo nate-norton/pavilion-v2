@@ -128,7 +128,7 @@ export function BoardDesk() {
         </button>
         <div className="flex flex-col items-end gap-1.5">
           <span className="rounded-full px-3 py-[5px] text-[10.5px] font-bold bg-navy text-cream" style={{ letterSpacing: '0.1em' }}>
-            {demo ? 'TREASURER' : 'BOARD'}
+            BOARD
           </span>
           {!demo && (
             <button
@@ -147,7 +147,12 @@ export function BoardDesk() {
         {triage.summary}
       </p>
 
-      <div className="grid grid-cols-3 gap-[9px] mb-3">
+      {/*
+        Collected has no live source yet, and a tile that can only ever render
+        an em-dash is decoration. It shows where there is a number behind it
+        and the row closes to two columns where there isn't.
+      */}
+      <div className={'grid gap-[9px] mb-3 ' + (demo ? 'grid-cols-3' : 'grid-cols-2')}>
         <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
           <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--terracotta))' }}>
             Open
@@ -160,12 +165,14 @@ export function BoardDesk() {
           </p>
           <p className="m-0 font-serif text-lg text-navy">{quorum.pct}%</p>
         </div>
-        <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
-            Collected
-          </p>
-          <p className="m-0 font-serif text-lg text-navy">{demo ? '96%' : '—'}</p>
-        </div>
+        {demo && (
+          <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+            <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
+              Collected
+            </p>
+            <p className="m-0 font-serif text-lg text-navy">96%</p>
+          </div>
+        )}
       </div>
 
       <div className="mb-[18px]">

@@ -26,18 +26,35 @@
    * WCAG 1.4.3 failure the audit found on every primary button.
    */
   --emberdeep: 172 80 45;
-  --terracotta: 199 90 49;
+  /*
+   * --terracotta is the *themed* text-bearing accent: brand themes remap it
+   * per community (see src/theme/themes.ts) and it is what accent-coloured
+   * copy, status pills and inline links resolve to. It was 199 90 49, which
+   * measured 3.75:1 on cream and 3.72:1 on blush — below AA — and it is set
+   * as type on ~40 surfaces including the "Review & pay" pill on Today. The
+   * value below clears 4.5:1 on every warm bed in the system (cream 5.03,
+   * blush 4.99, paper 5.67, parchment 5.26, sand 4.60; white on it 5.72).
+   * A brand theme that overrides it must clear the same floor on its own
+   * blush — Meadow Park's original 34 128 73 did not (4.44) and was darkened.
+   */
+  --terracotta: 168 74 38;
   --blush: 251 237 228;
   --peach: 232 167 136;
   --sage: 42 157 92;
   --mint: 233 246 238;
   /* Text-bearing variants: sage/gold are fills. Sage text on mint was
    * 3.11:1 and gold text on goldpale 2.03:1 — the darks below clear
-   * 4.9:1 and 4.56:1 on those beds. */
+   * 4.5:1 on their own beds (sagedark on mint 4.92, on cream 4.82;
+   * golddark on goldpale 5.16, on cream 5.02).
+   *
+   * --golddark was 140 105 40, which cleared goldpale (4.56) but measured
+   * 4.44 on cream — and cream is the page every screen sits on, so gold
+   * metadata text was failing AA wherever it sat outside a goldpale pill.
+   * Darkened until it clears cream and sand too. */
   --sagedark: 32 120 71;
   --gold: 217 164 65;
   --goldpale: 251 243 224;
-  --golddark: 140 105 40;
+  --golddark: 130 97 36;
   --sky: 74 144 226;
   --skydeep: 58 115 181;
   --skypale: 234 243 253;

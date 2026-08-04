@@ -5,7 +5,6 @@ import { emitAppSuccess } from '../lib/errorBus';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusTimeline } from '../components/StatusTimeline';
-import { Confetti } from '../components/Confetti';
 import { usePavStore } from '../store/store';
 import { useVotes, useArc, useIssues, useDecisions, useMeetings, useMember, useLoadState, useRepository } from '../data/repo';
 import type { OpenVote } from '../data/repo';
@@ -552,7 +551,6 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             className="relative rounded-[13px] px-3.5 py-3 flex items-center gap-2.5"
             style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}
           >
-            <Confetti />
             <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sagebright))" className="flex-shrink-0" />
             <p className="m-0 text-[13px] font-bold text-cream">
               You voted <strong>{votedLabel}</strong> · ballot receipt {vote.receipt} · secret ballot
@@ -612,7 +610,6 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             className="relative rounded-[13px] px-3.5 py-3 flex items-center gap-2.5 mb-3.5"
             style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}
           >
-            <Confetti />
             <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sagebright))" className="flex-shrink-0" />
             <p className="m-0 text-[13px] font-bold text-cream">
               Ballot received · receipt {vote.receipt} · secret ballot
