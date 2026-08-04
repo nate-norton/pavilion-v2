@@ -2,6 +2,7 @@ import { BoardSetupCard } from '../components/BoardSetupCard';
 import { PhIcon } from '../components/PhIcon';
 import { useArc, useAssessment, useDues, useEvents, useMember, useNotifications, usePortfolio, useReservation, useRepository, useViolation, useVotes } from '../data/repo';
 import { usePavStore } from '../store/store';
+import { isLiveMode } from '../auth/AuthGate';
 
 // Rows are real buttons so they take keyboard focus and fire on Enter/Space.
 // The resets (w-full/border-none/bg-transparent/text-left/font-sans) keep the
@@ -36,6 +37,8 @@ export function Today() {
   const isOwner = state.role === 'owner';
   const isTenant = state.role === 'tenant';
   const isManager = state.role === 'manager';
+  // Live gates on the real membership role; the demo keeps its owner persona.
+  const isBoardMember = isLiveMode ? member?.role === 'board' : isOwner;
 
   const showPayCardRole = !!dues.current && isOwner;
   const showArcCardRole = !!arc.unseenApproval && isOwner;
@@ -123,6 +126,7 @@ export function Today() {
           <button
             onClick={() => set({ searchOpen: true, searchQ: '' })}
             title="Search"
+            aria-label="Search"
             className="w-9 h-9 rounded-full border-none bg-transparent flex items-center justify-center cursor-pointer"
           >
             <PhIcon name="ph-bold ph-magnifying-glass" size={17} color="rgb(var(--navy))" />
@@ -130,6 +134,7 @@ export function Today() {
           <button
             onClick={() => set({ notifOpen: true })}
             title="Notifications"
+            aria-label="Notifications"
             className="relative w-9 h-9 rounded-full border-none bg-transparent flex items-center justify-center cursor-pointer"
           >
             <PhIcon name="ph ph-bell" size={18} color="rgb(var(--navy))" />
@@ -143,6 +148,7 @@ export function Today() {
           <button
             onClick={() => set({ myPlaceOpen: true })}
             title="My Place"
+            aria-label="My Place — profile and settings"
             className="w-[34px] h-[34px] rounded-full border-none bg-navy flex items-center justify-center text-cream font-extrabold text-[13px] cursor-pointer ml-1.5"
           >
             {member?.initial ?? 'A'}
@@ -150,6 +156,28 @@ export function Today() {
         </div>
       </div>
       <p className="m-0 mb-5 text-sm text-taupe font-semibold">{attnSummary}</p>
+
+      {/* Board desk door. It already existed inside My Place, three taps deep
+          behind a 34px avatar — which meant a first-time board member had no
+          way to learn their tools exist. Navy, not ember: it is a standing
+          door, not the one action of the day (The Porch Light Rule). */}
+      {isBoardMember && (
+        <button
+          type="button"
+          onClick={() => set({ boardMode: true })}
+          className="w-full border-none font-sans text-left bg-navy rounded-[16px] flex items-center gap-3 cursor-pointer mb-3.5"
+          style={{ padding: '13px 15px' }}
+        >
+          <PhIcon name="ph-fill ph-shield-star" size={19} color="rgb(var(--peach))" className="flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <p className="m-0 text-[13.5px] font-bold text-cream">Board desk</p>
+            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.62)' }}>
+              Requests, compliance, money, and the roster
+            </p>
+          </div>
+          <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--cream) / 0.62)" className="flex-shrink-0" />
+        </button>
+      )}
 
       {/* Board activation — above "Needs you" because on a fresh community
           there is nothing in "Needs you" yet, and this is the only thing
@@ -280,7 +308,8 @@ export function Today() {
         <h2 className="m-0 font-serif font-normal text-[19px] text-navy">Around the neighborhood</h2>
         <button
           onClick={() => set({ eventsOpen: true })}
-          className="border-none bg-transparent text-[12.5px] font-bold cursor-pointer p-0 text-stone"
+          className="border-none bg-transparent text-[12.5px] font-bold cursor-pointer px-1 py-1.5 text-stone"
+          style={{ minHeight: 24 }}
         >
           Calendar
         </button>
@@ -358,7 +387,7 @@ export function Today() {
           <button
             onClick={() => set({ chatWith: 'okafor' })}
             className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer flex-shrink-0"
-            style={{ color: 'rgb(var(--terracotta))', padding: '2px 4px' }}
+            style={{ color: 'rgb(var(--terracotta))', padding: '4px 6px', minHeight: 24 }}
           >
             Say hi
           </button>

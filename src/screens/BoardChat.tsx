@@ -3,6 +3,8 @@ import { PhIcon } from '../components/PhIcon';
 import { useArchivedBoardTopics, useBoardChat, useRepository } from '../data/repo';
 import type { BoardMessage } from '../data/repo';
 import { usePavStore } from '../store/store';
+import { confirmDestructive } from '../components/ConfirmSheet';
+import { emitAppSuccess } from '../lib/errorBus';
 
 /** The pinned thread every community always has. Stored as topic = null. */
 const GENERAL = 'General';
@@ -266,7 +268,12 @@ export function BoardChat() {
                   </div>
                   {m.me && (
                     <button
-                      onClick={() => void repo.deleteBoardMessage(m.id)}
+                      onClick={() => confirmDestructive({
+                        title: 'Delete this message?',
+                        body: 'It disappears from the board thread for every board member.',
+                        confirmLabel: 'Delete message',
+                        onConfirm: () => { void repo.deleteBoardMessage(m.id); emitAppSuccess('Message deleted.'); },
+                      })}
                       title="Delete message"
                       className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-40"
                     >

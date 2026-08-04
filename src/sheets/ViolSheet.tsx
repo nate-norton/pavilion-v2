@@ -1,4 +1,5 @@
 import { PhIcon } from '../components/PhIcon';
+import { Hint } from '../components/Hint';
 import { Sheet } from '../components/Sheet';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { usePavStore } from '../store/store';
@@ -101,9 +102,16 @@ export function ViolSheet() {
       {!state.violFixed ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">A friendly heads-up</p>
-          <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-1 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
             Courtesy notice #V-31 · no fee · nothing on your record
           </p>
+          <div className="mb-3.5">
+            <Hint label="What does a courtesy notice mean?">
+              It is the first and lightest step: no fine, nothing recorded
+              against your home, and it closes by itself once the issue is
+              fixed. It only escalates if it is ignored past the date above.
+            </Hint>
+          </div>
           <div
             className="rounded-2xl p-[15px] mb-3"
             style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.1)' }}

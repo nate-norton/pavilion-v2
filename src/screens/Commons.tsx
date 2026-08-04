@@ -7,6 +7,8 @@ import { SegmentedControl } from '../components/SegmentedControl';
 import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember, useChatSeed, useLoadState, useRepository } from '../data/repo';
 import type { FeedPost, ThreadComment } from '../data/repo';
 import { usePavStore } from '../store/store';
+import { confirmDestructive } from '../components/ConfirmSheet';
+import { emitAppSuccess } from '../lib/errorBus';
 
 const SEG_OPTIONS = [
   { key: 'feed', label: 'Feed' },
@@ -121,14 +123,14 @@ export function Commons() {
                 <div className="flex items-center gap-4 mt-3">
                   <button
                     onClick={() => set({ liked: !state.liked })}
-                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
                   >
                     <PhIcon name={heartClass} size={19} color={heartColor} className={state.liked ? 'animate-heartpop' : undefined} />
                     <span className="text-[13px] font-bold text-stone">{likeCount}</span>
                   </button>
                   <button
                     onClick={() => set({ commentsOpen: !state.commentsOpen })}
-                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
                   >
                     <PhIcon name="ph ph-chat-circle" size={19} color="rgb(var(--stone))" />
                     <span className="text-[13px] font-bold text-stone">{commentCount}</span>
@@ -576,7 +578,12 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
         )}
         {(p.mine || isBoard) && (
           <button
-            onClick={() => void repo.deleteFeedPost(p.id)}
+            onClick={() => confirmDestructive({
+            title: 'Delete this post?',
+            body: 'It disappears from the feed for everyone, along with its comments and reactions.',
+            confirmLabel: 'Delete post',
+            onConfirm: () => { void repo.deleteFeedPost(p.id); emitAppSuccess('Post deleted.'); },
+          })}
             title="Delete post"
             className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-50"
           >
@@ -598,7 +605,7 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
         <button
           onClick={() => void repo.togglePostLike(p.id)}
           aria-label={p.likedByMe ? 'Unlike' : 'Like'}
-          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
         >
           <PhIcon
             name={p.likedByMe ? 'ph-fill ph-heart' : 'ph ph-heart'}
@@ -611,7 +618,7 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
         <button
           onClick={toggleComments}
           aria-label="Comments"
-          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
         >
           <PhIcon name="ph ph-chat-circle" size={18} color="rgb(var(--stone))" />
           <span className="text-xs font-bold text-stone">{p.commentCount || ''}</span>

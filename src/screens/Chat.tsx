@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 import { useChatSeed, useChats, useRepository } from '../data/repo';
+import { confirmDestructive } from '../components/ConfirmSheet';
+import { emitAppSuccess } from '../lib/errorBus';
 
 /** 1:1 chat thread screen — ported from prototype lines 1926-1953. */
 export function Chat() {
@@ -83,7 +85,12 @@ export function Chat() {
             <div className="flex items-center gap-1.5" style={{ flexDirection: m.me ? 'row' : 'row-reverse' }}>
               {m.me && !demo && m.id && (
                 <button
-                  onClick={() => void repo.deleteChatMessage(chatKey, m.id!)}
+                  onClick={() => confirmDestructive({
+                    title: 'Delete this message?',
+                    body: 'It disappears from the thread for both of you.',
+                    confirmLabel: 'Delete message',
+                    onConfirm: () => { void repo.deleteChatMessage(chatKey, m.id!); emitAppSuccess('Message deleted.'); },
+                  })}
                   title="Delete message"
                   className="border-0 bg-transparent p-0.5 cursor-pointer opacity-30"
                 >

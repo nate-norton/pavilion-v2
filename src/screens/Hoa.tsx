@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { EmptyState } from '../components/EmptyState';
+import { Hint } from '../components/Hint';
+import { emitAppSuccess } from '../lib/errorBus';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusTimeline } from '../components/StatusTimeline';
@@ -192,7 +194,7 @@ export function Hoa() {
         <div className="mt-3.5 pt-[13px]" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)' }}>
           <button type="button"
             onClick={() => setForecastOpen(!forecastOpen)}
-            className="w-full border-none font-sans bg-transparent text-left flex items-center justify-between gap-2 cursor-pointer"
+            className="w-full border-none font-sans bg-transparent text-left flex items-center justify-between gap-2 cursor-pointer py-1"
           >
             <p className="m-0 text-[12.5px] font-bold text-navy">Funding forecast</p>
             <div className="flex items-center gap-1.5">
@@ -403,18 +405,29 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
   const repo = useRepository();
   const [changing, setChanging] = useState(false);
   const [picks, setPicks] = useState<string[]>([]);
+  const [casting, setCasting] = useState<string | null>(null);
 
   const isOptions = vote.kind === 'options';
   const hasVoted = isOptions ? vote.myOptionIds.length > 0 : !!vote.myVote;
   const showBallot = !hasVoted || changing;
   const votedLabel = vote.myVote === 'yes' ? vote.yesLabel : vote.noLabel;
 
+  // Casting is the highest-stakes action in the product and used to give no
+  // feedback until the round trip finished — 1-3s of silence on cell service,
+  // which is exactly how a resident ends up tapping twice.
   const castYesNo = (choice: 'yes' | 'no') => {
-    void repo.castVote(vote.id, choice).then(() => setChanging(false));
+    if (casting) return;
+    setCasting(choice);
+    void repo.castVote(vote.id, choice)
+      .then(() => { setChanging(false); emitAppSuccess('Your ballot is recorded.'); })
+      .finally(() => setCasting(null));
   };
   const castOptions = (ids: string[]) => {
-    if (!ids.length) return;
-    void repo.castOptionVote(vote.id, ids).then(() => { setChanging(false); setPicks([]); });
+    if (!ids.length || casting) return;
+    setCasting('options');
+    void repo.castOptionVote(vote.id, ids)
+      .then(() => { setChanging(false); setPicks([]); emitAppSuccess('Your ballot is recorded.'); })
+      .finally(() => setCasting(null));
   };
   const optionTotal = vote.options.reduce((n, o) => n + o.tally, 0);
 
@@ -438,8 +451,15 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
           {vote.quorumCount} of {vote.quorumTotal} households
         </span>
       </div>
-      <div className="mb-3.5">
+      <div className="mb-1.5">
         <ProgressBar pct={vote.quorumPct} height={8} track="rgb(var(--cream) / 0.15)" gradient />
+      </div>
+      <div className="mb-3.5">
+        <Hint label="What is quorum?">
+          Enough households have to vote for the result to count at all. Until
+          the bar fills, the outcome is not binding no matter how one-sided the
+          tally looks — which is why a vote you agree with still needs yours.
+        </Hint>
       </div>
 
       {/* Ballot — yes/no */}
@@ -447,17 +467,21 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
         <div className="flex gap-2.5">
           <button
             onClick={() => castYesNo('yes')}
+            disabled={!!casting}
+            aria-busy={casting === 'yes'}
             className="flex-1 border-none rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-            style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
+            style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))', opacity: casting && casting !== 'yes' ? 0.5 : 1 }}
           >
-            {vote.yesLabel}
+            {casting === 'yes' ? 'Recording…' : vote.yesLabel}
           </button>
           <button
             onClick={() => castYesNo('no')}
+            disabled={!!casting}
+            aria-busy={casting === 'no'}
             className="flex-1 bg-transparent rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-            style={{ border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))' }}
+            style={{ border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))', opacity: casting && casting !== 'no' ? 0.5 : 1 }}
           >
-            {vote.noLabel}
+            {casting === 'no' ? 'Recording…' : vote.noLabel}
           </button>
         </div>
       )}

@@ -1,0 +1,45 @@
+import { useState } from 'react';
+import { PhIcon } from './PhIcon';
+
+/**
+ * Inline explainer for the handful of HOA terms that carry real consequence.
+ *
+ * PRODUCT.md describes board members as volunteers with no training and
+ * residents as people who did not choose this software — and live mode ships
+ * with no help surface at all, because the AI that was meant to be the help
+ * says "coming soon". This is the cheap stand-in: an explanation attached to
+ * the exact decision it affects, rather than a help centre nobody opens.
+ *
+ * Collapsed by default so it costs an experienced user nothing.
+ */
+export function Hint({ label, children }: { label: string; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="mt-1.5">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="inline-flex items-center gap-1 border-none bg-transparent px-0 py-1.5 cursor-pointer font-sans"
+        style={{ minHeight: 24 }}
+      >
+        <PhIcon name="ph-fill ph-info" size={12} color="rgb(var(--stone))" />
+        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>{label}</span>
+      </button>
+      {open && (
+        <p
+          className="m-0 mt-1.5 text-[12px] font-semibold leading-[1.5] animate-fadeup"
+          style={{
+            color: 'rgb(var(--bark))',
+            background: 'rgb(var(--parchment))',
+            border: '1px solid rgb(var(--navy) / 0.08)',
+            borderRadius: 11,
+            padding: '9px 11px',
+          }}
+        >
+          {children}
+        </p>
+      )}
+    </div>
+  );
+}

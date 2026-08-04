@@ -4,6 +4,8 @@ import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 import { useDocuments, useDocSections, useMember, useLoadState, useRepository } from '../data/repo';
+import { confirmDestructive } from '../components/ConfirmSheet';
+import { emitAppSuccess } from '../lib/errorBus';
 
 const DOC_CONTENT: Record<string, { sections: { tag: string; name: string; body: string }[] }> = {
   bylaws: {
@@ -124,7 +126,15 @@ export function Documents() {
                 </div>
                 {canManage && d.id ? (
                   <button
-                    onClick={(e) => { e.stopPropagation(); void repo.deleteDocument(d.id!); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      confirmDestructive({
+                        title: 'Remove this document?',
+                        body: `“${d.title}” disappears for every household. If it is a governing document, residents lose their copy of the rules until you publish it again.`,
+                        confirmLabel: 'Remove document',
+                        onConfirm: () => { void repo.deleteDocument(d.id!); emitAppSuccess('Document removed.'); },
+                      });
+                    }}
                     title="Remove document"
                     className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-50"
                   >
@@ -213,7 +223,7 @@ export function Documents() {
                 type="button"
                 aria-label="Clear search"
                 onClick={() => set({ docQ: '' })}
-                className="border-none w-5 h-5 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
+                className="border-none w-6 h-6 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
                 style={{ background: 'rgb(var(--sand))' }}
               >
                 <PhIcon name="ph-bold ph-x" size={10} color="rgb(var(--bark))" />

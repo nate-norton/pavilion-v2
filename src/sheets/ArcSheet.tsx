@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { PhIcon } from '../components/PhIcon';
+import { Hint } from '../components/Hint';
 import { Sheet } from '../components/Sheet';
 import { Chip } from '../components/Chip';
 import { usePavStore } from '../store/store';
@@ -153,11 +154,20 @@ export function ArcSheet() {
       </div>
       )}
 
+      <div className="mb-3">
+        <Hint label="What happens after I submit?">
+          The board reviews it and either approves, declines, or asks for more
+          detail — you will see each step here. Start the work before approval
+          and you may be asked to undo it at your own cost, so it is worth the
+          wait.
+        </Hint>
+      </div>
+
       <button
         onClick={submit}
         className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold font-sans"
         style={{
-          background: canSubmit ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
+          background: canSubmit ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))',
           color: canSubmit ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
           cursor: canSubmit ? 'pointer' : 'default',
         }}

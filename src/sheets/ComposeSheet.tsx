@@ -86,6 +86,18 @@ export function ComposeSheet() {
             className="w-full rounded-2xl border-none bg-cream px-4 py-3 text-[14px] font-semibold text-navy resize-none font-sans"
             style={{ minHeight: 100, outline: 'none' }}
           />
+          {/* A cap that silently stops accepting keystrokes reads as a broken
+              field. Show the ceiling only once it is close enough to matter. */}
+          {text.length > 1700 && (
+            <p
+              className="m-0 mt-1.5 text-right text-[11.5px] font-bold"
+              style={{ color: text.length >= 2000 ? 'rgb(var(--terracotta))' : 'rgb(var(--stone))' }}
+            >
+              {text.length >= 2000
+                ? 'Character limit reached (2,000)'
+                : `${(2000 - text.length).toLocaleString()} characters left`}
+            </p>
+          )}
           <div className="flex items-center justify-between mt-3">
             <div className="flex gap-2 items-center">
               {demo ? (

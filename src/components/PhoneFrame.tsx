@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { usePavStore } from '../store/store';
 import { isLiveMode } from '../auth/AuthGate';
 import { AppToast } from './AppToast';
+import { ConfirmSheet } from './ConfirmSheet';
 import { Commons } from '../screens/Commons';
 import { Hoa } from '../screens/Hoa';
 import { Reserve } from '../screens/Reserve';
@@ -65,6 +66,7 @@ export function PhoneFrame() {
         <Overlays />
         <NavDock />
         <AppToast />
+        <ConfirmSheet />
       </ErrorBoundary>
     </div>
   );
