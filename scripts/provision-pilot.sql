@@ -3,6 +3,14 @@
 -- How to run: paste into the Supabase SQL editor (pavilion-dev) after editing
 -- the EDIT ME values below. Idempotent — safe to re-run after adding rows.
 --
+-- Verified 2026-08-04 against pavilion-dev's live schema: executed inside a
+-- transaction and rolled back, twice over, under a throwaway slug. Every
+-- statement applies cleanly, and a second pass adds nothing (the community
+-- unique-slug constraint, the partial unique index on pending invites, and
+-- the amenity name guard each absorb the repeat). No rows persisted.
+-- What that does NOT prove: the placeholder values below are placeholders.
+-- Replace all three EDIT ME blocks before running for real.
+--
 -- What this does:
 --   1. Creates the community.
 --   2. Creates pending invites (board first). When an invited email signs in,
