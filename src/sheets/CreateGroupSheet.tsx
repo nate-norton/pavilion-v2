@@ -46,7 +46,7 @@ export function CreateGroupSheet() {
       label="Create a group"
       open={state.createGroupOpen} onClose={close} maxHeight="85%">
       <div style={{ padding: '22px 22px 32px' }}>
-        <h2 className="m-0 mb-1 font-serif font-normal text-[22px] text-navy">Create a group</h2>
+        <h2 className="m-0 mb-1 font-serif font-normal text-[19px] text-navy">Create a group</h2>
         <p className="m-0 mb-5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
           Neighbors can discover and join your group.
         </p>

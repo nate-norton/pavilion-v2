@@ -5,7 +5,6 @@ import { emitAppSuccess } from '../lib/errorBus';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusTimeline } from '../components/StatusTimeline';
-import { Confetti } from '../components/Confetti';
 import { usePavStore } from '../store/store';
 import { useVotes, useArc, useIssues, useDecisions, useMeetings, useMember, useLoadState, useRepository } from '../data/repo';
 import type { OpenVote } from '../data/repo';
@@ -75,7 +74,7 @@ export function Hoa() {
 
   return (
     <div className="absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: '64px 18px 150px' }}>
-      <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">The HOA, in the open</h1>
+      <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">The HOA, in the open</h1>
       <p className="m-0 mb-[18px] text-[13.5px] font-semibold text-taupe">
         Every dollar, vote, and decision — visible to every household.
       </p>
@@ -389,8 +388,12 @@ export function Hoa() {
         )}
       </div>
 
-      {/* Docs + AI */}
-      <div className="grid grid-cols-2 gap-2.5">
+      {/*
+        Docs, and — in the demo, where the assistant actually answers — AI.
+        Live has no assistant, so the tile that would advertise one is gone and
+        Documents takes the full width rather than pairing with a dead card.
+      */}
+      <div className={demo ? 'grid grid-cols-2 gap-2.5' : ''}>
         <button type="button"
           onClick={() => set({ docsOpen: true, docReader: false })}
           className="w-full border-none font-sans text-left bg-paper rounded-[18px] p-[15px] cursor-pointer"
@@ -402,17 +405,19 @@ export function Hoa() {
             CC&amp;Rs · Bylaws · Budget · Minutes
           </p>
         </button>
-        <button type="button"
-          onClick={() => set({ aiOpen: true })}
-          className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-[15px] cursor-pointer text-white"
-          style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}
-        >
-          <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--white))" />
-          <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold">Ask AI</p>
-          <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.85)' }}>
-            &quot;Can I paint my fence black?&quot;
-          </p>
-        </button>
+        {demo && (
+          <button type="button"
+            onClick={() => set({ aiOpen: true })}
+            className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-[15px] cursor-pointer text-white"
+            style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}
+          >
+            <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--white))" />
+            <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold">Ask AI</p>
+            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.85)' }}>
+              &quot;Can I paint my fence black?&quot;
+            </p>
+          </button>
+        )}
       </div>
     </div>
   );
@@ -461,7 +466,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
       >
         {vote.closesLabel}
       </p>
-      <p className="m-0 mb-1 font-serif text-[18px] leading-[1.3]">{vote.title}</p>
+      <p className="m-0 mb-1 font-serif text-[17px] leading-[1.3]">{vote.title}</p>
       <p className="m-0 mb-3.5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
         {vote.subtitle}
       </p>
@@ -552,7 +557,6 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             className="relative rounded-[13px] px-3.5 py-3 flex items-center gap-2.5"
             style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}
           >
-            <Confetti />
             <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sagebright))" className="flex-shrink-0" />
             <p className="m-0 text-[13px] font-bold text-cream">
               You voted <strong>{votedLabel}</strong> · ballot receipt {vote.receipt} · secret ballot
@@ -612,7 +616,6 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             className="relative rounded-[13px] px-3.5 py-3 flex items-center gap-2.5 mb-3.5"
             style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}
           >
-            <Confetti />
             <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sagebright))" className="flex-shrink-0" />
             <p className="m-0 text-[13px] font-bold text-cream">
               Ballot received · receipt {vote.receipt} · secret ballot

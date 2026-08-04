@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
+import { reportedByDataLayer } from '../lib/errorBus';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
@@ -168,7 +169,7 @@ export function MyPlace() {
       <BackButton onClick={() => set({ myPlaceOpen: false })} className="mb-4" />
 
       <div className="flex items-center gap-3.5 mb-[18px]">
-        <div className="w-[58px] h-[58px] rounded-full bg-navy flex items-center justify-center text-cream font-extrabold text-[22px] flex-shrink-0">
+        <div className="w-[58px] h-[58px] rounded-full bg-navy flex items-center justify-center text-cream font-extrabold text-[19px] flex-shrink-0">
           {displayInitial}
         </div>
         <div>
@@ -229,7 +230,7 @@ export function MyPlace() {
                 className="rounded-full px-2 py-0.5 text-[9.5px] font-bold"
                 style={{ background: 'rgb(var(--peach) / 0.2)', color: 'rgb(var(--peach))', letterSpacing: '0.06em' }}
               >
-                TREASURER
+                BOARD
               </span>
             </div>
             <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
@@ -577,7 +578,7 @@ export function MyPlace() {
                         void repo.addReportComment(r.id, reportReply)
                           .then(() => { setReportReply(''); return repo.listReportComments(r.id); })
                           .then(setReportThread)
-                          .catch(() => {});
+                          .catch(reportedByDataLayer);
                       }
                     }}
                     placeholder="Message the board about this…"
@@ -725,7 +726,7 @@ export function MyPlace() {
                     setPfBusy(true);
                     void repo.updateProfile({ name: pfName, phone: pfPhone, hideDirectory: pfHide })
                       .then(() => setProfileEditOpen(false))
-                      .catch(() => {})
+                      .catch(reportedByDataLayer)
                       .finally(() => setPfBusy(false));
                   }}
                   className="w-full border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"

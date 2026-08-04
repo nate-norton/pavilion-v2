@@ -38,7 +38,7 @@ export function CircleDetail() {
         </span>
       </div>
       <div className="flex items-center justify-between gap-2.5 mb-1">
-        <h1 className="m-0 font-serif font-normal text-[26px] text-navy">Garden Circle</h1>
+        <h1 className="m-0 font-serif font-normal text-[24px] text-navy">Garden Circle</h1>
         <span className="rounded-full text-[11px] font-bold" style={{ background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))', padding: '5px 12px' }}>
           Joined ✓
         </span>

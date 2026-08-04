@@ -77,7 +77,7 @@ export function PaymentDetailSheet() {
           {status.label}
         </span>
       </div>
-      <p className="m-0 text-[28px] font-bold text-navy mb-4">{row.amount}</p>
+      <p className="m-0 text-[24px] font-bold text-navy mb-4">{row.amount}</p>
 
       <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
         <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-2.5" style={{ color: 'rgb(var(--stonelight))' }}>
@@ -116,7 +116,7 @@ export function PaymentDetailSheet() {
       {!status.isPaid && (
         <button
           onClick={() => set({ paySheetOpen: true, paymentDetailIdx: null })}
-          className="w-full rounded-2xl py-3.5 border-none text-[15px] font-extrabold cursor-pointer font-sans mt-1"
+          className="w-full rounded-2xl py-3.5 border-none text-[14px] font-extrabold cursor-pointer font-sans mt-1"
           style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }}
         >
           Pay now

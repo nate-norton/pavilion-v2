@@ -66,7 +66,7 @@ export function Notifications() {
           Mark all read
         </button>
       </div>
-      <h1 className="m-0 mb-4 font-serif font-normal text-[26px] text-navy">Activity</h1>
+      <h1 className="m-0 mb-4 font-serif font-normal text-[24px] text-navy">Activity</h1>
 
       {today.length > 0 && (
         <div>
@@ -105,7 +105,7 @@ export function Notifications() {
           
         }}
       >
-        <p className="m-0 mb-[3px] font-serif text-[15px] text-navy">What reaches you</p>
+        <p className="m-0 mb-[3px] font-serif text-[14px] text-navy">What reaches you</p>
         <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
           Tap to mute a category — urgent safety alerts always come through.
         </p>

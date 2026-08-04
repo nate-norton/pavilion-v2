@@ -4,7 +4,7 @@ import { useArchivedBoardTopics, useBoardChat, useRepository } from '../data/rep
 import type { BoardMessage } from '../data/repo';
 import { usePavStore } from '../store/store';
 import { confirmDestructive } from '../components/ConfirmSheet';
-import { emitAppSuccess } from '../lib/errorBus';
+import { emitAppSuccess, reportedByDataLayer } from '../lib/errorBus';
 
 /** The pinned thread every community always has. Stored as topic = null. */
 const GENERAL = 'General';
@@ -72,7 +72,7 @@ export function BoardChat() {
         setMsg(''); setNewName(''); setCreating(false); setPhotos([]);
         if (to !== topic) set({ boardChatTopic: to });
       })
-      .catch(() => {})
+      .catch(reportedByDataLayer)
       .finally(() => setBusy(false));
   };
 
@@ -81,13 +81,13 @@ export function BoardChat() {
     setBusy(true);
     repo.renameBoardTopic(topic, newName.trim())
       .then(() => { set({ boardChatTopic: newName.trim() }); setRenaming(false); setNewName(''); })
-      .catch(() => {})
+      .catch(reportedByDataLayer)
       .finally(() => setBusy(false));
   };
 
   const archive = () => {
     if (!topic || topic === GENERAL) return;
-    void repo.archiveBoardTopic(topic).then(() => set({ boardChatTopic: null })).catch(() => {});
+    void repo.archiveBoardTopic(topic).then(() => set({ boardChatTopic: null })).catch(reportedByDataLayer);
   };
 
   const input = (props: { value: string; onChange: (v: string) => void; placeholder: string; onEnter?: () => void; autoFocus?: boolean }) => (
@@ -113,7 +113,7 @@ export function BoardChat() {
           <PhIcon name="ph-bold ph-arrow-left" size={18} color="rgb(var(--navy))" />
         </button>
         <div className="flex-1 min-w-0">
-          <h1 className="m-0 font-serif font-normal text-[22px] text-navy truncate">{topic ?? 'Board chat'}</h1>
+          <h1 className="m-0 font-serif font-normal text-[19px] text-navy truncate">{topic ?? 'Board chat'}</h1>
           <div className="flex items-center gap-1.5">
             <PhIcon name="ph-fill ph-lock-simple" size={11} color="rgb(var(--stone))" className="flex-shrink-0" />
             <p className="m-0 text-[11px] font-bold text-stone">Private to board members</p>

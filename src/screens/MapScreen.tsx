@@ -52,7 +52,7 @@ export function MapScreen() {
         </span>
       </div>
       <div style={{ padding: '10px 18px 0' }}>
-        <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">{member?.communityName || 'Juniper Ridge'}</h1>
+        <h1 className="m-0 mb-[3px] font-serif font-normal text-[24px] text-navy">{member?.communityName || 'Juniper Ridge'}</h1>
         <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
           Tap a pin to see what&apos;s happening.
         </p>
@@ -115,7 +115,7 @@ export function MapScreen() {
         <div className="absolute flex gap-1.5" style={{ left: '50%', top: '44%' }}>
           <span style={HOUSE} />
           <span
-            className="flex items-center justify-center text-[9px] font-bold text-cream"
+            className="flex items-center justify-center text-[10px] font-bold text-cream"
             style={{ width: 26, height: 20, borderRadius: 5, background: 'rgb(var(--navy))' }}
           >
             27
@@ -123,12 +123,12 @@ export function MapScreen() {
           <span style={HOUSE} />
         </div>
         <div className="absolute" style={{ left: '50%', top: '44%', transform: 'translate(4px,24px)' }}>
-          <span className="text-[9px] font-bold text-navy">You</span>
+          <span className="text-[10px] font-bold text-navy">You</span>
         </div>
         <div className="absolute flex gap-1.5" style={{ left: '6%', top: '82%' }}>
           <span style={HOUSE} />
           <span
-            className="flex items-center justify-center text-[9px] font-bold text-white"
+            className="flex items-center justify-center text-[10px] font-bold text-white"
             style={{ width: 26, height: 20, borderRadius: 5, background: 'rgb(var(--gold))' }}
           >
             42

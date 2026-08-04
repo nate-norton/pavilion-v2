@@ -32,7 +32,7 @@ export function ViolSheet() {
         {!viol ? (
           <div className="text-center pt-1.5 pb-1">
             <PhIcon name="ph-fill ph-check-circle" size={40} color="rgb(var(--sage))" />
-            <p className="m-0 mt-2.5 text-[15px] font-bold text-navy">Nothing open on your unit.</p>
+            <p className="m-0 mt-2.5 text-[14px] font-bold text-navy">Nothing open on your unit.</p>
           </div>
         ) : !viol.fixed ? (
           <div>
