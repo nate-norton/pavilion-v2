@@ -58,7 +58,7 @@ export function AiSheet() {
             <PhIcon name="ph-fill ph-sparkle" size={18} color="rgb(var(--white))" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="m-0 text-[15px] font-bold text-navy">AI</p>
+            <p className="m-0 text-[14px] font-bold text-navy">AI</p>
             <p className="m-0 text-[11.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
               {demo ? "Answers cite Juniper Ridge's actual documents" : 'Coming soon'}
             </p>
@@ -76,7 +76,7 @@ export function AiSheet() {
         {!demo ? (
           <div className="flex-1 flex flex-col items-center justify-center px-8 pb-10 text-center">
             <PhIcon name="ph-fill ph-sparkle" size={30} color="rgb(var(--claypale))" />
-            <p className="m-0 mt-3 text-[15px] font-bold text-navy">Ask AI is on the way</p>
+            <p className="m-0 mt-3 text-[14px] font-bold text-navy">Ask AI is on the way</p>
             <p className="m-0 mt-1.5 text-[13px] font-semibold leading-[1.5] text-stone">
               It will answer questions about rules, dues, and amenities — grounded in your
               community&apos;s actual documents, with citations.

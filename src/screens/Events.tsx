@@ -86,7 +86,7 @@ export function Events() {
       style={{ background: 'rgb(var(--cream))', padding: '60px 18px 40px' }}
     >
       <BackButton onClick={() => set({ eventsOpen: false })} />
-      <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">July at the Ridge</h1>
+      <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">July at the Ridge</h1>
       <p className="m-0 mb-3.5 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
         4 events · dots mark the days
       </p>

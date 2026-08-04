@@ -33,7 +33,7 @@ export function Portfolio() {
         <PhIcon name="ph-bold ph-arrow-left" size={14} />
         Back
       </button>
-      <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">Portfolio</h1>
+      <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Portfolio</h1>
       <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
         Cedar Hill Management · 3 communities · {pfDoors} doors
       </p>

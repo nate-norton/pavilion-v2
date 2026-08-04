@@ -114,7 +114,7 @@ export function GroupDetail() {
               </span>
               {t.count && t.count > 0 ? (
                 <span
-                  className="min-w-[16px] h-4 rounded-full flex items-center justify-center text-[9px] font-extrabold px-1"
+                  className="min-w-[16px] h-4 rounded-full flex items-center justify-center text-[10px] font-extrabold px-1"
                   style={{ background: tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--taupepale))', color: tab === t.key ? 'rgb(var(--cream))' : 'rgb(var(--stone))' }}
                 >
                   {t.count}

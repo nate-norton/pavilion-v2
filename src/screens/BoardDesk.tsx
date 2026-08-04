@@ -142,7 +142,7 @@ export function BoardDesk() {
           )}
         </div>
       </div>
-      <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">Board desk</h1>
+      <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Board desk</h1>
       <p className="m-0 mb-3.5 text-[13.5px] font-semibold text-taupe">
         {triage.summary}
       </p>
@@ -1142,7 +1142,7 @@ export function BoardDesk() {
           </p>
           <div className="bg-paper rounded-[20px] p-[18px] mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
             <div className="flex items-baseline justify-between gap-2.5 mb-2.5">
-              <p className="m-0 font-serif text-[22px] text-navy">96% collected</p>
+              <p className="m-0 font-serif text-[19px] text-navy">96% collected</p>
               <p className="m-0 text-xs font-bold text-stone">
                 $38.9K of $40.5K
               </p>

@@ -34,7 +34,7 @@ export function Meeting() {
       <p className="m-0 mb-1.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.14em', color: 'rgb(var(--terracotta))' }}>
         Annual meeting · Tue Jul 15 · 7 PM
       </p>
-      <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">Juniper Ridge, assembled</h1>
+      <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Juniper Ridge, assembled</h1>
       <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
         Clubhouse + Zoom · childcare at the clubhouse · minutes posted within 48h
       </p>

@@ -167,7 +167,7 @@ export function ArcSheet() {
 
       <button
         onClick={submit}
-        className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold font-sans"
+        className="w-full border-none rounded-2xl py-4 text-[14px] font-extrabold font-sans"
         style={{
           background: canSubmit ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))',
           color: canSubmit ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',

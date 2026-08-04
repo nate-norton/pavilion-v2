@@ -84,7 +84,7 @@ export function Documents() {
       {!state.docReader ? (
         <div>
           <BackButton onClick={() => set({ docsOpen: false })} />
-          <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">Documents</h1>
+          <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Documents</h1>
           <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
             {DOCS.length > 0
               ? 'Every governing document, searchable. Your AI has read them all.'
@@ -209,7 +209,7 @@ export function Documents() {
       ) : state.docReaderKey === 'ccrs' ? (
         <div className="animate-fadeup">
           <BackButton label="All documents" onClick={() => set({ docReader: false })} />
-          <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">CC&amp;Rs</h1>
+          <h1 className="m-0 mb-[3px] font-serif font-normal text-[24px] text-navy">CC&amp;Rs</h1>
           <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
             Rev. March 2026 · 48 pages · applies to all 136 homes
           </p>
@@ -371,7 +371,7 @@ function GenericDocReader() {
   return (
     <div className="animate-fadeup">
       <BackButton label="All documents" onClick={() => set({ docReader: false })} />
-      <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">{doc.title}</h1>
+      <h1 className="m-0 mb-[3px] font-serif font-normal text-[24px] text-navy">{doc.title}</h1>
       <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
         {doc.sub}
       </p>

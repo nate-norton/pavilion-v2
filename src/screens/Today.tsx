@@ -123,7 +123,7 @@ export function Today() {
         })()}
       </p>
       <div className="flex items-start justify-between gap-3 mb-1.5">
-        <h1 className="m-0 font-serif font-normal text-[32px] text-navy leading-[1.1]" style={{ letterSpacing: '-0.01em' }}>
+        <h1 className="m-0 font-serif font-normal text-[36px] text-navy leading-[1.1]" style={{ letterSpacing: '-0.01em' }}>
           {(() => {
             // The demo is scripted to Tuesday, July 1 in the morning; live
             // greets by actual time of day.

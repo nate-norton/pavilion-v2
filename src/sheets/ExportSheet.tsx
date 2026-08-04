@@ -20,7 +20,7 @@ export function ExportSheet() {
       open={state.exportOpen} onClose={closeExport}>
       {exportPending && (
         <div>
-          <p className="m-0 mb-0.5 font-serif text-[20px] text-navy">Export the ledger</p>
+          <p className="m-0 mb-0.5 font-serif text-[19px] text-navy">Export the ledger</p>
           <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
             July 2026 · dues, special assessments &amp; vendor payments
           </p>
@@ -61,7 +61,7 @@ export function ExportSheet() {
       {!exportPending && (
         <div className="text-center pt-2 pb-1 animate-fadeup">
           <PhIcon name="ph-fill ph-check-circle" size={48} color="rgb(var(--sage))" />
-          <p className="m-0 mt-2.5 mb-[3px] font-serif text-[20px] text-navy">{exportDoneLabel}</p>
+          <p className="m-0 mt-2.5 mb-[3px] font-serif text-[19px] text-navy">{exportDoneLabel}</p>
           <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
             129 line items · reconciled through Jun 30
           </p>

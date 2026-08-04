@@ -168,7 +168,7 @@ export function MyPlace() {
       <BackButton onClick={() => set({ myPlaceOpen: false })} className="mb-4" />
 
       <div className="flex items-center gap-3.5 mb-[18px]">
-        <div className="w-[58px] h-[58px] rounded-full bg-navy flex items-center justify-center text-cream font-extrabold text-[22px] flex-shrink-0">
+        <div className="w-[58px] h-[58px] rounded-full bg-navy flex items-center justify-center text-cream font-extrabold text-[19px] flex-shrink-0">
           {displayInitial}
         </div>
         <div>
