@@ -1,4 +1,5 @@
 import { PhIcon } from '../components/PhIcon';
+import { StackedCards, StackedPanel } from '../components/StackedCard';
 import { useArc, useAssessment, useDues, useEvents, useMember, useNotifications, usePortfolio, useReservation, useViolation, useVotes } from '../data/repo';
 import { usePavStore } from '../store/store';
 
@@ -262,39 +263,40 @@ export function Today() {
         </button>
       </div>
 
-      {/* One featured event */}
-      <div className="rounded-[20px] text-cream bg-navy mb-2.5" style={{ padding: '16px 18px' }}>
-        <div className="flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
-              {featuredEvent?.whenLabel}
-            </p>
-            <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.2]">{featuredEvent?.title}</p>
-            <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
-              {tacoGoing} neighbors going
-            </p>
+      {/* Featured event hero with the ambient list tucked underneath */}
+      <StackedCards overlap={22}>
+        <StackedPanel tint="navy" className="!pt-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
+                {featuredEvent?.whenLabel}
+              </p>
+              <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.2] text-cream">{featuredEvent?.title}</p>
+              <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+                {tacoGoing} neighbors going
+              </p>
+            </div>
+            {rsvpFood ? (
+              <button
+                onClick={() => set({ rsvpFood: !state.rsvpFood })}
+                className="border-none text-white rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 flex items-center gap-1.5 bg-sage"
+              >
+                <PhIcon name="ph-fill ph-check" size={14} />
+                Going
+              </button>
+            ) : (
+              <button
+                onClick={() => set({ rsvpFood: !state.rsvpFood })}
+                className="border-none text-white rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 bg-ember"
+              >
+                I&apos;m in
+              </button>
+            )}
           </div>
-          {rsvpFood ? (
-            <button
-              onClick={() => set({ rsvpFood: !state.rsvpFood })}
-              className="border-none text-white rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 flex items-center gap-1.5 bg-sage"
-            >
-              <PhIcon name="ph-fill ph-check" size={14} />
-              Going
-            </button>
-          ) : (
-            <button
-              onClick={() => set({ rsvpFood: !state.rsvpFood })}
-              className="border-none text-white rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 bg-ember"
-            >
-              I&apos;m in
-            </button>
-          )}
-        </div>
-      </div>
+        </StackedPanel>
 
-      {/* Quiet neighborhood list */}
-      <div className="bg-paper rounded-[20px]" style={{ border: '1px solid rgb(var(--navy) / 0.1)', padding: '6px 18px' }}>
+        {/* Quiet neighborhood list */}
+        <StackedPanel flush className="px-[18px] pt-[22px] pb-1.5">
         {hasBooking ? (
           <div onClick={() => set({ tab: 'reserve' })} className="flex items-center gap-3 cursor-pointer" style={ROW_PAD}>
             <PhIcon name="ph-fill ph-calendar-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
@@ -325,7 +327,8 @@ export function Today() {
             Say hi
           </button>
         </div>
-      </div>
+        </StackedPanel>
+      </StackedCards>
       </>)}
     </div>
   );

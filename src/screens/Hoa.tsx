@@ -3,6 +3,7 @@ import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusTimeline } from '../components/StatusTimeline';
 import { Confetti } from '../components/Confetti';
+import { StackedCards, StackedPanel } from '../components/StackedCard';
 import { usePavStore } from '../store/store';
 import { useVotes, useArc, useIssues, useDecisions, useRepository } from '../data/repo';
 
@@ -57,9 +58,10 @@ export function Hoa() {
         Every dollar, vote, and decision — visible to every household.
       </p>
 
-      {/* Open vote */}
+      {/* Open vote, with the annual meeting tucked underneath */}
+      <StackedCards overlap={22} className="mb-3.5">
       {vote ? (
-        <div className="bg-navy rounded-[20px] p-[18px] mb-3.5 text-cream">
+        <StackedPanel tint="navy" className="text-cream">
           <p
             className="m-0 mb-1.5 text-[11px] font-bold uppercase"
             style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}
@@ -148,26 +150,23 @@ export function Hoa() {
               </div>
             </div>
           )}
-        </div>
+        </StackedPanel>
       ) : (
-        <div
-          className="bg-paper rounded-[20px] p-[18px] mb-3.5 text-center"
-          style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
-        >
+        <StackedPanel className="text-center border border-navy/10">
           <PhIcon name="ph-fill ph-scales" size={26} color="rgb(var(--claypale))" />
           <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No open votes</p>
           <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
             When your board opens a ballot, it’ll appear here.
           </p>
-        </div>
+        </StackedPanel>
       )}
 
       {/* Annual meeting (demo-only until a meetings domain exists) */}
       {demo && (
+      <StackedPanel flush className="px-4 pb-3.5 pt-[22px]">
       <div
         onClick={() => set({ meetingOpen: true })}
-        className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
-        style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
+        className="flex items-center gap-3 cursor-pointer"
       >
         <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-goldpale">
           <PhIcon name="ph-fill ph-users-four" size={21} color="rgb(var(--gold))" />
@@ -182,7 +181,9 @@ export function Hoa() {
           Preview →
         </span>
       </div>
+      </StackedPanel>
       )}
+      </StackedCards>
 
       {/* Where dues go (demo-only until a finance domain exists) */}
       {demo && (
