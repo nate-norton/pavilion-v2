@@ -215,7 +215,7 @@ export function BoardDesk() {
                   </button>
                 )}
                 {state.reportTicketed && (
-                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                     #M-88 ✓
                     <br />
                     BrightPath Electric
@@ -246,7 +246,7 @@ export function BoardDesk() {
                     </button>
                   )}
                   {state.m89Assigned && (
-                    <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                    <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                       GreenScape ✓
                       <br />
                       Mon, Jul 6
@@ -328,7 +328,7 @@ export function BoardDesk() {
                   </button>
                 )}
                 {state.gateScheduled && (
-                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                     AquaFix ✓
                     <br />
                     Thu, Jul 3
@@ -475,7 +475,7 @@ export function BoardDesk() {
                             )}
                           </>
                         ) : (
-                          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sage))' }}>
+                          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
                             Joined ✓
                           </span>
                         )}
@@ -839,7 +839,7 @@ export function BoardDesk() {
       {state.boardTab === 'req' && !demo && (
         boardArcQueue.length === 0 ? (
           <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-            <PhIcon name="ph-fill ph-tray" size={22} color="rgb(var(--claypale))" />
+            <div className="flex justify-center"><PhIcon name="ph-fill ph-tray" size={22} color="rgb(var(--claypale))" /></div>
             <p className="m-0 mt-2 text-[13px] font-bold text-navy">No requests yet</p>
             <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
               ARC requests land here as residents submit them.
@@ -982,14 +982,14 @@ export function BoardDesk() {
             <div className="flex items-center gap-[11px] py-[11px]" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
               <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#A-118 · Backyard pergola · #27</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--barkgray))' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--stone))' }}>
                 Jun 12
               </span>
             </div>
             <div className="flex items-center gap-[11px] py-[11px]">
               <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#A-115 · Fence stain, Cedar · #33</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--barkgray))' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--stone))' }}>
                 May 30
               </span>
             </div>
@@ -1121,7 +1121,7 @@ export function BoardDesk() {
 
       {state.boardTab === 'money' && !demo && (
         <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <PhIcon name="ph-fill ph-coins" size={22} color="rgb(var(--claypale))" />
+          <div className="flex justify-center"><PhIcon name="ph-fill ph-coins" size={22} color="rgb(var(--claypale))" /></div>
           <p className="m-0 mt-2 text-[13px] font-bold text-navy">No financials yet</p>
           <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
             Collections, budget tracking, and the aging report switch on once dues are issued.
@@ -1301,7 +1301,7 @@ export function BoardDesk() {
                 </button>
               )}
               {state.invApproved && (
-                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                   2 of 3 ✓
                   <br />
                   ACH Thursday
@@ -1322,10 +1322,10 @@ export function BoardDesk() {
               <div className="rounded-[13px] p-3.5 flex items-start gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0 mt-px" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedark">
+                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedarkdark">
                     Ballot is open — &quot;{voteQPreview}&quot;
                   </p>
-                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagegray))' }}>
+                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagedark))' }}>
                     Live on every resident&apos;s Today screen · watch the tally on the Desk tab
                   </p>
                   <button
@@ -1460,7 +1460,7 @@ export function BoardDesk() {
                     onClick={() => canPostVote && setVoteConfirm(true)}
                     disabled={!canPostVote}
                     className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                    style={{ background: canPostVote ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
+                    style={{ background: canPostVote ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
                   >
                     Open the ballot
                   </button>
@@ -1482,7 +1482,7 @@ export function BoardDesk() {
                           .catch(() => {}); // failure surfaced via the app toast
                       }}
                       className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                      style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
+                      style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
                     >
                       Confirm — open to all households
                     </button>
@@ -1624,7 +1624,7 @@ export function BoardDesk() {
                   onClick={sendBroadcast}
                   disabled={!canBc}
                   className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold"
-                  style={{ background: canBc ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canBc ? 'rgb(var(--white))' : 'rgb(var(--stonelight))', cursor: canBc ? 'pointer' : 'default' }}
+                  style={{ background: canBc ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canBc ? 'rgb(var(--white))' : 'rgb(var(--stonelight))', cursor: canBc ? 'pointer' : 'default' }}
                 >
                   Send to 136 households
                 </button>
@@ -1633,7 +1633,7 @@ export function BoardDesk() {
             {state.broadcastSent && (
               <div className="rounded-[13px] p-3.5 flex items-center gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0" />
-                <span className="text-[13px] font-bold text-sagedark">
+                <span className="text-[13px] font-bold text-sagedarkdark">
                   Sent — live in the Commons, email digest goes out at 6 PM
                 </span>
               </div>
@@ -1690,7 +1690,7 @@ export function BoardDesk() {
                         onClick={() => canPostVote && setVoteConfirm(true)}
                         disabled={!canPostVote}
                         className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                        style={{ background: canPostVote ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
+                        style={{ background: canPostVote ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
                       >
                         Open the ballot
                       </button>
@@ -1699,7 +1699,7 @@ export function BoardDesk() {
                         <button
                           onClick={() => { postVote(); setVoteConfirm(false); }}
                           className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                          style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
+                          style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
                         >
                           Confirm — open to 136 households
                         </button>
@@ -1739,10 +1739,10 @@ export function BoardDesk() {
               <div className="rounded-[13px] p-3.5 flex items-start gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0 mt-px" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedark">
+                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedarkdark">
                     Ballot is open — &quot;{voteQPreview}&quot;
                   </p>
-                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagegray))' }}>
+                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagedark))' }}>
                     Live on every resident&apos;s Today screen · closes in 7 days · you&apos;ll see the tally here
                   </p>
                 </div>
@@ -1852,7 +1852,7 @@ export function BoardDesk() {
                 </button>
               )}
               {state.minutesPublished && (
-                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                   Published ✓
                   <br />
                   in Documents
@@ -1893,7 +1893,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
   const urgencyPill = t.urgency === 'urgent'
     ? { label: 'URGENT', bg: 'rgb(var(--blush))', color: 'rgb(var(--terracotta))' }
     : t.urgency === 'low'
-      ? { label: 'LOW', bg: 'rgb(var(--sand))', color: 'rgb(var(--barkgray))' }
+      ? { label: 'LOW', bg: 'rgb(var(--sand))', color: 'rgb(var(--stone))' }
       : null;
 
   return (
@@ -1952,7 +1952,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
             <div className="flex gap-2 mb-3 overflow-x-auto pav-scroll">
               {t.photoUrls.map((u) => (
                 <a key={u} href={u} target="_blank" rel="noreferrer" className="flex-shrink-0">
-                  <img src={u} alt="" className="rounded-[11px] block" style={{ height: 84, width: 84, objectFit: 'cover' }} />
+                  <img src={u} alt="Attached photo" className="rounded-[11px] block" style={{ height: 84, width: 84, objectFit: 'cover' }} />
                 </a>
               ))}
             </div>
@@ -2006,6 +2006,8 @@ function TriageCard({ item: t }: { item: TriageItem }) {
               style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
             />
             <button
+              type="button"
+              aria-label="Send reply"
               onClick={sendReply}
               className="w-8 h-8 border-0 rounded-full cursor-pointer flex items-center justify-center flex-shrink-0"
               style={{ background: reply.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}

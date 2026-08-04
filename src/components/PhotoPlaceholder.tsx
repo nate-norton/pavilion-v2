@@ -5,7 +5,7 @@ export interface PhotoPlaceholderProps {
 }
 
 /** Striped photo-stand-in block with a mono caption (line 322). */
-export function PhotoPlaceholder({ label, height = 88, tint = 'rgb(var(--sandwarm))' }: PhotoPlaceholderProps) {
+export function PhotoPlaceholder({ label, height = 88, tint = 'rgb(var(--sanddeep))' }: PhotoPlaceholderProps) {
   return (
     <div
       className="rounded-xl flex items-center justify-center"

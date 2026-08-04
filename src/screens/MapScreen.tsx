@@ -83,7 +83,7 @@ export function MapScreen() {
       {/* Stylized map */}
       <div
         className="flex-1 relative rounded-[22px] overflow-hidden"
-        style={{ margin: '12px 14px 16px', background: 'rgb(var(--creamsand))', border: '1px solid rgb(var(--navy) / 0.08)' }}
+        style={{ margin: '12px 14px 16px', background: 'rgb(var(--sandtint))', border: '1px solid rgb(var(--navy) / 0.08)' }}
       >
         <div
           className="absolute left-0 right-0"
@@ -101,7 +101,7 @@ export function MapScreen() {
           className="absolute flex items-center justify-center"
           style={{ left: '53%', top: '5%', width: '36%', height: '16%', background: 'rgb(var(--sagepale))', borderRadius: 18 }}
         >
-          <span className="text-[9.5px] font-bold" style={{ color: 'rgb(var(--sagegray))', letterSpacing: '0.1em' }}>
+          <span className="text-[9.5px] font-bold" style={{ color: 'rgb(var(--sagedark))', letterSpacing: '0.1em' }}>
             THE GREEN
           </span>
         </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useRepository } from './context';
-import { hasSnapshot, type Repository, type RepositorySnapshot } from './Repository';
+import { hasSnapshot, type LoadDomain, type LoadState, type Repository, type RepositorySnapshot } from './Repository';
 import type { QA } from '../types';
 
 /** Reactive read of mutable domain state — re-renders when the repo mutates. */
@@ -237,3 +237,13 @@ export const useAiQA = () => useRepoRead<QA>('aiQA', (r) => r.getAiQA(), {});
 // Onboarding config
 export const useHouseholdOptions = () => useRepoRead('householdOptions', (r) => r.listHouseholdOptions(), []);
 export const useOnboardCircles = () => useRepoRead('onboardCircles', (r) => r.listOnboardCircles(), []);
+
+/**
+ * Hydration status for a domain, so a screen can tell "still loading" and
+ * "request failed" apart from "genuinely nothing here" instead of rendering
+ * all three as the same empty state.
+ */
+export function useLoadState(domain: LoadDomain): LoadState {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getLoadState(domain));
+}

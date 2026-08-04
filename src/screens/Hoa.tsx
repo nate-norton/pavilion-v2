@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { EmptyState } from '../components/EmptyState';
+import { Hint } from '../components/Hint';
+import { emitAppSuccess } from '../lib/errorBus';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusTimeline } from '../components/StatusTimeline';
 import { Confetti } from '../components/Confetti';
 import { usePavStore } from '../store/store';
-import { useVotes, useArc, useIssues, useDecisions, useMeetings, useRepository } from '../data/repo';
+import { useVotes, useArc, useIssues, useDecisions, useMeetings, useMember, useLoadState, useRepository } from '../data/repo';
 import type { OpenVote } from '../data/repo';
 
 const DUES_LEGEND = [
@@ -27,8 +30,27 @@ const FORECAST_BARS = [
 const ISSUE_TONES = {
   gold: { bg: 'rgb(var(--goldpale))', color: 'rgb(var(--golddark))' },
   mint: { bg: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' },
-  sand: { bg: 'rgb(var(--sand))', color: 'rgb(var(--barkgray))' },
+  sand: { bg: 'rgb(var(--sand))', color: 'rgb(var(--stone))' },
 } as const;
+
+
+/**
+ * Renders a real <button> when the row actually does something, and a plain
+ * <div> when it does not. Known-issue and decision rows are only tappable in
+ * the demo; making them buttons unconditionally would put focusable controls
+ * in a live resident's tab order that do nothing when activated.
+ */
+function RowShell({ interactive, onClick, className, style, children }: {
+  interactive: boolean; onClick: () => void; className: string;
+  style?: React.CSSProperties; children: React.ReactNode;
+}) {
+  if (!interactive) return <div className={className} style={style}>{children}</div>;
+  return (
+    <button type="button" onClick={onClick} className={`w-full border-none bg-transparent font-sans text-left ${className}`} style={style}>
+      {children}
+    </button>
+  );
+}
 
 /** HOA screen — ported from prototype lines 630-828. */
 export function Hoa() {
@@ -45,6 +67,11 @@ export function Hoa() {
   // Demo-flavor panels (finance breakdown, meeting) have no live data domain
   // yet — a live community hides them rather than showing fabricated numbers.
   const demo = repo.isDemo();
+  const member = useMember();
+  // Empty states are a dead end for the one person who can fill them, so the
+  // board gets an action where residents get an honest wait.
+  const isBoard = !demo && member?.role === 'board';
+  const votesLoad = useLoadState('votes');
 
   return (
     <div className="absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: '64px 18px 150px' }}>
@@ -57,23 +84,27 @@ export function Hoa() {
       {openAll.length > 0 ? (
         <>{openAll.map((v) => <VoteCard key={v.id} vote={v} demo={demo} />)}</>
       ) : (
-        <div
-          className="bg-paper rounded-[20px] p-[18px] mb-3.5 text-center"
-          style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
-        >
-          <PhIcon name="ph-fill ph-scales" size={26} color="rgb(var(--claypale))" />
-          <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No open votes</p>
-          <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-            When your board opens a ballot, it’ll appear here.
-          </p>
+        <div className="mb-3.5">
+          <EmptyState
+            icon="ph-fill ph-scales"
+            title="No open votes"
+            body={
+              isBoard
+                ? 'Put a decision to the community and every household sees the tally and quorum as it happens.'
+                : 'When your board opens a ballot, it’ll appear here.'
+            }
+            status={votesLoad}
+            actionLabel={isBoard ? 'Open a vote' : undefined}
+            onAction={isBoard ? () => set({ boardMode: true, boardTab: 'desk', voteDraftOpen: true }) : undefined}
+          />
         </div>
       )}
 
       {/* Annual meeting (demo-only until a meetings domain exists) */}
       {demo && (
-      <div
+      <button type="button"
         onClick={() => set({ meetingOpen: true })}
-        className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
+        className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
         style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
       >
         <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-goldpale">
@@ -88,7 +119,7 @@ export function Hoa() {
         <span className="text-[13px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--terracotta))' }}>
           Preview →
         </span>
-      </div>
+      </button>
       )}
 
       {/* Live meetings — board-scheduled, minutes downloadable */}
@@ -180,9 +211,9 @@ export function Hoa() {
           </div>
         </div>
         <div className="mt-3.5 pt-[13px]" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)' }}>
-          <div
+          <button type="button"
             onClick={() => setForecastOpen(!forecastOpen)}
-            className="flex items-center justify-between gap-2 cursor-pointer"
+            className="w-full border-none font-sans bg-transparent text-left flex items-center justify-between gap-2 cursor-pointer py-1"
           >
             <p className="m-0 text-[12.5px] font-bold text-navy">Funding forecast</p>
             <div className="flex items-center gap-1.5">
@@ -194,7 +225,7 @@ export function Hoa() {
               </span>
               <PhIcon name={forecastOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'} size={13} color="rgb(var(--stonelight))" />
             </div>
-          </div>
+          </button>
           {forecastOpen && (
             <div className="animate-fadeup mt-2.5">
               <div className="relative h-[78px]">
@@ -247,10 +278,11 @@ export function Hoa() {
           </p>
         ) : (
           arc.requests.map((r, i) => (
-            <div
+            <button
+              type="button"
               key={r.id}
               onClick={() => set({ arcDetailId: r.id })}
-              className={`bg-cream rounded-2xl px-3.5 py-[13px] cursor-pointer${i < arc.requests.length - 1 ? ' mb-2.5' : ''}`}
+              className={`w-full border-none font-sans text-left bg-cream rounded-2xl px-3.5 py-[13px] cursor-pointer${i < arc.requests.length - 1 ? ' mb-2.5' : ''}`}
             >
               <div className="flex items-center justify-between gap-2.5 mb-3">
                 <p className="m-0 text-[13.5px] font-bold text-navy">{r.title} · {r.ref}</p>
@@ -265,7 +297,7 @@ export function Hoa() {
                 </span>
               </div>
               <StatusTimeline steps={r.steps} />
-            </div>
+            </button>
           ))
         )}
       </div>
@@ -285,9 +317,10 @@ export function Hoa() {
           </p>
         ) : (
           issues.map((issue, i) => (
-            <div
+            <RowShell
               key={issue.id}
-              onClick={() => { if (demo) set({ issueDetailId: issue.id }); }}
+              interactive={demo}
+              onClick={() => set({ issueDetailId: issue.id })}
               className={`flex items-center gap-[11px]${i < issues.length - 1 ? ' pb-2.5 mb-2.5' : ''}${demo ? ' cursor-pointer' : ''}`}
               style={i < issues.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}
             >
@@ -301,7 +334,7 @@ export function Hoa() {
               >
                 {issue.statusLabel}
               </span>
-            </div>
+            </RowShell>
           ))
         )}
         <button
@@ -330,9 +363,10 @@ export function Hoa() {
         ) : (
           <div className="flex flex-col">
             {decisions.map((d, i) => (
-              <div
+              <RowShell
                 key={d.id}
-                onClick={() => { if (demo) set({ decisionDetailIdx: i }); }}
+                interactive={demo}
+                onClick={() => set({ decisionDetailIdx: i })}
                 className={`flex items-center gap-[11px] py-2.5${demo ? ' cursor-pointer' : ''}`}
                 style={i < decisions.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}
               >
@@ -349,7 +383,7 @@ export function Hoa() {
                 >
                   {d.pillLabel}
                 </span>
-              </div>
+              </RowShell>
             ))}
           </div>
         )}
@@ -357,9 +391,9 @@ export function Hoa() {
 
       {/* Docs + AI */}
       <div className="grid grid-cols-2 gap-2.5">
-        <div
+        <button type="button"
           onClick={() => set({ docsOpen: true, docReader: false })}
-          className="bg-paper rounded-[18px] p-[15px] cursor-pointer"
+          className="w-full border-none font-sans text-left bg-paper rounded-[18px] p-[15px] cursor-pointer"
           style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
         >
           <PhIcon name="ph-fill ph-files" size={22} color="rgb(var(--navy))" />
@@ -367,10 +401,10 @@ export function Hoa() {
           <p className="m-0 text-[11.5px] font-semibold text-stone">
             CC&amp;Rs · Bylaws · Budget · Minutes
           </p>
-        </div>
-        <div
+        </button>
+        <button type="button"
           onClick={() => set({ aiOpen: true })}
-          className="rounded-[18px] p-[15px] cursor-pointer text-white"
+          className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-[15px] cursor-pointer text-white"
           style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}
         >
           <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--white))" />
@@ -378,7 +412,7 @@ export function Hoa() {
           <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.85)' }}>
             &quot;Can I paint my fence black?&quot;
           </p>
-        </div>
+        </button>
       </div>
     </div>
   );
@@ -393,18 +427,29 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
   const repo = useRepository();
   const [changing, setChanging] = useState(false);
   const [picks, setPicks] = useState<string[]>([]);
+  const [casting, setCasting] = useState<string | null>(null);
 
   const isOptions = vote.kind === 'options';
   const hasVoted = isOptions ? vote.myOptionIds.length > 0 : !!vote.myVote;
   const showBallot = !hasVoted || changing;
   const votedLabel = vote.myVote === 'yes' ? vote.yesLabel : vote.noLabel;
 
+  // Casting is the highest-stakes action in the product and used to give no
+  // feedback until the round trip finished — 1-3s of silence on cell service,
+  // which is exactly how a resident ends up tapping twice.
   const castYesNo = (choice: 'yes' | 'no') => {
-    void repo.castVote(vote.id, choice).then(() => setChanging(false));
+    if (casting) return;
+    setCasting(choice);
+    void repo.castVote(vote.id, choice)
+      .then(() => { setChanging(false); emitAppSuccess('Your ballot is recorded.'); })
+      .finally(() => setCasting(null));
   };
   const castOptions = (ids: string[]) => {
-    if (!ids.length) return;
-    void repo.castOptionVote(vote.id, ids).then(() => { setChanging(false); setPicks([]); });
+    if (!ids.length || casting) return;
+    setCasting('options');
+    void repo.castOptionVote(vote.id, ids)
+      .then(() => { setChanging(false); setPicks([]); emitAppSuccess('Your ballot is recorded.'); })
+      .finally(() => setCasting(null));
   };
   const optionTotal = vote.options.reduce((n, o) => n + o.tally, 0);
 
@@ -428,8 +473,15 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
           {vote.quorumCount} of {vote.quorumTotal} households
         </span>
       </div>
-      <div className="mb-3.5">
+      <div className="mb-1.5">
         <ProgressBar pct={vote.quorumPct} height={8} track="rgb(var(--cream) / 0.15)" gradient />
+      </div>
+      <div className="mb-3.5">
+        <Hint label="What is quorum?">
+          Enough households have to vote for the result to count at all. Until
+          the bar fills, the outcome is not binding no matter how one-sided the
+          tally looks — which is why a vote you agree with still needs yours.
+        </Hint>
       </div>
 
       {/* Ballot — yes/no */}
@@ -437,17 +489,21 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
         <div className="flex gap-2.5">
           <button
             onClick={() => castYesNo('yes')}
+            disabled={!!casting}
+            aria-busy={casting === 'yes'}
             className="flex-1 border-none rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-            style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
+            style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))', opacity: casting && casting !== 'yes' ? 0.5 : 1 }}
           >
-            {vote.yesLabel}
+            {casting === 'yes' ? 'Recording…' : vote.yesLabel}
           </button>
           <button
             onClick={() => castYesNo('no')}
+            disabled={!!casting}
+            aria-busy={casting === 'no'}
             className="flex-1 bg-transparent rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-            style={{ border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))' }}
+            style={{ border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))', opacity: casting && casting !== 'no' ? 0.5 : 1 }}
           >
-            {vote.noLabel}
+            {casting === 'no' ? 'Recording…' : vote.noLabel}
           </button>
         </div>
       )}
@@ -469,7 +525,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
                 }}
                 className="w-full rounded-[13px] py-3 px-3.5 text-left text-sm font-extrabold cursor-pointer"
                 style={picked
-                  ? { background: 'rgb(var(--ember))', border: '1.5px solid rgb(var(--ember))', color: 'rgb(var(--white))' }
+                  ? { background: 'rgb(var(--emberdeep))', border: '1.5px solid rgb(var(--emberdeep))', color: 'rgb(var(--white))' }
                   : { background: 'transparent', border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))' }}
               >
                 {vote.multi && <span className="mr-2">{picked ? '☑' : '☐'}</span>}
@@ -481,7 +537,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             <button
               onClick={() => castOptions(picks)}
               className="w-full border-none rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-              style={{ background: picks.length ? 'rgb(var(--ember))' : 'rgb(var(--cream) / 0.15)', color: 'rgb(var(--white))' }}
+              style={{ background: picks.length ? 'rgb(var(--emberdeep))' : 'rgb(var(--cream) / 0.15)', color: 'rgb(var(--white))' }}
             >
               Cast ballot{picks.length > 1 ? ` · ${picks.length} picks` : ''}
             </button>

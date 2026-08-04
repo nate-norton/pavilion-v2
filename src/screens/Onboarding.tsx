@@ -187,7 +187,7 @@ export function Onboarding() {
                     Runs on the 3rd · cancel anytime
                   </p>
                 </div>
-                <Toggle on={state.obAutopay} onToggle={() => set({ obAutopay: !state.obAutopay })} size="lg" />
+                <Toggle on={state.obAutopay} onToggle={() => set({ obAutopay: !state.obAutopay })} size="lg" label="Autopay — charge dues automatically each month" />
               </div>
               <div
                 className="flex items-center gap-[9px] pt-3.5"

@@ -15,7 +15,9 @@ export function ExportSheet() {
   const exportDoneLabel = state.exportDone === 'QuickBooks' ? 'Synced to QuickBooks Online' : 'ledger.csv downloaded';
 
   return (
-    <Sheet open={state.exportOpen} onClose={closeExport}>
+    <Sheet
+      label="Export your data"
+      open={state.exportOpen} onClose={closeExport}>
       {exportPending && (
         <div>
           <p className="m-0 mb-0.5 font-serif text-[20px] text-navy">Export the ledger</p>

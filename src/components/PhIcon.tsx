@@ -258,7 +258,16 @@ export function PhIcon({ name, size, color, className }: PhIconProps) {
 
   if (!iconKey) return null;
   const Component = ICONS[iconKey];
-  if (!Component) return null;
+  if (!Component) {
+    // Rendering nothing is the right runtime behaviour, but doing it silently
+    // has now shipped two invisible icons (ph-cloud-slash, ph-warning-circle).
+    // A dev-only warning turns a soundless gap into something you notice the
+    // first time you look at the screen.
+    if (import.meta.env.DEV) {
+      console.warn(`[PhIcon] "${iconKey}" is not in the icon map — nothing will render. Add it to ICONS in PhIcon.tsx.`);
+    }
+    return null;
+  }
 
   return <Component size={size} color={color} weight={weight} className={className} />;
 }

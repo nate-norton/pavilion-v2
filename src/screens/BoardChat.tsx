@@ -3,6 +3,8 @@ import { PhIcon } from '../components/PhIcon';
 import { useArchivedBoardTopics, useBoardChat, useRepository } from '../data/repo';
 import type { BoardMessage } from '../data/repo';
 import { usePavStore } from '../store/store';
+import { confirmDestructive } from '../components/ConfirmSheet';
+import { emitAppSuccess } from '../lib/errorBus';
 
 /** The pinned thread every community always has. Stored as topic = null. */
 const GENERAL = 'General';
@@ -137,6 +139,8 @@ export function BoardChat() {
         )}
         {topic === null && (
           <button
+            type="button"
+            aria-label="Close board chat"
             onClick={close}
             className="w-8 h-8 rounded-full border-0 bg-paper cursor-pointer flex items-center justify-center"
           >
@@ -259,12 +263,17 @@ export function BoardChat() {
                     </p>
                     {m.text && <p className="m-0 text-[13.5px] leading-[1.45] font-semibold text-navy">{m.text}</p>}
                     {m.photoUrls.map((u) => (
-                      <img key={u} src={u} alt="" className="mt-1.5 rounded-[13px] max-w-[220px] block" style={{ maxHeight: 240, objectFit: 'cover' }} />
+                      <img key={u} src={u} alt="Photo in message" className="mt-1.5 rounded-[13px] max-w-[220px] block" style={{ maxHeight: 240, objectFit: 'cover' }} />
                     ))}
                   </div>
                   {m.me && (
                     <button
-                      onClick={() => void repo.deleteBoardMessage(m.id)}
+                      onClick={() => confirmDestructive({
+                        title: 'Delete this message?',
+                        body: 'It disappears from the board thread for every board member.',
+                        confirmLabel: 'Delete message',
+                        onConfirm: () => { void repo.deleteBoardMessage(m.id); emitAppSuccess('Message deleted.'); },
+                      })}
                       title="Delete message"
                       className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-40"
                     >

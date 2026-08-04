@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 import { useChatSeed, useChats, useRepository } from '../data/repo';
+import { confirmDestructive } from '../components/ConfirmSheet';
+import { emitAppSuccess } from '../lib/errorBus';
 
 /** 1:1 chat thread screen — ported from prototype lines 1926-1953. */
 export function Chat() {
@@ -83,7 +85,12 @@ export function Chat() {
             <div className="flex items-center gap-1.5" style={{ flexDirection: m.me ? 'row' : 'row-reverse' }}>
               {m.me && !demo && m.id && (
                 <button
-                  onClick={() => void repo.deleteChatMessage(chatKey, m.id!)}
+                  onClick={() => confirmDestructive({
+                    title: 'Delete this message?',
+                    body: 'It disappears from the thread for both of you.',
+                    confirmLabel: 'Delete message',
+                    onConfirm: () => { void repo.deleteChatMessage(chatKey, m.id!); emitAppSuccess('Message deleted.'); },
+                  })}
                   title="Delete message"
                   className="border-0 bg-transparent p-0.5 cursor-pointer opacity-30"
                 >
@@ -102,11 +109,11 @@ export function Chat() {
               >
                 {m.text && <p className="m-0 text-[13.5px] leading-[1.45] font-semibold">{m.text}</p>}
                 {(m.photos ?? []).map((u) => (
-                  <img key={u} src={u} alt="" className="mt-1 rounded-[11px] block" style={{ maxWidth: 200, maxHeight: 220, objectFit: 'cover' }} />
+                  <img key={u} src={u} alt="Photo in message" className="mt-1 rounded-[11px] block" style={{ maxWidth: 200, maxHeight: 220, objectFit: 'cover' }} />
                 ))}
               </div>
             </div>
-            <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--claygray))' }}>
+            <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--stone))' }}>
               {m.time || ''}
             </span>
           </div>
@@ -145,6 +152,7 @@ export function Chat() {
             if (e.key === 'Enter') sendChatMessage();
           }}
           placeholder="Message…"
+          maxLength={2000}
           className="flex-1 rounded-full text-[13.5px] font-semibold text-navy outline-none font-sans min-w-0"
           style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))', padding: '12px 16px' }}
         />

@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { PhIcon } from '../components/PhIcon';
+import { Hint } from '../components/Hint';
 import { Sheet } from '../components/Sheet';
 import { Chip } from '../components/Chip';
 import { usePavStore } from '../store/store';
@@ -29,7 +30,9 @@ export function ArcSheet() {
   const demo = repo.isDemo();
 
   return (
-    <Sheet open={state.arcSheetOpen} onClose={closeArc} maxHeight="86%">
+    <Sheet
+      label="New architectural request"
+      open={state.arcSheetOpen} onClose={closeArc} maxHeight="86%">
       <p className="m-0 mb-0.5 font-serif text-xl text-navy">New ARC request</p>
       <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
         Most requests get a decision within 7 days.
@@ -63,6 +66,7 @@ export function ArcSheet() {
         value={state.arcDesc}
         onChange={(e) => set({ arcDesc: e.target.value })}
         placeholder="e.g. Repaint front door in Sage, per the approved palette"
+        maxLength={2000}
         className="w-full bg-[rgb(var(--paper))] rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans resize-none mb-4"
         style={{ minHeight: 72, border: '1px solid rgb(var(--navy) / 0.12)' }}
       />
@@ -152,11 +156,20 @@ export function ArcSheet() {
       </div>
       )}
 
+      <div className="mb-3">
+        <Hint label="What happens after I submit?">
+          The board reviews it and either approves, declines, or asks for more
+          detail — you will see each step here. Start the work before approval
+          and you may be asked to undo it at your own cost, so it is worth the
+          wait.
+        </Hint>
+      </div>
+
       <button
         onClick={submit}
         className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold font-sans"
         style={{
-          background: canSubmit ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
+          background: canSubmit ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))',
           color: canSubmit ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
           cursor: canSubmit ? 'pointer' : 'default',
         }}
