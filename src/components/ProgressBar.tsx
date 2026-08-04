@@ -14,12 +14,18 @@ export function ProgressBar({ pct, color = 'rgb(var(--navy))', track = 'rgb(var(
       className="w-full rounded-full overflow-hidden"
       style={{ height, background: track }}
     >
+      {/*
+        Fills the track and scales down, rather than animating `width`.
+        Animating width lays out every frame; scaleX composites, so the
+        quorum bar on the vote card stays smooth on a mid-range phone.
+        `transform-origin: left` keeps it growing from the left edge.
+      */}
       <div
-        className="h-full rounded-full"
+        className="h-full w-full rounded-full origin-left"
         style={{
-          width: `${clamped}%`,
+          transform: `scaleX(${clamped / 100})`,
           background: gradient ? 'linear-gradient(90deg,rgb(var(--ember)),rgb(var(--emberbright)))' : color,
-          transition: 'width 0.6s cubic-bezier(0.22,1,0.36,1)',
+          transition: 'transform 0.6s cubic-bezier(0.22,1,0.36,1)',
         }}
       />
     </div>

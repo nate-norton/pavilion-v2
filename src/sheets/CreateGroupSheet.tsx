@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { usePavStore } from '../store/store';
@@ -20,25 +21,32 @@ export function CreateGroupSheet() {
   const state = usePavStore();
   const { set } = state;
   const repo = useRepository();
+  const [busy, setBusy] = useState(false);
 
   const close = () => set({ createGroupOpen: false, createGroupName: '', createGroupDesc: '', createGroupIcon: 'ph-fill ph-users-three', createGroupColor: 'rgb(var(--navy))' });
-  const canCreate = state.createGroupName.trim().length > 0;
+  const canCreate = state.createGroupName.trim().length > 0 && !busy;
 
   const createGroup = async () => {
     if (!canCreate) return;
+    setBusy(true);
+    try {
     const key = await repo.createGroup({
       name: state.createGroupName.trim(),
       description: state.createGroupDesc.trim(),
       icon: state.createGroupIcon,
       color: state.createGroupColor,
     });
-    set({ createGroupOpen: false, createGroupName: '', createGroupDesc: '', createGroupIcon: 'ph-fill ph-users-three', createGroupColor: 'rgb(var(--navy))', activeGroup: key });
+      set({ createGroupOpen: false, createGroupName: '', createGroupDesc: '', createGroupIcon: 'ph-fill ph-users-three', createGroupColor: 'rgb(var(--navy))', activeGroup: key });
+    } catch { /* failure surfaced via the app toast */ }
+    setBusy(false);
   };
 
   return (
-    <Sheet open={state.createGroupOpen} onClose={close} maxHeight="85%">
+    <Sheet
+      label="Create a group"
+      open={state.createGroupOpen} onClose={close} maxHeight="85%">
       <div style={{ padding: '22px 22px 32px' }}>
-        <h2 className="m-0 mb-1 font-serif font-normal text-[22px] text-navy">Create a group</h2>
+        <h2 className="m-0 mb-1 font-serif font-normal text-[19px] text-navy">Create a group</h2>
         <p className="m-0 mb-5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
           Neighbors can discover and join your group.
         </p>
@@ -136,7 +144,7 @@ export function CreateGroupSheet() {
             color: canCreate ? 'rgb(var(--cream))' : 'rgb(var(--stonelight))',
           }}
         >
-          Create group
+          {busy ? 'Creating…' : 'Create group'}
         </button>
       </div>
     </Sheet>

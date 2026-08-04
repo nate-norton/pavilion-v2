@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { reportedByDataLayer } from '../lib/errorBus';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
@@ -13,6 +14,13 @@ export function GroupDetail() {
   const groups = useGroups();
   const { voteGroupPoll, rsvpGroupEvent, toggleGroupJoin, toggleGroupMute } = repo;
   const [tab, setTab] = useState<Tab>('chat');
+  const [pollDraftOpen, setPollDraftOpen] = useState(false);
+  const [pollQ, setPollQ] = useState('');
+  const [pollOpts, setPollOpts] = useState<string[]>(['', '']);
+  const [evDraftOpen, setEvDraftOpen] = useState(false);
+  const [evTitle, setEvTitle] = useState('');
+  const [evWhen, setEvWhen] = useState('');
+  const [evWhere, setEvWhere] = useState('');
   const listRef = useRef<HTMLDivElement>(null);
 
   const group = state.activeGroup ? groups[state.activeGroup] : null;
@@ -107,8 +115,8 @@ export function GroupDetail() {
               </span>
               {t.count && t.count > 0 ? (
                 <span
-                  className="min-w-[16px] h-4 rounded-full flex items-center justify-center text-[9px] font-extrabold px-1"
-                  style={{ background: tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--taupepale))', color: tab === t.key ? 'rgb(var(--cream))' : 'rgb(var(--barkgray))' }}
+                  className="min-w-[16px] h-4 rounded-full flex items-center justify-center text-[10px] font-extrabold px-1"
+                  style={{ background: tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--taupepale))', color: tab === t.key ? 'rgb(var(--cream))' : 'rgb(var(--stone))' }}
                 >
                   {t.count}
                 </span>
@@ -157,7 +165,7 @@ export function GroupDetail() {
                       >
                         <p className="m-0 text-[13.5px] leading-[1.45] font-semibold">{m.text}</p>
                       </div>
-                      <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--claygray))' }}>
+                      <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--stone))' }}>
                         {m.time || ''}
                       </span>
                     </div>
@@ -190,6 +198,68 @@ export function GroupDetail() {
       {/* Polls tab */}
       {tab === 'polls' && (
         <div className="pav-scroll flex-1 overflow-y-auto" style={{ padding: '16px 18px' }}>
+          {!repo.isDemo() && group.joined && (
+            !pollDraftOpen ? (
+              <button
+                onClick={() => setPollDraftOpen(true)}
+                className="w-full rounded-full py-2.5 mb-3 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                style={{ border: '1.5px dashed rgb(var(--navy) / 0.25)' }}
+              >
+                + Start a poll
+              </button>
+            ) : (
+              <div className="rounded-[18px] p-3.5 mb-3 animate-fadeup" style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.1)' }}>
+                <input
+                  value={pollQ}
+                  onChange={(e) => setPollQ(e.target.value)}
+                  placeholder="Question"
+                  autoFocus
+                  className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                />
+                {pollOpts.map((o, i) => (
+                  <input
+                    key={i}
+                    value={o}
+                    onChange={(e) => setPollOpts(pollOpts.map((x, j) => (j === i ? e.target.value : x)))}
+                    placeholder={`Option ${i + 1}`}
+                    className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                ))}
+                {pollOpts.length < 5 && (
+                  <button
+                    onClick={() => setPollOpts([...pollOpts, ''])}
+                    className="w-full rounded-[11px] py-2 mb-2 text-[12px] font-extrabold cursor-pointer bg-transparent text-navy"
+                    style={{ border: '1.5px dashed rgb(var(--navy) / 0.2)' }}
+                  >
+                    + Add option
+                  </button>
+                )}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => { setPollDraftOpen(false); setPollQ(''); setPollOpts(['', '']); }}
+                    className="flex-1 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                    style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!pollQ.trim() || pollOpts.filter((o) => o.trim()).length < 2) return;
+                      void repo.createGroupPoll(group.key, pollQ, pollOpts)
+                        .then(() => { setPollDraftOpen(false); setPollQ(''); setPollOpts(['', '']); })
+                        .catch(reportedByDataLayer);
+                    }}
+                    className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
+                    style={{ background: pollQ.trim() && pollOpts.filter((o) => o.trim()).length >= 2 ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                  >
+                    Start poll
+                  </button>
+                </div>
+              </div>
+            )
+          )}
           {group.polls.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10" style={{ color: 'rgb(var(--stonelight))' }}>
               <PhIcon name="ph ph-chart-bar-horizontal" size={32} color="rgb(var(--taupepale))" />
@@ -228,8 +298,8 @@ export function GroupDetail() {
                         >
                           {poll.myVote && (
                             <div
-                              className="absolute inset-0 rounded-xl"
-                              style={{ background: 'rgb(var(--navy))', opacity: 0.06, width: pct + '%', transition: 'width 0.4s ease' }}
+                              className="absolute inset-0 rounded-xl origin-left"
+                              style={{ background: 'rgb(var(--navy))', opacity: 0.06, transform: `scaleX(${pct / 100})`, transition: 'transform 0.4s ease' }}
                             />
                           )}
                           <div className="relative flex items-center justify-between">
@@ -255,6 +325,65 @@ export function GroupDetail() {
       {/* Events tab */}
       {tab === 'events' && (
         <div className="pav-scroll flex-1 overflow-y-auto" style={{ padding: '16px 18px' }}>
+          {!repo.isDemo() && group.joined && (
+            !evDraftOpen ? (
+              <button
+                onClick={() => setEvDraftOpen(true)}
+                className="w-full rounded-full py-2.5 mb-3 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                style={{ border: '1.5px dashed rgb(var(--navy) / 0.25)' }}
+              >
+                + Plan an event
+              </button>
+            ) : (
+              <div className="rounded-[18px] p-3.5 mb-3 animate-fadeup" style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.1)' }}>
+                <input
+                  value={evTitle}
+                  onChange={(e) => setEvTitle(e.target.value)}
+                  placeholder="What — e.g. Saturday trail cleanup"
+                  autoFocus
+                  className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                />
+                <div className="flex gap-2 mb-2">
+                  <input
+                    value={evWhen}
+                    onChange={(e) => setEvWhen(e.target.value)}
+                    placeholder="When"
+                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                  <input
+                    value={evWhere}
+                    onChange={(e) => setEvWhere(e.target.value)}
+                    placeholder="Where"
+                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => { setEvDraftOpen(false); setEvTitle(''); setEvWhen(''); setEvWhere(''); }}
+                    className="flex-1 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                    style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!evTitle.trim()) return;
+                      void repo.createGroupEvent(group.key, evTitle, evWhen, evWhere)
+                        .then(() => { setEvDraftOpen(false); setEvTitle(''); setEvWhen(''); setEvWhere(''); })
+                        .catch(reportedByDataLayer);
+                    }}
+                    className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
+                    style={{ background: evTitle.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                  >
+                    Plan it
+                  </button>
+                </div>
+              </div>
+            )
+          )}
           {group.events.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10" style={{ color: 'rgb(var(--stonelight))' }}>
               <PhIcon name="ph ph-calendar-dots" size={32} color="rgb(var(--taupepale))" />
@@ -292,7 +421,7 @@ export function GroupDetail() {
                         type="button"
                         onClick={() => rsvpGroupEvent(group.key, evt.id)}
                         className="border-none text-white rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans flex-shrink-0"
-                        style={{ background: 'rgb(var(--ember))', padding: '9px 14px' }}
+                        style={{ background: 'rgb(var(--emberdeep))', padding: '9px 14px' }}
                       >
                         I&apos;m in
                       </button>
@@ -344,6 +473,17 @@ export function GroupDetail() {
               style={{ background: 'rgb(var(--blushpale))', color: 'rgb(var(--terracotta))' }}
             >
               Leave group
+            </button>
+          )}
+          {!repo.isDemo() && group.joined && (
+            <button
+              type="button"
+              onClick={() => void repo.archiveGroup(group.key).then(() => set({ activeGroup: null })).catch(reportedByDataLayer)}
+              className="w-full mt-2 bg-transparent rounded-xl py-3 text-[13px] font-extrabold cursor-pointer text-stone"
+              style={{ border: '1.5px dashed rgb(var(--navy) / 0.2)' }}
+              title="Only the creator or the board can archive"
+            >
+              Archive group — hides it for everyone, history kept
             </button>
           )}
         </div>

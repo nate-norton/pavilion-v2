@@ -14,49 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      amenities: {
+        Row: { active: boolean; avail_label: string; capacity: number; close_hour: number; community_id: string; created_at: string; icon: string; id: string; max_days_ahead: number; name: string; occ_label: string; open_hour: number; rules: string; slot_minutes: number; sort_order: number; sub: string }
+        Insert: { active?: boolean; avail_label?: string; capacity?: number; close_hour?: number; community_id: string; created_at?: string; icon?: string; id?: string; max_days_ahead?: number; name: string; occ_label?: string; open_hour?: number; rules?: string; slot_minutes?: number; sort_order?: number; sub?: string }
+        Update: { active?: boolean; avail_label?: string; capacity?: number; close_hour?: number; community_id?: string; created_at?: string; icon?: string; id?: string; max_days_ahead?: number; name?: string; occ_label?: string; open_hour?: number; rules?: string; slot_minutes?: number; sort_order?: number; sub?: string }
+        Relationships: [
+          { foreignKeyName: "amenities_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
+      }
       arc_requests: {
-        Row: {
-          approved: boolean
-          community_id: string
-          created_at: string
-          id: string
-          ref: string
-          sort_order: number
-          status: string
-          status_label: string
-          steps: Json
-          title: string
-          unit_id: string
-        }
-        Insert: {
-          approved?: boolean
-          community_id: string
-          created_at?: string
-          id?: string
-          ref: string
-          sort_order?: number
-          status?: string
-          status_label?: string
-          steps?: Json
-          title: string
-          unit_id: string
-        }
-        Update: {
-          approved?: boolean
-          community_id?: string
-          created_at?: string
-          id?: string
-          ref?: string
-          sort_order?: number
-          status?: string
-          status_label?: string
-          steps?: Json
-          title?: string
-          unit_id?: string
-        }
+        Row: { approved: boolean; attachments: string[]; community_id: string; conditions: string; created_at: string; decision_note: string; id: string; ref: string; sort_order: number; status: string; status_label: string; steps: Json; title: string; unit_id: string }
+        Insert: { approved?: boolean; attachments?: string[]; community_id: string; conditions?: string; created_at?: string; decision_note?: string; id?: string; ref: string; sort_order?: number; status?: string; status_label?: string; steps?: Json; title: string; unit_id: string }
+        Update: { approved?: boolean; attachments?: string[]; community_id?: string; conditions?: string; created_at?: string; decision_note?: string; id?: string; ref?: string; sort_order?: number; status?: string; status_label?: string; steps?: Json; title?: string; unit_id?: string }
         Relationships: [
           { foreignKeyName: "arc_requests_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
           { foreignKeyName: "arc_requests_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
+        ]
+      }
+      board_messages: {
+        Row: { body: string; community_id: string; created_at: string; id: string; photos: string[]; sender_profile_id: string; topic: string | null }
+        Insert: { body: string; community_id: string; created_at?: string; id?: string; photos?: string[]; sender_profile_id: string; topic?: string | null }
+        Update: { body?: string; community_id?: string; created_at?: string; id?: string; photos?: string[]; sender_profile_id?: string; topic?: string | null }
+        Relationships: [
+          { foreignKeyName: "board_messages_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "board_messages_sender_profile_id_fkey"; columns: ["sender_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      board_topics: {
+        Row: { archived: boolean; community_id: string; created_at: string; id: string; name: string }
+        Insert: { archived?: boolean; community_id: string; created_at?: string; id?: string; name: string }
+        Update: { archived?: boolean; community_id?: string; created_at?: string; id?: string; name?: string }
+        Relationships: [
+          { foreignKeyName: "board_topics_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
+      }
+      audit_log: {
+        Row: { action: string; actor_profile_id: string | null; community_id: string; created_at: string; detail: string; id: string }
+        Insert: { action: string; actor_profile_id?: string | null; community_id: string; created_at?: string; detail?: string; id?: string }
+        Update: { action?: string; actor_profile_id?: string | null; community_id?: string; created_at?: string; detail?: string; id?: string }
+        Relationships: [
+          { foreignKeyName: "audit_log_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "audit_log_actor_profile_id_fkey"; columns: ["actor_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
         ]
       }
       communities: {
@@ -92,6 +90,42 @@ export type Database = {
         Update: { community_id?: string; created_at?: string; date_label?: string; id?: string; passed?: boolean; pill_label?: string; sort_order?: number; text?: string }
         Relationships: [
           { foreignKeyName: "decisions_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
+      }
+      dm_messages: {
+        Row: { body: string; created_at: string; id: string; photos: string[]; sender_profile_id: string; thread_id: string }
+        Insert: { body: string; created_at?: string; id?: string; photos?: string[]; sender_profile_id: string; thread_id: string }
+        Update: { body?: string; created_at?: string; id?: string; photos?: string[]; sender_profile_id?: string; thread_id?: string }
+        Relationships: [
+          { foreignKeyName: "dm_messages_thread_id_fkey"; columns: ["thread_id"]; isOneToOne: false; referencedRelation: "dm_threads"; referencedColumns: ["id"] },
+          { foreignKeyName: "dm_messages_sender_profile_id_fkey"; columns: ["sender_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      dm_reads: {
+        Row: { id: string; last_read_at: string; profile_id: string; thread_id: string }
+        Insert: { id?: string; last_read_at?: string; profile_id: string; thread_id: string }
+        Update: { id?: string; last_read_at?: string; profile_id?: string; thread_id?: string }
+        Relationships: [
+          { foreignKeyName: "dm_reads_thread_id_fkey"; columns: ["thread_id"]; isOneToOne: false; referencedRelation: "dm_threads"; referencedColumns: ["id"] },
+          { foreignKeyName: "dm_reads_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      dm_threads: {
+        Row: { a_profile_id: string; b_profile_id: string; community_id: string; created_at: string; id: string }
+        Insert: { a_profile_id: string; b_profile_id: string; community_id: string; created_at?: string; id?: string }
+        Update: { a_profile_id?: string; b_profile_id?: string; community_id?: string; created_at?: string; id?: string }
+        Relationships: [
+          { foreignKeyName: "dm_threads_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "dm_threads_a_profile_id_fkey"; columns: ["a_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+          { foreignKeyName: "dm_threads_b_profile_id_fkey"; columns: ["b_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      documents: {
+        Row: { community_id: string; created_at: string; id: string; name: string; section: string; size_label: string; storage_path: string; updated_label: string }
+        Insert: { community_id: string; created_at?: string; id?: string; name: string; section?: string; size_label?: string; storage_path: string; updated_label?: string }
+        Update: { community_id?: string; created_at?: string; id?: string; name?: string; section?: string; size_label?: string; storage_path?: string; updated_label?: string }
+        Relationships: [
+          { foreignKeyName: "documents_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
         ]
       }
       dues_statements: {
@@ -151,6 +185,15 @@ export type Database = {
           { foreignKeyName: "dues_statements_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
         ]
       }
+      invites: {
+        Row: { accepted_at: string | null; code: string; community_id: string; created_at: string; email: string; expires_at: string; id: string; invited_by: string | null; role: "resident" | "board"; status: string; unit_label: string }
+        Insert: { accepted_at?: string | null; code?: string; community_id: string; created_at?: string; email: string; expires_at?: string; id?: string; invited_by?: string | null; role?: "resident" | "board"; status?: string; unit_label?: string }
+        Update: { accepted_at?: string | null; code?: string; community_id?: string; created_at?: string; email?: string; expires_at?: string; id?: string; invited_by?: string | null; role?: "resident" | "board"; status?: string; unit_label?: string }
+        Relationships: [
+          { foreignKeyName: "invites_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+          { foreignKeyName: "invites_invited_by_fkey"; columns: ["invited_by"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
       events: {
         Row: { community_id: string; created_at: string; featured: boolean; going: number; id: string; photo_label: string; sort_order: number; tag_label: string; title: string; when_label: string; where_label: string }
         Insert: { community_id: string; created_at?: string; featured?: boolean; going?: number; id?: string; photo_label?: string; sort_order?: number; tag_label?: string; title: string; when_label?: string; where_label?: string }
@@ -159,10 +202,19 @@ export type Database = {
           { foreignKeyName: "events_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
         ]
       }
+      event_rsvps: {
+        Row: { created_at: string; event_id: string; id: string; profile_id: string }
+        Insert: { created_at?: string; event_id: string; id?: string; profile_id: string }
+        Update: { created_at?: string; event_id?: string; id?: string; profile_id?: string }
+        Relationships: [
+          { foreignKeyName: "event_rsvps_event_id_fkey"; columns: ["event_id"]; isOneToOne: false; referencedRelation: "events"; referencedColumns: ["id"] },
+          { foreignKeyName: "event_rsvps_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
       feed_posts: {
-        Row: { author_color: string; author_initial: string; author_name: string; body: string; community_id: string; created_at: string; id: string; kind: string; photo_label: string; sort_order: number; tag_label: string; time_label: string; unit_label: string }
-        Insert: { author_color?: string; author_initial?: string; author_name: string; body?: string; community_id: string; created_at?: string; id?: string; kind?: string; photo_label?: string; sort_order?: number; tag_label?: string; time_label?: string; unit_label?: string }
-        Update: { author_color?: string; author_initial?: string; author_name?: string; body?: string; community_id?: string; created_at?: string; id?: string; kind?: string; photo_label?: string; sort_order?: number; tag_label?: string; time_label?: string; unit_label?: string }
+        Row: { author_color: string; author_initial: string; author_name: string; author_profile_id: string | null; body: string; community_id: string; created_at: string; id: string; kind: string; photo_label: string; photos: string[]; pinned: boolean; sort_order: number; tag_label: string; time_label: string; unit_label: string }
+        Insert: { author_color?: string; author_initial?: string; author_name: string; author_profile_id?: string | null; body?: string; community_id: string; created_at?: string; id?: string; kind?: string; photo_label?: string; photos?: string[]; pinned?: boolean; sort_order?: number; tag_label?: string; time_label?: string; unit_label?: string }
+        Update: { author_color?: string; author_initial?: string; author_name?: string; author_profile_id?: string | null; body?: string; community_id?: string; created_at?: string; id?: string; kind?: string; photo_label?: string; photos?: string[]; pinned?: boolean; sort_order?: number; tag_label?: string; time_label?: string; unit_label?: string }
         Relationships: [
           { foreignKeyName: "feed_posts_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
         ]
@@ -194,9 +246,9 @@ export type Database = {
         ]
       }
       group_messages: {
-        Row: { body: string; created_at: string; group_id: string; id: string; profile_id: string | null }
-        Insert: { body: string; created_at?: string; group_id: string; id?: string; profile_id?: string | null }
-        Update: { body?: string; created_at?: string; group_id?: string; id?: string; profile_id?: string | null }
+        Row: { body: string; created_at: string; group_id: string; id: string; photos: string[]; profile_id: string | null }
+        Insert: { body: string; created_at?: string; group_id: string; id?: string; photos?: string[]; profile_id?: string | null }
+        Update: { body?: string; created_at?: string; group_id?: string; id?: string; photos?: string[]; profile_id?: string | null }
         Relationships: [
           { foreignKeyName: "group_messages_group_id_fkey"; columns: ["group_id"]; isOneToOne: false; referencedRelation: "groups"; referencedColumns: ["id"] },
           { foreignKeyName: "group_messages_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
@@ -237,9 +289,9 @@ export type Database = {
         ]
       }
       groups: {
-        Row: { color: string; community_id: string; created_at: string; description: string; icon: string; id: string; is_group_chat: boolean; member_count: number; name: string }
-        Insert: { color?: string; community_id: string; created_at?: string; description?: string; icon?: string; id?: string; is_group_chat?: boolean; member_count?: number; name: string }
-        Update: { color?: string; community_id?: string; created_at?: string; description?: string; icon?: string; id?: string; is_group_chat?: boolean; member_count?: number; name?: string }
+        Row: { archived: boolean; color: string; community_id: string; created_at: string; created_by: string | null; description: string; icon: string; id: string; is_group_chat: boolean; member_count: number; name: string }
+        Insert: { archived?: boolean; color?: string; community_id: string; created_at?: string; created_by?: string | null; description?: string; icon?: string; id?: string; is_group_chat?: boolean; member_count?: number; name: string }
+        Update: { archived?: boolean; color?: string; community_id?: string; created_at?: string; created_by?: string | null; description?: string; icon?: string; id?: string; is_group_chat?: boolean; member_count?: number; name?: string }
         Relationships: [
           { foreignKeyName: "groups_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
         ]
@@ -297,34 +349,36 @@ export type Database = {
         ]
       }
       profiles: {
-        Row: {
-          avatar_url: string | null
-          color: string
-          created_at: string
-          id: string
-          initial: string
-          name: string
-          user_id: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          color?: string
-          created_at?: string
-          id?: string
-          initial?: string
-          name: string
-          user_id?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          color?: string
-          created_at?: string
-          id?: string
-          initial?: string
-          name?: string
-          user_id?: string | null
-        }
+        Row: { avatar_url: string | null; color: string; created_at: string; hide_directory: boolean; id: string; initial: string; name: string; phone: string; user_id: string | null }
+        Insert: { avatar_url?: string | null; color?: string; created_at?: string; hide_directory?: boolean; id?: string; initial?: string; name: string; phone?: string; user_id?: string | null }
+        Update: { avatar_url?: string | null; color?: string; created_at?: string; hide_directory?: boolean; id?: string; initial?: string; name?: string; phone?: string; user_id?: string | null }
         Relationships: []
+      }
+      post_comments: {
+        Row: { author_profile_id: string | null; body: string; created_at: string; id: string; post_id: string }
+        Insert: { author_profile_id?: string | null; body: string; created_at?: string; id?: string; post_id: string }
+        Update: { author_profile_id?: string | null; body?: string; created_at?: string; id?: string; post_id?: string }
+        Relationships: [
+          { foreignKeyName: "post_comments_post_id_fkey"; columns: ["post_id"]; isOneToOne: false; referencedRelation: "feed_posts"; referencedColumns: ["id"] },
+          { foreignKeyName: "post_comments_author_profile_id_fkey"; columns: ["author_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      post_reactions: {
+        Row: { created_at: string; id: string; post_id: string; profile_id: string }
+        Insert: { created_at?: string; id?: string; post_id: string; profile_id: string }
+        Update: { created_at?: string; id?: string; post_id?: string; profile_id?: string }
+        Relationships: [
+          { foreignKeyName: "post_reactions_post_id_fkey"; columns: ["post_id"]; isOneToOne: false; referencedRelation: "feed_posts"; referencedColumns: ["id"] },
+          { foreignKeyName: "post_reactions_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
+      meetings: {
+        Row: { agenda: Json; community_id: string; created_at: string; id: string; minutes_path: string | null; status: string; title: string; when_label: string; where_label: string }
+        Insert: { agenda?: Json; community_id: string; created_at?: string; id?: string; minutes_path?: string | null; status?: string; title: string; when_label?: string; where_label?: string }
+        Update: { agenda?: Json; community_id?: string; created_at?: string; id?: string; minutes_path?: string | null; status?: string; title?: string; when_label?: string; where_label?: string }
+        Relationships: [
+          { foreignKeyName: "meetings_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
+        ]
       }
       units: {
         Row: {
@@ -355,10 +409,19 @@ export type Database = {
           },
         ]
       }
+      report_comments: {
+        Row: { author_profile_id: string | null; body: string; created_at: string; id: string; report_id: string }
+        Insert: { author_profile_id?: string | null; body: string; created_at?: string; id?: string; report_id: string }
+        Update: { author_profile_id?: string | null; body?: string; created_at?: string; id?: string; report_id?: string }
+        Relationships: [
+          { foreignKeyName: "report_comments_report_id_fkey"; columns: ["report_id"]; isOneToOne: false; referencedRelation: "reports"; referencedColumns: ["id"] },
+          { foreignKeyName: "report_comments_author_profile_id_fkey"; columns: ["author_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ]
+      }
       reports: {
-        Row: { community_id: string; created_at: string; id: string; kind: string; ref: string; reporter_label: string; reporter_profile_id: string | null; status: string; title: string; vendor: string }
-        Insert: { community_id: string; created_at?: string; id?: string; kind?: string; ref?: string; reporter_label?: string; reporter_profile_id?: string | null; status?: string; title: string; vendor?: string }
-        Update: { community_id?: string; created_at?: string; id?: string; kind?: string; ref?: string; reporter_label?: string; reporter_profile_id?: string | null; status?: string; title?: string; vendor?: string }
+        Row: { board_notes: string; community_id: string; created_at: string; id: string; kind: string; location: string; photos: string[]; ref: string; reporter_label: string; reporter_profile_id: string | null; status: string; title: string; urgency: string; vendor: string }
+        Insert: { board_notes?: string; community_id: string; created_at?: string; id?: string; kind?: string; location?: string; photos?: string[]; ref?: string; reporter_label?: string; reporter_profile_id?: string | null; status?: string; title: string; urgency?: string; vendor?: string }
+        Update: { board_notes?: string; community_id?: string; created_at?: string; id?: string; kind?: string; location?: string; photos?: string[]; ref?: string; reporter_label?: string; reporter_profile_id?: string | null; status?: string; title?: string; urgency?: string; vendor?: string }
         Relationships: [
           { foreignKeyName: "reports_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
           { foreignKeyName: "reports_reporter_profile_id_fkey"; columns: ["reporter_profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
@@ -383,25 +446,36 @@ export type Database = {
         ]
       }
       violations: {
-        Row: { community_id: string; created_at: string; id: string; status: string; sub: string; title: string; unit_id: string }
-        Insert: { community_id: string; created_at?: string; id?: string; status?: string; sub?: string; title: string; unit_id: string }
-        Update: { community_id?: string; created_at?: string; id?: string; status?: string; sub?: string; title?: string; unit_id?: string }
+        Row: { community_id: string; created_at: string; description: string; fine_cents: number; id: string; photos: string[]; severity: string; status: string; sub: string; title: string; unit_id: string }
+        Insert: { community_id: string; created_at?: string; description?: string; fine_cents?: number; id?: string; photos?: string[]; severity?: string; status?: string; sub?: string; title: string; unit_id: string }
+        Update: { community_id?: string; created_at?: string; description?: string; fine_cents?: number; id?: string; photos?: string[]; severity?: string; status?: string; sub?: string; title?: string; unit_id?: string }
         Relationships: [
           { foreignKeyName: "violations_community_id_fkey"; columns: ["community_id"]; isOneToOne: false; referencedRelation: "communities"; referencedColumns: ["id"] },
           { foreignKeyName: "violations_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: false; referencedRelation: "units"; referencedColumns: ["id"] },
         ]
       }
       vote_ballots: {
-        Row: { choice: string; created_at: string; id: string; profile_id: string; vote_id: string }
-        Insert: { choice: string; created_at?: string; id?: string; profile_id: string; vote_id: string }
-        Update: { choice?: string; created_at?: string; id?: string; profile_id?: string; vote_id?: string }
+        Row: { choice: string; created_at: string; id: string; option_ids: string[]; profile_id: string; vote_id: string }
+        Insert: { choice?: string; created_at?: string; id?: string; option_ids?: string[]; profile_id: string; vote_id: string }
+        Update: { choice?: string; created_at?: string; id?: string; option_ids?: string[]; profile_id?: string; vote_id?: string }
         Relationships: [
           { foreignKeyName: "vote_ballots_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
           { foreignKeyName: "vote_ballots_vote_id_fkey"; columns: ["vote_id"]; isOneToOne: false; referencedRelation: "votes"; referencedColumns: ["id"] },
         ]
       }
+      vote_options: {
+        Row: { id: string; label: string; position: number; tally: number; vote_id: string }
+        Insert: { id?: string; label: string; position?: number; tally?: number; vote_id: string }
+        Update: { id?: string; label?: string; position?: number; tally?: number; vote_id?: string }
+        Relationships: [
+          { foreignKeyName: "vote_options_vote_id_fkey"; columns: ["vote_id"]; isOneToOne: false; referencedRelation: "votes"; referencedColumns: ["id"] },
+        ]
+      }
       votes: {
         Row: {
+          closes_at: string | null
+          kind: string
+          multi: boolean
           closes_label: string
           community_id: string
           created_at: string
@@ -418,6 +492,9 @@ export type Database = {
           yes_label: string
         }
         Insert: {
+          closes_at?: string | null
+          kind?: string
+          multi?: boolean
           closes_label?: string
           community_id: string
           created_at?: string
@@ -434,6 +511,9 @@ export type Database = {
           yes_label?: string
         }
         Update: {
+          closes_at?: string | null
+          kind?: string
+          multi?: boolean
           closes_label?: string
           community_id?: string
           created_at?: string
@@ -458,7 +538,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      claim_invite: { Args: Record<PropertyKey, never>; Returns: boolean }
+      claim_invite_code: { Args: { invite_code: string }; Returns: boolean }
     }
     Enums: {
       member_role: "resident" | "board"

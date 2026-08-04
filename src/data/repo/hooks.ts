@@ -1,7 +1,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useRepository } from './context';
-import { hasSnapshot, type Repository, type RepositorySnapshot } from './Repository';
-import type { ChatSeed, QA } from '../types';
+import { hasSnapshot, type LoadDomain, type LoadState, type Repository, type RepositorySnapshot } from './Repository';
+import type { QA } from '../types';
 
 /** Reactive read of mutable domain state — re-renders when the repo mutates. */
 export function useReservation() {
@@ -95,6 +95,60 @@ export function useMyReports() {
   return useSyncExternalStore(repo.subscribe, () => repo.getMyReports());
 }
 
+/** The board's private chat (live only; empty in demo). */
+export function useBoardChat() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getBoardChat());
+}
+
+/** The board's invites (live only; empty in demo). */
+export function useInvites() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getInvites());
+}
+
+/** The board's open violations across units (live only; empty in demo). */
+export function useBoardViolations() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getBoardViolations());
+}
+
+/** The community's units for board pickers (live only; empty in demo). */
+export function useUnits() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getUnits());
+}
+
+/** The board's member-admin roster (live only; empty in demo). */
+export function useAdminMembers() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getAdminMembers());
+}
+
+/** The board's audit trail (live only; empty in demo). */
+export function useAuditLog() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getAuditLog());
+}
+
+/** All active bookings across the community (board; live only). */
+export function useBoardBookings() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getBoardBookings());
+}
+
+/** Community meetings (live; the demo's meeting prep is scripted). */
+export function useMeetings() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getMeetings());
+}
+
+/** Board chat topics archived away (live only). */
+export function useArchivedBoardTopics() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getArchivedBoardTopics());
+}
+
 /** The board's live ARC queue across all units (empty in demo). */
 export function useBoardArcQueue() {
   const repo = useRepository();
@@ -138,19 +192,35 @@ function useRepoRead<T>(
 }
 
 // Reservations
-export const useAmenities = () => useRepoRead('amenities', (r) => r.listAmenities(), []);
+/** Reactive: live re-renders when amenities hydrate after auth resolves. */
+export function useAmenities() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getAmenities());
+}
 export const useReservationSlots = () => useRepoRead('reservationSlots', (r) => r.getReservationSlots(), []);
 export const useReservationDays = () => useRepoRead('reservationDays', (r) => r.getReservationDays(), []);
 
 // Community / people
-export const useDirectory = () => useRepoRead('directory', (r) => r.listDirectory(), []);
+/** Reactive: live re-renders as the community directory hydrates. */
+export function useDirectory() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getDirectory());
+}
 export const useCircles = () => useRepoRead('circles', (r) => r.listCircles(), []);
 export const useFreeItems = () => useRepoRead('freeItems', (r) => r.listFreeItems(), []);
-export const useChatSeed = () => useRepoRead<ChatSeed>('chatSeed', (r) => r.getChatSeed(), {});
+/** Reactive chat index (see Repository.getChatIndex). */
+export function useChatSeed() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getChatIndex());
+}
 
 // HOA / board
 export const useVendors = () => useRepoRead('vendors', (r) => r.listVendors(), []);
-export const useDocuments = () => useRepoRead('documents', (r) => r.listDocuments(), []);
+/** Reactive: live re-renders as the board uploads/removes documents. */
+export function useDocuments() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getDocs());
+}
 export const useDocSections = () => useRepoRead('docSections', (r) => r.listDocSections(), []);
 export const useArcTypes = () => useRepoRead('arcTypes', (r) => r.listArcTypes(), []);
 export const usePortfolio = () => useRepoRead('portfolio', (r) => r.listPortfolio(), []);
@@ -167,3 +237,13 @@ export const useAiQA = () => useRepoRead<QA>('aiQA', (r) => r.getAiQA(), {});
 // Onboarding config
 export const useHouseholdOptions = () => useRepoRead('householdOptions', (r) => r.listHouseholdOptions(), []);
 export const useOnboardCircles = () => useRepoRead('onboardCircles', (r) => r.listOnboardCircles(), []);
+
+/**
+ * Hydration status for a domain, so a screen can tell "still loading" and
+ * "request failed" apart from "genuinely nothing here" instead of rendering
+ * all three as the same empty state.
+ */
+export function useLoadState(domain: LoadDomain): LoadState {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getLoadState(domain));
+}

@@ -76,7 +76,7 @@ export function Onboarding() {
             >
               Juniper Ridge · Est. 1994
             </p>
-            <h1 className="m-0 mb-2.5 font-serif font-normal text-[34px] leading-[1.15]" style={{ color: 'rgb(var(--navy))' }}>
+            <h1 className="m-0 mb-2.5 font-serif font-normal text-[36px] leading-[1.15]" style={{ color: 'rgb(var(--navy))' }}>
               Welcome home, Alex.
             </h1>
             <p className="m-0 mb-6 text-[14.5px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
@@ -90,7 +90,7 @@ export function Onboarding() {
                 <PhIcon name="ph-fill ph-house-line" size={23} color="rgb(var(--navy))" />
               </div>
               <div className="flex-1">
-                <p className="m-0 mb-0.5 text-[15px] font-bold" style={{ color: 'rgb(var(--navy))' }}>
+                <p className="m-0 mb-0.5 text-[14px] font-bold" style={{ color: 'rgb(var(--navy))' }}>
                   #27 Alder Way
                 </p>
                 <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
@@ -104,7 +104,7 @@ export function Onboarding() {
 
         {step === 1 && (
           <div className="animate-fadeup">
-            <h1 className="m-0 mb-2.5 font-serif font-normal text-[28px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
+            <h1 className="m-0 mb-2.5 font-serif font-normal text-[24px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
               Who's in the household?
             </h1>
             <p className="m-0 mb-[22px] text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
@@ -138,7 +138,7 @@ export function Onboarding() {
 
         {step === 2 && (
           <div className="animate-fadeup">
-            <h1 className="m-0 mb-2.5 font-serif font-normal text-[28px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
+            <h1 className="m-0 mb-2.5 font-serif font-normal text-[24px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
               What are you into?
             </h1>
             <p className="m-0 mb-[22px] text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
@@ -171,7 +171,7 @@ export function Onboarding() {
 
         {step === 3 && (
           <div className="animate-fadeup">
-            <h1 className="m-0 mb-2.5 font-serif font-normal text-[28px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
+            <h1 className="m-0 mb-2.5 font-serif font-normal text-[24px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
               Dues on autopilot?
             </h1>
             <p className="m-0 mb-[22px] text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
@@ -180,14 +180,14 @@ export function Onboarding() {
             <div className="p-[18px]" style={CARD}>
               <div className="flex items-center justify-between gap-2.5 mb-3.5">
                 <div>
-                  <p className="m-0 font-serif text-[26px]" style={{ color: 'rgb(var(--navy))' }}>
-                    $285<span className="text-[15px]" style={{ color: 'rgb(var(--stone))' }}>/mo</span>
+                  <p className="m-0 font-serif text-[24px]" style={{ color: 'rgb(var(--navy))' }}>
+                    $285<span className="text-[14px]" style={{ color: 'rgb(var(--stone))' }}>/mo</span>
                   </p>
                   <p className="m-0 text-[12px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
                     Runs on the 3rd · cancel anytime
                   </p>
                 </div>
-                <Toggle on={state.obAutopay} onToggle={() => set({ obAutopay: !state.obAutopay })} size="lg" />
+                <Toggle on={state.obAutopay} onToggle={() => set({ obAutopay: !state.obAutopay })} size="lg" label="Autopay — charge dues automatically each month" />
               </div>
               <div
                 className="flex items-center gap-[9px] pt-3.5"
@@ -210,7 +210,7 @@ export function Onboarding() {
             >
               <PhIcon name="ph-fill ph-sparkle" size={28} color="rgb(var(--white))" />
             </div>
-            <h1 className="m-0 mb-2.5 font-serif font-normal text-[28px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
+            <h1 className="m-0 mb-2.5 font-serif font-normal text-[24px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
               Meet your AI assistant.
             </h1>
             <p className="m-0 mb-5 text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
@@ -256,7 +256,7 @@ export function Onboarding() {
         <button
           type="button"
           onClick={next}
-          className="flex-1 rounded-2xl text-[15px] font-extrabold cursor-pointer font-sans active:scale-[0.98]"
+          className="flex-1 rounded-2xl text-[14px] font-extrabold cursor-pointer font-sans active:scale-[0.98]"
           style={{ border: 'none', background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', padding: '16px 0' }}
         >
           {nextLabel}

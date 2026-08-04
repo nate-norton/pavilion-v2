@@ -26,10 +26,11 @@ export function Notifications() {
   const allMuted = today.length === 0 && earlier.length === 0;
 
   const renderRow = (nt: Notif) => (
-    <div
+    <button
+      type="button"
       key={nt.key}
       onClick={() => routeNotif(nt.go)}
-      className="flex items-center gap-3 cursor-pointer"
+      className="w-full border-none font-sans text-left flex items-center gap-3 cursor-pointer"
       style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '13px 14px' }}
     >
       <div className="w-[38px] h-[38px] rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: nt.bg }}>
@@ -45,7 +46,7 @@ export function Notifications() {
         <span data-testid="notif-dot" className="w-[9px] h-[9px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--ember))' }} />
       )}
       <PhIcon name="ph ph-caret-right" size={13} color="rgb(var(--taupedim))" className="flex-shrink-0" />
-    </div>
+    </button>
   );
 
   return (
@@ -60,12 +61,12 @@ export function Notifications() {
           type="button"
           onClick={() => set({ notifsRead: true })}
           className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer font-sans p-0"
-          style={{ color: 'rgb(var(--sky))' }}
+          style={{ color: 'rgb(var(--skydeep))' }}
         >
           Mark all read
         </button>
       </div>
-      <h1 className="m-0 mb-4 font-serif font-normal text-[26px] text-navy">Activity</h1>
+      <h1 className="m-0 mb-4 font-serif font-normal text-[24px] text-navy">Activity</h1>
 
       {today.length > 0 && (
         <div>
@@ -104,7 +105,7 @@ export function Notifications() {
           
         }}
       >
-        <p className="m-0 mb-[3px] font-serif text-[15px] text-navy">What reaches you</p>
+        <p className="m-0 mb-[3px] font-serif text-[14px] text-navy">What reaches you</p>
         <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
           Tap to mute a category — urgent safety alerts always come through.
         </p>

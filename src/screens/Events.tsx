@@ -86,7 +86,7 @@ export function Events() {
       style={{ background: 'rgb(var(--cream))', padding: '60px 18px 40px' }}
     >
       <BackButton onClick={() => set({ eventsOpen: false })} />
-      <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">July at the Ridge</h1>
+      <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">July at the Ridge</h1>
       <p className="m-0 mb-3.5 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
         4 events · dots mark the days
       </p>
@@ -159,7 +159,7 @@ export function Events() {
                 Popcorn duty · 2 of 3
               </span>
               {state.volPopcorn ? (
-                <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sage))' }}>
+                <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
                   You&apos;re in ✓
                 </span>
               ) : (
@@ -186,13 +186,13 @@ export function Events() {
         </div>
 
         {/* Annual meeting */}
-        <div onClick={() => set({ meetingOpen: true })} className="flex items-center gap-3 cursor-pointer" style={cardStyle}>
+        <button type="button" onClick={() => set({ meetingOpen: true })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={cardStyle}>
           <EventIcon bg="rgb(var(--skypale))" icon="ph-fill ph-users-four" color="rgb(var(--skydeep))" />
           <EventTitle title="Annual meeting · Tue Jul 15, 7 PM" sub="Clubhouse + Zoom · 2 board seats open" />
           <span className="text-[12.5px] font-extrabold flex-shrink-0" style={{ color: 'rgb(var(--terracotta))' }}>
             Preview →
           </span>
-        </div>
+        </button>
 
         {/* Pool party */}
         <div className="flex items-center gap-3" style={cardStyle}>

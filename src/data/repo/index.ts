@@ -3,7 +3,7 @@ import { MockRepository } from './MockRepository';
 import { SupabaseRepository } from './SupabaseRepository';
 import { mockDomain } from './mockDomainStore';
 
-export type { Repository, RepositorySnapshot, MemberContext, DuesState, DuesStatement, DuesStatus, VotesState, OpenVote, VoteChoice, ViolationNotice, SpecialAssessment, ArcState, ArcRequest, ArcStep, CommunityEvent, FeedPost, BoardTriage, KnownIssue, Decision, TriageItem, BoardArcItem, NewReport, NewArcRequest, NewVote } from './Repository';
+export type { Repository, RepositorySnapshot, MemberContext, DuesState, DuesStatement, DuesStatus, VotesState, OpenVote, VoteChoice, ViolationNotice, SpecialAssessment, ArcState, ArcRequest, ArcStep, CommunityEvent, FeedPost, BoardTriage, KnownIssue, Decision, TriageItem, BoardArcItem, NewReport, NewArcRequest, NewVote, BoardMessage, ThreadComment, VoteOption, ClosedVote, ArcDecision, NewViolation, UnitRef, BoardViolation, AdminMember, BoardBooking, Meeting, AuditEntry, Invite, LoadState, LoadDomain } from './Repository';
 export { MockRepository } from './MockRepository';
 export { SupabaseRepository } from './SupabaseRepository';
 export { RepositoryProvider, useRepository } from './context';

@@ -1,10 +1,14 @@
-import { type KeyboardEvent } from 'react';
+import { useState, type KeyboardEvent } from 'react';
 import { Avatar } from '../components/Avatar';
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
-import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember, useRepository } from '../data/repo';
+import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember, useChatSeed, useLoadState, useRepository } from '../data/repo';
+import type { FeedPost, ThreadComment } from '../data/repo';
 import { usePavStore } from '../store/store';
+import { confirmDestructive } from '../components/ConfirmSheet';
+import { emitAppSuccess, reportedByDataLayer } from '../lib/errorBus';
 
 const SEG_OPTIONS = [
   { key: 'feed', label: 'Feed' },
@@ -24,6 +28,11 @@ export function Commons() {
   const groups = useGroups();
   const feed = useFeed();
   const member = useMember();
+  const chatIndex = useChatSeed();
+  // Board members can fill the empty directory themselves; residents cannot.
+  const isBoard = !repo.isDemo() && member?.role === 'board';
+  const feedLoad = useLoadState('feed');
+  const unreadTotal = Object.values(chatIndex).reduce((n, e) => n + (e.unread || 0), 0);
 
   const addComment = () => {
     const t = state.commentInput.trim();
@@ -45,7 +54,7 @@ export function Commons() {
 
   return (
     <div className="absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: '64px 18px 150px' }}>
-      <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">The Commons</h1>
+      <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">The Commons</h1>
       <p className="m-0 mb-3.5 text-[13.5px] text-taupe font-semibold">What neighbors are sharing this week.</p>
 
       <div className="mb-4">
@@ -54,15 +63,15 @@ export function Commons() {
 
       {state.commonsView === 'feed' && (
         <div>
-          <div
+          <button type="button"
             onClick={() => set({ composeOpen: true })}
-            className="bg-paper rounded-2xl px-3.5 py-3 mb-2 flex items-center gap-2.5 cursor-pointer"
+            className="w-full border-none font-sans text-left bg-paper rounded-2xl px-3.5 py-3 mb-2 flex items-center gap-2.5 cursor-pointer"
             style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
           >
             <Avatar initial={member?.initial ?? 'A'} color={member?.color ?? 'rgb(var(--navy))'} size={32} />
             <span className="flex-1 text-[13.5px] text-stonelight font-semibold">Share something…</span>
             <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--stonelight))" />
-          </div>
+          </button>
           <button
             onClick={() => set({ reportOpen: true })}
             className="flex items-center gap-1.5 mb-4 border-none bg-transparent cursor-pointer px-1 py-0.5 text-left"
@@ -78,37 +87,17 @@ export function Commons() {
 
           <div className="flex flex-col gap-3">
             {feed.length === 0 ? (
-              <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-                <PhIcon name="ph-fill ph-chats-circle" size={26} color="rgb(var(--claypale))" />
-                <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">Nothing shared yet</p>
-                <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-                  Be the first to share something with your neighbors.
-                </p>
-              </div>
+              <EmptyState
+                icon="ph-fill ph-chats-circle"
+                title="Nothing shared yet"
+                body="Be the first to share something with your neighbors."
+                status={feedLoad}
+                actionLabel="Share something"
+                onAction={() => set({ composeOpen: true })}
+              />
             ) : !repo.isDemo() ? (
-              // Live: real feed posts as generic cards (the demo renders its
-              // bespoke scripted posts below).
-              feed.map((p) => (
-                <div key={p.id} className="bg-paper rounded-[18px] p-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-                  <div className="flex items-center gap-2.5 mb-2.5">
-                    <Avatar initial={p.authorInitial} color={p.authorColor} size={36} />
-                    <div className="flex-1">
-                      <p className="m-0 text-[13.5px] font-bold text-navy">
-                        {p.authorName}{' '}
-                        <span className="font-semibold text-stonelight">
-                          {p.unitLabel ? `· ${p.unitLabel} ` : ''}· {p.timeLabel}
-                        </span>
-                      </p>
-                      {p.tagLabel && (
-                        <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--terracotta))' }}>
-                          {p.tagLabel}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <p className="m-0 text-[13.5px] leading-[1.55] font-semibold text-bark">{p.body}</p>
-                </div>
-              ))
+              // Live: real feed posts with reactions, comments, photos, pins.
+              feed.map((p) => <LivePostCard key={p.id} post={p} isBoard={member?.role === 'board'} />)
             ) : (<>
             {(
               <div
@@ -134,14 +123,14 @@ export function Commons() {
                 <div className="flex items-center gap-4 mt-3">
                   <button
                     onClick={() => set({ liked: !state.liked })}
-                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
                   >
                     <PhIcon name={heartClass} size={19} color={heartColor} className={state.liked ? 'animate-heartpop' : undefined} />
                     <span className="text-[13px] font-bold text-stone">{likeCount}</span>
                   </button>
                   <button
                     onClick={() => set({ commentsOpen: !state.commentsOpen })}
-                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
                   >
                     <PhIcon name="ph ph-chat-circle" size={19} color="rgb(var(--stone))" />
                     <span className="text-[13px] font-bold text-stone">{commentCount}</span>
@@ -203,7 +192,7 @@ export function Commons() {
                   Anyone have an 8-ft ladder I could borrow Sunday? Painting the trim — ARC-approved, promise.
                 </p>
                 {state.offered ? (
-                  <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-sage">
+                  <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-sagedark">
                     <PhIcon name="ph-fill ph-check-circle" size={16} />
                     You offered yours — Dev will message you
                   </span>
@@ -305,10 +294,11 @@ export function Commons() {
                     const upcomingEvents = g.events.filter((e) => !e.rsvped).length;
                     const lastMsg = g.messages[g.messages.length - 1];
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={g.key}
                         onClick={() => set({ activeGroup: g.key })}
-                        className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
+                        className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
                         style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
                       >
                         <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: g.color + '18' }}>
@@ -320,12 +310,12 @@ export function Commons() {
                             {g.muted && <PhIcon name="ph-fill ph-bell-slash" size={11} color="rgb(var(--stonelight))" />}
                           </p>
                           <p className="m-0 text-[11.5px] text-stone font-semibold overflow-hidden text-ellipsis whitespace-nowrap">
-                            {lastMsg ? lastMsg.text : `${g.memberCount} members`}
+                            {lastMsg ? lastMsg.text : `${g.memberCount} ${g.memberCount === 1 ? "member" : "members"}`}
                           </p>
                           {(openPolls > 0 || upcomingEvents > 0) && (
                             <div className="flex gap-2 mt-1">
                               {openPolls > 0 && (
-                                <span className="text-[10px] font-bold rounded-full px-2 py-0.5" style={{ background: 'rgb(var(--goldpale))', color: 'rgb(var(--goldmid))' }}>
+                                <span className="text-[10px] font-bold rounded-full px-2 py-0.5" style={{ background: 'rgb(var(--goldpale))', color: 'rgb(var(--golddark))' }}>
                                   {openPolls} poll{openPolls > 1 ? 's' : ''}
                                 </span>
                               )}
@@ -340,7 +330,7 @@ export function Commons() {
                         <span className="text-[12.5px] font-extrabold flex-shrink-0 text-terracotta">
                           Open →
                         </span>
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
@@ -356,10 +346,11 @@ export function Commons() {
                   {discover.map((g) => {
                     const nextEvent = g.events[0];
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={g.key}
                         onClick={() => set({ activeGroup: g.key })}
-                        className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
+                        className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
                         style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
                       >
                         <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: g.color + '18' }}>
@@ -368,7 +359,7 @@ export function Commons() {
                         <div className="flex-1 min-w-0">
                           <p className="m-0 mb-px text-sm font-bold text-navy">{g.name}</p>
                           <p className="m-0 text-[11.5px] text-stone font-semibold">
-                            {g.memberCount} members{nextEvent ? ` · ${nextEvent.title}` : ''}
+                            {g.memberCount} {g.memberCount === 1 ? "member" : "members"}{nextEvent ? ` · ${nextEvent.title}` : ''}
                           </p>
                         </div>
                         <button
@@ -379,16 +370,16 @@ export function Commons() {
                         >
                           Join
                         </button>
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
               </>
             )}
 
-            <div
+            <button type="button"
               onClick={() => set({ createGroupOpen: true })}
-              className="rounded-[18px] p-4 flex items-center gap-3 cursor-pointer"
+              className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-4 flex items-center gap-3 cursor-pointer"
               style={{ border: '1.5px dashed rgb(var(--navy) / 0.2)' }}
             >
               <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-sand">
@@ -400,34 +391,54 @@ export function Commons() {
                   Any interest counts — 5 neighbors makes it official
                 </p>
               </div>
-            </div>
+            </button>
           </div>
         );
       })()}
 
       {state.commonsView === 'dir' && (
         <div className="animate-fadeup">
-          <div
+          <button type="button"
             onClick={() => set({ msgsOpen: true })}
-            className="bg-navy rounded-2xl px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
+            className="w-full border-none font-sans text-left bg-navy rounded-2xl px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
           >
             <PhIcon name="ph-fill ph-chats-circle" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
             <div className="flex-1">
               <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Messages</p>
               <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
-                3 unread from your neighbors
+                {repo.isDemo()
+                  ? '3 unread from your neighbors'
+                  : unreadTotal > 0
+                    ? `${unreadTotal} unread from your neighbors`
+                    : 'Chat privately with your neighbors'}
               </p>
             </div>
-            <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 bg-ember">
-              3
+            {(repo.isDemo() || unreadTotal > 0) && (
+            <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 bg-emberdeep">
+              {repo.isDemo() ? 3 : unreadTotal}
             </span>
-          </div>
+            )}
+          </button>
           <div className="flex items-start gap-1.5 mx-1 mb-3.5">
             <PhIcon name="ph-fill ph-lock-simple" size={12} color="rgb(var(--stone))" className="mt-0.5" />
             <p className="m-0 text-[11.5px] text-stone font-bold">
-              Only neighbors who opt in appear here. You&apos;re visible as &quot;Alex · #27&quot;.
+              Only neighbors who opt in appear here. You&apos;re visible as &quot;
+              {repo.isDemo() ? 'Alex · #27' : [member?.name, member?.unitLabel].filter(Boolean).join(' · ')}&quot;.
             </p>
           </div>
+          {DIR.length === 0 && (
+            <EmptyState
+              icon="ph-fill ph-users-three"
+              title="No neighbors here yet"
+              body={
+                isBoard
+                  ? 'Invite your neighbors and the directory fills itself as they join and opt in.'
+                  : 'Neighbors appear as they join and opt in to the directory.'
+              }
+              actionLabel={isBoard ? 'Send invites' : undefined}
+              onAction={isBoard ? () => set({ boardMode: true, boardTab: 'desk' }) : undefined}
+            />
+          )}
           <div className="flex flex-col gap-2.5">
             {DIR.map((d) => {
               return (
@@ -436,7 +447,7 @@ export function Commons() {
                   className="bg-paper rounded-[18px] px-4 py-3.5"
                   style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
                 >
-                  <div onClick={() => set({ chatWith: d.key })} className="flex items-center gap-2.5 mb-2.5 cursor-pointer">
+                  <button type="button" onClick={() => set({ chatWith: d.key })} className="w-full flex items-center gap-2.5 mb-2.5 cursor-pointer border-none bg-transparent text-left font-sans">
                     <Avatar initial={d.initial} color={d.color} size={40} />
                     <div className="flex-1 min-w-0">
                       <p className="m-0 text-sm font-bold text-navy">
@@ -444,14 +455,18 @@ export function Commons() {
                       </p>
                       <p className="m-0 text-[11.5px] text-stone font-semibold">{d.note}</p>
                     </div>
-                  </div>
+                  </button>
                   <div className="flex items-center gap-2">
-                    <span
-                      className="flex-1 text-[11.5px] font-bold rounded-lg px-2.5 py-1.5"
-                      style={{ color: 'rgb(var(--skydeep))', background: 'rgb(var(--skypale))' }}
-                    >
-                      {d.tags.join(' · ')}
-                    </span>
+                    {d.tags.length > 0 ? (
+                      <span
+                        className="flex-1 text-[11.5px] font-bold rounded-lg px-2.5 py-1.5"
+                        style={{ color: 'rgb(var(--skydeep))', background: 'rgb(var(--skypale))' }}
+                      >
+                        {d.tags.join(' · ')}
+                      </span>
+                    ) : (
+                      <span className="flex-1" />
+                    )}
                     <button
                       onClick={() => set({ chatWith: d.key })}
                       className="border-none rounded-full px-3 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"
@@ -475,6 +490,13 @@ export function Commons() {
               Give it away, don&apos;t throw it away. Claimed items get picked up from the porch.
             </p>
           </div>
+          {FREE.length === 0 && (
+            <EmptyState
+              icon="ph-fill ph-gift"
+              title="Nothing listed right now"
+              body="Have something to give away? Listings are on the way."
+            />
+          )}
           <div className="grid grid-cols-2 gap-2.5">
             {FREE.map((f) => {
               const claimed = !!state.claimed[f.key];
@@ -501,6 +523,135 @@ export function Commons() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * One live feed post: pinned badge, photos, hearts, a comment thread that
+ * expands in place, delete-own (board can delete/pin any).
+ */
+function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }) {
+  const repo = useRepository();
+  const [open, setOpen] = useState(false);
+  const [thread, setThread] = useState<ThreadComment[]>([]);
+  const [reply, setReply] = useState('');
+
+  const loadThread = () => { void repo.listPostComments(p.id).then(setThread); };
+  const toggleComments = () => { if (!open) loadThread(); setOpen(!open); };
+  const sendReply = () => {
+    if (!reply.trim()) return;
+    void repo.addPostComment(p.id, reply).then(() => { setReply(''); loadThread(); }).catch(reportedByDataLayer);
+  };
+
+  return (
+    <div className="bg-paper rounded-[18px] p-4" style={{ border: p.pinned ? '1.5px solid rgb(var(--gold) / 0.5)' : '1px solid rgb(var(--navy) / 0.08)' }}>
+      {p.pinned && (
+        <p className="m-0 mb-2 text-[10.5px] font-extrabold uppercase flex items-center gap-1" style={{ letterSpacing: '0.1em', color: 'rgb(var(--golddark))' }}>
+          <PhIcon name="ph-fill ph-push-pin" size={11} color="rgb(var(--golddark))" /> Pinned by the board
+        </p>
+      )}
+      <div className="flex items-center gap-2.5 mb-2.5">
+        <Avatar initial={p.authorInitial} color={p.authorColor} size={36} />
+        <div className="flex-1 min-w-0">
+          <p className="m-0 text-[13.5px] font-bold text-navy">
+            {p.authorName}{' '}
+            <span className="font-semibold text-stonelight">
+              {p.unitLabel ? `· ${p.unitLabel} ` : ''}· {p.timeLabel}
+            </span>
+          </p>
+          {p.tagLabel && (
+            <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--terracotta))' }}>
+              {p.tagLabel}
+            </p>
+          )}
+        </div>
+        {isBoard && (
+          <button
+            onClick={() => void repo.togglePinPost(p.id)}
+            title={p.pinned ? 'Unpin' : 'Pin to top'}
+            className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0"
+          >
+            <PhIcon name={p.pinned ? 'ph-fill ph-push-pin-slash' : 'ph ph-push-pin'} size={14} color="rgb(var(--stone))" />
+          </button>
+        )}
+        {(p.mine || isBoard) && (
+          <button
+            onClick={() => confirmDestructive({
+            title: 'Delete this post?',
+            body: 'It disappears from the feed for everyone, along with its comments and reactions.',
+            confirmLabel: 'Delete post',
+            onConfirm: () => { void repo.deleteFeedPost(p.id); emitAppSuccess('Post deleted.'); },
+          })}
+            title="Delete post"
+            className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-50"
+          >
+            <PhIcon name="ph-fill ph-trash" size={13} color="rgb(var(--stone))" />
+          </button>
+        )}
+      </div>
+      {p.body && <p className="m-0 text-[13.5px] leading-[1.55] font-semibold text-bark">{p.body}</p>}
+      {(p.photoUrls ?? []).map((u, i, arr) => (
+        <img
+          key={u}
+          src={u}
+          alt={arr.length > 1 ? `Photo ${i + 1} of ${arr.length} from ${p.authorName}'s post` : `Photo from ${p.authorName}'s post`}
+          className="mt-2.5 rounded-[13px] w-full block"
+          style={{ maxHeight: 260, objectFit: 'cover' }}
+        />
+      ))}
+      <div className="flex items-center gap-4 mt-3">
+        <button
+          onClick={() => void repo.togglePostLike(p.id)}
+          aria-label={p.likedByMe ? 'Unlike' : 'Like'}
+          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
+        >
+          <PhIcon
+            name={p.likedByMe ? 'ph-fill ph-heart' : 'ph ph-heart'}
+            size={18}
+            color={p.likedByMe ? 'rgb(var(--terracotta))' : 'rgb(var(--stone))'}
+            className={p.likedByMe ? 'animate-heartpop' : undefined}
+          />
+          <span className="text-xs font-bold text-stone">{p.likes || ''}</span>
+        </button>
+        <button
+          onClick={toggleComments}
+          aria-label="Comments"
+          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
+        >
+          <PhIcon name="ph ph-chat-circle" size={18} color="rgb(var(--stone))" />
+          <span className="text-xs font-bold text-stone">{p.commentCount || ''}</span>
+        </button>
+      </div>
+      {open && (
+        <div className="mt-2.5 animate-fadeup" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)', paddingTop: 10 }}>
+          {thread.map((c) => (
+            <p key={c.id} className="m-0 mb-1 text-[12.5px] font-semibold text-navy">
+              <strong>{c.me ? 'You' : c.authorName}:</strong> {c.body}{' '}
+              <span className="text-stone" style={{ fontSize: 10.5 }}>· {c.time}</span>
+            </p>
+          ))}
+          <div className="flex gap-2 mt-1.5">
+            <input
+              value={reply}
+              onChange={(e) => setReply(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') sendReply(); }}
+              placeholder="Add a comment…"
+              className="flex-1 rounded-full px-3 py-2 text-[12.5px] font-bold text-navy outline-none min-w-0"
+              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+            />
+            <button
+              type="button"
+              aria-label="Send reply"
+              onClick={sendReply}
+              className="w-8 h-8 border-0 rounded-full cursor-pointer flex items-center justify-center flex-shrink-0"
+              style={{ background: reply.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+            >
+              <PhIcon name="ph-fill ph-paper-plane-right" size={12} color="rgb(var(--cream))" />
+            </button>
           </div>
         </div>
       )}

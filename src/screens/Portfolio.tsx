@@ -33,7 +33,7 @@ export function Portfolio() {
         <PhIcon name="ph-bold ph-arrow-left" size={14} />
         Back
       </button>
-      <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">Portfolio</h1>
+      <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Portfolio</h1>
       <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
         Cedar Hill Management · 3 communities · {pfDoors} doors
       </p>
@@ -64,10 +64,11 @@ export function Portfolio() {
           const openLabel = c.open === 0 ? 'All clear' : c.open + ' open';
           const openColor = c.open === 0 ? 'rgb(var(--sagedark))' : 'rgb(var(--golddark))';
           return (
-            <div
+            <button
+              type="button"
               key={c.name}
               onClick={() => set({ activeCommunity: i, portfolioOpen: false, boardMode: true })}
-              className="bg-paper rounded-[18px] p-4 cursor-pointer"
+              className="w-full border-none font-sans text-left bg-paper rounded-[18px] p-4 cursor-pointer"
               style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
             >
               <div className="flex items-center gap-2.5 mb-[11px]">
@@ -90,7 +91,7 @@ export function Portfolio() {
                 </div>
                 <span className="text-[11.5px] font-bold flex-shrink-0 text-navy">{c.collected}% collected</span>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>

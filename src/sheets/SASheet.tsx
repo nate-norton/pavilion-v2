@@ -16,10 +16,12 @@ export function SASheet() {
   const saPaid = state.saPaid;
 
   return (
-    <Sheet open={state.saSheetOpen} onClose={closeSA} maxHeight="88%">
+    <Sheet
+      label="Special assessment"
+      open={state.saSheetOpen} onClose={closeSA} maxHeight="88%">
       {notSaPaid && (
         <div>
-          <p className="m-0 mb-0.5 font-serif text-[22px] text-navy">Roof-reserve assessment</p>
+          <p className="m-0 mb-0.5 font-serif text-[19px] text-navy">Roof-reserve assessment</p>
           <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
             One-time · #27 Alder Way · approved 91–22 on Jun 18
           </p>
@@ -31,7 +33,7 @@ export function SASheet() {
               <span className="text-[13px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
                 Your share
               </span>
-              <span className="font-serif text-[28px] text-navy">
+              <span className="font-serif text-[24px] text-navy">
                 $450
                 <span className="text-base">.00</span>
               </span>
@@ -65,8 +67,8 @@ export function SASheet() {
           </div>
           <button
             onClick={paySA}
-            className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold cursor-pointer text-white mb-2.5"
-            style={{ background: 'rgb(var(--ember))' }}
+            className="w-full border-none rounded-2xl py-4 text-[14px] font-extrabold cursor-pointer text-white mb-2.5"
+            style={{ background: 'rgb(var(--emberdeep))' }}
           >
             Pay $450.00
           </button>
@@ -82,7 +84,7 @@ export function SASheet() {
       {saPlanConfirm && (
         <div className="text-center pt-2 pb-1 animate-fadeup">
           <PhIcon name="ph-fill ph-calendar-check" size={52} color="rgb(var(--sage))" />
-          <p className="m-0 mt-2.5 mb-[3px] font-serif text-[22px] text-navy">
+          <p className="m-0 mt-2.5 mb-[3px] font-serif text-[19px] text-navy">
             Assessment plan set.
           </p>
           <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
@@ -99,7 +101,7 @@ export function SASheet() {
       {saPaid && (
         <div className="text-center pt-2 pb-1 animate-fadeup">
           <PhIcon name="ph-fill ph-check-circle" size={52} color="rgb(var(--sage))" />
-          <p className="m-0 mt-2.5 mb-[3px] font-serif text-[22px] text-navy">
+          <p className="m-0 mt-2.5 mb-[3px] font-serif text-[19px] text-navy">
             Paid in full — thank you.
           </p>
           <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>

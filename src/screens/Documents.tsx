@@ -1,8 +1,11 @@
-import { type CSSProperties } from 'react';
+import { useRef, useState, type CSSProperties } from 'react';
 import { BackButton } from '../components/BackButton';
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { useDocuments, useDocSections } from '../data/repo';
+import { useDocuments, useDocSections, useMember, useLoadState, useRepository } from '../data/repo';
+import { confirmDestructive } from '../components/ConfirmSheet';
+import { emitAppSuccess, reportedByDataLayer } from '../lib/errorBus';
 
 const DOC_CONTENT: Record<string, { sections: { tag: string; name: string; body: string }[] }> = {
   bylaws: {
@@ -49,6 +52,14 @@ export function Documents() {
   const { set, askAiDocsSummary } = state;
   const DOCS = useDocuments();
   const DOC_SECTIONS = useDocSections();
+  const repo = useRepository();
+  const member = useMember();
+  const canManage = !repo.isDemo() && member?.role === 'board';
+  const docsLoad = useLoadState('docs');
+  const [upName, setUpName] = useState('');
+  const [upSection, setUpSection] = useState('Governing documents');
+  const [upBusy, setUpBusy] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   if (!state.docsOpen) return null;
 
@@ -73,38 +84,133 @@ export function Documents() {
       {!state.docReader ? (
         <div>
           <BackButton onClick={() => set({ docsOpen: false })} />
-          <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">Documents</h1>
+          <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Documents</h1>
           <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
-            Every governing document, searchable. Your AI has read them all.
+            {/* Only the demo has an assistant that has read anything. */}
+            {DOCS.length > 0 && repo.isDemo()
+              ? 'Every governing document, searchable. Your AI has read them all.'
+              : 'Every governing document, in one place.'}
           </p>
+          {DOCS.length === 0 && (
+            <EmptyState
+              icon="ph-fill ph-files"
+              title="No documents yet"
+              status={docsLoad}
+              body={
+                canManage
+                  ? 'Start with the CC&Rs and bylaws — they answer the questions neighbors ask you most. Publish below.'
+                  : 'CC&Rs, bylaws, budgets, and minutes appear here once your board publishes them.'
+              }
+            />
+          )}
           <div className="flex flex-col gap-[9px]">
             {DOCS.map((d) => (
+              // The row and its remove action are siblings inside a wrapper:
+              // a <button> may not contain another <button>, and nesting them
+              // also made the delete unreachable as its own tab stop.
               <div
                 key={d.key}
-                onClick={() => {
-                  set({ docReader: true, docReaderKey: d.key, docQ: '', diffOpen: false });
-                }}
-                className="flex items-center gap-3 cursor-pointer"
-                style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: 14 }}
+                className="flex items-center gap-1"
+                style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '0 14px 0 0' }}
               >
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
-                  <PhIcon name={d.icon} size={19} color="rgb(var(--navy))" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{d.title}</p>
-                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
-                    {d.sub}
-                  </p>
-                </div>
-                <PhIcon name="ph ph-caret-right" size={14} color="rgb(var(--stonelight))" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    // Live docs are real files — open them; demo docs open the
+                    // scripted reader.
+                    if (d.url) window.open(d.url, '_blank', 'noreferrer');
+                    else set({ docReader: true, docReaderKey: d.key, docQ: '', diffOpen: false });
+                  }}
+                  className="flex-1 min-w-0 border-none bg-transparent font-sans text-left flex items-center gap-3 cursor-pointer"
+                  style={{ padding: '14px 0 14px 14px' }}
+                >
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
+                    <PhIcon name={d.icon} size={19} color="rgb(var(--navy))" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{d.title}</p>
+                    <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+                      {d.sub}
+                    </p>
+                  </div>
+                </button>
+                {canManage && d.id ? (
+                  <button
+                    type="button"
+                    onClick={() => confirmDestructive({
+                      title: 'Remove this document?',
+                      body: `“${d.title}” disappears for every household. If it is a governing document, residents lose their copy of the rules until you publish it again.`,
+                      confirmLabel: 'Remove document',
+                      onConfirm: () => { void repo.deleteDocument(d.id!); emitAppSuccess('Document removed.'); },
+                    })}
+                    aria-label={`Remove ${d.title}`}
+                    className="border-0 bg-transparent p-1.5 cursor-pointer flex-shrink-0 opacity-50"
+                  >
+                    <PhIcon name="ph-fill ph-trash" size={14} color="rgb(var(--stone))" />
+                  </button>
+                ) : (
+                  <PhIcon name="ph ph-caret-right" size={14} color="rgb(var(--stonelight))" />
+                )}
               </div>
             ))}
           </div>
+
+          {/* Board: publish a document into the community library */}
+          {canManage && (
+            <div className="mt-3.5 bg-paper rounded-[16px] p-3.5" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+              <p className="m-0 mb-2 text-[13px] font-bold text-navy">Publish a document</p>
+              <input
+                value={upName}
+                onChange={(e) => setUpName(e.target.value)}
+                placeholder="Name — e.g. CC&Rs (rev. 2026)"
+                maxLength={120}
+                className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+              />
+              <div className="flex gap-1.5 flex-wrap mb-2.5">
+                {['Governing documents', 'Financials', 'Minutes', 'Forms', 'General'].map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setUpSection(s)}
+                    className="rounded-full px-3 py-1.5 text-[11px] font-extrabold cursor-pointer"
+                    style={upSection === s
+                      ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                      : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+              <input
+                ref={fileRef}
+                type="file"
+                accept=".pdf,.doc,.docx,.xls,.xlsx,image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (!f || upBusy) return;
+                  setUpBusy(true);
+                  void repo.uploadDocument({ file: f, name: upName || f.name, section: upSection })
+                    .then(() => setUpName(''))
+                    .catch(reportedByDataLayer)
+                    .finally(() => { setUpBusy(false); if (fileRef.current) fileRef.current.value = ''; });
+                }}
+              />
+              <button
+                onClick={() => fileRef.current?.click()}
+                disabled={upBusy}
+                className="w-full border-0 rounded-[13px] py-3 text-[13px] font-extrabold cursor-pointer text-cream"
+                style={{ background: upBusy ? 'rgb(var(--sandpale))' : 'rgb(var(--navy))' }}
+              >
+                {upBusy ? 'Uploading…' : 'Choose file & publish'}
+              </button>
+            </div>
+          )}
         </div>
       ) : state.docReaderKey === 'ccrs' ? (
         <div className="animate-fadeup">
           <BackButton label="All documents" onClick={() => set({ docReader: false })} />
-          <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">CC&amp;Rs</h1>
+          <h1 className="m-0 mb-[3px] font-serif font-normal text-[24px] text-navy">CC&amp;Rs</h1>
           <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
             Rev. March 2026 · 48 pages · applies to all 136 homes
           </p>
@@ -125,7 +231,7 @@ export function Documents() {
                 type="button"
                 aria-label="Clear search"
                 onClick={() => set({ docQ: '' })}
-                className="border-none w-5 h-5 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
+                className="border-none w-6 h-6 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
                 style={{ background: 'rgb(var(--sand))' }}
               >
                 <PhIcon name="ph-bold ph-x" size={10} color="rgb(var(--bark))" />
@@ -146,15 +252,18 @@ export function Documents() {
             ))}
           </div>
 
-          <button
-            type="button"
-            onClick={askAiDocsSummary}
-            className="w-full border-none text-white rounded-[14px] text-[13.5px] font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3.5"
-            style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))', padding: '13px 0' }}
-          >
-            <PhIcon name="ph-fill ph-sparkle" size={15} />
-            Ask AI to summarize
-          </button>
+          {/* Demo only — live has no assistant to summarize with. */}
+          {repo.isDemo() && (
+            <button
+              type="button"
+              onClick={askAiDocsSummary}
+              className="w-full border-none text-white rounded-[14px] text-[13.5px] font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3.5"
+              style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))', padding: '13px 0' }}
+            >
+              <PhIcon name="ph-fill ph-sparkle" size={15} />
+              Ask AI to summarize
+            </button>
+          )}
 
           {showEx && (
             <div style={SECTION_CARD}>
@@ -190,7 +299,7 @@ export function Documents() {
                     </span>
                   </p>
                   <p className="m-0 mb-2 text-[12.5px] font-bold" style={{ lineHeight: 1.55 }}>
-                    <span style={{ background: 'rgb(var(--sagetint))', color: 'rgb(var(--sagedark))', borderRadius: 3, padding: '1px 3px' }}>
+                    <span style={{ background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))', borderRadius: 3, padding: '1px 3px' }}>
                       Cedar, Slate Gray, White, Sage, Clay
                     </span>
                   </p>
@@ -266,7 +375,7 @@ function GenericDocReader() {
   return (
     <div className="animate-fadeup">
       <BackButton label="All documents" onClick={() => set({ docReader: false })} />
-      <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">{doc.title}</h1>
+      <h1 className="m-0 mb-[3px] font-serif font-normal text-[24px] text-navy">{doc.title}</h1>
       <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
         {doc.sub}
       </p>

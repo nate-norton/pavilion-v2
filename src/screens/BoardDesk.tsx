@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { reportedByDataLayer } from '../lib/errorBus';
+import { BoardSetupCard } from '../components/BoardSetupCard';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { usePavStore } from '../store/store';
-import { useVendors, useAging, useVotes, useAssessment, useBoardTriage, useTriageItems, useBoardArcQueue, useRepository } from '../data/repo';
+import { useVendors, useAging, useVotes, useAssessment, useBoardTriage, useTriageItems, useBoardArcQueue, useInvites, useBoardChat, useBoardViolations, useUnits, useAdminMembers, useAuditLog, useBoardBookings, useMeetings, useRepository } from '../data/repo';
+import type { ThreadComment, TriageItem } from '../data/repo';
 
 const BOARD_SEGS = [
   { key: 'desk', label: 'Desk' },
@@ -20,8 +23,45 @@ export function BoardDesk() {
   const { set } = state;
 
   const [voteConfirm, setVoteConfirm] = useState(false);
+  const [voteKind, setVoteKind] = useState<'yesno' | 'options'>('yesno');
+  const [voteOpts, setVoteOpts] = useState<string[]>(['', '']);
+  const [voteMulti, setVoteMulti] = useState(false);
+  const [voteDays, setVoteDays] = useState<number | null>(7);
+  const [arcDecideId, setArcDecideId] = useState<string | null>(null);
+  const [arcNote, setArcNote] = useState('');
+  const [copiedInvite, setCopiedInvite] = useState<string | null>(null);
+  const [rosterOpenId, setRosterOpenId] = useState<string | null>(null);
+  const [rosterUnit, setRosterUnit] = useState('');
+  const [violDraftOpen, setViolDraftOpen] = useState(false);
+  const [violUnitId, setViolUnitId] = useState('');
+  const [violTitle, setViolTitle] = useState('');
+  const [violDesc, setViolDesc] = useState('');
+  const [violSeverity, setViolSeverity] = useState<'courtesy' | 'warning' | 'fine'>('courtesy');
+  const [violFine, setViolFine] = useState('');
+  const [meetDraftOpen, setMeetDraftOpen] = useState(false);
+  const [meetTitle, setMeetTitle] = useState('');
+  const [meetWhen, setMeetWhen] = useState('');
+  const [meetWhere, setMeetWhere] = useState('');
+  const [meetAgenda, setMeetAgenda] = useState('');
+  const minutesFileRef = useRef<HTMLInputElement>(null);
+  const [evDraftOpen, setEvDraftOpen] = useState(false);
+  const [evTitle, setEvTitle] = useState('');
+  const [evWhen, setEvWhen] = useState('');
+  const [evWhere, setEvWhere] = useState('');
+  const boardViolations = useBoardViolations();
+  const units = useUnits();
+  const adminMembers = useAdminMembers();
+  const auditLog = useAuditLog();
+  const boardBookings = useBoardBookings();
+  const meetings = useMeetings();
+  const [invEmail, setInvEmail] = useState('');
+  const [invUnit, setInvUnit] = useState('');
+  const [invRole, setInvRole] = useState<'resident' | 'board'>('resident');
+  const [invBusy, setInvBusy] = useState(false);
+  const invites = useInvites();
+  const boardChat = useBoardChat();
   const triage = useBoardTriage();
-  const { open: vote } = useVotes();
+  const { open: vote, openAll: openVotes } = useVotes();
   const assessment = useAssessment();
   // The demo's Requests/Money/Comms are scripted; live renders real queues
   // (triage, ARC, votes) and hides panels with no data domain yet.
@@ -29,6 +69,18 @@ export function BoardDesk() {
   const demo = repo.isDemo();
   const triageItems = useTriageItems();
   const boardArcQueue = useBoardArcQueue();
+
+  // Board chat card rows: General pinned first, then topics by latest activity.
+  const topicMap = new Map<string, typeof boardChat>([['General', []]]);
+  boardChat.forEach((m) => {
+    const k = m.topic ?? 'General';
+    if (!topicMap.has(k)) topicMap.set(k, []);
+    topicMap.get(k)!.push(m);
+  });
+  const [generalThread, ...restThreads] = [...topicMap.entries()];
+  restThreads.sort((a, b) =>
+    boardChat.lastIndexOf(b[1][b[1].length - 1]) - boardChat.lastIndexOf(a[1][a[1].length - 1]));
+  const boardTopics = [generalThread, ...restThreads];
 
   if (!state.boardMode) return null;
 
@@ -45,7 +97,8 @@ export function BoardDesk() {
   const nonVoters = quorumTotal - quorum.count;
   const canBc = state.bcText.trim().length > 0;
   const voteQPreview = state.voteQ.trim() || 'Your question appears here';
-  const canPostVote = state.voteQ.trim().length > 0;
+  const canPostVote = state.voteQ.trim().length > 0
+    && (demo || voteKind === 'yesno' || voteOpts.filter((o) => o.trim()).length >= 2);
 
   const createTicket = () => set({ reportTicketed: true });
   const assignM89 = () => set({ m89Assigned: true });
@@ -75,16 +128,33 @@ export function BoardDesk() {
           <PhIcon name="ph-bold ph-arrow-left" size={14} />
           Resident view
         </button>
-        <span className="rounded-full px-3 py-[5px] text-[10.5px] font-bold bg-navy text-cream" style={{ letterSpacing: '0.1em' }}>
-          TREASURER
-        </span>
+        <div className="flex flex-col items-end gap-1.5">
+          <span className="rounded-full px-3 py-[5px] text-[10.5px] font-bold bg-navy text-cream" style={{ letterSpacing: '0.1em' }}>
+            BOARD
+          </span>
+          {!demo && (
+            <button
+              onClick={() => set({ boardChatOpen: true, boardChatTopic: null })}
+              className="flex items-center gap-1.5 rounded-full px-3 py-[5px] text-[11px] font-extrabold cursor-pointer bg-paper text-navy"
+              style={{ border: '1px solid rgb(var(--navy) / 0.15)' }}
+            >
+              <PhIcon name="ph-fill ph-chats-circle" size={13} color="rgb(var(--navy))" />
+              Board chat
+            </button>
+          )}
+        </div>
       </div>
-      <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">Board desk</h1>
+      <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Board desk</h1>
       <p className="m-0 mb-3.5 text-[13.5px] font-semibold text-taupe">
         {triage.summary}
       </p>
 
-      <div className="grid grid-cols-3 gap-[9px] mb-3">
+      {/*
+        Collected has no live source yet, and a tile that can only ever render
+        an em-dash is decoration. It shows where there is a number behind it
+        and the row closes to two columns where there isn't.
+      */}
+      <div className={'grid gap-[9px] mb-3 ' + (demo ? 'grid-cols-3' : 'grid-cols-2')}>
         <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
           <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--terracotta))' }}>
             Open
@@ -97,12 +167,14 @@ export function BoardDesk() {
           </p>
           <p className="m-0 font-serif text-lg text-navy">{quorum.pct}%</p>
         </div>
-        <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
-            Collected
-          </p>
-          <p className="m-0 font-serif text-lg text-navy">{demo ? '96%' : '—'}</p>
-        </div>
+        {demo && (
+          <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+            <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
+              Collected
+            </p>
+            <p className="m-0 font-serif text-lg text-navy">96%</p>
+          </div>
+        )}
       </div>
 
       <div className="mb-[18px]">
@@ -116,6 +188,16 @@ export function BoardDesk() {
 
       {state.boardTab === 'desk' && (
         <div>
+          {/*
+            The Desk stacks nine sections in no particular order, which is a
+            poor greeting for a volunteer with twenty minutes and no training.
+            BoardSetupCard is the one surface that answers "what first" — and
+            it only rendered on Today, so the guidance disappeared the moment a
+            board member reached their own tools. It renders itself only in
+            live, only for the board role, and only while steps remain, so it
+            costs nothing once the community is set up.
+          */}
+          <BoardSetupCard />
           <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
             Triage
           </p>
@@ -129,52 +211,7 @@ export function BoardDesk() {
               </div>
             ) : !demo ? (
               // Live: the real report queue with board actions.
-              triageItems.map((t) => {
-                const resolved = t.status === 'resolved';
-                const ticketed = t.status === 'ticketed' || t.status === 'assigned';
-                return (
-                  <div key={t.id} className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0"
-                        style={{ background: resolved ? 'rgb(var(--mint))' : 'rgb(var(--blush))' }}
-                      >
-                        <PhIcon
-                          name={resolved ? 'ph-fill ph-check-circle' : 'ph-fill ph-siren'}
-                          size={20}
-                          color={resolved ? 'rgb(var(--sage))' : 'rgb(var(--terracotta))'}
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">{t.title}</p>
-                        <p className="m-0 text-xs font-semibold text-stone">{t.sub}</p>
-                      </div>
-                      {t.status === 'open' && (
-                        <button
-                          onClick={() => void repo.setReportStatus(t.id, 'ticketed')}
-                          className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
-                        >
-                          Create ticket
-                        </button>
-                      )}
-                      {ticketed && (
-                        <button
-                          onClick={() => void repo.setReportStatus(t.id, 'resolved')}
-                          className="rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-transparent text-navy"
-                          style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
-                        >
-                          {t.ref ? `${t.ref} · Resolve` : 'Resolve'}
-                        </button>
-                      )}
-                      {resolved && (
-                        <span className="text-[11.5px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--sage))' }}>
-                          Resolved ✓
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                );
-              })
+              triageItems.map((t) => <TriageCard key={t.id} item={t} />)
             ) : (<>
             {/* Streetlight */}
             <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -197,7 +234,7 @@ export function BoardDesk() {
                   </button>
                 )}
                 {state.reportTicketed && (
-                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                     #M-88 ✓
                     <br />
                     BrightPath Electric
@@ -228,7 +265,7 @@ export function BoardDesk() {
                     </button>
                   )}
                   {state.m89Assigned && (
-                    <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                    <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                       GreenScape ✓
                       <br />
                       Mon, Jul 6
@@ -310,7 +347,7 @@ export function BoardDesk() {
                   </button>
                 )}
                 {state.gateScheduled && (
-                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                     AquaFix ✓
                     <br />
                     Thu, Jul 3
@@ -321,12 +358,472 @@ export function BoardDesk() {
             </>)}
           </div>
 
+          {!demo && (<>
+            <div className="mb-[22px]">
+              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+                Board chat
+              </p>
+              <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+                <div className="flex items-center gap-2 mb-1">
+                  <PhIcon name="ph-fill ph-lock-simple" size={13} color="rgb(var(--stone))" className="flex-shrink-0" />
+                  <p className="m-0 text-[11.5px] font-bold text-stone">
+                    Private to board members — residents never see this.
+                  </p>
+                </div>
+                {boardTopics.map(([name, msgs]) => {
+                  const last = msgs[msgs.length - 1];
+                  return (
+                    <button
+                      key={name}
+                      onClick={() => set({ boardChatOpen: true, boardChatTopic: name })}
+                      className="w-full flex items-center gap-2.5 py-2.5 px-0 border-0 bg-transparent cursor-pointer text-left"
+                      style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}
+                    >
+                      <div
+                        className="w-8 h-8 rounded-[11px] flex items-center justify-center flex-shrink-0"
+                        style={{ background: name === 'General' ? 'rgb(var(--navy))' : 'rgb(var(--parchment))' }}
+                      >
+                        <PhIcon
+                          name={name === 'General' ? 'ph-fill ph-push-pin' : 'ph-fill ph-hash'}
+                          size={13}
+                          color={name === 'General' ? 'rgb(var(--cream))' : 'rgb(var(--navy))'}
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="m-0 text-[13px] font-bold text-navy">{name}</p>
+                        <p className="m-0 text-[11.5px] font-semibold text-stone truncate">
+                          {last ? `${last.me ? 'You' : last.authorName}: ${last.text}` : 'No messages yet'}
+                        </p>
+                      </div>
+                      <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--stonelight))" className="flex-shrink-0" />
+                    </button>
+                  );
+                })}
+                <button
+                  onClick={() => set({ boardChatOpen: true, boardChatTopic: null })}
+                  className="w-full rounded-full py-2.5 mt-2.5 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                  style={{ border: '1.5px dashed rgb(var(--navy) / 0.25)' }}
+                >
+                  + New topic
+                </button>
+              </div>
+
+              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+                Members
+              </p>
+              <div className="bg-paper rounded-[18px] p-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+                <p className="m-0 mb-2.5 text-[13.5px] font-bold text-navy">Invite a neighbor</p>
+                <input
+                  value={invEmail}
+                  onChange={(e) => setInvEmail(e.target.value)}
+                  placeholder="Email address"
+                  type="email"
+                  className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                />
+                <div className="flex gap-2 mb-2.5">
+                  <input
+                    value={invUnit}
+                    onChange={(e) => setInvUnit(e.target.value)}
+                    placeholder="Unit — e.g. #14 Alder Way"
+                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                  <button
+                    onClick={() => setInvRole(invRole === 'resident' ? 'board' : 'resident')}
+                    className="rounded-[11px] px-3 py-2.5 text-[12px] font-extrabold cursor-pointer bg-transparent text-navy flex-shrink-0"
+                    style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                  >
+                    {invRole === 'resident' ? 'Resident' : 'Board'}
+                  </button>
+                </div>
+                <button
+                  onClick={() => {
+                    if (!invEmail.trim() || invBusy) return;
+                    setInvBusy(true);
+                    void repo.createInvite({ email: invEmail, unitLabel: invUnit, role: invRole })
+                      .then(() => { setInvEmail(''); setInvUnit(''); setInvRole('resident'); })
+                      .catch(reportedByDataLayer)
+                      .finally(() => setInvBusy(false));
+                  }}
+                  className="w-full border-0 rounded-[11px] py-2.5 text-[12.5px] font-extrabold cursor-pointer"
+                  style={{
+                    background: invEmail.trim() && !invBusy ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
+                    color: invEmail.trim() && !invBusy ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
+                  }}
+                >
+                  {invBusy ? 'Inviting…' : 'Send invite'}
+                </button>
+                {invites.length > 0 && (
+                  <div className="mt-3 pt-2" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)' }}>
+                    {invites.map((inv) => (
+                      <div key={inv.id} className="flex items-center gap-2 py-1.5">
+                        <div className="flex-1 min-w-0">
+                          <p className="m-0 text-[12.5px] font-bold text-navy truncate">{inv.email}</p>
+                          <p className="m-0 text-[11px] font-semibold text-stone">
+                            {[inv.unitLabel, inv.role === 'board' ? 'Board' : 'Resident', inv.expiresLabel].filter(Boolean).join(' · ')}
+                          </p>
+                        </div>
+                        {inv.status === 'pending' || inv.status === 'expired' ? (
+                          <>
+                            <button
+                              onClick={() => {
+                                void navigator.clipboard?.writeText(`https://app.pavilion.community/?invite=${inv.code}`);
+                                setCopiedInvite(inv.id);
+                                setTimeout(() => setCopiedInvite(null), 2000);
+                              }}
+                              className="border-none bg-transparent text-[11.5px] font-extrabold cursor-pointer p-1"
+                              style={{ color: copiedInvite === inv.id ? 'rgb(var(--sage))' : 'rgb(var(--terracotta))' }}
+                            >
+                              {copiedInvite === inv.id ? 'Copied ✓' : 'Copy link'}
+                            </button>
+                            {inv.status === 'expired' ? (
+                              <button
+                                onClick={() => void repo.renewInvite(inv.id)}
+                                className="border-none bg-transparent text-[11.5px] font-extrabold cursor-pointer p-1 text-navy"
+                              >
+                                Renew
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => void repo.revokeInvite(inv.id)}
+                                className="border-none bg-transparent text-[11.5px] font-extrabold cursor-pointer p-1 text-stone"
+                              >
+                                Revoke
+                              </button>
+                            )}
+                          </>
+                        ) : (
+                          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
+                            Joined ✓
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <p className="mt-2.5 mb-0 text-[11px] font-semibold text-stone">
+                  They can sign in with this email, or use the copied invite link with any email.
+                </p>
+              </div>
+
+              {/* Roster — role, unit, and status admin */}
+              {adminMembers.length > 0 && (
+                <div className="bg-paper rounded-[18px] p-4 mt-3" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+                  <p className="m-0 mb-1.5 text-[13.5px] font-bold text-navy">Roster</p>
+                  {adminMembers.map((m) => (
+                    <div key={m.membershipId} className="py-2" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="m-0 text-[12.5px] font-bold text-navy truncate">
+                            {m.name}
+                            {m.status !== 'active' && <span className="ml-1.5 text-[10.5px] font-extrabold text-stone">INACTIVE</span>}
+                          </p>
+                          <p className="m-0 text-[11px] font-semibold text-stone">
+                            {[m.unitLabel || 'No unit', m.role === 'board' ? 'Board' : 'Resident'].join(' · ')}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => setRosterOpenId(rosterOpenId === m.membershipId ? null : m.membershipId)}
+                          className="border-none bg-transparent text-[11.5px] font-extrabold cursor-pointer p-1 text-navy"
+                        >
+                          {rosterOpenId === m.membershipId ? 'Close' : 'Manage'}
+                        </button>
+                      </div>
+                      {rosterOpenId === m.membershipId && (
+                        <div className="mt-2 animate-fadeup">
+                          <div className="flex gap-1.5 mb-2">
+                            <button
+                              onClick={() => void repo.setMemberRole(m.membershipId, m.role === 'board' ? 'resident' : 'board')}
+                              className="flex-1 rounded-full py-1.5 text-[11px] font-extrabold cursor-pointer bg-transparent text-navy"
+                              style={{ border: '1.5px solid rgb(var(--navy) / 0.2)' }}
+                            >
+                              Make {m.role === 'board' ? 'resident' : 'board'}
+                            </button>
+                            <button
+                              onClick={() => void repo.setMemberStatus(m.membershipId, m.status === 'active' ? 'inactive' : 'active')}
+                              className="flex-1 rounded-full py-1.5 text-[11px] font-extrabold cursor-pointer bg-transparent"
+                              style={{ border: '1.5px solid rgb(var(--navy) / 0.2)', color: m.status === 'active' ? 'rgb(var(--terracotta))' : 'rgb(var(--sage))' }}
+                            >
+                              {m.status === 'active' ? 'Deactivate' : 'Reactivate'}
+                            </button>
+                          </div>
+                          <div className="flex gap-1.5">
+                            <input
+                              value={rosterUnit}
+                              onChange={(e) => setRosterUnit(e.target.value)}
+                              placeholder={m.unitLabel || 'Assign a unit'}
+                              className="flex-1 rounded-[11px] px-3 py-1.5 text-[12px] font-bold text-navy outline-none min-w-0"
+                              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                            />
+                            <button
+                              onClick={() => { if (rosterUnit.trim()) { void repo.assignMemberUnit(m.membershipId, rosterUnit); setRosterUnit(''); } }}
+                              className="border-0 rounded-[11px] px-3 text-[11px] font-extrabold cursor-pointer bg-navy text-cream"
+                            >
+                              Move
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Compliance — issue and track violations */}
+            <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+              Compliance
+            </p>
+            <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+              {boardViolations.map((v) => (
+                <div key={v.id} className="flex items-center gap-2 py-2" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}>
+                  <div className="flex-1 min-w-0">
+                    <p className="m-0 text-[12.5px] font-bold text-navy truncate">{v.title}</p>
+                    <p className="m-0 text-[11px] font-semibold text-stone">
+                      {[v.unitLabel, v.severity === 'fine' ? `Fine ${v.fineLabel}` : v.severity === 'warning' ? 'Warning' : 'Courtesy', v.status === 'fixed' ? 'Marked fixed by resident' : 'Open'].filter(Boolean).join(' · ')}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => void repo.resolveViolation(v.id)}
+                    className="rounded-full px-3 py-1.5 text-[11px] font-extrabold cursor-pointer bg-transparent text-navy flex-shrink-0"
+                    style={{ border: '1.5px solid rgb(var(--navy) / 0.2)' }}
+                  >
+                    Resolve
+                  </button>
+                </div>
+              ))}
+              {!violDraftOpen ? (
+                <button
+                  onClick={() => setViolDraftOpen(true)}
+                  className="w-full rounded-full py-2.5 mt-2 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                  style={{ border: '1.5px dashed rgb(var(--navy) / 0.25)' }}
+                >
+                  + Issue a notice
+                </button>
+              ) : (
+                <div className="mt-2 animate-fadeup">
+                  <select
+                    value={violUnitId}
+                    onChange={(e) => setViolUnitId(e.target.value)}
+                    className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  >
+                    <option value="">Pick a unit…</option>
+                    {units.map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
+                  </select>
+                  <input
+                    value={violTitle}
+                    onChange={(e) => setViolTitle(e.target.value)}
+                    placeholder="Notice — e.g. Trash bins out past pickup day"
+                    className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                  <input
+                    value={violDesc}
+                    onChange={(e) => setViolDesc(e.target.value)}
+                    placeholder="Details the resident will see (optional)"
+                    className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                  <div className="flex gap-1.5 mb-2">
+                    {(['courtesy', 'warning', 'fine'] as const).map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => setViolSeverity(s)}
+                        className="flex-1 rounded-full py-2 text-[11.5px] font-extrabold cursor-pointer capitalize"
+                        style={violSeverity === s
+                          ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                          : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                  {violSeverity === 'fine' && (
+                    <input
+                      value={violFine}
+                      onChange={(e) => setViolFine(e.target.value.replace(/[^0-9.]/g, ''))}
+                      placeholder="Fine amount — e.g. 50"
+                      className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                      style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    />
+                  )}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setViolDraftOpen(false)}
+                      className="flex-1 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                      style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (!violUnitId || !violTitle.trim()) return;
+                        void repo.createViolation({
+                          unitId: violUnitId, title: violTitle, description: violDesc,
+                          severity: violSeverity, fineCents: Math.round((parseFloat(violFine) || 0) * 100),
+                        }).then(() => {
+                          setViolDraftOpen(false); setViolTitle(''); setViolDesc(''); setViolUnitId(''); setViolFine(''); setViolSeverity('courtesy');
+                        }).catch(reportedByDataLayer);
+                      }}
+                      className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
+                      style={{ background: violUnitId && violTitle.trim() ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))' }}
+                    >
+                      Issue notice
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Bookings across the community */}
+            {boardBookings.length > 0 && (
+              <>
+                <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+                  Bookings
+                </p>
+                <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+                  {boardBookings.map((b, i) => (
+                    <div key={b.id} className="flex items-center gap-2 py-1.5" style={i < boardBookings.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.06)' } : undefined}>
+                      <p className="m-0 flex-1 text-[12.5px] font-bold text-navy truncate">{b.amenity}</p>
+                      <p className="m-0 text-[11.5px] font-semibold text-stone">{b.dayLabel} · {b.slotLabel} · {b.memberName}</p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* Meetings — schedule + publish minutes */}
+            <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+              Meetings
+            </p>
+            <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+              {meetings.map((m) => (
+                <div key={m.id} className="flex items-center gap-2 py-2" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}>
+                  <div className="flex-1 min-w-0">
+                    <p className="m-0 text-[12.5px] font-bold text-navy truncate">{m.title}</p>
+                    <p className="m-0 text-[11px] font-semibold text-stone">{[m.whenLabel, m.whereLabel].filter(Boolean).join(' · ')}</p>
+                  </div>
+                  {m.minutesUrl ? (
+                    <a href={m.minutesUrl} target="_blank" rel="noreferrer" className="text-[11.5px] font-extrabold no-underline flex-shrink-0" style={{ color: 'rgb(var(--terracotta))' }}>
+                      Minutes →
+                    </a>
+                  ) : (
+                    <>
+                      <input
+                        ref={minutesFileRef}
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        className="hidden"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) void repo.publishMinutes(m.id, f).catch(reportedByDataLayer);
+                        }}
+                      />
+                      <button
+                        onClick={() => minutesFileRef.current?.click()}
+                        className="rounded-full px-3 py-1.5 text-[11px] font-extrabold cursor-pointer bg-transparent text-navy flex-shrink-0"
+                        style={{ border: '1.5px solid rgb(var(--navy) / 0.2)' }}
+                      >
+                        Publish minutes
+                      </button>
+                    </>
+                  )}
+                </div>
+              ))}
+              {!meetDraftOpen ? (
+                <button
+                  onClick={() => setMeetDraftOpen(true)}
+                  className="w-full rounded-full py-2.5 mt-2 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                  style={{ border: '1.5px dashed rgb(var(--navy) / 0.25)' }}
+                >
+                  + Schedule a meeting
+                </button>
+              ) : (
+                <div className="mt-2 animate-fadeup">
+                  <input
+                    value={meetTitle}
+                    onChange={(e) => setMeetTitle(e.target.value)}
+                    placeholder="Title — e.g. July board meeting"
+                    className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                  <div className="flex gap-2 mb-2">
+                    <input
+                      value={meetWhen}
+                      onChange={(e) => setMeetWhen(e.target.value)}
+                      placeholder="When — Tue Aug 4, 7 PM"
+                      className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                      style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    />
+                    <input
+                      value={meetWhere}
+                      onChange={(e) => setMeetWhere(e.target.value)}
+                      placeholder="Where"
+                      className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                      style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    />
+                  </div>
+                  <input
+                    value={meetAgenda}
+                    onChange={(e) => setMeetAgenda(e.target.value)}
+                    placeholder="Agenda items, comma-separated"
+                    className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setMeetDraftOpen(false)}
+                      className="flex-1 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                      style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (!meetTitle.trim()) return;
+                        void repo.createMeeting({ title: meetTitle, whenLabel: meetWhen, whereLabel: meetWhere, agenda: meetAgenda.split(',') })
+                          .then(() => { setMeetDraftOpen(false); setMeetTitle(''); setMeetWhen(''); setMeetWhere(''); setMeetAgenda(''); })
+                          .catch(reportedByDataLayer);
+                      }}
+                      className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
+                      style={{ background: meetTitle.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                    >
+                      Schedule
+                    </button>
+                  </div>
+                </div>
+              )}
+              <p className="mt-2.5 mb-0 text-[11px] font-semibold text-stone">
+                Residents see meetings on the HOA tab; published minutes land in Documents.
+              </p>
+            </div>
+
+            {/* Recent board activity (audit trail) */}
+            {auditLog.length > 0 && (
+              <>
+                <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+                  Recent activity
+                </p>
+                <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+                  {auditLog.slice(0, 8).map((a, i) => (
+                    <p key={a.id} className="m-0 py-1.5 text-[12px] font-semibold text-navy" style={i < Math.min(auditLog.length, 8) - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.06)' } : undefined}>
+                      <strong>{a.actorName}</strong> · {a.action}{a.detail ? ` — ${a.detail}` : ''}{' '}
+                      <span className="text-stone">· {a.time}</span>
+                    </p>
+                  ))}
+                </div>
+              </>
+            )}
+          </>)}
+
           {vote && (<>
           <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
             Vote monitor
           </p>
           <div className="bg-navy rounded-[20px] p-[18px] mb-[22px] text-cream">
-            <p className="m-0 mb-1 font-serif text-base">{vote.title} · closes Thu</p>
+            <p className="m-0 mb-1 font-serif text-base">{demo ? `${vote.title} · closes Thu` : vote.title}</p>
             <div className="flex items-center justify-between my-2.5 mb-1.5">
               <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
                 QUORUM
@@ -361,7 +858,7 @@ export function BoardDesk() {
       {state.boardTab === 'req' && !demo && (
         boardArcQueue.length === 0 ? (
           <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-            <PhIcon name="ph-fill ph-tray" size={22} color="rgb(var(--claypale))" />
+            <div className="flex justify-center"><PhIcon name="ph-fill ph-tray" size={22} color="rgb(var(--claypale))" /></div>
             <p className="m-0 mt-2 text-[13px] font-bold text-navy">No requests yet</p>
             <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
               ARC requests land here as residents submit them.
@@ -373,37 +870,97 @@ export function BoardDesk() {
               ARC queue
             </p>
             <div className="bg-paper rounded-[18px] px-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-              {boardArcQueue.map((r, i) => (
-                <div
-                  key={r.id}
-                  className="flex items-center gap-[11px] py-[11px]"
-                  style={i < boardArcQueue.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}
-                >
-                  <PhIcon
-                    name={r.approved ? 'ph-fill ph-seal-check' : 'ph-fill ph-pencil-ruler'}
-                    size={17}
-                    color={r.approved ? 'rgb(var(--sage))' : 'rgb(var(--skydeep))'}
-                    className="flex-shrink-0"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="m-0 text-[13px] font-bold text-navy">{r.ref} · {r.title}</p>
-                    <p className="m-0 text-[11px] font-semibold text-stone">{r.unitLabel}</p>
+              {boardArcQueue.map((r, i) => {
+                const settled = r.status === 'approved' || r.status === 'declined';
+                const pill = r.status === 'approved'
+                  ? { label: 'Approved', bg: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' }
+                  : r.status === 'declined'
+                    ? { label: 'Declined', bg: 'rgb(var(--blush))', color: 'rgb(var(--terracotta))' }
+                    : r.status === 'info_requested'
+                      ? { label: 'Info requested', bg: 'rgb(var(--goldpale))', color: 'rgb(var(--golddark))' }
+                      : null;
+                const deciding = arcDecideId === r.id;
+                return (
+                  <div
+                    key={r.id}
+                    className="py-[11px]"
+                    style={i < boardArcQueue.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}
+                  >
+                    <div className="flex items-center gap-[11px]">
+                      <PhIcon
+                        name={r.approved ? 'ph-fill ph-seal-check' : 'ph-fill ph-pencil-ruler'}
+                        size={17}
+                        color={r.approved ? 'rgb(var(--sage))' : 'rgb(var(--skydeep))'}
+                        className="flex-shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="m-0 text-[13px] font-bold text-navy">{r.ref} · {r.title}</p>
+                        <p className="m-0 text-[11px] font-semibold text-stone">
+                          {r.unitLabel}
+                          {r.attachmentUrls.length > 0 && (
+                            <>
+                              {' · '}
+                              {r.attachmentUrls.map((u, j) => (
+                                <a key={u} href={u} target="_blank" rel="noreferrer" className="font-extrabold no-underline" style={{ color: 'rgb(var(--terracotta))' }}>
+                                  file {j + 1}{j < r.attachmentUrls.length - 1 ? ', ' : ''}
+                                </a>
+                              ))}
+                            </>
+                          )}
+                        </p>
+                      </div>
+                      {settled || r.status === 'info_requested' ? (
+                        <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0" style={{ background: pill!.bg, color: pill!.color }}>
+                          {pill!.label}
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => { setArcDecideId(deciding ? null : r.id); setArcNote(''); }}
+                          className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                        >
+                          {deciding ? 'Cancel' : 'Decide'}
+                        </button>
+                      )}
+                    </div>
+                    {deciding && (
+                      <div className="mt-2.5 animate-fadeup">
+                        <input
+                          value={arcNote}
+                          onChange={(e) => setArcNote(e.target.value)}
+                          placeholder="Note — conditions, reason, or what's missing (optional for approval)"
+                          className="w-full rounded-[11px] px-3 py-2.5 text-[12.5px] font-bold text-navy outline-none mb-2"
+                          style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                        />
+                        <div className="flex gap-1.5">
+                          <button
+                            onClick={() => { setArcDecideId(null); void repo.decideArc(r.id, 'approved', '', arcNote); }}
+                            className="flex-1 border-0 rounded-full py-2 text-[11.5px] font-extrabold cursor-pointer text-white"
+                            style={{ background: 'rgb(var(--sage))' }}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => { if (arcNote.trim()) { setArcDecideId(null); void repo.decideArc(r.id, 'declined', arcNote); } }}
+                            className="flex-1 border-0 rounded-full py-2 text-[11.5px] font-extrabold cursor-pointer text-white"
+                            style={{ background: arcNote.trim() ? 'rgb(var(--terracotta))' : 'rgb(var(--sandpale))' }}
+                            title="A decline needs a reason"
+                          >
+                            Decline
+                          </button>
+                          <button
+                            onClick={() => { if (arcNote.trim()) { setArcDecideId(null); void repo.decideArc(r.id, 'info_requested', arcNote); } }}
+                            className="flex-1 rounded-full py-2 text-[11.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                            style={{ border: '1.5px solid rgb(var(--navy) / 0.2)' }}
+                            title="Tell them what's missing"
+                          >
+                            Needs info
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  {r.approved ? (
-                    <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0" style={{ background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' }}>
-                      Approved
-                    </span>
-                  ) : (
-                    <button
-                      onClick={() => void repo.decideArc(r.id, true)}
-                      className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 text-white"
-                      style={{ background: 'rgb(var(--sage))' }}
-                    >
-                      Approve
-                    </button>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )
@@ -444,14 +1001,14 @@ export function BoardDesk() {
             <div className="flex items-center gap-[11px] py-[11px]" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
               <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#A-118 · Backyard pergola · #27</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--barkgray))' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--stone))' }}>
                 Jun 12
               </span>
             </div>
             <div className="flex items-center gap-[11px] py-[11px]">
               <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#A-115 · Fence stain, Cedar · #33</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--barkgray))' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--stone))' }}>
                 May 30
               </span>
             </div>
@@ -583,7 +1140,7 @@ export function BoardDesk() {
 
       {state.boardTab === 'money' && !demo && (
         <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <PhIcon name="ph-fill ph-coins" size={22} color="rgb(var(--claypale))" />
+          <div className="flex justify-center"><PhIcon name="ph-fill ph-coins" size={22} color="rgb(var(--claypale))" /></div>
           <p className="m-0 mt-2 text-[13px] font-bold text-navy">No financials yet</p>
           <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
             Collections, budget tracking, and the aging report switch on once dues are issued.
@@ -597,7 +1154,7 @@ export function BoardDesk() {
           </p>
           <div className="bg-paper rounded-[20px] p-[18px] mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
             <div className="flex items-baseline justify-between gap-2.5 mb-2.5">
-              <p className="m-0 font-serif text-[22px] text-navy">96% collected</p>
+              <p className="m-0 font-serif text-[19px] text-navy">96% collected</p>
               <p className="m-0 text-xs font-bold text-stone">
                 $38.9K of $40.5K
               </p>
@@ -763,7 +1320,7 @@ export function BoardDesk() {
                 </button>
               )}
               {state.invApproved && (
-                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                   2 of 3 ✓
                   <br />
                   ACH Thursday
@@ -784,10 +1341,10 @@ export function BoardDesk() {
               <div className="rounded-[13px] p-3.5 flex items-start gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0 mt-px" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedark">
+                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedarkdark">
                     Ballot is open — &quot;{voteQPreview}&quot;
                   </p>
-                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagegray))' }}>
+                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagedark))' }}>
                     Live on every resident&apos;s Today screen · watch the tally on the Desk tab
                   </p>
                   <button
@@ -807,7 +1364,7 @@ export function BoardDesk() {
                 <div className="flex-1 min-w-0">
                   <p className="m-0 mb-px text-[13.5px] font-bold text-navy">Draft a community vote</p>
                   <p className="m-0 text-[11.5px] font-semibold text-stone">
-                    Ask a yes/no or A/B question — results tally live
+                    Yes/no or multiple choice — results tally live
                   </p>
                 </div>
                 <button
@@ -827,27 +1384,102 @@ export function BoardDesk() {
                   className="w-full rounded-[13px] px-[13px] py-[11px] text-[13.5px] font-semibold text-navy outline-none resize-none mb-3"
                   style={{ minHeight: 58, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
                 />
-                <p className="m-0 mb-[7px] text-[11.5px] font-bold text-navy">Choices</p>
                 <div className="flex gap-2 mb-3">
-                  <input
-                    value={state.voteOptA}
-                    onChange={(e) => set({ voteOptA: e.target.value })}
-                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
-                  />
-                  <input
-                    value={state.voteOptB}
-                    onChange={(e) => set({ voteOptB: e.target.value })}
-                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
-                  />
+                  {(['yesno', 'options'] as const).map((k) => (
+                    <button
+                      key={k}
+                      onClick={() => setVoteKind(k)}
+                      className="flex-1 rounded-[11px] py-2 text-[12px] font-extrabold cursor-pointer"
+                      style={voteKind === k
+                        ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                        : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                    >
+                      {k === 'yesno' ? 'Yes / No' : 'Multiple choice'}
+                    </button>
+                  ))}
+                </div>
+                {voteKind === 'yesno' ? (
+                  <>
+                    <p className="m-0 mb-[7px] text-[11.5px] font-bold text-navy">Choices</p>
+                    <div className="flex gap-2 mb-3">
+                      <input
+                        value={state.voteOptA}
+                        onChange={(e) => set({ voteOptA: e.target.value })}
+                        className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                      />
+                      <input
+                        value={state.voteOptB}
+                        onChange={(e) => set({ voteOptB: e.target.value })}
+                        className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="m-0 mb-[7px] text-[11.5px] font-bold text-navy">Options</p>
+                    {voteOpts.map((opt, i) => (
+                      <div key={i} className="flex gap-2 mb-2">
+                        <input
+                          value={opt}
+                          onChange={(e) => setVoteOpts(voteOpts.map((o, j) => (j === i ? e.target.value : o)))}
+                          placeholder={`Option ${i + 1}`}
+                          className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                          style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                        />
+                        {voteOpts.length > 2 && (
+                          <button
+                            onClick={() => setVoteOpts(voteOpts.filter((_, j) => j !== i))}
+                            className="w-9 rounded-[11px] border-0 cursor-pointer flex items-center justify-center"
+                            style={{ background: 'rgb(var(--sandpale))' }}
+                          >
+                            <PhIcon name="ph-bold ph-x" size={12} color="rgb(var(--stone))" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    {voteOpts.length < 6 && (
+                      <button
+                        onClick={() => setVoteOpts([...voteOpts, ''])}
+                        className="w-full rounded-[11px] py-2 mb-2 text-[12px] font-extrabold cursor-pointer bg-transparent text-navy"
+                        style={{ border: '1.5px dashed rgb(var(--navy) / 0.25)' }}
+                      >
+                        + Add option
+                      </button>
+                    )}
+                    <button
+                      onClick={() => setVoteMulti(!voteMulti)}
+                      className="flex items-center gap-2 mb-3 bg-transparent border-0 p-0 cursor-pointer text-[12px] font-bold text-navy"
+                    >
+                      <span className="w-4 h-4 rounded-[5px] flex items-center justify-center" style={{ border: '1.5px solid rgb(var(--navy) / 0.3)', background: voteMulti ? 'rgb(var(--navy))' : 'transparent' }}>
+                        {voteMulti && <PhIcon name="ph-bold ph-check" size={10} color="rgb(var(--cream))" />}
+                      </span>
+                      Allow picking more than one
+                    </button>
+                  </>
+                )}
+                <p className="m-0 mb-[7px] text-[11.5px] font-bold text-navy">Closes</p>
+                <div className="flex gap-2 mb-3">
+                  {([['3 days', 3], ['1 week', 7], ['2 weeks', 14], ['No deadline', null]] as const).map(([label, days]) => (
+                    <button
+                      key={label}
+                      onClick={() => setVoteDays(days)}
+                      className="flex-1 rounded-[11px] py-2 text-[11.5px] font-extrabold cursor-pointer"
+                      style={voteDays === days
+                        ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                        : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                    >
+                      {label}
+                    </button>
+                  ))}
                 </div>
                 {!voteConfirm ? (
                   <button
                     onClick={() => canPostVote && setVoteConfirm(true)}
                     disabled={!canPostVote}
                     className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                    style={{ background: canPostVote ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
+                    style={{ background: canPostVote ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
                   >
                     Open the ballot
                   </button>
@@ -856,11 +1488,20 @@ export function BoardDesk() {
                     <button
                       onClick={() => {
                         setVoteConfirm(false);
-                        void repo.openVote({ question: state.voteQ, yesLabel: state.voteOptA, noLabel: state.voteOptB })
-                          .then(() => set({ votePosted: true }));
+                        void repo.openVote({
+                          question: state.voteQ,
+                          yesLabel: state.voteOptA,
+                          noLabel: state.voteOptB,
+                          kind: voteKind,
+                          options: voteOpts.map((o) => o.trim()).filter(Boolean),
+                          multi: voteMulti,
+                          closesAt: voteDays ? new Date(Date.now() + voteDays * 86400_000).toISOString() : null,
+                        })
+                          .then(() => set({ votePosted: true }))
+                          .catch(reportedByDataLayer); // failure surfaced via the app toast
                       }}
                       className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                      style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
+                      style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
                     >
                       Confirm — open to all households
                     </button>
@@ -875,6 +1516,105 @@ export function BoardDesk() {
                 )}
               </div>
             )}
+          </div>
+
+          {/* Open ballots — live tallies + close */}
+          {openVotes.length > 0 && (
+            <>
+              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+                Open ballots
+              </p>
+              <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+                {openVotes.map((v, i) => (
+                  <div key={v.id} className="py-2" style={i < openVotes.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="m-0 text-[13px] font-bold text-navy truncate">{v.title}</p>
+                        <p className="m-0 text-[11.5px] font-semibold text-stone">
+                          {v.kind === 'options'
+                            ? v.options.map((o) => `${o.label} ${o.tally}`).join(' · ')
+                            : `${v.yesLabel} ${v.yesCount} · ${v.noLabel} ${v.noCount}`}
+                          {` · quorum ${v.quorumCount}/${v.quorumTotal}`}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => void repo.closeVote(v.id)}
+                        className="rounded-full px-3 py-1.5 text-[11.5px] font-extrabold cursor-pointer bg-transparent text-navy flex-shrink-0"
+                        style={{ border: '1.5px solid rgb(var(--navy) / 0.2)' }}
+                      >
+                        Close ballot
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* Community event */}
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+            Events
+          </p>
+          <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+            {!evDraftOpen ? (
+              <button
+                onClick={() => setEvDraftOpen(true)}
+                className="w-full rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                style={{ border: '1.5px dashed rgb(var(--navy) / 0.25)' }}
+              >
+                + Create a community event
+              </button>
+            ) : (
+              <div className="animate-fadeup">
+                <input
+                  value={evTitle}
+                  onChange={(e) => setEvTitle(e.target.value)}
+                  placeholder="Title — e.g. Summer BBQ at the clubhouse"
+                  className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                />
+                <div className="flex gap-2 mb-2">
+                  <input
+                    value={evWhen}
+                    onChange={(e) => setEvWhen(e.target.value)}
+                    placeholder="When — Sat Aug 9 · 5 PM"
+                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                  <input
+                    value={evWhere}
+                    onChange={(e) => setEvWhere(e.target.value)}
+                    placeholder="Where"
+                    className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setEvDraftOpen(false)}
+                    className="flex-1 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer bg-transparent text-navy"
+                    style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!evTitle.trim()) return;
+                      void repo.createEvent({ title: evTitle, whenLabel: evWhen, whereLabel: evWhere })
+                        .then(() => { setEvDraftOpen(false); setEvTitle(''); setEvWhen(''); setEvWhere(''); })
+                        .catch(reportedByDataLayer);
+                    }}
+                    className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
+                    style={{ background: evTitle.trim() ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))' }}
+                  >
+                    Publish event
+                  </button>
+                </div>
+              </div>
+            )}
+            <p className="mt-2.5 mb-0 text-[11px] font-semibold text-stone">
+              Shows on every resident&apos;s Today screen with one-tap RSVP.
+            </p>
           </div>
         </div>
       )}
@@ -903,7 +1643,7 @@ export function BoardDesk() {
                   onClick={sendBroadcast}
                   disabled={!canBc}
                   className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold"
-                  style={{ background: canBc ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canBc ? 'rgb(var(--white))' : 'rgb(var(--stonelight))', cursor: canBc ? 'pointer' : 'default' }}
+                  style={{ background: canBc ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canBc ? 'rgb(var(--white))' : 'rgb(var(--stonelight))', cursor: canBc ? 'pointer' : 'default' }}
                 >
                   Send to 136 households
                 </button>
@@ -912,7 +1652,7 @@ export function BoardDesk() {
             {state.broadcastSent && (
               <div className="rounded-[13px] p-3.5 flex items-center gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0" />
-                <span className="text-[13px] font-bold text-sagedark">
+                <span className="text-[13px] font-bold text-sagedarkdark">
                   Sent — live in the Commons, email digest goes out at 6 PM
                 </span>
               </div>
@@ -969,7 +1709,7 @@ export function BoardDesk() {
                         onClick={() => canPostVote && setVoteConfirm(true)}
                         disabled={!canPostVote}
                         className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                        style={{ background: canPostVote ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
+                        style={{ background: canPostVote ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
                       >
                         Open the ballot
                       </button>
@@ -978,7 +1718,7 @@ export function BoardDesk() {
                         <button
                           onClick={() => { postVote(); setVoteConfirm(false); }}
                           className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                          style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))' }}
+                          style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
                         >
                           Confirm — open to 136 households
                         </button>
@@ -1018,10 +1758,10 @@ export function BoardDesk() {
               <div className="rounded-[13px] p-3.5 flex items-start gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0 mt-px" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedark">
+                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedarkdark">
                     Ballot is open — &quot;{voteQPreview}&quot;
                   </p>
-                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagegray))' }}>
+                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagedark))' }}>
                     Live on every resident&apos;s Today screen · closes in 7 days · you&apos;ll see the tally here
                   </p>
                 </div>
@@ -1131,13 +1871,168 @@ export function BoardDesk() {
                 </button>
               )}
               {state.minutesPublished && (
-                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                   Published ✓
                   <br />
                   in Documents
                 </span>
               )}
             </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * One live triage report: status flow (open → ticketed → in progress →
+ * resolved), urgency badge, and an expandable panel with photos, vendor
+ * assignment, private board notes, and the reporter thread.
+ */
+function TriageCard({ item: t }: { item: TriageItem }) {
+  const repo = useRepository();
+  const [open, setOpen] = useState(false);
+  const [vendor, setVendor] = useState(t.vendor);
+  const [notes, setNotes] = useState(t.boardNotes);
+  const [thread, setThread] = useState<ThreadComment[]>([]);
+  const [reply, setReply] = useState('');
+
+  const resolved = t.status === 'resolved';
+  const working = t.status === 'in_progress';
+  const ticketed = t.status === 'ticketed' || t.status === 'assigned';
+
+  const loadThread = () => { void repo.listReportComments(t.id).then(setThread); };
+  const toggle = () => { if (!open) loadThread(); setOpen(!open); };
+  const sendReply = () => {
+    if (!reply.trim()) return;
+    void repo.addReportComment(t.id, reply).then(() => { setReply(''); loadThread(); }).catch(reportedByDataLayer);
+  };
+
+  const urgencyPill = t.urgency === 'urgent'
+    ? { label: 'URGENT', bg: 'rgb(var(--blush))', color: 'rgb(var(--terracotta))' }
+    : t.urgency === 'low'
+      ? { label: 'LOW', bg: 'rgb(var(--sand))', color: 'rgb(var(--stone))' }
+      : null;
+
+  return (
+    <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+      <div className="flex items-center gap-3">
+        <div
+          className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0"
+          style={{ background: resolved ? 'rgb(var(--mint))' : 'rgb(var(--blush))' }}
+        >
+          <PhIcon
+            name={resolved ? 'ph-fill ph-check-circle' : 'ph-fill ph-siren'}
+            size={20}
+            color={resolved ? 'rgb(var(--sage))' : 'rgb(var(--terracotta))'}
+          />
+        </div>
+        <button onClick={toggle} className="flex-1 min-w-0 border-0 bg-transparent p-0 text-left cursor-pointer">
+          <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">
+            {urgencyPill && (
+              <span className="rounded-full px-[7px] py-[2px] text-[9.5px] font-extrabold mr-1.5 align-middle" style={{ background: urgencyPill.bg, color: urgencyPill.color, letterSpacing: '0.06em' }}>
+                {urgencyPill.label}
+              </span>
+            )}
+            {t.title}
+          </p>
+          <p className="m-0 text-xs font-semibold text-stone">
+            {t.sub}{t.location ? ` · ${t.location}` : ''}{t.vendor ? ` · ${t.vendor}` : ''}
+          </p>
+        </button>
+        {t.status === 'open' && (
+          <button
+            onClick={() => void repo.setReportStatus(t.id, 'ticketed')}
+            className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+          >
+            Create ticket
+          </button>
+        )}
+        {(ticketed || working) && (
+          <button
+            onClick={() => void repo.setReportStatus(t.id, 'resolved')}
+            className="rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-transparent text-navy"
+            style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+          >
+            {t.ref ? `${t.ref} · Resolve` : 'Resolve'}
+          </button>
+        )}
+        {resolved && (
+          <span className="text-[11.5px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--sage))' }}>
+            Resolved ✓
+          </span>
+        )}
+      </div>
+
+      {open && (
+        <div className="mt-3 animate-fadeup" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)', paddingTop: 12 }}>
+          {t.photoUrls.length > 0 && (
+            <div className="flex gap-2 mb-3 overflow-x-auto pav-scroll">
+              {t.photoUrls.map((u) => (
+                <a key={u} href={u} target="_blank" rel="noreferrer" className="flex-shrink-0">
+                  <img src={u} alt="Attached photo" className="rounded-[11px] block" style={{ height: 84, width: 84, objectFit: 'cover' }} />
+                </a>
+              ))}
+            </div>
+          )}
+          {!resolved && (
+            <div className="flex gap-2 mb-2.5">
+              <input
+                value={vendor}
+                onChange={(e) => setVendor(e.target.value)}
+                placeholder="Assign — vendor or person"
+                className="flex-1 rounded-[11px] px-3 py-2 text-[12.5px] font-bold text-navy outline-none min-w-0"
+                style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+              />
+              <button
+                onClick={() => { if (vendor.trim()) void repo.assignReport(t.id, vendor); }}
+                className="border-0 rounded-[11px] px-3 text-[11.5px] font-extrabold cursor-pointer bg-navy text-cream flex-shrink-0"
+              >
+                Assign
+              </button>
+            </div>
+          )}
+          <div className="flex gap-2 mb-2.5">
+            <input
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Board-only notes"
+              className="flex-1 rounded-[11px] px-3 py-2 text-[12.5px] font-bold text-navy outline-none min-w-0"
+              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+            />
+            <button
+              onClick={() => void repo.setReportNotes(t.id, notes)}
+              className="rounded-[11px] px-3 text-[11.5px] font-extrabold cursor-pointer bg-transparent text-navy flex-shrink-0"
+              style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+            >
+              Save
+            </button>
+          </div>
+          {thread.map((c) => (
+            <p key={c.id} className="m-0 mb-1 text-[12px] font-semibold text-navy">
+              <strong>{c.me ? 'You' : c.authorName}:</strong> {c.body}{' '}
+              <span className="text-stone" style={{ fontSize: 10.5 }}>· {c.time}</span>
+            </p>
+          ))}
+          <div className="flex gap-2 mt-1.5">
+            <input
+              value={reply}
+              onChange={(e) => setReply(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') sendReply(); }}
+              placeholder="Message the reporter…"
+              className="flex-1 rounded-full px-3 py-2 text-[12.5px] font-bold text-navy outline-none min-w-0"
+              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+            />
+            <button
+              type="button"
+              aria-label="Send reply"
+              onClick={sendReply}
+              className="w-8 h-8 border-0 rounded-full cursor-pointer flex items-center justify-center flex-shrink-0"
+              style={{ background: reply.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+            >
+              <PhIcon name="ph-fill ph-paper-plane-right" size={12} color="rgb(var(--cream))" />
+            </button>
           </div>
         </div>
       )}

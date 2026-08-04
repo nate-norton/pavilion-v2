@@ -17,23 +17,60 @@
   --sand: 237 230 214;
   --parchment: 249 245 236;
   --ember: 224 106 62;
-  --terracotta: 199 90 49;
+  /*
+   * Decorative vs. text-bearing accent. --ember is a fill: status dots,
+   * progress, gradients, large display type. Anything that carries text —
+   * a CTA background under white, or ember-colored copy on a light bed —
+   * uses --emberdeep, which clears 4.5:1 both ways (white on it: 5.33;
+   * it on blush: 4.65). Swapping one for the other reintroduces the
+   * WCAG 1.4.3 failure the audit found on every primary button.
+   */
+  --emberdeep: 172 80 45;
+  /*
+   * --terracotta is the *themed* text-bearing accent: brand themes remap it
+   * per community (see src/theme/themes.ts) and it is what accent-coloured
+   * copy, status pills and inline links resolve to. It was 199 90 49, which
+   * measured 3.75:1 on cream and 3.72:1 on blush — below AA — and it is set
+   * as type on ~40 surfaces including the "Review & pay" pill on Today. The
+   * value below clears 4.5:1 on every warm bed in the system (cream 5.03,
+   * blush 4.99, paper 5.67, parchment 5.26, sand 4.60; white on it 5.72).
+   * A brand theme that overrides it must clear the same floor on its own
+   * blush — Meadow Park's original 34 128 73 did not (4.44) and was darkened.
+   */
+  --terracotta: 168 74 38;
   --blush: 251 237 228;
   --peach: 232 167 136;
   --sage: 42 157 92;
   --mint: 233 246 238;
-  --sagedark: 34 128 73;
+  /* Text-bearing variants: sage/gold are fills. Sage text on mint was
+   * 3.11:1 and gold text on goldpale 2.03:1 — the darks below clear
+   * 4.5:1 on their own beds (sagedark on mint 4.92, on cream 4.82;
+   * golddark on goldpale 5.16, on cream 5.02).
+   *
+   * --golddark was 140 105 40, which cleared goldpale (4.56) but measured
+   * 4.44 on cream — and cream is the page every screen sits on, so gold
+   * metadata text was failing AA wherever it sat outside a goldpale pill.
+   * Darkened until it clears cream and sand too. */
+  --sagedark: 32 120 71;
   --gold: 217 164 65;
   --goldpale: 251 243 224;
-  --golddark: 168 123 31;
+  --golddark: 130 97 36;
   --sky: 74 144 226;
   --skydeep: 58 115 181;
   --skypale: 234 243 253;
   --ink: 62 76 99;
-  --stone: 138 131 117;
-  --stonelight: 163 155 139;
+  /*
+   * Secondary-text ramp. Every step clears 4.5:1 on cream (the lightest
+   * page bg is paper, so cream is the worst case): stonelight 4.52,
+   * stone 5.32, taupe 5.79, bark 6.50. The ramp is compressed compared
+   * with its original 163→91 spread because anything lighter than ~115
+   * cannot reach AA on a warm background — the four steps stay
+   * distinguishable, just closer together.
+   */
+  --stone: 107 101 89;
+  --stonelight: 115 109 97;
   --bark: 91 85 74;
-  --taupe: 122 115 101;
+  --taupe: 99 93 82;
   --red: 199 64 46;
 
   /*
@@ -48,32 +85,30 @@
   --taupepale: 213 207 191;
   --taupedim: 201 193 176;
   --claypale: 201 192 174;
-  --claygray: 180 172 156;
-  --stonegray: 138 127 111;
-  --barkgray: 110 103 89;
   --creamlight: 247 243 234;
   --creamdim: 243 237 224;
   --creamtint: 242 235 220;
-  --creamsand: 239 232 214;
   --sandtint: 235 227 208;
   --sanddeep: 229 220 198;
-  --sandwarm: 228 220 200;
   --blushpale: 254 243 238;
   --blushdim: 251 228 224;
-  --sagegray: 95 138 111;
-  --sagelight: 116 185 146;
-  --sagebright: 111 211 156;
-  --sagemid: 85 172 124;
+  /*
+   * Sequential scale — reserve-funding forecast (Hoa.tsx FORECAST_BARS).
+   * Six steps of one hue, lightest year to darkest, ending on --sage. These
+   * look like duplicates in a flat token list and are not: collapsing any of
+   * them flattens a chart. Ordered here as they appear in the chart.
+   */
+  --sagemist: 191 220 201;   /* '26 */
+  --sagesoft: 169 210 184;   /* '27 */
+  --sagecool: 143 198 166;   /* '28 */
+  --sagelight: 116 185 146;  /* '29 */
+  --sagemid: 85 172 124;     /* '30 — '31 uses --sage */
+  /* Surfaces, not scale steps. */
   --sagepale: 220 233 221;
-  --sagetint: 226 242 232;
-  --sagewash: 213 228 214;
-  --sagemist: 191 220 201;
-  --sagesoft: 169 210 184;
-  --sagecool: 143 198 166;
+  --sagebright: 111 211 156;
   --emberbright: 249 123 75;
   --brown: 138 81 56;
   --reddeep: 178 58 43;
-  --goldmid: 184 135 46;
   --skytint: 216 230 244;
   --skydark: 58 100 145;
   --violet: 139 92 246;
@@ -95,6 +130,25 @@
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+/*
+ * Focus (WCAG 2.4.7). Keyboard users get a visible ring everywhere; pointer
+ * users never see it. Declared once at the global layer so it survives the
+ * `outline-none` utilities scattered through the screens — those kill the
+ * default ring, and :focus-visible here restores an intentional one.
+ * The ring is emberdeep against a cream offset so it reads on both the
+ * paper surfaces and the navy dock.
+ */
+:focus-visible {
+  outline: 2px solid rgb(var(--emberdeep));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* On navy surfaces the ember ring loses contrast — invert to cream there. */
+.bg-navy :focus-visible,
+[data-on-navy] :focus-visible {
+  outline-color: rgb(var(--cream));
+}
 html, body { margin: 0; padding: 0; background: rgb(var(--color-bg)); }
 body { font-family: 'Nunito Sans', system-ui, sans-serif; }
 .pav-scroll::-webkit-scrollbar { display: none; }
@@ -109,6 +163,36 @@ body { font-family: 'Nunito Sans', system-ui, sans-serif; }
 @keyframes slideLeft { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes slideRight { from { transform: translateX(-40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes msgBubble { from { transform: translateY(8px) scale(0.96); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+/* Skeleton breathing — opacity only, so it costs nothing to composite and
+   needs no special case under prefers-reduced-motion beyond the shared
+   duration clamp. */
+@keyframes skeletonPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+/* Screen-reader-only text (skeletons announce "Loading…" without showing it). */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/*
+ * Large type (PRODUCT.md commits to this as a first-class feature; the switch
+ * shipped wired to nothing).
+ *
+ * The obvious implementation — scale the root font-size — does nothing here,
+ * because the whole type scale is literal px in Tailwind arbitrary values
+ * (text-[13px]), which ignore the root. Converting ~26 sizes to rem across
+ * 10k lines is the "right" fix and also the one most likely to break layout
+ * before a pilot.
+ *
+ * `zoom` scales the rendered result including px, so it actually delivers what
+ * the switch promises: bigger text AND proportionally bigger tap targets. It
+ * applies to the screen layer only, so the phone frame itself and the fixed
+ * dock keep their geometry. Trade-off, stated honestly: less content fits on
+ * screen, which is inherent to large type rather than a defect.
+ */
+[data-large-type] .pav-zoom {
+  zoom: 1.15;
+}
 
 /* Button press feedback */
 button[class*="cursor-pointer"]:active,
@@ -120,6 +204,27 @@ div[class*="cursor-pointer"] {
   transition: transform 0.12s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
 
+/*
+ * Desktop board shell (live mode only — see PhoneFrame). At ≥1024px the frame
+ * stops pretending to be a handset while the board surface is open: it takes
+ * the window's height and widens to a working column. Board Desk's content is
+ * capped at 880px so rows don't stretch into unreadable full-width bands on a
+ * wide monitor; the cap is what keeps this an honest adaptation rather than a
+ * stretched phone.
+ */
+@media (min-width: 1024px) {
+  .pav-frame[data-desk-board] {
+    width: min(1040px, 92vw);
+    height: min(920px, calc(100vh - 48px));
+    max-height: calc(100vh - 48px);
+    border-radius: 28px;
+  }
+  .pav-frame[data-desk-board] [data-testid='board-desk'] > * {
+    max-width: 880px;
+    margin-inline: auto;
+  }
+}
+
 /* Card hover lift */
 @media (hover: hover) {
   div[class*="cursor-pointer"]:hover {
@@ -127,4 +232,34 @@ div[class*="cursor-pointer"] {
   }
 }
 
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }
+/*
+ * Reduced motion: substitute, don't delete. Zeroing every duration removes
+ * the movement *and* the feedback — sheets teleport, tab changes become
+ * indistinguishable, and the app loses its spatial logic for exactly the
+ * users who need the most orientation. Instead every animation that moves
+ * something is redefined as a short opacity fade: the state change stays
+ * legible, the vestibular trigger goes away.
+ */
+@media (prefers-reduced-motion: reduce) {
+  @keyframes scPop { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scFadeUp { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes sheetUp { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideLeft { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideRight { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes msgBubble { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes heartPop { from { opacity: 0.6; } to { opacity: 1; } }
+  @keyframes typingBounce { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+  /* Purely decorative motion has no state to convey — remove it outright. */
+  @keyframes confettiPop { from { opacity: 0; } to { opacity: 0; } }
+
+  /* Keep transitions perceptible but brief, and drop the press-scale. */
+  *, *::before, *::after {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.12s !important;
+  }
+  button[class*="cursor-pointer"]:active,
+  div[class*="cursor-pointer"]:active {
+    transform: none;
+  }
+}

@@ -3,14 +3,14 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { ArcRequest, ArcState, BoardArcItem, BoardTriage, CommunityEvent, Decision, DuesState, DuesStatement, FeedPost, KnownIssue, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, TriageItem, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { AdminMember, ArcRequest, ArcState, AuditEntry, BoardArcItem, BoardBooking, BoardMessage, BoardTriage, BoardViolation, ClosedVote, CommunityEvent, Decision, DuesState, DuesStatement, FeedPost, Invite, KnownIssue, Meeting, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, TriageItem, UnitRef, ViolationNotice, VoteChoice, VotesState } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
 import { usePavStore } from '../../store/store';
 
 /** The demo persona (stable reference for useSyncExternalStore). */
 const DEMO_MEMBER: MemberContext = {
-  name: 'Alex Rivera', initial: 'A', color: '#1A3352', role: 'board',
+  name: 'Alex Rivera', initial: 'A', color: 'rgb(var(--navy))', role: 'board',
   communityName: 'Juniper Ridge', unitLabel: '#27 Alder Way',
 };
 
@@ -20,9 +20,9 @@ const DEMO_EVENTS: CommunityEvent[] = [
   { id: 'movie', title: 'Movie on the lawn', whenLabel: 'Sat, Jul 5 · Dusk · The Green', whereLabel: 'The Green', going: 23, photoLabel: 'event photo — movie night', tagLabel: 'Social Committee', featured: false },
 ];
 const DEMO_FEED: FeedPost[] = [
-  { id: 'maria', authorName: 'Maria R.', authorInitial: 'M', authorColor: '#C75A31', unitLabel: '#7', timeLabel: '2h', kind: 'shoutout', tagLabel: 'Shoutout', body: 'Huge thanks to Tom at #18 for helping clear my gutters before Sunday’s storm.', photoLabel: 'photo — clean gutters, proud Tom' },
-  { id: 'dev', authorName: 'Dev P.', authorInitial: 'D', authorColor: '#4A90E2', unitLabel: '#23', timeLabel: '5h', kind: 'borrow', tagLabel: 'Help & Borrow', body: 'Anyone have an 8-ft ladder I could borrow Sunday?', photoLabel: '' },
-  { id: 'movie', authorName: 'Social Committee', authorInitial: 'S', authorColor: '#1A3352', unitLabel: '', timeLabel: '', kind: 'event', tagLabel: 'Social Committee', body: 'Movie on the lawn', photoLabel: 'event photo — movie night' },
+  { id: 'maria', authorName: 'Maria R.', authorInitial: 'M', authorColor: 'rgb(var(--terracotta))', unitLabel: '#7', timeLabel: '2h', kind: 'shoutout', tagLabel: 'Shoutout', body: 'Huge thanks to Tom at #18 for helping clear my gutters before Sunday’s storm.', photoLabel: 'photo — clean gutters, proud Tom' },
+  { id: 'dev', authorName: 'Dev P.', authorInitial: 'D', authorColor: 'rgb(var(--sky))', unitLabel: '#23', timeLabel: '5h', kind: 'borrow', tagLabel: 'Help & Borrow', body: 'Anyone have an 8-ft ladder I could borrow Sunday?', photoLabel: '' },
+  { id: 'movie', authorName: 'Social Committee', authorInitial: 'S', authorColor: 'rgb(var(--navy))', unitLabel: '', timeLabel: '', kind: 'event', tagLabel: 'Social Committee', body: 'Movie on the lawn', photoLabel: 'event photo — movie night' },
 ];
 
 /** Demo decisions log (stable ref). Live reads the `decisions` table. */
@@ -35,6 +35,16 @@ const DEMO_DECISIONS: Decision[] = [
 /** Stable empty refs for the live-only board queues (demo renders scripted cards). */
 const EMPTY_TRIAGE_ITEMS: TriageItem[] = [];
 const EMPTY_BOARD_ARC: BoardArcItem[] = [];
+const EMPTY_INVITES: Invite[] = [];
+const EMPTY_BOARD_CHAT: BoardMessage[] = [];
+const EMPTY_STRINGS: string[] = [];
+const EMPTY_UNITS: UnitRef[] = [];
+const EMPTY_BOARD_VIOL: BoardViolation[] = [];
+const EMPTY_ADMIN: AdminMember[] = [];
+const EMPTY_BOOKINGS: BoardBooking[] = [];
+const EMPTY_MEETINGS: Meeting[] = [];
+const EMPTY_AUDIT: AuditEntry[] = [];
+const EMPTY_CLOSED: ClosedVote[] = [];
 
 /** Clock label matching the store's original format (e.g. "3:07 PM"). */
 function now(): string {
@@ -56,6 +66,12 @@ export class MockRepository implements Repository, SnapshotReadable {
 
   isDemo = () => true;
 
+  // The demo derives everything synchronously from the store, so there is no
+  // in-flight window and nothing that can fail — an empty list here always
+  // means genuinely empty.
+  getLoadState = () => 'ready' as const;
+  retry = () => {};
+
   getMember = () => DEMO_MEMBER;
 
   getDecisions = () => DEMO_DECISIONS;
@@ -65,14 +81,60 @@ export class MockRepository implements Repository, SnapshotReadable {
   // Board Desk renders its own scripted triage/queue cards instead.
   createReport = async () => { usePavStore.getState().submitReport(); };
   setReportStatus = async () => {};
+  assignReport = async () => {};
+  setReportNotes = async () => {};
+  listReportComments = async () => [];
+  addReportComment = async () => {};
   getTriageItems = () => EMPTY_TRIAGE_ITEMS;
   getMyReports = () => EMPTY_TRIAGE_ITEMS;
   createArcRequest = async () => { usePavStore.getState().submitArc(); };
   decideArc = async () => {};
   getBoardArcQueue = () => EMPTY_BOARD_ARC;
   createFeedPost = async () => {};
+  deleteFeedPost = async () => {};
+  togglePinPost = async () => {};
+  togglePostLike = async () => {};
+  listPostComments = async () => [];
+  addPostComment = async () => {};
   openVote = async () => { usePavStore.getState().postVote(); };
+  castOptionVote = async () => {};
+  closeVote = async () => {};
   markViolationFixed = async () => { usePavStore.getState().set({ violFixed: true }); };
+  createViolation = async () => {};
+  resolveViolation = async () => {};
+  getBoardViolations = () => EMPTY_BOARD_VIOL;
+  getUnits = () => EMPTY_UNITS;
+  getInvites = () => EMPTY_INVITES;
+  getBoardChat = () => EMPTY_BOARD_CHAT;   // board chat is live-only
+  sendBoardMessage = async () => {};
+  deleteBoardMessage = async () => {};
+  renameBoardTopic = async () => {};
+  archiveBoardTopic = async () => {};
+  getArchivedBoardTopics = () => EMPTY_STRINGS;
+  markChatRead = () => {};   // demo unread badges are scripted
+  deleteChatMessage = async () => {};
+  createInvite = async () => {};
+  revokeInvite = async () => {};
+  renewInvite = async () => {};
+  getAdminMembers = () => EMPTY_ADMIN;
+  setMemberRole = async () => {};
+  setMemberStatus = async () => {};
+  assignMemberUnit = async () => {};
+  updateProfile = async () => {};
+  getDocs = () => DOCS;
+  uploadDocument = async () => {};
+  deleteDocument = async () => {};
+  getMeetings = () => EMPTY_MEETINGS;
+  createMeeting = async () => {};
+  publishMinutes = async () => {};
+  getAuditLog = () => EMPTY_AUDIT;
+  toggleEventRsvp = async () => {};
+  createEvent = async () => {};
+  updateAmenity = async () => {};
+  getBoardBookings = () => EMPTY_BOOKINGS;
+  createGroupPoll = async () => {};
+  createGroupEvent = async () => {};
+  archiveGroup = async () => {};
 
   // Known issues derived from the demo triage flags so the board's actions
   // (create ticket, schedule vendor) reflect on the resident-facing HOA list.
@@ -194,8 +256,9 @@ export class MockRepository implements Repository, SnapshotReadable {
       receipt: '#R-0482',
       yesLabel: 'Yes, replace it',
       noLabel: 'No, wait a year',
+      kind: 'yesno', multi: false, options: [], myOptionIds: [],
     };
-    const value: VotesState = { open };
+    const value: VotesState = { open, openAll: [open], closed: EMPTY_CLOSED };
     this.votesCache = { sig, value };
     return value;
   };
@@ -271,7 +334,10 @@ export class MockRepository implements Repository, SnapshotReadable {
     return value;
   };
 
+  getAmenities = () => AMENS;
   listAmenities = async () => AMENS;
+  createAmenity = async () => {};   // board amenity tooling is live-only
+  retireAmenity = async () => {};
   getReservationSlots = async () => SLOTS;
   getReservationDays = async () => DAYS;
   getReservation = () => mockDomain.get().reservation;
@@ -284,7 +350,7 @@ export class MockRepository implements Repository, SnapshotReadable {
 
   getComments = () => mockDomain.get().comments;
   addComment = async (text: string) => {
-    mockDomain.set({ comments: [...mockDomain.get().comments, { who: 'You', color: '#1A3352', text }] });
+    mockDomain.set({ comments: [...mockDomain.get().comments, { who: 'You', color: 'rgb(var(--navy))', text }] });
   };
 
   getGroups = () => mockDomain.get().groups;
@@ -312,7 +378,7 @@ export class MockRepository implements Repository, SnapshotReadable {
       key, name, icon, color,
       description: description || 'A new community group',
       memberCount: 1, isGroupChat: false, joined: true, muted: false,
-      members: [{ name: 'You', initial: 'A', color: '#1A3352' }],
+      members: [{ name: 'You', initial: 'A', color: 'rgb(var(--navy))' }],
       messages: [], polls: [], events: [], pins: [],
     };
     mockDomain.set({ groups: { ...mockDomain.get().groups, [key]: newGroup } });
@@ -327,7 +393,7 @@ export class MockRepository implements Repository, SnapshotReadable {
         joined: joining,
         memberCount: g.memberCount + (joining ? 1 : -1),
         members: joining
-          ? [...g.members, { name: 'You', initial: 'A', color: '#1A3352' }]
+          ? [...g.members, { name: 'You', initial: 'A', color: 'rgb(var(--navy))' }]
           : g.members.filter((m) => m.name !== 'You'),
       };
     });
@@ -371,6 +437,8 @@ export class MockRepository implements Repository, SnapshotReadable {
   };
 
   listDirectory = async () => DIR;
+  getDirectory = () => DIR;
+  getChatIndex = () => CHAT_SEED;
   listCircles = async () => CIRC;
   listFreeItems = async () => FREE;
   getChatSeed = async () => CHAT_SEED;

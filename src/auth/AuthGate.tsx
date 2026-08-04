@@ -15,12 +15,23 @@ export function AuthGate({ children }: { children: ReactNode }) {
   return <LiveAuthGate>{children}</LiveAuthGate>;
 }
 
+/** Stash an invite code from the URL (?invite=…) so it survives the
+ * magic-link round trip; claimed after sign-in, cleared on success. */
+function stashInviteCode() {
+  try {
+    const code = new URLSearchParams(window.location.search).get('invite');
+    if (code) localStorage.setItem('pav-invite-code', code);
+  } catch { /* no-op */ }
+}
+
 function LiveAuthGate({ children }: { children: ReactNode }) {
   const supabase = getSupabaseClient();
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
   // null = still checking; true/false = whether the user belongs to a community.
   const [hasCommunity, setHasCommunity] = useState<boolean | null>(null);
+
+  useEffect(() => { stashInviteCode(); }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => { setSession(data.session); setReady(true); });
@@ -38,7 +49,27 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
         const { count } = await supabase.from('memberships')
           .select('id', { count: 'exact', head: true })
           .eq('profile_id', profile.id).eq('status', 'active');
-        if (alive) setHasCommunity((count ?? 0) > 0);
+        if ((count ?? 0) > 0) { if (alive) setHasCommunity(true); return; }
+        // No membership yet — a pending invite for this email joins them now.
+        const { data: claimed } = await supabase.rpc('claim_invite');
+        if (claimed === true) {
+          // nudge an auth event so the repository re-hydrates with the new membership
+          void supabase.auth.refreshSession();
+          if (alive) setHasCommunity(true);
+          return;
+        }
+        // Or a copied invite link (?invite=CODE) works for any email.
+        const code = localStorage.getItem('pav-invite-code');
+        if (code) {
+          const { data: codeClaimed } = await supabase.rpc('claim_invite_code', { invite_code: code });
+          if (codeClaimed === true) {
+            localStorage.removeItem('pav-invite-code');
+            void supabase.auth.refreshSession();
+            if (alive) setHasCommunity(true);
+            return;
+          }
+        }
+        if (alive) setHasCommunity(false);
       } catch {
         if (alive) setHasCommunity(false); // treat any failure as "no community"
       }
@@ -69,18 +100,29 @@ function NoCommunity({ email }: { email: string }) {
           <span className="text-navy">{email}</span> isn’t part of a community yet. Pavilion is
           invite-based — your HOA board adds you to your community.
         </p>
-        <div className="rounded-2xl px-4 py-3.5 mb-5 text-left" style={{ background: 'rgb(var(--parchment))', border: '1px solid rgb(var(--navy) / 0.08)' }}>
+        <div className="rounded-2xl px-4 py-3.5 mb-4 text-left" style={{ background: 'rgb(var(--parchment))', border: '1px solid rgb(var(--navy) / 0.08)' }}>
           <p className="m-0 mb-1 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.1em' }}>What’s next</p>
           <p className="m-0 text-[13px] font-semibold text-bark leading-[1.5]">
-            Ask your board or manager to invite this email. Once you’re added, you’ll land right in your community.
+            Ask your board to invite this email. Once you’re added, you’ll land right in your community.
           </p>
         </div>
+
+        {/*
+          The most likely reason someone lands here is a mismatch, not a
+          missing invite: the board invited a different address than the one
+          they just signed in with. Naming that turns a dead end into a
+          one-tap retry — and it costs nothing to offer.
+        */}
+        <p className="m-0 mb-3 text-[11.5px] font-semibold text-stone leading-[1.45]">
+          Invited under a different address? Sign in with that one instead.
+        </p>
         <button
+          type="button"
           onClick={() => void signOutLive()}
-          className="w-full bg-transparent rounded-xl py-3 text-[13px] font-bold cursor-pointer"
+          className="w-full bg-transparent rounded-xl py-3 text-[13px] font-bold cursor-pointer font-sans"
           style={{ border: '1px solid rgb(var(--navy) / 0.14)', color: 'rgb(var(--navy))' }}
         >
-          Sign out
+          Sign out and try another email
         </button>
       </div>
     </div>
@@ -145,7 +187,7 @@ function LiveSignIn() {
               onClick={sendLink}
               disabled={busy || !email.trim()}
               className="w-full border-none rounded-xl py-3 text-[14px] font-extrabold cursor-pointer"
-              style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))', opacity: busy || !email.trim() ? 0.6 : 1 }}
+              style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))', opacity: busy || !email.trim() ? 0.6 : 1 }}
             >
               {busy ? 'Sending…' : 'Send sign-in link'}
             </button>

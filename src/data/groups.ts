@@ -3,15 +3,15 @@ import type { GroupData } from './types';
 /** Seed groups & group-chats for the demo (Juniper Ridge). */
 export const GROUPS_SEED: Record<string, GroupData> = {
   'gc-block-party': {
-    key: 'gc-block-party', name: 'Block Party Planning', icon: 'ph-fill ph-confetti', color: '#C75A31',
+    key: 'gc-block-party', name: 'Block Party Planning', icon: 'ph-fill ph-confetti', color: 'rgb(var(--terracotta))',
     description: 'Coordinating the annual block party — food, music, and good vibes.',
     memberCount: 7, isGroupChat: true, joined: true, muted: false,
     members: [
-      { name: 'Tom B.', initial: 'T', color: '#4A90E2' },
-      { name: 'Rosa M.', initial: 'R', color: '#C75A31' },
-      { name: 'You', initial: 'A', color: '#1A3352' },
-      { name: 'Priya S.', initial: 'P', color: '#2A9D5C' },
-      { name: 'The Okafors', initial: 'O', color: '#D9A441' },
+      { name: 'Tom B.', initial: 'T', color: 'rgb(var(--sky))' },
+      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--terracotta))' },
+      { name: 'You', initial: 'A', color: 'rgb(var(--navy))' },
+      { name: 'Priya S.', initial: 'P', color: 'rgb(var(--sage))' },
+      { name: 'The Okafors', initial: 'O', color: 'rgb(var(--gold))' },
     ],
     messages: [
       { me: false, text: "We need to figure out the speaker situation", time: 'Today 11:20 AM' },
@@ -28,13 +28,13 @@ export const GROUPS_SEED: Record<string, GroupData> = {
     pins: [{ id: 'bp-budget', text: 'Budget: $400 from HOA + $12/household voluntary', author: 'Rosa M.', time: '5d ago' }],
   },
   'gc-trail-crew': {
-    key: 'gc-trail-crew', name: 'Trail Crew', icon: 'ph-fill ph-tree', color: '#2A9D5C',
+    key: 'gc-trail-crew', name: 'Trail Crew', icon: 'ph-fill ph-tree', color: 'rgb(var(--sage))',
     description: 'Sunday morning trail maintenance and hikes. All levels welcome.',
     memberCount: 9, isGroupChat: true, joined: true, muted: false,
     members: [
-      { name: 'Priya S.', initial: 'P', color: '#2A9D5C' },
-      { name: 'Tom B.', initial: 'T', color: '#4A90E2' },
-      { name: 'You', initial: 'A', color: '#1A3352' },
+      { name: 'Priya S.', initial: 'P', color: 'rgb(var(--sage))' },
+      { name: 'Tom B.', initial: 'T', color: 'rgb(var(--sky))' },
+      { name: 'You', initial: 'A', color: 'rgb(var(--navy))' },
     ],
     messages: [
       { me: false, text: 'Sunday 8 AM still on — meet at trailhead', time: 'Yesterday 6:15 PM' },
@@ -46,13 +46,13 @@ export const GROUPS_SEED: Record<string, GroupData> = {
     pins: [{ id: 'tc-gear', text: 'Bring gloves and clippers if you have them', author: 'Priya S.', time: '1w ago' }],
   },
   'gc-dog-owners': {
-    key: 'gc-dog-owners', name: 'Dog Owners', icon: 'ph-fill ph-dog', color: '#D9A441',
+    key: 'gc-dog-owners', name: 'Dog Owners', icon: 'ph-fill ph-dog', color: 'rgb(var(--gold))',
     description: 'Playdates, vet recs, and keeping the paths clean.',
     memberCount: 11, isGroupChat: true, joined: true, muted: false,
     members: [
-      { name: 'The Okafors', initial: 'O', color: '#D9A441' },
-      { name: 'Rosa M.', initial: 'R', color: '#C75A31' },
-      { name: 'You', initial: 'A', color: '#1A3352' },
+      { name: 'The Okafors', initial: 'O', color: 'rgb(var(--gold))' },
+      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--terracotta))' },
+      { name: 'You', initial: 'A', color: 'rgb(var(--navy))' },
     ],
     messages: [
       { me: false, text: 'Anyone else see a coyote near lot C?', time: 'Yesterday 2:40 PM' },
@@ -68,13 +68,13 @@ export const GROUPS_SEED: Record<string, GroupData> = {
     pins: [],
   },
   'gr-garden': {
-    key: 'gr-garden', name: 'Garden Club', icon: 'ph-fill ph-plant', color: '#74B992',
+    key: 'gr-garden', name: 'Garden Club', icon: 'ph-fill ph-plant', color: 'rgb(var(--sagelight))',
     description: 'Community garden plots, seed swaps, and growing tips.',
     memberCount: 12, isGroupChat: false, joined: true, muted: false,
     members: [
-      { name: 'Rosa M.', initial: 'R', color: '#C75A31' },
-      { name: 'Priya S.', initial: 'P', color: '#2A9D5C' },
-      { name: 'You', initial: 'A', color: '#1A3352' },
+      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--terracotta))' },
+      { name: 'Priya S.', initial: 'P', color: 'rgb(var(--sage))' },
+      { name: 'You', initial: 'A', color: 'rgb(var(--navy))' },
     ],
     messages: [
       { me: false, text: 'Free tomato starts at plot 4 — first come first served!', time: 'Today 9:00 AM' },
@@ -90,12 +90,12 @@ export const GROUPS_SEED: Record<string, GroupData> = {
     pins: [{ id: 'gr-rules', text: 'Plot assignments posted on the shed door. Water your plot or lose it after 2 weeks.', author: 'Rosa M.', time: '2w ago' }],
   },
   'gr-parents': {
-    key: 'gr-parents', name: 'Parents & Kids', icon: 'ph-fill ph-baby', color: '#4A90E2',
+    key: 'gr-parents', name: 'Parents & Kids', icon: 'ph-fill ph-baby', color: 'rgb(var(--sky))',
     description: 'Playdates, babysitter recs, and kid-friendly events.',
     memberCount: 18, isGroupChat: false, joined: false, muted: false,
     members: [
-      { name: 'Rosa M.', initial: 'R', color: '#C75A31' },
-      { name: 'The Okafors', initial: 'O', color: '#D9A441' },
+      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--terracotta))' },
+      { name: 'The Okafors', initial: 'O', color: 'rgb(var(--gold))' },
     ],
     messages: [
       { me: false, text: 'Movie night this Friday — Encanto on the lawn', time: 'Mon 3:45 PM' },
@@ -107,12 +107,12 @@ export const GROUPS_SEED: Record<string, GroupData> = {
     pins: [{ id: 'pk-sitters', text: 'Trusted babysitter list pinned — DM Rosa to add yours', author: 'Rosa M.', time: '1w ago' }],
   },
   'gr-pickle': {
-    key: 'gr-pickle', name: 'Pickleball', icon: 'ph-fill ph-tennis-ball', color: '#E06A3E',
+    key: 'gr-pickle', name: 'Pickleball', icon: 'ph-fill ph-tennis-ball', color: 'rgb(var(--ember))',
     description: 'Casual games, ladder matches, and court reservations.',
     memberCount: 9, isGroupChat: false, joined: false, muted: false,
     members: [
-      { name: 'Tom B.', initial: 'T', color: '#4A90E2' },
-      { name: 'Priya S.', initial: 'P', color: '#2A9D5C' },
+      { name: 'Tom B.', initial: 'T', color: 'rgb(var(--sky))' },
+      { name: 'Priya S.', initial: 'P', color: 'rgb(var(--sage))' },
     ],
     messages: [
       { me: false, text: 'Court 2 open tomorrow 6-8 AM if anyone wants in', time: 'Sun 10:20 AM' },

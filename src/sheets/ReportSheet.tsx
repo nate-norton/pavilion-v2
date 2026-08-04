@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react';
+import { reportedByDataLayer } from '../lib/errorBus';
 import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { Chip } from '../components/Chip';
@@ -5,6 +7,11 @@ import { usePavStore } from '../store/store';
 import { useRepository } from '../data/repo';
 
 const REPORT_CHIPS = ['Maintenance', 'Safety', 'Violation concern', 'Noise', 'Other'];
+const URGENCIES = [
+  { key: 'low', label: 'Low' },
+  { key: 'normal', label: 'Normal' },
+  { key: 'urgent', label: 'Urgent' },
+] as const;
 
 /** Private report sheet — ported from prototype lines 2223-2266. */
 export function ReportSheet() {
@@ -12,22 +19,34 @@ export function ReportSheet() {
   const { set, submitReport } = state;
   const repo = useRepository();
   const demo = repo.isDemo();
+  const [urgency, setUrgency] = useState('normal');
+  const [location, setLocation] = useState('');
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [busy, setBusy] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   // Live resets the submitted flag on close so the member can file another
   // report later; the demo keeps its scripted one-shot flow.
-  const closeReport = () => (demo
-    ? set({ reportOpen: false })
-    : set({ reportOpen: false, reportSubmitted: false, reportType: null }));
-  const canReport = !!state.reportType;
+  const closeReport = () => {
+    if (demo) { set({ reportOpen: false }); return; }
+    set({ reportOpen: false, reportSubmitted: false, reportType: null });
+    setUrgency('normal'); setLocation(''); setPhotos([]);
+  };
+  const canReport = !!state.reportType && !busy;
   const send = () => {
     if (!canReport) return;
     if (demo) { submitReport(); return; }
-    void repo.createReport({ kind: state.reportType ?? 'Other', description: state.reportDesc })
-      .then(() => set({ reportSubmitted: true, reportDesc: '' }));
+    setBusy(true);
+    void repo.createReport({ kind: state.reportType ?? 'Other', description: state.reportDesc, urgency, location, photos })
+      .then(() => { set({ reportSubmitted: true, reportDesc: '' }); setPhotos([]); setLocation(''); setUrgency('normal'); })
+      .catch(reportedByDataLayer)
+      .finally(() => setBusy(false));
   };
 
   return (
-    <Sheet open={state.reportOpen} onClose={closeReport} maxHeight="86%">
+    <Sheet
+      label="Report an issue to the board"
+      open={state.reportOpen} onClose={closeReport} maxHeight="86%">
       {!state.reportSubmitted ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">Report a problem</p>
@@ -63,24 +82,57 @@ export function ReportSheet() {
             value={state.reportDesc}
             onChange={(e) => set({ reportDesc: e.target.value })}
             placeholder="e.g. Sprinkler head broken on the Green, spraying the sidewalk"
+            maxLength={2000}
             className="w-full bg-[rgb(var(--paper))] rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans resize-none mb-3.5"
             style={{ minHeight: 70, border: '1px solid rgb(var(--navy) / 0.12)' }}
           />
 
+          {!demo && (
+            <>
+              <p className="m-0 mb-2 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+                How urgent?
+              </p>
+              <div className="flex gap-1.5 mb-3.5">
+                {URGENCIES.map((u) => (
+                  <Chip key={u.key} label={u.label} active={urgency === u.key} onClick={() => setUrgency(u.key)} size="md" />
+                ))}
+              </div>
+              <input
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Where? — e.g. the Green, by the mailboxes (optional)"
+                maxLength={120}
+                className="w-full bg-[rgb(var(--paper))] rounded-[13px] px-3.5 py-3 text-[13px] font-bold text-navy outline-none mb-3.5"
+                style={{ border: '1px solid rgb(var(--navy) / 0.12)' }}
+              />
+            </>
+          )}
+
+          {/* Demo keeps its scripted photo toggle; live attaches real files. */}
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => setPhotos([...photos, ...Array.from(e.target.files ?? [])].slice(0, 4))}
+          />
           <button
             type="button"
-            onClick={() => set({ reportPhoto: true })}
+            onClick={() => (demo ? set({ reportPhoto: true }) : fileRef.current?.click())}
             className="w-full flex items-center justify-center gap-2 mb-4 cursor-pointer"
             style={{
               height: 70,
-              border: state.reportPhoto ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
+              border: (demo ? state.reportPhoto : photos.length > 0) ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
               borderRadius: 13,
-              background: state.reportPhoto ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--creamdim)) 0 8px,rgb(var(--parchment)) 8px 16px)',
+              background: (demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--creamdim)) 0 8px,rgb(var(--parchment)) 8px 16px)',
             }}
           >
-            <PhIcon name={state.reportPhoto ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={state.reportPhoto ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
-            <span className="font-mono text-[10px]" style={{ color: state.reportPhoto ? 'rgb(var(--sagedark))' : 'rgb(var(--stone))' }}>
-              {state.reportPhoto ? 'photo added ✓' : 'add a photo (optional)'}
+            <PhIcon name={(demo ? state.reportPhoto : photos.length > 0) ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={(demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
+            <span className="font-mono text-[10px]" style={{ color: (demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--sagedark))' : 'rgb(var(--stone))' }}>
+              {demo
+                ? (state.reportPhoto ? 'photo added ✓' : 'add a photo (optional)')
+                : (photos.length > 0 ? `${photos.length} photo${photos.length > 1 ? 's' : ''} added ✓ · tap for more` : 'add a photo (optional)')}
             </span>
           </button>
 

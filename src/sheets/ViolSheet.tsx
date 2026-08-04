@@ -1,4 +1,5 @@
 import { PhIcon } from '../components/PhIcon';
+import { Hint } from '../components/Hint';
 import { Sheet } from '../components/Sheet';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { usePavStore } from '../store/store';
@@ -25,17 +26,23 @@ export function ViolSheet() {
   // Live: a generic notice from the real violation row — no scripted #V-31 story.
   if (!repo.isDemo()) {
     return (
-      <Sheet open={state.violSheetOpen} onClose={closeViol} maxHeight="86%">
+      <Sheet
+      label="Courtesy notice"
+      open={state.violSheetOpen} onClose={closeViol} maxHeight="86%">
         {!viol ? (
           <div className="text-center pt-1.5 pb-1">
             <PhIcon name="ph-fill ph-check-circle" size={40} color="rgb(var(--sage))" />
-            <p className="m-0 mt-2.5 text-[15px] font-bold text-navy">Nothing open on your unit.</p>
+            <p className="m-0 mt-2.5 text-[14px] font-bold text-navy">Nothing open on your unit.</p>
           </div>
         ) : !viol.fixed ? (
           <div>
-            <p className="m-0 mb-0.5 font-serif text-xl text-navy">A friendly heads-up</p>
+            <p className="m-0 mb-0.5 font-serif text-xl text-navy">
+              {viol.severity === 'fine' ? 'A notice from your board' : viol.severity === 'warning' ? 'A formal heads-up' : 'A friendly heads-up'}
+            </p>
             <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
-              Courtesy notice · no fee · nothing on your record
+              {viol.severity === 'fine' ? 'Fine notice · see details below'
+                : viol.severity === 'warning' ? 'Formal warning · no fee yet'
+                  : 'Courtesy notice · no fee · nothing on your record'}
             </p>
             <div
               className="rounded-2xl p-[15px] mb-4"
@@ -43,6 +50,18 @@ export function ViolSheet() {
             >
               <p className="m-0 mb-1 text-[13.5px] font-bold text-navy">{viol.title}</p>
               {viol.sub && <p className="m-0 text-xs font-semibold text-stone">{viol.sub}</p>}
+              {viol.description && (
+                <p className="m-0 mt-2 text-[12.5px] leading-[1.5] font-semibold text-navy">{viol.description}</p>
+              )}
+              {(viol.photoUrls ?? []).length > 0 && (
+                <div className="flex gap-2 mt-2.5 overflow-x-auto pav-scroll">
+                  {viol.photoUrls!.map((u, i) => (
+                    <a key={u} href={u} target="_blank" rel="noreferrer" className="flex-shrink-0">
+                      <img src={u} alt={`Evidence photo ${i + 1}`} className="rounded-[11px] block" style={{ height: 76, width: 76, objectFit: 'cover' }} />
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
             <button
               onClick={() => void repo.markViolationFixed()}
@@ -85,9 +104,16 @@ export function ViolSheet() {
       {!state.violFixed ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">A friendly heads-up</p>
-          <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-1 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
             Courtesy notice #V-31 · no fee · nothing on your record
           </p>
+          <div className="mb-3.5">
+            <Hint label="What does a courtesy notice mean?">
+              It is the first and lightest step: no fine, nothing recorded
+              against your home, and it closes by itself once the issue is
+              fixed. It only escalates if it is ignored past the date above.
+            </Hint>
+          </div>
           <div
             className="rounded-2xl p-[15px] mb-3"
             style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.1)' }}

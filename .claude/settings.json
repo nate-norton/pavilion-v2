@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Supabase__apply_migration",
+      "mcp__Supabase__execute_sql",
+      "mcp__Supabase__get_advisors",
+      "mcp__Supabase__list_tables",
+      "mcp__Supabase__list_migrations",
+      "mcp__f0c7064d-4639-44a6-9a18-ac270c236a17__apply_migration",
+      "mcp__f0c7064d-4639-44a6-9a18-ac270c236a17__execute_sql",
+      "mcp__f0c7064d-4639-44a6-9a18-ac270c236a17__get_advisors",
+      "mcp__f0c7064d-4639-44a6-9a18-ac270c236a17__list_tables",
+      "mcp__f0c7064d-4639-44a6-9a18-ac270c236a17__list_migrations"
+    ]
+  }
+}

@@ -28,7 +28,7 @@ it('StatusTimeline renders one node per step', () => {
 
 it('Toggle reflects state and fires', () => {
   const fn = vi.fn();
-  render(<Toggle on={false} onToggle={fn} />);
+  render(<Toggle on={false} onToggle={fn} label="Test switch" />);
   fireEvent.click(screen.getByRole('switch'));
   expect(fn).toHaveBeenCalled();
 });

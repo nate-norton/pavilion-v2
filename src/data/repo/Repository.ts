@@ -5,6 +5,12 @@ import type {
 } from '../types';
 
 /** Fields the create-group flow collects; membership/seed are filled in. */
+/** Hydration status for one domain — see `Repository.getLoadState`. */
+export type LoadState = 'loading' | 'ready' | 'error';
+
+/** Domains that render an empty state and therefore need load status. */
+export type LoadDomain = 'votes' | 'docs' | 'amenities' | 'feed' | 'directory' | 'dues' | 'arc';
+
 export interface NewGroup {
   name: string;
   description: string;
@@ -79,6 +85,7 @@ export interface CommunityEvent {
   photoLabel: string;
   tagLabel: string;
   featured: boolean;
+  rsvpd?: boolean;     // live: signed-in member is going
 }
 
 /** A Commons feed post. Kinds render differently but share these fields. */
@@ -93,6 +100,12 @@ export interface FeedPost {
   tagLabel: string;
   body: string;
   photoLabel: string;
+  mine?: boolean;         // live: authored by the signed-in member
+  pinned?: boolean;       // live: board-pinned announcement
+  photoUrls?: string[];   // live: attached images (signed URLs)
+  likes?: number;
+  likedByMe?: boolean;
+  commentCount?: number;
 }
 
 /** One architectural-review request on the member's unit. */
@@ -107,6 +120,10 @@ export interface ArcRequest {
   approved: boolean;
   statusLabel: string; // 'Approved' / 'In review'
   steps: ArcStep[];
+  status?: string;         // live: submitted | in_review | info_requested | approved | declined
+  decisionNote?: string;   // live: board's reason on decline / info request
+  conditions?: string;     // live: conditions attached to an approval
+  attachmentUrls?: string[];
 }
 
 /** The member's ARC surface: their requests + an unseen approval to surface. */
@@ -122,6 +139,9 @@ export interface ViolationNotice {
   title: string;   // 'Courtesy notice: trash bins'
   sub: string;     // 'No fee · auto-closes if fixed by Jul 8'
   fixed: boolean;
+  description?: string;   // live: board's detail text
+  severity?: string;      // live: courtesy | warning | fine
+  photoUrls?: string[];   // live: board's evidence photos
 }
 
 /** A one-time special assessment on the member's unit (null when none). */
@@ -134,6 +154,11 @@ export interface SpecialAssessment {
 
 /** A community's single open ballot, plus this member's cast vote (if any). */
 export type VoteChoice = 'yes' | 'no';
+export interface VoteOption {
+  id: string;
+  label: string;
+  tally: number;
+}
 export interface OpenVote {
   id: string;
   title: string;
@@ -149,11 +174,26 @@ export interface OpenVote {
   receipt: string;         // '#R-0482'
   yesLabel: string;        // 'Yes, replace it'
   noLabel: string;         // 'No, wait a year'
+  kind: 'yesno' | 'options';
+  multi: boolean;
+  options: VoteOption[];   // empty for yesno ballots
+  myOptionIds: string[];   // this member's picks on an options ballot
 }
 
-/** The votes surface. `open` is null when nothing is on the ballot (empty state). */
+/** A closed ballot's archived result line. */
+export interface ClosedVote {
+  id: string;
+  title: string;
+  resultLabel: string;     // 'Yes 12 · No 4' or 'Pool hours: 9' (winner)
+  dateLabel: string;       // 'Closed Jul 20'
+}
+
+/** The votes surface. `open` lists every live ballot (first = newest);
+ * `closed` is the results history. Both empty for a fresh community. */
 export interface VotesState {
-  open: OpenVote | null;
+  open: OpenVote | null;   // newest open ballot (Today card / vote sheet)
+  openAll: OpenVote[];     // every open ballot
+  closed: ClosedVote[];
 }
 
 /** A community-visible maintenance issue row (HOA "Known issues"). */
@@ -182,8 +222,22 @@ export interface TriageItem {
   id: string;
   title: string;
   sub: string;        // 'Reported privately by #27 · Maintenance'
-  status: string;     // open | ticketed | assigned | resolved
+  status: string;     // open | ticketed | in_progress | resolved
   ref: string;        // '#M-92' once ticketed
+  urgency: string;    // low | normal | urgent
+  location: string;
+  photoUrls: string[];
+  boardNotes: string;
+  vendor: string;
+}
+
+/** One message on a report's private thread (reporter ↔ board). */
+export interface ThreadComment {
+  id: string;
+  authorName: string;
+  me: boolean;
+  body: string;
+  time: string;
 }
 
 /** An ARC request in the board's live queue, across all units. */
@@ -193,25 +247,129 @@ export interface BoardArcItem {
   title: string;
   unitLabel: string;
   approved: boolean;
+  status: string;          // submitted | in_review | info_requested | approved | declined
+  attachmentUrls: string[];
 }
 
 /** Resident-submitted report (private to the board). */
 export interface NewReport {
   kind: string;        // 'Maintenance' | 'Safety' | …
   description: string;
+  urgency?: string;    // low | normal | urgent
+  location?: string;
+  photos?: File[];
 }
 
 /** Resident-submitted ARC request. */
 export interface NewArcRequest {
   type: string;        // 'Paint' | 'Fence' | …
   description: string;
+  attachments?: File[];
 }
 
-/** Board-opened community ballot. */
+/** Board's decision on an ARC request. */
+export type ArcDecision = 'approved' | 'declined' | 'info_requested';
+
+/** Board-opened community ballot. yesno keeps the classic two-label form;
+ * options carries N choices (multi allows picking several). */
 export interface NewVote {
   question: string;
-  yesLabel: string;
-  noLabel: string;
+  yesLabel?: string;
+  noLabel?: string;
+  kind?: 'yesno' | 'options';
+  options?: string[];
+  multi?: boolean;
+  closesAt?: string | null;   // ISO timestamp; null = no deadline
+}
+
+/** A board-issued violation (live board flow). */
+export interface NewViolation {
+  unitId: string;
+  title: string;
+  description: string;
+  severity: string;      // courtesy | warning | fine
+  fineCents: number;
+  photos?: File[];
+}
+
+/** A unit reference for board pickers. */
+export interface UnitRef {
+  id: string;
+  label: string;
+}
+
+/** A violation row in the board's compliance list. */
+export interface BoardViolation {
+  id: string;
+  unitLabel: string;
+  title: string;
+  severity: string;
+  status: string;        // open | fixed | resolved
+  fineLabel: string;     // '$50' or ''
+}
+
+/** A row in the board's member-admin list. */
+export interface AdminMember {
+  membershipId: string;
+  profileId: string;
+  name: string;
+  unitLabel: string;
+  role: 'resident' | 'board';
+  status: string;        // active | inactive
+}
+
+/** A booking row in the board's all-reservations view. */
+export interface BoardBooking {
+  id: string;
+  amenity: string;
+  dayLabel: string;
+  slotLabel: string;
+  memberName: string;
+}
+
+/** A community meeting (board-scheduled; minutes publish into Documents). */
+export interface Meeting {
+  id: string;
+  title: string;
+  whenLabel: string;
+  whereLabel: string;
+  agenda: string[];
+  minutesUrl: string | null;
+  status: string;        // scheduled | past
+}
+
+/** One board action in the audit trail (board-visible). */
+export interface AuditEntry {
+  id: string;
+  actorName: string;
+  action: string;
+  detail: string;
+  time: string;
+}
+
+/** One message in the board's private channel (Board Desk chat). */
+export interface BoardMessage {
+  id: string;
+  authorName: string;
+  authorInitial: string;
+  authorColor: string;
+  me: boolean;
+  text: string;
+  time: string;
+  /** Named thread this message belongs to; null = the pinned General thread. */
+  topic: string | null;
+  photoUrls: string[];
+}
+
+/** A pending/accepted invitation to join the community (board-managed). */
+export interface Invite {
+  id: string;
+  email: string;
+  unitLabel: string;
+  role: 'resident' | 'board';
+  status: string;   // pending | accepted | revoked | expired
+  code: string;     // shareable claim code (invite link)
+  expiresLabel: string;  // 'Expires Aug 5'
 }
 
 /** The signed-in member's identity + their place in the community. */
@@ -222,6 +380,9 @@ export interface MemberContext {
   role: 'resident' | 'board';
   communityName: string;
   unitLabel: string;
+  phone?: string;
+  avatarUrl?: string | null;
+  hideDirectory?: boolean;
 }
 
 export interface Repository {
@@ -239,6 +400,22 @@ export interface Repository {
    */
   isDemo(): boolean;
 
+  /**
+   * Whether a domain's data has arrived, is still in flight, or failed.
+   *
+   * Without this the app cannot tell three very different situations apart —
+   * still loading, request failed, genuinely nothing there — and renders all
+   * of them as an empty state. In a product whose promise is that every
+   * dollar and vote is visible, silently showing "No open votes" because a
+   * request failed is worse than showing nothing: it is confidently wrong.
+   *
+   * The mock is synchronous and always `ready`.
+   */
+  getLoadState(domain: LoadDomain): LoadState;
+
+  /** Re-run hydration after a failure. No-op in the demo. */
+  retry(): void;
+
   /** The current member's identity/community. null until resolved (live mode). */
   getMember(): MemberContext | null;
 
@@ -247,8 +424,12 @@ export interface Repository {
 
   /** The community's open ballot + this member's vote (open is null when none). */
   getVotes(): VotesState;
-  /** Cast this member's ballot on the open vote. */
+  /** Cast (or change) this member's ballot on a yes/no vote. */
   castVote(voteId: string, choice: VoteChoice): Promise<void>;
+  /** Cast (or change) this member's picks on an options ballot. */
+  castOptionVote(voteId: string, optionIds: string[]): Promise<void>;
+  /** Board: close a ballot — it moves to the results history. */
+  closeVote(voteId: string): Promise<void>;
 
   /** The member's open courtesy notice / violation (null when compliant). */
   getViolation(): ViolationNotice | null;
@@ -272,8 +453,15 @@ export interface Repository {
   // the presenter flow is unchanged.
   /** File a private report to the board. */
   createReport(input: NewReport): Promise<void>;
-  /** Board: advance a report (create ticket / resolve). */
-  setReportStatus(id: string, status: 'ticketed' | 'resolved'): Promise<void>;
+  /** Board: advance a report (create ticket / start work / resolve). */
+  setReportStatus(id: string, status: 'ticketed' | 'in_progress' | 'resolved'): Promise<void>;
+  /** Board: assign a vendor/person to a report. */
+  assignReport(id: string, vendor: string): Promise<void>;
+  /** Board: private working notes on a report. */
+  setReportNotes(id: string, notes: string): Promise<void>;
+  /** The report's private thread (reporter ↔ board). */
+  listReportComments(reportId: string): Promise<ThreadComment[]>;
+  addReportComment(reportId: string, body: string): Promise<void>;
   /** The board's live triage rows (empty in demo — scripted cards render instead). */
   getTriageItems(): TriageItem[];
   /** The member's own reports (live MyPlace "My requests"; empty in demo). */
@@ -281,27 +469,102 @@ export interface Repository {
 
   /** Submit an ARC request for the member's unit. */
   createArcRequest(input: NewArcRequest): Promise<void>;
-  /** Board: approve (or decline) an ARC request; approval logs a decision. */
-  decideArc(id: string, approve: boolean): Promise<void>;
+  /** Board: decide an ARC request — approve (with optional conditions),
+   * decline (with reason), or request more info. Approvals log a decision. */
+  decideArc(id: string, decision: ArcDecision, note?: string, conditions?: string): Promise<void>;
   /** The board's live ARC queue across all units (empty in demo). */
   getBoardArcQueue(): BoardArcItem[];
 
   /** Post to the Commons feed as the signed-in member. */
-  createFeedPost(body: string): Promise<void>;
+  createFeedPost(body: string, opts?: { kind?: string; photos?: File[] }): Promise<void>;
+  /** Delete the member's own post (board can delete any). */
+  deleteFeedPost(id: string): Promise<void>;
+  /** Board: pin/unpin an announcement to the top of the feed. */
+  togglePinPost(id: string): Promise<void>;
+  /** Heart/unheart a post. */
+  togglePostLike(id: string): Promise<void>;
+  listPostComments(postId: string): Promise<ThreadComment[]>;
+  addPostComment(postId: string, body: string): Promise<void>;
 
-  /** Board: open a community ballot. */
+  /** Board: open a community ballot (two-label yes/no or N options). */
   openVote(input: NewVote): Promise<void>;
 
   /** Member marks their own courtesy notice fixed (self-cure). */
   markViolationFixed(): Promise<void>;
+  /** Board: issue a violation on a unit. */
+  createViolation(input: NewViolation): Promise<void>;
+  /** Board: close a violation for good. */
+  resolveViolation(id: string): Promise<void>;
+  /** Board: the community's open/fixed violations across units. */
+  getBoardViolations(): BoardViolation[];
+  /** Board: the community's units (pickers; live only). */
+  getUnits(): UnitRef[];
+
+  // Board chat (private board channel; live only)
+  getBoardChat(): BoardMessage[];
+  /** topic null/omitted posts to the pinned General thread. */
+  sendBoardMessage(text: string, topic?: string | null, photos?: File[]): Promise<void>;
+  /** Delete the member's own board-chat message. */
+  deleteBoardMessage(id: string): Promise<void>;
+  /** Board: rename a topic (all of its messages move with it). */
+  renameBoardTopic(oldName: string, newName: string): Promise<void>;
+  /** Board: archive a topic — hidden from the list, messages retained. */
+  archiveBoardTopic(name: string): Promise<void>;
+  /** Topic names archived away (so the list can filter them). */
+  getArchivedBoardTopics(): string[];
+
+  // Invites (board-managed; live only — the demo has no join flow)
+  getInvites(): Invite[];
+  createInvite(input: { email: string; unitLabel: string; role: 'resident' | 'board' }): Promise<void>;
+  revokeInvite(id: string): Promise<void>;
+  /** Board: push a pending invite's expiry out another 14 days. */
+  renewInvite(id: string): Promise<void>;
+
+  // Member & unit admin (board; live only)
+  getAdminMembers(): AdminMember[];
+  setMemberRole(membershipId: string, role: 'resident' | 'board'): Promise<void>;
+  setMemberStatus(membershipId: string, status: 'active' | 'inactive'): Promise<void>;
+  assignMemberUnit(membershipId: string, unitLabel: string): Promise<void>;
+
+  // Profile (live only; demo identity is scripted)
+  updateProfile(patch: { name?: string; phone?: string; color?: string; hideDirectory?: boolean }): Promise<void>;
+
+  // Documents (live: board-uploaded library; demo: scripted)
+  /** Reactive documents list (live re-renders as the library hydrates). */
+  getDocs(): Doc[];
+  uploadDocument(input: { file: File; name: string; section: string }): Promise<void>;
+  deleteDocument(id: string): Promise<void>;
+
+  // Meetings (live; demo meeting prep is scripted)
+  getMeetings(): Meeting[];
+  createMeeting(input: { title: string; whenLabel: string; whereLabel: string; agenda: string[] }): Promise<void>;
+  /** Board: upload minutes — they also land in Documents under Minutes. */
+  publishMinutes(meetingId: string, file: File): Promise<void>;
+
+  // Audit trail (board; live only)
+  getAuditLog(): AuditEntry[];
 
   /** Community events (empty for a fresh community). */
   getEvents(): CommunityEvent[];
+  /** RSVP / un-RSVP the signed-in member to a community event. */
+  toggleEventRsvp(id: string): Promise<void>;
+  /** Board: create a community event. */
+  createEvent(input: { title: string; whenLabel: string; whereLabel: string; tagLabel?: string }): Promise<void>;
   /** Commons feed posts (empty for a fresh community). */
   getFeed(): FeedPost[];
 
   // Reservations
+  /** The community's bookable amenities, reactive (empty for a fresh community). */
+  getAmenities(): Amenity[];
   listAmenities(): Promise<Amenity[]>;
+  /** Board: add a bookable amenity (hours/slots/capacity configurable). */
+  createAmenity(input: { name: string; sub: string; rules: string; icon: string; openHour?: number; closeHour?: number; slotMinutes?: number; capacity?: number; maxDaysAhead?: number }): Promise<void>;
+  /** Board: adjust an amenity's booking configuration. */
+  updateAmenity(id: string, patch: Partial<{ name: string; sub: string; rules: string; openHour: number; closeHour: number; slotMinutes: number; capacity: number; maxDaysAhead: number }>): Promise<void>;
+  /** Board: retire an amenity (soft — it stops showing, history survives). */
+  retireAmenity(id: string): Promise<void>;
+  /** Board: every active booking across the community. */
+  getBoardBookings(): BoardBooking[];
   getReservationSlots(): Promise<string[]>;
   getReservationDays(): Promise<string[]>;
   getReservation(): ReservationState;
@@ -313,9 +576,19 @@ export interface Repository {
   addComment(text: string): Promise<void>;
 
   // Direct messages
+  /** Reactive chat index: who you can message + last-message preview.
+   * Demo: the scripted seed. Live: every other community member, with real
+   * thread previews merged in (keys are profile ids). */
+  getChatIndex(): ChatSeed;
+  /** Reactive community directory (live: fellow members; demo: seed). */
+  getDirectory(): DirEntry[];
   getChats(): Record<string, ChatMsg[]>;
+  /** Mark a thread read (clears its unread badge; demo no-op). */
+  markChatRead(chatKey: string): void;
   /** `reply` (default true) triggers the scripted neighbor reply; photos pass false. */
-  sendChatMessage(chatKey: string, text: string, reply?: boolean): Promise<void>;
+  sendChatMessage(chatKey: string, text: string, reply?: boolean, photos?: File[]): Promise<void>;
+  /** Delete the member's own DM (live only). */
+  deleteChatMessage(chatKey: string, messageId: string): Promise<void>;
 
   // Groups & group chats
   getGroups(): Record<string, GroupData>;
@@ -326,6 +599,12 @@ export interface Repository {
   toggleGroupMute(groupKey: string): Promise<void>;
   voteGroupPoll(groupKey: string, pollId: string, option: string): Promise<void>;
   rsvpGroupEvent(groupKey: string, eventId: string): Promise<void>;
+  /** Start a poll in a group (live). */
+  createGroupPoll(groupKey: string, question: string, options: string[]): Promise<void>;
+  /** Schedule a group event (live). */
+  createGroupEvent(groupKey: string, title: string, whenLabel: string, whereLabel: string): Promise<void>;
+  /** Archive a group (creator or board; hidden from lists, history kept). */
+  archiveGroup(groupKey: string): Promise<void>;
 
   // Community / people
   listDirectory(): Promise<DirEntry[]>;

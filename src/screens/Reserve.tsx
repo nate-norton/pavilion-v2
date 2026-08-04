@@ -1,6 +1,17 @@
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
-import { useAmenities, useReservationSlots, useReservationDays, useReservation, useRepository } from '../data/repo';
+import { useAmenities, useMember, useReservationSlots, useReservationDays, useReservation, useLoadState, useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
+import { isLiveMode } from '../auth/AuthGate';
+
+/** "9:00 AM" style label for an hour+minute pair. */
+function slotLabel(mins: number): string {
+  let h = Math.floor(mins / 60);
+  const m = mins % 60;
+  const ap = h < 12 ? 'AM' : 'PM';
+  h = h % 12; if (h === 0) h = 12;
+  return `${h}:${String(m).padStart(2, '0')} ${ap}`;
+}
 
 /** Reserve screen — ported from prototype lines 523-628. */
 export function Reserve() {
@@ -8,18 +19,42 @@ export function Reserve() {
   const { set } = state;
   const repo = useRepository();
   const AMENS = useAmenities();
-  const SLOTS = useReservationSlots();
-  const DAYS = useReservationDays();
+  const DEMO_SLOTS = useReservationSlots();
+  const DEMO_DAYS = useReservationDays();
   const reservation = useReservation();
+  const member = useMember();
+  const canManage = isLiveMode && member?.role === 'board';
+  const demo = repo.isDemo();
+  const amenLoad = useLoadState('amenities');
 
   const amen = state.amenIdx != null ? AMENS[state.amenIdx] : null;
+
+  // Live: the booking grid comes from the amenity's own configuration
+  // (hours, slot length, booking window). Demo keeps its scripted grid.
+  const SLOTS = demo || !amen ? DEMO_SLOTS : (() => {
+    const out: string[] = [];
+    const step = amen.slotMinutes ?? 60;
+    for (let t = (amen.openHour ?? 8) * 60; t + step <= (amen.closeHour ?? 21) * 60; t += step) out.push(slotLabel(t));
+    return out;
+  })();
+  const DAYS = demo ? DEMO_DAYS : (() => {
+    const out: string[] = [];
+    for (let i = 0; i < (amen?.maxDaysAhead ?? 7); i++) {
+      const d = new Date(Date.now() + i * 86400_000);
+      out.push(i === 0
+        ? `Today · ${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+        : d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).replace(',', ' ·'));
+    }
+    return out;
+  })();
+
   const hasBooking = reservation.booked && !!reservation.summary;
   const canBook = state.slotIdx != null;
   const notCalAdded = !state.calAdded;
 
   const book = () => {
     if (state.slotIdx == null || amen == null) return;
-    const day = DAYS[state.dayIdx].split(' · ')[0];
+    const day = demo ? DAYS[state.dayIdx].split(' · ')[0] : DAYS[state.dayIdx] ?? DAYS[0];
     repo.createReservation({ amenity: amen.name, day, slot: SLOTS[state.slotIdx], hours: state.durIdx === 1 ? 2 : 1 });
     set({ bookingConfirmed: true, calAdded: false });
   };
@@ -57,8 +92,8 @@ export function Reserve() {
             <PhIcon name="ph-bold ph-arrow-left" size={14} />
             All amenities
           </button>
-          <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">{amen.name}</h1>
-          <p className="m-0 mb-2.5 text-[13px] text-taupe font-semibold">{amen.sub} · free for residents</p>
+          <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">{amen.name}</h1>
+          <p className="m-0 mb-2.5 text-[13px] text-taupe font-semibold">{demo ? `${amen.sub} · free for residents` : amen.sub}</p>
           <div
             className="bg-paper rounded-[13px] px-3.5 py-2.5 flex gap-2.5 items-start mb-[18px]"
             style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
@@ -73,14 +108,21 @@ export function Reserve() {
           >
             Pick a day
           </p>
-          <div className="flex gap-1.5 mb-[18px]">
+          {/*
+            Seven 64px chips plus their gaps are 484px inside a 357px column,
+            so the row clipped its last days off the right edge with no way to
+            reach them — and live amenities can set maxDaysAhead higher still.
+            It scrolls now, and the chips hold their width instead of being
+            squeezed until the date labels wrap.
+          */}
+          <div className="flex gap-1.5 mb-[18px] overflow-x-auto pav-scroll">
             {DAYS.map((d, i) => {
               const on = state.dayIdx === i;
               return (
                 <button
                   key={d}
                   onClick={() => set({ dayIdx: i, slotIdx: null })}
-                  className="rounded-[13px] py-2.5 text-xs font-extrabold cursor-pointer text-center leading-[1.3]"
+                  className="rounded-[13px] py-2.5 text-xs font-extrabold cursor-pointer text-center leading-[1.3] flex-shrink-0"
                   style={{
                     width: 64,
                     border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',
@@ -123,7 +165,7 @@ export function Reserve() {
                         ? '1px solid rgb(var(--sage) / 0.35)'
                         : '1px solid rgb(var(--navy) / 0.12)',
                     background: taken ? (wl ? 'rgb(var(--mint))' : 'rgb(var(--sand))') : sel ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                    color: taken ? (wl ? 'rgb(var(--sagedark))' : 'rgb(var(--claygray))') : sel ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
+                    color: taken ? (wl ? 'rgb(var(--sagedark))' : 'rgb(var(--bark))') : sel ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
                     textDecoration: taken && !wl ? 'line-through' : 'none',
                   }}
                 >
@@ -162,9 +204,9 @@ export function Reserve() {
           {!state.bookingConfirmed ? (
             <button
               onClick={book}
-              className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold"
+              className="w-full border-none rounded-2xl py-4 text-[14px] font-extrabold"
               style={{
-                background: canBook ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
+                background: canBook ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))',
                 color: canBook ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
                 cursor: canBook ? 'pointer' : 'default',
               }}
@@ -179,8 +221,8 @@ export function Reserve() {
               <div className="flex items-center gap-3 mb-3">
                 <PhIcon name="ph-fill ph-check-circle" size={28} color="rgb(var(--sage))" className="flex-shrink-0" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[15px] font-bold text-navy">Booked!</p>
-                  <p className="m-0 text-[13px] font-bold" style={{ color: 'rgb(var(--sagegray))' }}>
+                  <p className="m-0 mb-0.5 text-[14px] font-bold text-navy">Booked!</p>
+                  <p className="m-0 text-[13px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
                     {reservation.summary}
                   </p>
                 </div>
@@ -222,14 +264,15 @@ export function Reserve() {
       style={{ padding: '64px 18px 150px' }}
     >
       <div>
-        <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">Reserve</h1>
+        <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Reserve</h1>
         <p className="m-0 mb-3.5 text-[13.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
           Amenities, booked in two taps. One active booking per household.
         </p>
-        <div
+        {repo.isDemo() && (
+        <button type="button"
           onClick={() => set({ passOpen: true })}
-          className="rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5 bg-navy"
-        >
+          className="w-full border-none font-sans text-left rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5 bg-navy"
+>
           <PhIcon name="ph-fill ph-qr-code" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
           <div className="flex-1">
             <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Expecting visitors?</p>
@@ -240,7 +283,8 @@ export function Reserve() {
           <span className="text-[13px] font-extrabold" style={{ color: 'rgb(var(--peach))' }}>
             Pass →
           </span>
-        </div>
+        </button>
+        )}
 
         {hasBooking && (
           <div
@@ -250,7 +294,7 @@ export function Reserve() {
             <PhIcon name="ph-fill ph-ticket" size={21} color="rgb(var(--sage))" className="flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{reservation.summary}</p>
-              <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--sagegray))' }}>
+              <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
                 We&apos;ll remind you an hour before
               </p>
             </div>
@@ -264,19 +308,44 @@ export function Reserve() {
           </div>
         )}
 
+        {AMENS.length === 0 && (
+          <EmptyState
+            icon="ph-fill ph-calendar-check"
+            title="No amenities set up yet"
+            body={
+              canManage
+                ? 'Add the clubhouse, pool, or courts and neighbors book them themselves — no more sign-up sheet on the door.'
+                : 'When your board adds the clubhouse, pool, or courts, you’ll book them here.'
+            }
+            status={amenLoad}
+            actionLabel={canManage ? 'Add an amenity' : undefined}
+            onAction={canManage ? () => set({ manageAmenOpen: true }) : undefined}
+          />
+        )}
+        {canManage && (
+          <button
+            onClick={() => set({ manageAmenOpen: true })}
+            className="w-full mt-3 mb-1 rounded-xl py-[11px] text-[13px] font-extrabold cursor-pointer bg-transparent text-navy flex items-center justify-center gap-2"
+            style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+          >
+            <PhIcon name="ph-fill ph-gear-six" size={15} />
+            Manage amenities
+          </button>
+        )}
         <div className="flex flex-col gap-2.5">
           {AMENS.map((a, i) => (
-            <div
+            <button
+              type="button"
               key={a.name}
               onClick={() => openAmen(i)}
-              className="bg-paper rounded-[18px] px-4 py-[15px] flex items-center gap-3.5 cursor-pointer"
+              className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-[15px] flex items-center gap-3.5 cursor-pointer"
               style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
             >
               <div className="w-11 h-11 rounded-[14px] flex items-center justify-center flex-shrink-0 bg-sand">
                 <PhIcon name={a.icon} size={22} color="rgb(var(--navy))" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="m-0 mb-0.5 text-[15px] font-bold text-navy">{a.name}</p>
+                <p className="m-0 mb-0.5 text-[14px] font-bold text-navy">{a.name}</p>
                 <p className="m-0 mb-1 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
                   {a.sub}
                 </p>
@@ -299,7 +368,7 @@ export function Reserve() {
                   {a.avail}
                 </span>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

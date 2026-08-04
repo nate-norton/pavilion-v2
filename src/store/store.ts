@@ -61,6 +61,8 @@ export interface PavData {
   arcSubmitted: boolean;
   arcApprovedByBoard: boolean;
   boardMode: boolean;
+  /** Board-only setup checklist hidden by hand; it also self-retires when complete. */
+  boardSetupDismissed: boolean;
   boardTab: string;
   reportTicketed: boolean;
   gateScheduled: boolean;
@@ -145,6 +147,10 @@ export interface PavData {
   paymentDetailIdx: number | null;
   decisionDetailIdx: number | null;
   composeOpen: boolean;
+  manageAmenOpen: boolean;
+  boardChatOpen: boolean;
+  /** Topic thread the board chat sheet opens on; null = topic list. */
+  boardChatTopic: string | null;
   vehicleAdded: boolean;
   petAdded: boolean;
   arcNeedsInfo: boolean;
@@ -220,7 +226,10 @@ export const dataDefaults: PavData = {
   ],
   paySheetOpen: false,
   paid: false,
-  autopay: true,
+  // Opt-in, never opt-out. This defaulted to true, so the PaySheet opened with
+  // the switch already on and "Pay $285.00" silently authorised a recurring
+  // ACH debit — affirmative consent taken by default for a bank mandate.
+  autopay: false,
   planActive: false,
   apPaused: false,
   arcSheetOpen: false,
@@ -229,6 +238,7 @@ export const dataDefaults: PavData = {
   arcSubmitted: false,
   arcApprovedByBoard: false,
   boardMode: false,
+  boardSetupDismissed: false,
   boardTab: 'desk',
   reportTicketed: false,
   gateScheduled: false,
@@ -313,6 +323,9 @@ export const dataDefaults: PavData = {
   paymentDetailIdx: null,
   decisionDetailIdx: null,
   composeOpen: false,
+  manageAmenOpen: false,
+  boardChatOpen: false,
+  boardChatTopic: null,
   vehicleAdded: false,
   petAdded: false,
   arcNeedsInfo: false,
