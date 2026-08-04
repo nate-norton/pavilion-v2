@@ -1,5 +1,6 @@
 import { BoardSetupCard } from '../components/BoardSetupCard';
 import { PhIcon } from '../components/PhIcon';
+import { StackedCards, StackedPanel } from '../components/StackedCard';
 import { useArc, useAssessment, useDues, useEvents, useMember, useNotifications, usePortfolio, useReservation, useRepository, useViolation, useVotes } from '../data/repo';
 import { usePavStore } from '../store/store';
 import { isLiveMode } from '../auth/AuthGate';
@@ -33,6 +34,9 @@ export function Today() {
   const events = useEvents();
   const featuredEvent = events.find((e) => e.featured) ?? null;
   const hasNeighborhood = events.length > 0;
+  // Drives the stack: with a hero the list tucks under it, without one it
+  // stands alone and drops the extra top padding.
+  const showFeatured = hasNeighborhood && !!featuredEvent;
 
   const isOwner = state.role === 'owner';
   const isTenant = state.role === 'tenant';
@@ -313,7 +317,7 @@ export function Today() {
       )}
 
       {/* Around the neighborhood — ambient content; hidden for an empty community */}
-      {hasNeighborhood && (<>
+      {hasNeighborhood && (
       <div className="flex items-baseline justify-between gap-2.5" style={{ margin: '28px 0 12px' }}>
         <h2 className="m-0 font-serif font-normal text-[19px] text-navy">Around the neighborhood</h2>
         <button
@@ -324,10 +328,16 @@ export function Today() {
           Calendar
         </button>
       </div>
+      )}
 
-      {/* One featured event */}
-      {featuredEvent && (
-      <div className="rounded-[20px] text-cream bg-navy mb-2.5" style={{ padding: '16px 18px' }}>
+      {/*
+       * Featured event hero with the ambient list tucked under it. The hero is
+       * conditional and the list is always on, so a community with no events
+       * renders the list alone — StackedCards drops the falsy child.
+       */}
+      <StackedCards overlap={22}>
+        {showFeatured && (
+        <StackedPanel tint="navy" className="!pt-4">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
@@ -355,12 +365,11 @@ export function Today() {
             </button>
           )}
         </div>
-      </div>
-      )}
-      </>)}
+        </StackedPanel>
+        )}
 
-      {/* Quiet neighborhood list — always on: booking + map are real surfaces */}
-      <div className="bg-paper rounded-[20px]" style={{ border: '1px solid rgb(var(--navy) / 0.1)', padding: '6px 18px' }}>
+        {/* Quiet neighborhood list — always on: booking + map are real surfaces */}
+        <StackedPanel flush className={`px-[18px] pb-1.5 ${showFeatured ? 'pt-[22px]' : 'pt-1.5'}`}>
         {hasBooking ? (
           <button type="button" onClick={() => set({ tab: 'reserve' })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
             <PhIcon name="ph-fill ph-calendar-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
@@ -403,7 +412,8 @@ export function Today() {
           </button>
         </div>
         )}
-      </div>
+        </StackedPanel>
+      </StackedCards>
     </div>
   );
 }
