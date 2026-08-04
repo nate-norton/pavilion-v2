@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { reportedByDataLayer } from '../lib/errorBus';
+import { BoardSetupCard } from '../components/BoardSetupCard';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
@@ -187,6 +188,16 @@ export function BoardDesk() {
 
       {state.boardTab === 'desk' && (
         <div>
+          {/*
+            The Desk stacks nine sections in no particular order, which is a
+            poor greeting for a volunteer with twenty minutes and no training.
+            BoardSetupCard is the one surface that answers "what first" — and
+            it only rendered on Today, so the guidance disappeared the moment a
+            board member reached their own tools. It renders itself only in
+            live, only for the board role, and only while steps remain, so it
+            costs nothing once the community is set up.
+          */}
+          <BoardSetupCard />
           <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
             Triage
           </p>
