@@ -136,7 +136,7 @@ export function PaySheet() {
           </div>
           <button
             onClick={doPay}
-            className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold cursor-pointer text-white"
+            className="w-full border-none rounded-2xl py-4 text-[14px] font-extrabold cursor-pointer text-white"
             style={{ background: 'rgb(var(--emberdeep))' }}
           >
             {payBtnLabel}
@@ -160,7 +160,7 @@ export function PaySheet() {
       {planConfirm && (
         <div className="text-center pt-2 pb-1 animate-fadeup">
           <PhIcon name="ph-fill ph-calendar-check" size={52} color="rgb(var(--sage))" />
-          <p className="m-0 mt-2.5 mb-[3px] font-serif text-[22px] text-navy">
+          <p className="m-0 mt-2.5 mb-[3px] font-serif text-[19px] text-navy">
             Payment plan is set.
           </p>
           <p className="m-0 mb-3.5 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
@@ -186,7 +186,7 @@ export function PaySheet() {
       {paid && (
         <div className="relative text-center pt-2 pb-1 animate-fadeup">
           <PhIcon name="ph-fill ph-check-circle" size={52} color="rgb(var(--sage))" />
-          <p className="m-0 mt-2.5 mb-[3px] font-serif text-[22px] text-navy">
+          <p className="m-0 mt-2.5 mb-[3px] font-serif text-[19px] text-navy">
             Paid. Done in two taps.
           </p>
           <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>

@@ -33,3 +33,17 @@ export function emitAppError(message: string): void {
 export function emitAppSuccess(message: string): void {
   listeners.forEach((l) => l({ message, tone: 'success' }));
 }
+
+/**
+ * Rejection handler for a write whose failure the data layer has already
+ * reported.
+ *
+ * SupabaseRepository's `failed(action, error, fatal)` emits the member-facing
+ * toast and, when fatal, rethrows — so the screen's `.then()` never runs, the
+ * draft stays open with the member's values intact, and the only thing left to
+ * do is stop the rejection from becoming an unhandled promise. Screens wrote
+ * that as a bare `.catch(() => {})`, which is indistinguishable on sight from
+ * swallowing the error and silently closing the form. It is not: use this
+ * instead, so the intent is legible at the call site.
+ */
+export const reportedByDataLayer = (): void => {};

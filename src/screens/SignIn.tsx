@@ -21,7 +21,7 @@ export function SignIn() {
           className="w-16 h-16 rounded-[20px] flex items-center justify-center mb-[22px]"
           style={{ background: 'linear-gradient(150deg,rgb(var(--emberbright)),rgb(var(--terracotta)))' }}
         >
-          <span className="font-serif text-[30px] text-white">P</span>
+          <span className="font-serif text-[36px] text-white">P</span>
         </div>
         <h1 className="m-0 mb-3 font-serif font-normal text-[36px] leading-[1.15] text-cream">
           The neighborhood, not the paperwork.
@@ -47,7 +47,7 @@ export function SignIn() {
         <button
           type="button"
           onClick={continueIn}
-          className="rounded-2xl text-[15px] font-extrabold cursor-pointer font-sans active:scale-[0.98]"
+          className="rounded-2xl text-[14px] font-extrabold cursor-pointer font-sans active:scale-[0.98]"
           style={{ border: 'none', background: 'rgb(var(--cream))', color: 'rgb(var(--navy))', padding: '16px 0' }}
         >
           Continue with email
@@ -55,7 +55,7 @@ export function SignIn() {
         <button
           type="button"
           onClick={continueIn}
-          className="rounded-2xl text-[15px] font-extrabold cursor-pointer font-sans active:scale-[0.98]"
+          className="rounded-2xl text-[14px] font-extrabold cursor-pointer font-sans active:scale-[0.98]"
           style={{ border: '1.5px solid rgb(var(--cream) / 0.3)', background: 'none', color: 'rgb(var(--cream))', padding: '15px 0' }}
         >
           Continue with phone

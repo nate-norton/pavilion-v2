@@ -36,7 +36,7 @@ export function Messages() {
     >
       <BackButton onClick={() => set({ msgsOpen: false })} />
       <div className="flex items-center justify-between mb-1">
-        <h1 className="m-0 font-serif font-normal text-[26px] text-navy">Messages</h1>
+        <h1 className="m-0 font-serif font-normal text-[24px] text-navy">Messages</h1>
         <div className="flex gap-2">
           {msgTab !== 'direct' && (
             <button

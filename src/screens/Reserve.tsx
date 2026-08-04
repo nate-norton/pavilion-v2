@@ -92,7 +92,7 @@ export function Reserve() {
             <PhIcon name="ph-bold ph-arrow-left" size={14} />
             All amenities
           </button>
-          <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">{amen.name}</h1>
+          <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">{amen.name}</h1>
           <p className="m-0 mb-2.5 text-[13px] text-taupe font-semibold">{demo ? `${amen.sub} · free for residents` : amen.sub}</p>
           <div
             className="bg-paper rounded-[13px] px-3.5 py-2.5 flex gap-2.5 items-start mb-[18px]"
@@ -108,14 +108,21 @@ export function Reserve() {
           >
             Pick a day
           </p>
-          <div className="flex gap-1.5 mb-[18px]">
+          {/*
+            Seven 64px chips plus their gaps are 484px inside a 357px column,
+            so the row clipped its last days off the right edge with no way to
+            reach them — and live amenities can set maxDaysAhead higher still.
+            It scrolls now, and the chips hold their width instead of being
+            squeezed until the date labels wrap.
+          */}
+          <div className="flex gap-1.5 mb-[18px] overflow-x-auto pav-scroll">
             {DAYS.map((d, i) => {
               const on = state.dayIdx === i;
               return (
                 <button
                   key={d}
                   onClick={() => set({ dayIdx: i, slotIdx: null })}
-                  className="rounded-[13px] py-2.5 text-xs font-extrabold cursor-pointer text-center leading-[1.3]"
+                  className="rounded-[13px] py-2.5 text-xs font-extrabold cursor-pointer text-center leading-[1.3] flex-shrink-0"
                   style={{
                     width: 64,
                     border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',
@@ -197,7 +204,7 @@ export function Reserve() {
           {!state.bookingConfirmed ? (
             <button
               onClick={book}
-              className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold"
+              className="w-full border-none rounded-2xl py-4 text-[14px] font-extrabold"
               style={{
                 background: canBook ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))',
                 color: canBook ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
@@ -214,7 +221,7 @@ export function Reserve() {
               <div className="flex items-center gap-3 mb-3">
                 <PhIcon name="ph-fill ph-check-circle" size={28} color="rgb(var(--sage))" className="flex-shrink-0" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[15px] font-bold text-navy">Booked!</p>
+                  <p className="m-0 mb-0.5 text-[14px] font-bold text-navy">Booked!</p>
                   <p className="m-0 text-[13px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
                     {reservation.summary}
                   </p>
@@ -257,7 +264,7 @@ export function Reserve() {
       style={{ padding: '64px 18px 150px' }}
     >
       <div>
-        <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">Reserve</h1>
+        <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Reserve</h1>
         <p className="m-0 mb-3.5 text-[13.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
           Amenities, booked in two taps. One active booking per household.
         </p>
@@ -338,7 +345,7 @@ export function Reserve() {
                 <PhIcon name={a.icon} size={22} color="rgb(var(--navy))" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="m-0 mb-0.5 text-[15px] font-bold text-navy">{a.name}</p>
+                <p className="m-0 mb-0.5 text-[14px] font-bold text-navy">{a.name}</p>
                 <p className="m-0 mb-1 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
                   {a.sub}
                 </p>

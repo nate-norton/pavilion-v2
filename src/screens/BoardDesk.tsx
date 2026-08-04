@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react';
+import { reportedByDataLayer } from '../lib/errorBus';
+import { BoardSetupCard } from '../components/BoardSetupCard';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
@@ -128,7 +130,7 @@ export function BoardDesk() {
         </button>
         <div className="flex flex-col items-end gap-1.5">
           <span className="rounded-full px-3 py-[5px] text-[10.5px] font-bold bg-navy text-cream" style={{ letterSpacing: '0.1em' }}>
-            {demo ? 'TREASURER' : 'BOARD'}
+            BOARD
           </span>
           {!demo && (
             <button
@@ -142,12 +144,17 @@ export function BoardDesk() {
           )}
         </div>
       </div>
-      <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">Board desk</h1>
+      <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Board desk</h1>
       <p className="m-0 mb-3.5 text-[13.5px] font-semibold text-taupe">
         {triage.summary}
       </p>
 
-      <div className="grid grid-cols-3 gap-[9px] mb-3">
+      {/*
+        Collected has no live source yet, and a tile that can only ever render
+        an em-dash is decoration. It shows where there is a number behind it
+        and the row closes to two columns where there isn't.
+      */}
+      <div className={'grid gap-[9px] mb-3 ' + (demo ? 'grid-cols-3' : 'grid-cols-2')}>
         <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
           <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--terracotta))' }}>
             Open
@@ -160,12 +167,14 @@ export function BoardDesk() {
           </p>
           <p className="m-0 font-serif text-lg text-navy">{quorum.pct}%</p>
         </div>
-        <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
-            Collected
-          </p>
-          <p className="m-0 font-serif text-lg text-navy">{demo ? '96%' : '—'}</p>
-        </div>
+        {demo && (
+          <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
+            <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
+              Collected
+            </p>
+            <p className="m-0 font-serif text-lg text-navy">96%</p>
+          </div>
+        )}
       </div>
 
       <div className="mb-[18px]">
@@ -179,6 +188,16 @@ export function BoardDesk() {
 
       {state.boardTab === 'desk' && (
         <div>
+          {/*
+            The Desk stacks nine sections in no particular order, which is a
+            poor greeting for a volunteer with twenty minutes and no training.
+            BoardSetupCard is the one surface that answers "what first" — and
+            it only rendered on Today, so the guidance disappeared the moment a
+            board member reached their own tools. It renders itself only in
+            live, only for the board role, and only while steps remain, so it
+            costs nothing once the community is set up.
+          */}
+          <BoardSetupCard />
           <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
             Triage
           </p>
@@ -424,7 +443,7 @@ export function BoardDesk() {
                     setInvBusy(true);
                     void repo.createInvite({ email: invEmail, unitLabel: invUnit, role: invRole })
                       .then(() => { setInvEmail(''); setInvUnit(''); setInvRole('resident'); })
-                      .catch(() => {})
+                      .catch(reportedByDataLayer)
                       .finally(() => setInvBusy(false));
                   }}
                   className="w-full border-0 rounded-[11px] py-2.5 text-[12.5px] font-extrabold cursor-pointer"
@@ -646,7 +665,7 @@ export function BoardDesk() {
                           severity: violSeverity, fineCents: Math.round((parseFloat(violFine) || 0) * 100),
                         }).then(() => {
                           setViolDraftOpen(false); setViolTitle(''); setViolDesc(''); setViolUnitId(''); setViolFine(''); setViolSeverity('courtesy');
-                        }).catch(() => {});
+                        }).catch(reportedByDataLayer);
                       }}
                       className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
                       style={{ background: violUnitId && violTitle.trim() ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))' }}
@@ -699,7 +718,7 @@ export function BoardDesk() {
                         className="hidden"
                         onChange={(e) => {
                           const f = e.target.files?.[0];
-                          if (f) void repo.publishMinutes(m.id, f).catch(() => {});
+                          if (f) void repo.publishMinutes(m.id, f).catch(reportedByDataLayer);
                         }}
                       />
                       <button
@@ -766,7 +785,7 @@ export function BoardDesk() {
                         if (!meetTitle.trim()) return;
                         void repo.createMeeting({ title: meetTitle, whenLabel: meetWhen, whereLabel: meetWhere, agenda: meetAgenda.split(',') })
                           .then(() => { setMeetDraftOpen(false); setMeetTitle(''); setMeetWhen(''); setMeetWhere(''); setMeetAgenda(''); })
-                          .catch(() => {});
+                          .catch(reportedByDataLayer);
                       }}
                       className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
                       style={{ background: meetTitle.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
@@ -1135,7 +1154,7 @@ export function BoardDesk() {
           </p>
           <div className="bg-paper rounded-[20px] p-[18px] mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
             <div className="flex items-baseline justify-between gap-2.5 mb-2.5">
-              <p className="m-0 font-serif text-[22px] text-navy">96% collected</p>
+              <p className="m-0 font-serif text-[19px] text-navy">96% collected</p>
               <p className="m-0 text-xs font-bold text-stone">
                 $38.9K of $40.5K
               </p>
@@ -1479,7 +1498,7 @@ export function BoardDesk() {
                           closesAt: voteDays ? new Date(Date.now() + voteDays * 86400_000).toISOString() : null,
                         })
                           .then(() => set({ votePosted: true }))
-                          .catch(() => {}); // failure surfaced via the app toast
+                          .catch(reportedByDataLayer); // failure surfaced via the app toast
                       }}
                       className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
                       style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
@@ -1583,7 +1602,7 @@ export function BoardDesk() {
                       if (!evTitle.trim()) return;
                       void repo.createEvent({ title: evTitle, whenLabel: evWhen, whereLabel: evWhere })
                         .then(() => { setEvDraftOpen(false); setEvTitle(''); setEvWhen(''); setEvWhere(''); })
-                        .catch(() => {});
+                        .catch(reportedByDataLayer);
                     }}
                     className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
                     style={{ background: evTitle.trim() ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))' }}
@@ -1887,7 +1906,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
   const toggle = () => { if (!open) loadThread(); setOpen(!open); };
   const sendReply = () => {
     if (!reply.trim()) return;
-    void repo.addReportComment(t.id, reply).then(() => { setReply(''); loadThread(); }).catch(() => {});
+    void repo.addReportComment(t.id, reply).then(() => { setReply(''); loadThread(); }).catch(reportedByDataLayer);
   };
 
   const urgencyPill = t.urgency === 'urgent'

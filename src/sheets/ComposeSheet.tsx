@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { reportedByDataLayer } from '../lib/errorBus';
 import { Sheet } from '../components/Sheet';
 import { PhIcon } from '../components/PhIcon';
 import { Confetti } from '../components/Confetti';
@@ -44,7 +45,7 @@ export function ComposeSheet() {
     void repo.createFeedPost(text, { kind, photos }).then(() => {
       setPosted(true);
       setTimeout(close, 1600);
-    }).catch(() => {}) // failure surfaced via the app toast
+    }).catch(reportedByDataLayer)
       .finally(() => setBusy(false));
   };
 

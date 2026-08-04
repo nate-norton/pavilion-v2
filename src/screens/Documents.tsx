@@ -5,7 +5,7 @@ import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 import { useDocuments, useDocSections, useMember, useLoadState, useRepository } from '../data/repo';
 import { confirmDestructive } from '../components/ConfirmSheet';
-import { emitAppSuccess } from '../lib/errorBus';
+import { emitAppSuccess, reportedByDataLayer } from '../lib/errorBus';
 
 const DOC_CONTENT: Record<string, { sections: { tag: string; name: string; body: string }[] }> = {
   bylaws: {
@@ -84,9 +84,10 @@ export function Documents() {
       {!state.docReader ? (
         <div>
           <BackButton onClick={() => set({ docsOpen: false })} />
-          <h1 className="m-0 mb-1 font-serif font-normal text-[26px] text-navy">Documents</h1>
+          <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Documents</h1>
           <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
-            {DOCS.length > 0
+            {/* Only the demo has an assistant that has read anything. */}
+            {DOCS.length > 0 && repo.isDemo()
               ? 'Every governing document, searchable. Your AI has read them all.'
               : 'Every governing document, in one place.'}
           </p>
@@ -191,7 +192,7 @@ export function Documents() {
                   setUpBusy(true);
                   void repo.uploadDocument({ file: f, name: upName || f.name, section: upSection })
                     .then(() => setUpName(''))
-                    .catch(() => {})
+                    .catch(reportedByDataLayer)
                     .finally(() => { setUpBusy(false); if (fileRef.current) fileRef.current.value = ''; });
                 }}
               />
@@ -209,7 +210,7 @@ export function Documents() {
       ) : state.docReaderKey === 'ccrs' ? (
         <div className="animate-fadeup">
           <BackButton label="All documents" onClick={() => set({ docReader: false })} />
-          <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">CC&amp;Rs</h1>
+          <h1 className="m-0 mb-[3px] font-serif font-normal text-[24px] text-navy">CC&amp;Rs</h1>
           <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
             Rev. March 2026 · 48 pages · applies to all 136 homes
           </p>
@@ -251,15 +252,18 @@ export function Documents() {
             ))}
           </div>
 
-          <button
-            type="button"
-            onClick={askAiDocsSummary}
-            className="w-full border-none text-white rounded-[14px] text-[13.5px] font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3.5"
-            style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))', padding: '13px 0' }}
-          >
-            <PhIcon name="ph-fill ph-sparkle" size={15} />
-            Ask AI to summarize
-          </button>
+          {/* Demo only — live has no assistant to summarize with. */}
+          {repo.isDemo() && (
+            <button
+              type="button"
+              onClick={askAiDocsSummary}
+              className="w-full border-none text-white rounded-[14px] text-[13.5px] font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3.5"
+              style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))', padding: '13px 0' }}
+            >
+              <PhIcon name="ph-fill ph-sparkle" size={15} />
+              Ask AI to summarize
+            </button>
+          )}
 
           {showEx && (
             <div style={SECTION_CARD}>
@@ -371,7 +375,7 @@ function GenericDocReader() {
   return (
     <div className="animate-fadeup">
       <BackButton label="All documents" onClick={() => set({ docReader: false })} />
-      <h1 className="m-0 mb-[3px] font-serif font-normal text-[26px] text-navy">{doc.title}</h1>
+      <h1 className="m-0 mb-[3px] font-serif font-normal text-[24px] text-navy">{doc.title}</h1>
       <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
         {doc.sub}
       </p>

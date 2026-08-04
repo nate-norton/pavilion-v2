@@ -1,6 +1,6 @@
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { useSearchIndex } from '../data/repo';
+import { useSearchIndex, useMember, useRepository } from '../data/repo';
 
 const SUGGESTIONS = ['fence colors', 'pool hours', 'ladder', 'annual meeting'];
 
@@ -8,7 +8,11 @@ const SUGGESTIONS = ['fence colors', 'pool hours', 'ladder', 'annual meeting'];
 export function Search() {
   const state = usePavStore();
   const SEARCH = useSearchIndex();
+  const member = useMember();
+  const demo = useRepository().isDemo();
   const { set } = state;
+  // "the Ridge" is Juniper Ridge's name, not every community's.
+  const communityName = member?.communityName ?? 'your community';
 
   if (!state.searchOpen) return null;
 
@@ -99,10 +103,17 @@ export function Search() {
       {sq.length > 0 && rows.length === 0 && (
         <div className="text-center" style={{ padding: '34px 16px' }}>
           <PhIcon name="ph ph-binoculars" size={34} color="rgb(var(--stonelight))" className="inline-block" />
-          <p className="mt-2.5 mb-1 text-sm font-bold text-navy">Nothing in the Ridge matches that</p>
+          <p className="mt-2.5 mb-1 text-sm font-bold text-navy">Nothing in {communityName} matches that</p>
+          {/*
+            The assistant only exists in the demo, so live neither offers it
+            nor claims it has read anything.
+          */}
           <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
-            AI can dig deeper — it&apos;s read every page.
+            {demo
+              ? 'AI can dig deeper — it’s read every page.'
+              : 'Try a document name, a unit number, or a neighbor’s name.'}
           </p>
+          {demo && (
           <button
             type="button"
             onClick={() => set({ searchOpen: false, aiOpen: true })}
@@ -112,6 +123,7 @@ export function Search() {
             <PhIcon name="ph-fill ph-sparkle" size={14} />
             Ask AI instead
           </button>
+          )}
         </div>
       )}
     </div>

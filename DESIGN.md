@@ -5,7 +5,7 @@ colors:
   porch-shade: "rgb(26 51 82)"
   porch-light-ember: "rgb(224 106 62)"
   porch-light-ember-deep: "rgb(172 80 45)"
-  terracotta: "rgb(199 90 49)"
+  terracotta: "rgb(168 74 38)"
   blush: "rgb(251 237 228)"
   cream: "rgb(245 240 230)"
   paper: "rgb(255 254 250)"
@@ -15,7 +15,7 @@ colors:
   sagedark: "rgb(32 120 71)"
   mint: "rgb(233 246 238)"
   gold: "rgb(217 164 65)"
-  golddark: "rgb(140 105 40)"
+  golddark: "rgb(130 97 36)"
   goldpale: "rgb(251 243 224)"
   red: "rgb(199 64 46)"
   ink: "rgb(62 76 99)"
@@ -245,6 +245,23 @@ Any colour that sits under white, or is itself set as type, must clear 4.5:1 on
 every bed it lands on — which is why sage, gold and sky each have a dark
 variant and the bright ones never appear as words.
 
+**Terracotta is text-bearing, and the rule's blind spot was that it never said
+so.** The rule above named ember, sage, gold and sky, so terracotta was left
+unguarded — and it is the token that per-community theming remaps, which makes
+it the one accent set as type on the most surfaces (~40, including the
+"Review & pay" pill on Today). At `199 90 49` it measured 3.75:1 on cream and
+3.72:1 on blush: the exact WCAG 1.4.3 failure the audit had already fixed on
+every primary button, re-entered through the side door. It is now `168 74 38`
+(cream 5.03, blush 4.99, paper 5.67, parchment 5.26, sand 4.60, white on it
+5.72). **A brand theme that overrides `terracotta` must clear the same floor
+against cream and against its own blush** — Meadow Park's `34 128 73` did not
+(4.44) and was darkened to `30 112 64`.
+
+The same audit found Gold Dark clearing goldpale (4.56) but failing cream at
+4.44 — and cream is the page every screen sits on, so gold metadata was below
+AA anywhere it sat outside a goldpale pill. It is now `130 97 36`. **Check a
+text-bearing colour against cream, not only against its own tinted pill.**
+
 **The No Gray Rule.** There is no neutral gray in this system. Every neutral is
 warmed with yellow — cream, sand, parchment, stone, taupe, bark. A `#888` gray
 anywhere is a bug, not a choice.
@@ -265,17 +282,34 @@ information. The pairing is what keeps the app from reading like a utility
 bill.
 
 ### Hierarchy
-- **Display** (400, 36px, 1.1): The dollar amount on a dues sheet and the
-  morning greeting. One per screen at most.
-- **Headline** (400, 24–30px, 1.2): Screen titles — "The Commons", "Reserve",
-  "The HOA, in the open".
-- **Title** (400, 17–22px, 1.3): Card and section headings, sheet titles.
-- **Body** (700, 13px, 1.5): The default. Note the weight: body copy runs bold
-  because it sits at 13px on a warm background and needs the density.
-- **Secondary body** (600–700, 11.5–12.5px, 1.5): Sub-lines, metadata, and
+
+The ramp is a **fixed set of steps, not ranges.** It previously read as ranges
+here while the front-matter tokens listed exact values, and the two disagreed —
+which let 58 off-ramp literals (9, 15, 18, 20, 22, 26, 28, 30, 32, 34px)
+accumulate across the screens while each one looked locally defensible. Every
+size in the app is now one of the steps below, and a new step is added here
+first or not at all.
+
+- **Display** (400, 36px, 1.1): The morning greeting, the onboarding hero, and
+  the dollar amount on a dues sheet. One per screen at most.
+- **Headline** (400, 24px, 1.2): Every screen title — "The Commons",
+  "Reserve", "The HOA, in the open", "Documents", "Messages".
+- **Subtitle** (400, 19px, 1.3): Sheet titles and confirmations — "Create a
+  group", "Paid. Done in two taps."
+- **Title** (400, 17px, 1.3): Card and section headings, the open-vote title.
+- **Body large** (600, 14px, 1.5): Primary CTA labels and emphasized lines
+  inside sheets.
+- **Body** (700, 13.5/13px, 1.5): The default. Note the weight: body copy runs
+  bold because it sits small on a warm background and needs the density.
+- **Secondary body** (600–700, 11.5/12/12.5px, 1.5): Sub-lines, metadata, and
   card descriptions in stone or taupe.
-- **Label** (700–800, 10–11px, 0.12em, uppercase): Section eyebrows, status
-  pills, nav labels. The wide tracking is the system's signature.
+- **Label** (700–800, 10/10.5/11px, 0.12em, uppercase): Section eyebrows,
+  status pills, nav labels. The wide tracking is the system's signature.
+
+**Screen titles lost a level in this pass.** Primary tabs sat at 28px and
+secondary screens at 26px — a real two-step distinction that the token ramp has
+no room for, so both collapsed to Headline. If that hierarchy is worth keeping,
+it comes back as a documented `headline-lg` step, not as a literal.
 
 ### Named Rules
 

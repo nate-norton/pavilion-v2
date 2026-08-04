@@ -8,7 +8,7 @@ import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember,
 import type { FeedPost, ThreadComment } from '../data/repo';
 import { usePavStore } from '../store/store';
 import { confirmDestructive } from '../components/ConfirmSheet';
-import { emitAppSuccess } from '../lib/errorBus';
+import { emitAppSuccess, reportedByDataLayer } from '../lib/errorBus';
 
 const SEG_OPTIONS = [
   { key: 'feed', label: 'Feed' },
@@ -54,7 +54,7 @@ export function Commons() {
 
   return (
     <div className="absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: '64px 18px 150px' }}>
-      <h1 className="m-0 mb-1 font-serif font-normal text-[28px] text-navy">The Commons</h1>
+      <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">The Commons</h1>
       <p className="m-0 mb-3.5 text-[13.5px] text-taupe font-semibold">What neighbors are sharing this week.</p>
 
       <div className="mb-4">
@@ -544,7 +544,7 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
   const toggleComments = () => { if (!open) loadThread(); setOpen(!open); };
   const sendReply = () => {
     if (!reply.trim()) return;
-    void repo.addPostComment(p.id, reply).then(() => { setReply(''); loadThread(); }).catch(() => {});
+    void repo.addPostComment(p.id, reply).then(() => { setReply(''); loadThread(); }).catch(reportedByDataLayer);
   };
 
   return (

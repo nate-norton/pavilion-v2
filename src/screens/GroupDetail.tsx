@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { reportedByDataLayer } from '../lib/errorBus';
 import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
@@ -114,7 +115,7 @@ export function GroupDetail() {
               </span>
               {t.count && t.count > 0 ? (
                 <span
-                  className="min-w-[16px] h-4 rounded-full flex items-center justify-center text-[9px] font-extrabold px-1"
+                  className="min-w-[16px] h-4 rounded-full flex items-center justify-center text-[10px] font-extrabold px-1"
                   style={{ background: tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--taupepale))', color: tab === t.key ? 'rgb(var(--cream))' : 'rgb(var(--stone))' }}
                 >
                   {t.count}
@@ -248,7 +249,7 @@ export function GroupDetail() {
                       if (!pollQ.trim() || pollOpts.filter((o) => o.trim()).length < 2) return;
                       void repo.createGroupPoll(group.key, pollQ, pollOpts)
                         .then(() => { setPollDraftOpen(false); setPollQ(''); setPollOpts(['', '']); })
-                        .catch(() => {});
+                        .catch(reportedByDataLayer);
                     }}
                     className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
                     style={{ background: pollQ.trim() && pollOpts.filter((o) => o.trim()).length >= 2 ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
@@ -372,7 +373,7 @@ export function GroupDetail() {
                       if (!evTitle.trim()) return;
                       void repo.createGroupEvent(group.key, evTitle, evWhen, evWhere)
                         .then(() => { setEvDraftOpen(false); setEvTitle(''); setEvWhen(''); setEvWhere(''); })
-                        .catch(() => {});
+                        .catch(reportedByDataLayer);
                     }}
                     className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
                     style={{ background: evTitle.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
@@ -477,7 +478,7 @@ export function GroupDetail() {
           {!repo.isDemo() && group.joined && (
             <button
               type="button"
-              onClick={() => void repo.archiveGroup(group.key).then(() => set({ activeGroup: null })).catch(() => {})}
+              onClick={() => void repo.archiveGroup(group.key).then(() => set({ activeGroup: null })).catch(reportedByDataLayer)}
               className="w-full mt-2 bg-transparent rounded-xl py-3 text-[13px] font-extrabold cursor-pointer text-stone"
               style={{ border: '1.5px dashed rgb(var(--navy) / 0.2)' }}
               title="Only the creator or the board can archive"
