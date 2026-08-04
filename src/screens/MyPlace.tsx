@@ -367,7 +367,7 @@ export function MyPlace() {
                 </button>
               </div>
             ) : (
-              <Toggle on={!state.apPaused} onToggle={() => setApConfirm(true)} />
+              <Toggle on={!state.apPaused} onToggle={() => setApConfirm(true)} label="Autopay" />
             )}
           </div>
           )}
@@ -717,7 +717,7 @@ export function MyPlace() {
                 />
                 <div className="flex items-center gap-2.5 mb-2.5">
                   <p className="m-0 flex-1 text-[12.5px] font-bold text-navy">Hide me from the directory</p>
-                  <Toggle on={pfHide} onToggle={() => setPfHide(!pfHide)} />
+                  <Toggle on={pfHide} onToggle={() => setPfHide(!pfHide)} label="Hide me from the neighbor directory" />
                 </div>
                 <button
                   onClick={() => {
@@ -759,7 +759,7 @@ export function MyPlace() {
         >
           <PhIcon name="ph-fill ph-text-aa" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13px] font-bold text-navy">Large type</p>
-          <Toggle on={state.largeType} onToggle={() => set({ largeType: !state.largeType })} />
+          <Toggle on={state.largeType} onToggle={() => set({ largeType: !state.largeType })} label="Large type" />
         </div>
         <div
           className="flex flex-col"

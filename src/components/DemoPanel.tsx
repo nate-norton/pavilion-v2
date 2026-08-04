@@ -100,6 +100,7 @@ export function DemoPanel() {
             <div key={s.key} className="flex items-center justify-between">
               <span className="text-[13px] text-navy font-semibold">{s.label}</span>
               <Toggle
+                label="Demo scenario"
                 on={scenarioValues[s.key]}
                 onToggle={() => set({ [s.key]: !scenarioValues[s.key] })}
                 size="sm"

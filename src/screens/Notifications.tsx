@@ -26,10 +26,11 @@ export function Notifications() {
   const allMuted = today.length === 0 && earlier.length === 0;
 
   const renderRow = (nt: Notif) => (
-    <div
+    <button
+      type="button"
       key={nt.key}
       onClick={() => routeNotif(nt.go)}
-      className="flex items-center gap-3 cursor-pointer"
+      className="w-full border-none font-sans text-left flex items-center gap-3 cursor-pointer"
       style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '13px 14px' }}
     >
       <div className="w-[38px] h-[38px] rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: nt.bg }}>
@@ -45,7 +46,7 @@ export function Notifications() {
         <span data-testid="notif-dot" className="w-[9px] h-[9px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--ember))' }} />
       )}
       <PhIcon name="ph ph-caret-right" size={13} color="rgb(var(--taupedim))" className="flex-shrink-0" />
-    </div>
+    </button>
   );
 
   return (

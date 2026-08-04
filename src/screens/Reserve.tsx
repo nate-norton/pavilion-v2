@@ -327,10 +327,11 @@ export function Reserve() {
         )}
         <div className="flex flex-col gap-2.5">
           {AMENS.map((a, i) => (
-            <div
+            <button
+              type="button"
               key={a.name}
               onClick={() => openAmen(i)}
-              className="bg-paper rounded-[18px] px-4 py-[15px] flex items-center gap-3.5 cursor-pointer"
+              className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-[15px] flex items-center gap-3.5 cursor-pointer"
               style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
             >
               <div className="w-11 h-11 rounded-[14px] flex items-center justify-center flex-shrink-0 bg-sand">
@@ -360,7 +361,7 @@ export function Reserve() {
                   {a.avail}
                 </span>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

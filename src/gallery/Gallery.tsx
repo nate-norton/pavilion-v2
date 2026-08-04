@@ -155,8 +155,8 @@ export function Gallery() {
 
         <Section title="Toggles">
           <div className="flex items-center gap-6">
-            <Toggle on={tog1} onToggle={() => setTog1((v) => !v)} size="sm" />
-            <Toggle on={tog2} onToggle={() => setTog2((v) => !v)} size="lg" />
+            <Toggle on={tog1} onToggle={() => setTog1((v) => !v)} size="sm" label="Example switch, small" />
+            <Toggle on={tog2} onToggle={() => setTog2((v) => !v)} size="lg" label="Example switch, large" />
           </div>
         </Section>
 

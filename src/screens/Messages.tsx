@@ -90,10 +90,11 @@ export function Messages() {
             Start a conversation
           </p>
           {Object.entries(CHAT_SEED).map(([k, p]) => (
-            <div
+            <button
+              type="button"
               key={k}
               onClick={() => set({ chatWith: k, msgsOpen: false, newMsgOpen: false })}
-              className="flex items-center gap-2.5 px-3.5 py-2.5 cursor-pointer bg-[rgb(var(--paper))]"
+              className="w-full border-none font-sans text-left flex items-center gap-2.5 px-3.5 py-2.5 cursor-pointer bg-[rgb(var(--paper))]"
               style={{ borderTop: '1px solid rgb(var(--navy) / 0.06)' }}
             >
               <div
@@ -103,7 +104,7 @@ export function Messages() {
                 {p.initial}
               </div>
               <p className="m-0 text-[13px] font-bold text-navy">{p.name} <span className="font-semibold text-stonelight">· {p.unit}</span></p>
-            </div>
+            </button>
           ))}
         </div>
       )}
@@ -117,10 +118,11 @@ export function Messages() {
             const preview = (last.me ? 'You: ' : '') + last.text;
             const lastTime = mine.length ? mine[mine.length - 1].time || 'now' : p.time;
             return (
-              <div
+              <button
+                type="button"
                 key={k}
                 onClick={() => set({ chatWith: k, msgsOpen: false })}
-                className="flex items-center gap-3 cursor-pointer"
+                className="w-full border-none font-sans text-left flex items-center gap-3 cursor-pointer"
                 style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '13px 14px' }}
               >
                 <div
@@ -148,7 +150,7 @@ export function Messages() {
                 {p.unread > 0 && (
                   <span data-testid="msg-unread" className="w-[9px] h-[9px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--ember))' }} />
                 )}
-              </div>
+              </button>
             );
           })}
         </div>

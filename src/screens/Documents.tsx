@@ -104,39 +104,46 @@ export function Documents() {
           )}
           <div className="flex flex-col gap-[9px]">
             {DOCS.map((d) => (
+              // The row and its remove action are siblings inside a wrapper:
+              // a <button> may not contain another <button>, and nesting them
+              // also made the delete unreachable as its own tab stop.
               <div
                 key={d.key}
-                onClick={() => {
-                  // Live docs are real files — open them; demo docs open the
-                  // scripted reader.
-                  if (d.url) window.open(d.url, '_blank', 'noreferrer');
-                  else set({ docReader: true, docReaderKey: d.key, docQ: '', diffOpen: false });
-                }}
-                className="flex items-center gap-3 cursor-pointer"
-                style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: 14 }}
+                className="flex items-center gap-1"
+                style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '0 14px 0 0' }}
               >
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
-                  <PhIcon name={d.icon} size={19} color="rgb(var(--navy))" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{d.title}</p>
-                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
-                    {d.sub}
-                  </p>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    // Live docs are real files — open them; demo docs open the
+                    // scripted reader.
+                    if (d.url) window.open(d.url, '_blank', 'noreferrer');
+                    else set({ docReader: true, docReaderKey: d.key, docQ: '', diffOpen: false });
+                  }}
+                  className="flex-1 min-w-0 border-none bg-transparent font-sans text-left flex items-center gap-3 cursor-pointer"
+                  style={{ padding: '14px 0 14px 14px' }}
+                >
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
+                    <PhIcon name={d.icon} size={19} color="rgb(var(--navy))" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{d.title}</p>
+                    <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+                      {d.sub}
+                    </p>
+                  </div>
+                </button>
                 {canManage && d.id ? (
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      confirmDestructive({
-                        title: 'Remove this document?',
-                        body: `“${d.title}” disappears for every household. If it is a governing document, residents lose their copy of the rules until you publish it again.`,
-                        confirmLabel: 'Remove document',
-                        onConfirm: () => { void repo.deleteDocument(d.id!); emitAppSuccess('Document removed.'); },
-                      });
-                    }}
-                    title="Remove document"
-                    className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-50"
+                    type="button"
+                    onClick={() => confirmDestructive({
+                      title: 'Remove this document?',
+                      body: `“${d.title}” disappears for every household. If it is a governing document, residents lose their copy of the rules until you publish it again.`,
+                      confirmLabel: 'Remove document',
+                      onConfirm: () => { void repo.deleteDocument(d.id!); emitAppSuccess('Document removed.'); },
+                    })}
+                    aria-label={`Remove ${d.title}`}
+                    className="border-0 bg-transparent p-1.5 cursor-pointer flex-shrink-0 opacity-50"
                   >
                     <PhIcon name="ph-fill ph-trash" size={14} color="rgb(var(--stone))" />
                   </button>

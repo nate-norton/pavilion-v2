@@ -226,7 +226,10 @@ export const dataDefaults: PavData = {
   ],
   paySheetOpen: false,
   paid: false,
-  autopay: true,
+  // Opt-in, never opt-out. This defaulted to true, so the PaySheet opened with
+  // the switch already on and "Pay $285.00" silently authorised a recurring
+  // ACH debit — affirmative consent taken by default for a bank mandate.
+  autopay: false,
   planActive: false,
   apPaused: false,
   arcSheetOpen: false,

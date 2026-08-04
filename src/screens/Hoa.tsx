@@ -33,6 +33,25 @@ const ISSUE_TONES = {
   sand: { bg: 'rgb(var(--sand))', color: 'rgb(var(--barkgray))' },
 } as const;
 
+
+/**
+ * Renders a real <button> when the row actually does something, and a plain
+ * <div> when it does not. Known-issue and decision rows are only tappable in
+ * the demo; making them buttons unconditionally would put focusable controls
+ * in a live resident's tab order that do nothing when activated.
+ */
+function RowShell({ interactive, onClick, className, style, children }: {
+  interactive: boolean; onClick: () => void; className: string;
+  style?: React.CSSProperties; children: React.ReactNode;
+}) {
+  if (!interactive) return <div className={className} style={style}>{children}</div>;
+  return (
+    <button type="button" onClick={onClick} className={`w-full border-none bg-transparent font-sans text-left ${className}`} style={style}>
+      {children}
+    </button>
+  );
+}
+
 /** HOA screen — ported from prototype lines 630-828. */
 export function Hoa() {
   const state = usePavStore();
@@ -259,10 +278,11 @@ export function Hoa() {
           </p>
         ) : (
           arc.requests.map((r, i) => (
-            <div
+            <button
+              type="button"
               key={r.id}
               onClick={() => set({ arcDetailId: r.id })}
-              className={`bg-cream rounded-2xl px-3.5 py-[13px] cursor-pointer${i < arc.requests.length - 1 ? ' mb-2.5' : ''}`}
+              className={`w-full border-none font-sans text-left bg-cream rounded-2xl px-3.5 py-[13px] cursor-pointer${i < arc.requests.length - 1 ? ' mb-2.5' : ''}`}
             >
               <div className="flex items-center justify-between gap-2.5 mb-3">
                 <p className="m-0 text-[13.5px] font-bold text-navy">{r.title} · {r.ref}</p>
@@ -277,7 +297,7 @@ export function Hoa() {
                 </span>
               </div>
               <StatusTimeline steps={r.steps} />
-            </div>
+            </button>
           ))
         )}
       </div>
@@ -297,9 +317,10 @@ export function Hoa() {
           </p>
         ) : (
           issues.map((issue, i) => (
-            <div
+            <RowShell
               key={issue.id}
-              onClick={() => { if (demo) set({ issueDetailId: issue.id }); }}
+              interactive={demo}
+              onClick={() => set({ issueDetailId: issue.id })}
               className={`flex items-center gap-[11px]${i < issues.length - 1 ? ' pb-2.5 mb-2.5' : ''}${demo ? ' cursor-pointer' : ''}`}
               style={i < issues.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}
             >
@@ -313,7 +334,7 @@ export function Hoa() {
               >
                 {issue.statusLabel}
               </span>
-            </div>
+            </RowShell>
           ))
         )}
         <button
@@ -342,9 +363,10 @@ export function Hoa() {
         ) : (
           <div className="flex flex-col">
             {decisions.map((d, i) => (
-              <div
+              <RowShell
                 key={d.id}
-                onClick={() => { if (demo) set({ decisionDetailIdx: i }); }}
+                interactive={demo}
+                onClick={() => set({ decisionDetailIdx: i })}
                 className={`flex items-center gap-[11px] py-2.5${demo ? ' cursor-pointer' : ''}`}
                 style={i < decisions.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}
               >
@@ -361,7 +383,7 @@ export function Hoa() {
                 >
                   {d.pillLabel}
                 </span>
-              </div>
+              </RowShell>
             ))}
           </div>
         )}

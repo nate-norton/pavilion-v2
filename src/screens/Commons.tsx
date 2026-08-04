@@ -294,10 +294,11 @@ export function Commons() {
                     const upcomingEvents = g.events.filter((e) => !e.rsvped).length;
                     const lastMsg = g.messages[g.messages.length - 1];
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={g.key}
                         onClick={() => set({ activeGroup: g.key })}
-                        className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
+                        className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
                         style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
                       >
                         <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: g.color + '18' }}>
@@ -329,7 +330,7 @@ export function Commons() {
                         <span className="text-[12.5px] font-extrabold flex-shrink-0 text-terracotta">
                           Open →
                         </span>
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
@@ -345,10 +346,11 @@ export function Commons() {
                   {discover.map((g) => {
                     const nextEvent = g.events[0];
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={g.key}
                         onClick={() => set({ activeGroup: g.key })}
-                        className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
+                        className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
                         style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
                       >
                         <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: g.color + '18' }}>
@@ -368,7 +370,7 @@ export function Commons() {
                         >
                           Join
                         </button>
-                      </div>
+                      </button>
                     );
                   })}
                 </div>

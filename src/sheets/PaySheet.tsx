@@ -25,7 +25,11 @@ export function PaySheet() {
 
   const payTitle = delinquent ? 'June + July assessments' : 'July assessment';
   const payAmtMain = delinquent ? '$570' : '$285';
-  const payBtnLabel = delinquent ? 'Pay $570.00 now' : 'Pay $285.00';
+  // The label names everything the tap commits to. If autopay is on, this is
+  // two commitments — a payment and a standing mandate — and the control that
+  // makes them should say so.
+  const payAmountLabel = delinquent ? 'Pay $570.00 now' : 'Pay $285.00';
+  const payBtnLabel = state.autopay ? `${payAmountLabel} and turn on autopay` : payAmountLabel;
 
   return (
     <Sheet open={state.paySheetOpen} onClose={closePay}>
@@ -66,8 +70,9 @@ export function PaySheet() {
           <p className="m-0 mb-4 text-[11.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
             Landscaping $78 · Reserves $71 · Insurance $54 · Utilities $48 · Mgmt $34
           </p>
-          <div
-            className="rounded-[14px] p-[13px_14px] flex items-center gap-2.5 mb-2.5 bg-[rgb(var(--paper))] cursor-pointer"
+          <button
+            type="button"
+            className="w-full border-none font-sans text-left rounded-[14px] p-[13px_14px] flex items-center gap-2.5 mb-2.5 bg-[rgb(var(--paper))] cursor-pointer"
             style={{ border: '1px solid rgb(var(--navy) / 0.1)' }}
             onClick={() => set({ payMethodOpen: !state.payMethodOpen })}
           >
@@ -83,7 +88,7 @@ export function PaySheet() {
             <span className="text-xs font-bold" style={{ color: 'rgb(var(--sky))' }}>
               Change
             </span>
-          </div>
+          </button>
           {state.payMethodOpen && (
             <div className="rounded-[14px] mb-2.5 overflow-hidden animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.1)' }}>
               {[
@@ -91,10 +96,11 @@ export function PaySheet() {
                 { key: 'visa', label: 'Visa ····7923', sub: '$2.85 fee', icon: 'ph-fill ph-credit-card' },
                 { key: 'apple', label: 'Apple Pay', sub: 'No fee', icon: 'ph-fill ph-apple-logo' },
               ].map((pm) => (
-                <div
+                <button
+                  type="button"
                   key={pm.key}
                   onClick={() => set({ payMethod: pm.key, payMethodOpen: false })}
-                  className="flex items-center gap-2.5 px-3.5 py-3 cursor-pointer bg-[rgb(var(--paper))]"
+                  className="w-full border-none font-sans text-left flex items-center gap-2.5 px-3.5 py-3 cursor-pointer bg-[rgb(var(--paper))]"
                   style={{ borderBottom: pm.key !== 'apple' ? '1px solid rgb(var(--navy) / 0.06)' : undefined }}
                 >
                   <PhIcon name={pm.icon} size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
@@ -105,7 +111,7 @@ export function PaySheet() {
                   {state.payMethod === pm.key && (
                     <PhIcon name="ph-fill ph-check-circle" size={16} color="rgb(var(--sage))" />
                   )}
-                </div>
+                </button>
               ))}
             </div>
           )}
@@ -125,7 +131,7 @@ export function PaySheet() {
                 Never think about dues again
               </p>
             </div>
-            <Toggle on={state.autopay} onToggle={toggleAutopay} />
+            <Toggle on={state.autopay} onToggle={toggleAutopay} label="Autopay — charge this account automatically on the 3rd of each month" />
           </div>
           <button
             onClick={doPay}
@@ -134,6 +140,11 @@ export function PaySheet() {
           >
             {payBtnLabel}
           </button>
+          {state.autopay && (
+            <p className="m-0 mt-2 text-[11.5px] font-semibold text-center" style={{ color: 'rgb(var(--stone))' }}>
+              Autopay charges this account on the 3rd of each month. Cancel any time in My Place.
+            </p>
+          )}
           {delinquent && (
             <button
               onClick={startPlan}
