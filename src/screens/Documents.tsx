@@ -1,8 +1,11 @@
 import { useRef, useState, type CSSProperties } from 'react';
 import { BackButton } from '../components/BackButton';
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
-import { useDocuments, useDocSections, useMember, useRepository } from '../data/repo';
+import { useDocuments, useDocSections, useMember, useLoadState, useRepository } from '../data/repo';
+import { confirmDestructive } from '../components/ConfirmSheet';
+import { emitAppSuccess } from '../lib/errorBus';
 
 const DOC_CONTENT: Record<string, { sections: { tag: string; name: string; body: string }[] }> = {
   bylaws: {
@@ -52,6 +55,7 @@ export function Documents() {
   const repo = useRepository();
   const member = useMember();
   const canManage = !repo.isDemo() && member?.role === 'board';
+  const docsLoad = useLoadState('docs');
   const [upName, setUpName] = useState('');
   const [upSection, setUpSection] = useState('Governing documents');
   const [upBusy, setUpBusy] = useState(false);
@@ -87,41 +91,59 @@ export function Documents() {
               : 'Every governing document, in one place.'}
           </p>
           {DOCS.length === 0 && (
-            <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-              <PhIcon name="ph-fill ph-files" size={26} color="rgb(var(--claypale))" />
-              <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No documents yet</p>
-              <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-                CC&amp;Rs, bylaws, budgets, and minutes appear here once your board publishes them.
-              </p>
-            </div>
+            <EmptyState
+              icon="ph-fill ph-files"
+              title="No documents yet"
+              status={docsLoad}
+              body={
+                canManage
+                  ? 'Start with the CC&Rs and bylaws — they answer the questions neighbors ask you most. Publish below.'
+                  : 'CC&Rs, bylaws, budgets, and minutes appear here once your board publishes them.'
+              }
+            />
           )}
           <div className="flex flex-col gap-[9px]">
             {DOCS.map((d) => (
+              // The row and its remove action are siblings inside a wrapper:
+              // a <button> may not contain another <button>, and nesting them
+              // also made the delete unreachable as its own tab stop.
               <div
                 key={d.key}
-                onClick={() => {
-                  // Live docs are real files — open them; demo docs open the
-                  // scripted reader.
-                  if (d.url) window.open(d.url, '_blank', 'noreferrer');
-                  else set({ docReader: true, docReaderKey: d.key, docQ: '', diffOpen: false });
-                }}
-                className="flex items-center gap-3 cursor-pointer"
-                style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: 14 }}
+                className="flex items-center gap-1"
+                style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '0 14px 0 0' }}
               >
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
-                  <PhIcon name={d.icon} size={19} color="rgb(var(--navy))" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{d.title}</p>
-                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
-                    {d.sub}
-                  </p>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    // Live docs are real files — open them; demo docs open the
+                    // scripted reader.
+                    if (d.url) window.open(d.url, '_blank', 'noreferrer');
+                    else set({ docReader: true, docReaderKey: d.key, docQ: '', diffOpen: false });
+                  }}
+                  className="flex-1 min-w-0 border-none bg-transparent font-sans text-left flex items-center gap-3 cursor-pointer"
+                  style={{ padding: '14px 0 14px 14px' }}
+                >
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
+                    <PhIcon name={d.icon} size={19} color="rgb(var(--navy))" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{d.title}</p>
+                    <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+                      {d.sub}
+                    </p>
+                  </div>
+                </button>
                 {canManage && d.id ? (
                   <button
-                    onClick={(e) => { e.stopPropagation(); void repo.deleteDocument(d.id!); }}
-                    title="Remove document"
-                    className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-50"
+                    type="button"
+                    onClick={() => confirmDestructive({
+                      title: 'Remove this document?',
+                      body: `“${d.title}” disappears for every household. If it is a governing document, residents lose their copy of the rules until you publish it again.`,
+                      confirmLabel: 'Remove document',
+                      onConfirm: () => { void repo.deleteDocument(d.id!); emitAppSuccess('Document removed.'); },
+                    })}
+                    aria-label={`Remove ${d.title}`}
+                    className="border-0 bg-transparent p-1.5 cursor-pointer flex-shrink-0 opacity-50"
                   >
                     <PhIcon name="ph-fill ph-trash" size={14} color="rgb(var(--stone))" />
                   </button>
@@ -140,6 +162,7 @@ export function Documents() {
                 value={upName}
                 onChange={(e) => setUpName(e.target.value)}
                 placeholder="Name — e.g. CC&Rs (rev. 2026)"
+                maxLength={120}
                 className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
                 style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
               />
@@ -207,7 +230,7 @@ export function Documents() {
                 type="button"
                 aria-label="Clear search"
                 onClick={() => set({ docQ: '' })}
-                className="border-none w-5 h-5 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
+                className="border-none w-6 h-6 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
                 style={{ background: 'rgb(var(--sand))' }}
               >
                 <PhIcon name="ph-bold ph-x" size={10} color="rgb(var(--bark))" />
@@ -272,7 +295,7 @@ export function Documents() {
                     </span>
                   </p>
                   <p className="m-0 mb-2 text-[12.5px] font-bold" style={{ lineHeight: 1.55 }}>
-                    <span style={{ background: 'rgb(var(--sagetint))', color: 'rgb(var(--sagedark))', borderRadius: 3, padding: '1px 3px' }}>
+                    <span style={{ background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))', borderRadius: 3, padding: '1px 3px' }}>
                       Cedar, Slate Gray, White, Sage, Clay
                     </span>
                   </p>

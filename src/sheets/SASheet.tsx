@@ -16,7 +16,9 @@ export function SASheet() {
   const saPaid = state.saPaid;
 
   return (
-    <Sheet open={state.saSheetOpen} onClose={closeSA} maxHeight="88%">
+    <Sheet
+      label="Special assessment"
+      open={state.saSheetOpen} onClose={closeSA} maxHeight="88%">
       {notSaPaid && (
         <div>
           <p className="m-0 mb-0.5 font-serif text-[22px] text-navy">Roof-reserve assessment</p>
@@ -66,7 +68,7 @@ export function SASheet() {
           <button
             onClick={paySA}
             className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold cursor-pointer text-white mb-2.5"
-            style={{ background: 'rgb(var(--ember))' }}
+            style={{ background: 'rgb(var(--emberdeep))' }}
           >
             Pay $450.00
           </button>

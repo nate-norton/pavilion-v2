@@ -9,8 +9,8 @@ export const DOCS: Doc[] = [
 ];
 
 export const DOC_SECTIONS: DocSection[] = [
-  { tag: '§4', name: 'Exteriors', accent: '#C75A31', kw: 'exterior arc paint fence color palette cedar sage clay structure', body: 'ex' },
-  { tag: '§5', name: 'Living', accent: '#8A8375', kw: 'quiet hours hens chickens roosters coop fireworks noise pets', body: 'liv' },
-  { tag: '§7', name: 'Leasing', accent: '#8A8375', kw: 'lease rent tenant register short-term term months', body: 'lease' },
-  { tag: '§9', name: 'Assessments', accent: '#8A8375', kw: 'dues assessment fee late reserve courtesy payment', body: 'assess' },
+  { tag: '§4', name: 'Exteriors', accent: 'rgb(var(--terracotta))', kw: 'exterior arc paint fence color palette cedar sage clay structure', body: 'ex' },
+  { tag: '§5', name: 'Living', accent: 'rgb(var(--stone))', kw: 'quiet hours hens chickens roosters coop fireworks noise pets', body: 'liv' },
+  { tag: '§7', name: 'Leasing', accent: 'rgb(var(--stone))', kw: 'lease rent tenant register short-term term months', body: 'lease' },
+  { tag: '§9', name: 'Assessments', accent: 'rgb(var(--stone))', kw: 'dues assessment fee late reserve courtesy payment', body: 'assess' },
 ];

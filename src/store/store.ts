@@ -61,6 +61,8 @@ export interface PavData {
   arcSubmitted: boolean;
   arcApprovedByBoard: boolean;
   boardMode: boolean;
+  /** Board-only setup checklist hidden by hand; it also self-retires when complete. */
+  boardSetupDismissed: boolean;
   boardTab: string;
   reportTicketed: boolean;
   gateScheduled: boolean;
@@ -224,7 +226,10 @@ export const dataDefaults: PavData = {
   ],
   paySheetOpen: false,
   paid: false,
-  autopay: true,
+  // Opt-in, never opt-out. This defaulted to true, so the PaySheet opened with
+  // the switch already on and "Pay $285.00" silently authorised a recurring
+  // ACH debit — affirmative consent taken by default for a bank mandate.
+  autopay: false,
   planActive: false,
   apPaused: false,
   arcSheetOpen: false,
@@ -233,6 +238,7 @@ export const dataDefaults: PavData = {
   arcSubmitted: false,
   arcApprovedByBoard: false,
   boardMode: false,
+  boardSetupDismissed: false,
   boardTab: 'desk',
   reportTicketed: false,
   gateScheduled: false,

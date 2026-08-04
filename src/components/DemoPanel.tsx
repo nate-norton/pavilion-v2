@@ -100,6 +100,7 @@ export function DemoPanel() {
             <div key={s.key} className="flex items-center justify-between">
               <span className="text-[13px] text-navy font-semibold">{s.label}</span>
               <Toggle
+                label="Demo scenario"
                 on={scenarioValues[s.key]}
                 onToggle={() => set({ [s.key]: !scenarioValues[s.key] })}
                 size="sm"
@@ -144,7 +145,7 @@ function StatePill({ label, active }: { label: string; active: boolean }) {
       className="rounded-full px-2.5 py-1 text-[11px] font-bold"
       style={{
         background: active ? 'rgb(var(--sage) / 0.12)' : 'rgb(var(--navy) / 0.06)',
-        color: active ? 'rgb(var(--sage))' : 'rgb(var(--stonegray))',
+        color: active ? 'rgb(var(--sage))' : 'rgb(var(--stonelight))',
       }}
     >
       {label}

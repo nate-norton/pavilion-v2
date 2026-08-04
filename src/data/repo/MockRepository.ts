@@ -10,7 +10,7 @@ import { usePavStore } from '../../store/store';
 
 /** The demo persona (stable reference for useSyncExternalStore). */
 const DEMO_MEMBER: MemberContext = {
-  name: 'Alex Rivera', initial: 'A', color: '#1A3352', role: 'board',
+  name: 'Alex Rivera', initial: 'A', color: 'rgb(var(--navy))', role: 'board',
   communityName: 'Juniper Ridge', unitLabel: '#27 Alder Way',
 };
 
@@ -20,9 +20,9 @@ const DEMO_EVENTS: CommunityEvent[] = [
   { id: 'movie', title: 'Movie on the lawn', whenLabel: 'Sat, Jul 5 · Dusk · The Green', whereLabel: 'The Green', going: 23, photoLabel: 'event photo — movie night', tagLabel: 'Social Committee', featured: false },
 ];
 const DEMO_FEED: FeedPost[] = [
-  { id: 'maria', authorName: 'Maria R.', authorInitial: 'M', authorColor: '#C75A31', unitLabel: '#7', timeLabel: '2h', kind: 'shoutout', tagLabel: 'Shoutout', body: 'Huge thanks to Tom at #18 for helping clear my gutters before Sunday’s storm.', photoLabel: 'photo — clean gutters, proud Tom' },
-  { id: 'dev', authorName: 'Dev P.', authorInitial: 'D', authorColor: '#4A90E2', unitLabel: '#23', timeLabel: '5h', kind: 'borrow', tagLabel: 'Help & Borrow', body: 'Anyone have an 8-ft ladder I could borrow Sunday?', photoLabel: '' },
-  { id: 'movie', authorName: 'Social Committee', authorInitial: 'S', authorColor: '#1A3352', unitLabel: '', timeLabel: '', kind: 'event', tagLabel: 'Social Committee', body: 'Movie on the lawn', photoLabel: 'event photo — movie night' },
+  { id: 'maria', authorName: 'Maria R.', authorInitial: 'M', authorColor: 'rgb(var(--terracotta))', unitLabel: '#7', timeLabel: '2h', kind: 'shoutout', tagLabel: 'Shoutout', body: 'Huge thanks to Tom at #18 for helping clear my gutters before Sunday’s storm.', photoLabel: 'photo — clean gutters, proud Tom' },
+  { id: 'dev', authorName: 'Dev P.', authorInitial: 'D', authorColor: 'rgb(var(--sky))', unitLabel: '#23', timeLabel: '5h', kind: 'borrow', tagLabel: 'Help & Borrow', body: 'Anyone have an 8-ft ladder I could borrow Sunday?', photoLabel: '' },
+  { id: 'movie', authorName: 'Social Committee', authorInitial: 'S', authorColor: 'rgb(var(--navy))', unitLabel: '', timeLabel: '', kind: 'event', tagLabel: 'Social Committee', body: 'Movie on the lawn', photoLabel: 'event photo — movie night' },
 ];
 
 /** Demo decisions log (stable ref). Live reads the `decisions` table. */
@@ -65,6 +65,12 @@ export class MockRepository implements Repository, SnapshotReadable {
   subscribe = mockDomain.subscribe;
 
   isDemo = () => true;
+
+  // The demo derives everything synchronously from the store, so there is no
+  // in-flight window and nothing that can fail — an empty list here always
+  // means genuinely empty.
+  getLoadState = () => 'ready' as const;
+  retry = () => {};
 
   getMember = () => DEMO_MEMBER;
 
@@ -344,7 +350,7 @@ export class MockRepository implements Repository, SnapshotReadable {
 
   getComments = () => mockDomain.get().comments;
   addComment = async (text: string) => {
-    mockDomain.set({ comments: [...mockDomain.get().comments, { who: 'You', color: '#1A3352', text }] });
+    mockDomain.set({ comments: [...mockDomain.get().comments, { who: 'You', color: 'rgb(var(--navy))', text }] });
   };
 
   getGroups = () => mockDomain.get().groups;
@@ -372,7 +378,7 @@ export class MockRepository implements Repository, SnapshotReadable {
       key, name, icon, color,
       description: description || 'A new community group',
       memberCount: 1, isGroupChat: false, joined: true, muted: false,
-      members: [{ name: 'You', initial: 'A', color: '#1A3352' }],
+      members: [{ name: 'You', initial: 'A', color: 'rgb(var(--navy))' }],
       messages: [], polls: [], events: [], pins: [],
     };
     mockDomain.set({ groups: { ...mockDomain.get().groups, [key]: newGroup } });
@@ -387,7 +393,7 @@ export class MockRepository implements Repository, SnapshotReadable {
         joined: joining,
         memberCount: g.memberCount + (joining ? 1 : -1),
         members: joining
-          ? [...g.members, { name: 'You', initial: 'A', color: '#1A3352' }]
+          ? [...g.members, { name: 'You', initial: 'A', color: 'rgb(var(--navy))' }]
           : g.members.filter((m) => m.name !== 'You'),
       };
     });

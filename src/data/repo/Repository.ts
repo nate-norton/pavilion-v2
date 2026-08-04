@@ -5,6 +5,12 @@ import type {
 } from '../types';
 
 /** Fields the create-group flow collects; membership/seed are filled in. */
+/** Hydration status for one domain — see `Repository.getLoadState`. */
+export type LoadState = 'loading' | 'ready' | 'error';
+
+/** Domains that render an empty state and therefore need load status. */
+export type LoadDomain = 'votes' | 'docs' | 'amenities' | 'feed' | 'directory' | 'dues' | 'arc';
+
 export interface NewGroup {
   name: string;
   description: string;
@@ -393,6 +399,22 @@ export interface Repository {
    * that have no live data domain yet — live shows honest empty states instead.
    */
   isDemo(): boolean;
+
+  /**
+   * Whether a domain's data has arrived, is still in flight, or failed.
+   *
+   * Without this the app cannot tell three very different situations apart —
+   * still loading, request failed, genuinely nothing there — and renders all
+   * of them as an empty state. In a product whose promise is that every
+   * dollar and vote is visible, silently showing "No open votes" because a
+   * request failed is worse than showing nothing: it is confidently wrong.
+   *
+   * The mock is synchronous and always `ready`.
+   */
+  getLoadState(domain: LoadDomain): LoadState;
+
+  /** Re-run hydration after a failure. No-op in the demo. */
+  retry(): void;
 
   /** The current member's identity/community. null until resolved (live mode). */
   getMember(): MemberContext | null;

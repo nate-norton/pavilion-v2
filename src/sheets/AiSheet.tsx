@@ -64,6 +64,8 @@ export function AiSheet() {
             </p>
           </div>
           <button
+            type="button"
+            aria-label="Close"
             onClick={close}
             className="border-none w-[30px] h-[30px] rounded-full flex items-center justify-center flex-shrink-0 bg-sand cursor-pointer"
           >
@@ -155,6 +157,8 @@ export function AiSheet() {
             style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))' }}
           />
           <button
+            type="button"
+            aria-label="Send question"
             onClick={send}
             className="w-11 h-11 border-none rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
             style={{ background: 'rgb(var(--navy))' }}

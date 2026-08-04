@@ -115,7 +115,7 @@ export function GroupDetail() {
               {t.count && t.count > 0 ? (
                 <span
                   className="min-w-[16px] h-4 rounded-full flex items-center justify-center text-[9px] font-extrabold px-1"
-                  style={{ background: tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--taupepale))', color: tab === t.key ? 'rgb(var(--cream))' : 'rgb(var(--barkgray))' }}
+                  style={{ background: tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--taupepale))', color: tab === t.key ? 'rgb(var(--cream))' : 'rgb(var(--stone))' }}
                 >
                   {t.count}
                 </span>
@@ -164,7 +164,7 @@ export function GroupDetail() {
                       >
                         <p className="m-0 text-[13.5px] leading-[1.45] font-semibold">{m.text}</p>
                       </div>
-                      <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--claygray))' }}>
+                      <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--stone))' }}>
                         {m.time || ''}
                       </span>
                     </div>
@@ -297,8 +297,8 @@ export function GroupDetail() {
                         >
                           {poll.myVote && (
                             <div
-                              className="absolute inset-0 rounded-xl"
-                              style={{ background: 'rgb(var(--navy))', opacity: 0.06, width: pct + '%', transition: 'width 0.4s ease' }}
+                              className="absolute inset-0 rounded-xl origin-left"
+                              style={{ background: 'rgb(var(--navy))', opacity: 0.06, transform: `scaleX(${pct / 100})`, transition: 'transform 0.4s ease' }}
                             />
                           )}
                           <div className="relative flex items-center justify-between">
@@ -420,7 +420,7 @@ export function GroupDetail() {
                         type="button"
                         onClick={() => rsvpGroupEvent(group.key, evt.id)}
                         className="border-none text-white rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans flex-shrink-0"
-                        style={{ background: 'rgb(var(--ember))', padding: '9px 14px' }}
+                        style={{ background: 'rgb(var(--emberdeep))', padding: '9px 14px' }}
                       >
                         I&apos;m in
                       </button>

@@ -51,8 +51,8 @@ export function Meeting() {
         </div>
         <div className="rounded-full overflow-hidden mb-2.5" style={{ height: 8, background: 'rgb(var(--cream) / 0.15)' }}>
           <div
-            className="h-full rounded-full"
-            style={{ width: `${quorum.pct}%`, background: 'linear-gradient(90deg,rgb(var(--ember)),rgb(var(--emberbright)))', transition: 'width 0.6s ease' }}
+            className="h-full w-full rounded-full origin-left"
+            style={{ transform: `scaleX(${quorum.pct / 100})`, background: 'linear-gradient(90deg,rgb(var(--ember)),rgb(var(--emberbright)))', transition: 'transform 0.6s ease' }}
           />
         </div>
         <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
@@ -90,7 +90,7 @@ export function Meeting() {
           type="button"
           onClick={() => set({ handRaised: true })}
           className="w-full border-none text-white rounded-2xl text-sm font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3"
-          style={{ background: 'rgb(var(--ember))', padding: '15px 0' }}
+          style={{ background: 'rgb(var(--emberdeep))', padding: '15px 0' }}
         >
           <PhIcon name="ph-fill ph-hand-waving" size={16} />
           Raise your hand for open comment
@@ -110,11 +110,11 @@ export function Meeting() {
       {/* Proxy */}
       {!state.proxyPick ? (
         <div style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '13px 15px' }}>
-          <div onClick={() => set({ proxyOpen: !state.proxyOpen })} className="flex items-center gap-[11px] cursor-pointer">
+          <button type="button" onClick={() => set({ proxyOpen: !state.proxyOpen })} className="w-full flex items-center gap-[11px] cursor-pointer border-none bg-transparent text-left font-sans">
             <PhIcon name="ph-fill ph-user-switch" size={18} color="rgb(var(--navy))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[12.5px] font-bold text-navy">Can&apos;t make it? Assign your vote to a proxy</p>
             <PhIcon name={state.proxyOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'} size={14} color="rgb(var(--stonelight))" />
-          </div>
+          </button>
           {state.proxyOpen && (
             <div className="animate-fadeup">
               <div className="flex gap-2 flex-wrap mt-3">

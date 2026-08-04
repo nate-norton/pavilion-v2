@@ -13,3 +13,7 @@ ds-bundle/
 .design-sync/learnings/
 .design-sync/node_modules
 .design-sync/style/
+
+# Local agent skills (installed per-machine, not vendored)
+.claude/skills/
+.impeccable/

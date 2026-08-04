@@ -1,5 +1,6 @@
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
-import { useAmenities, useMember, useReservationSlots, useReservationDays, useReservation, useRepository } from '../data/repo';
+import { useAmenities, useMember, useReservationSlots, useReservationDays, useReservation, useLoadState, useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
 import { isLiveMode } from '../auth/AuthGate';
 
@@ -24,6 +25,7 @@ export function Reserve() {
   const member = useMember();
   const canManage = isLiveMode && member?.role === 'board';
   const demo = repo.isDemo();
+  const amenLoad = useLoadState('amenities');
 
   const amen = state.amenIdx != null ? AMENS[state.amenIdx] : null;
 
@@ -156,7 +158,7 @@ export function Reserve() {
                         ? '1px solid rgb(var(--sage) / 0.35)'
                         : '1px solid rgb(var(--navy) / 0.12)',
                     background: taken ? (wl ? 'rgb(var(--mint))' : 'rgb(var(--sand))') : sel ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                    color: taken ? (wl ? 'rgb(var(--sagedark))' : 'rgb(var(--claygray))') : sel ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
+                    color: taken ? (wl ? 'rgb(var(--sagedark))' : 'rgb(var(--bark))') : sel ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
                     textDecoration: taken && !wl ? 'line-through' : 'none',
                   }}
                 >
@@ -197,7 +199,7 @@ export function Reserve() {
               onClick={book}
               className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold"
               style={{
-                background: canBook ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
+                background: canBook ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))',
                 color: canBook ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
                 cursor: canBook ? 'pointer' : 'default',
               }}
@@ -213,7 +215,7 @@ export function Reserve() {
                 <PhIcon name="ph-fill ph-check-circle" size={28} color="rgb(var(--sage))" className="flex-shrink-0" />
                 <div>
                   <p className="m-0 mb-0.5 text-[15px] font-bold text-navy">Booked!</p>
-                  <p className="m-0 text-[13px] font-bold" style={{ color: 'rgb(var(--sagegray))' }}>
+                  <p className="m-0 text-[13px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
                     {reservation.summary}
                   </p>
                 </div>
@@ -260,9 +262,9 @@ export function Reserve() {
           Amenities, booked in two taps. One active booking per household.
         </p>
         {repo.isDemo() && (
-        <div
+        <button type="button"
           onClick={() => set({ passOpen: true })}
-          className="rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5 bg-navy"
+          className="w-full border-none font-sans text-left rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5 bg-navy"
 >
           <PhIcon name="ph-fill ph-qr-code" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
           <div className="flex-1">
@@ -274,7 +276,7 @@ export function Reserve() {
           <span className="text-[13px] font-extrabold" style={{ color: 'rgb(var(--peach))' }}>
             Pass →
           </span>
-        </div>
+        </button>
         )}
 
         {hasBooking && (
@@ -285,7 +287,7 @@ export function Reserve() {
             <PhIcon name="ph-fill ph-ticket" size={21} color="rgb(var(--sage))" className="flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{reservation.summary}</p>
-              <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--sagegray))' }}>
+              <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
                 We&apos;ll remind you an hour before
               </p>
             </div>
@@ -300,13 +302,18 @@ export function Reserve() {
         )}
 
         {AMENS.length === 0 && (
-          <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-            <PhIcon name="ph-fill ph-calendar-check" size={26} color="rgb(var(--claypale))" />
-            <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No amenities set up yet</p>
-            <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-              When your board adds the clubhouse, pool, or courts, you&apos;ll book them here.
-            </p>
-          </div>
+          <EmptyState
+            icon="ph-fill ph-calendar-check"
+            title="No amenities set up yet"
+            body={
+              canManage
+                ? 'Add the clubhouse, pool, or courts and neighbors book them themselves — no more sign-up sheet on the door.'
+                : 'When your board adds the clubhouse, pool, or courts, you’ll book them here.'
+            }
+            status={amenLoad}
+            actionLabel={canManage ? 'Add an amenity' : undefined}
+            onAction={canManage ? () => set({ manageAmenOpen: true }) : undefined}
+          />
         )}
         {canManage && (
           <button
@@ -320,10 +327,11 @@ export function Reserve() {
         )}
         <div className="flex flex-col gap-2.5">
           {AMENS.map((a, i) => (
-            <div
+            <button
+              type="button"
               key={a.name}
               onClick={() => openAmen(i)}
-              className="bg-paper rounded-[18px] px-4 py-[15px] flex items-center gap-3.5 cursor-pointer"
+              className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-[15px] flex items-center gap-3.5 cursor-pointer"
               style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
             >
               <div className="w-11 h-11 rounded-[14px] flex items-center justify-center flex-shrink-0 bg-sand">
@@ -353,7 +361,7 @@ export function Reserve() {
                   {a.avail}
                 </span>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

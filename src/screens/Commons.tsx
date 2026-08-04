@@ -1,11 +1,14 @@
 import { useState, type KeyboardEvent } from 'react';
 import { Avatar } from '../components/Avatar';
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { PhotoPlaceholder } from '../components/PhotoPlaceholder';
 import { SegmentedControl } from '../components/SegmentedControl';
-import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember, useChatSeed, useRepository } from '../data/repo';
+import { useDirectory, useFreeItems, useComments, useGroups, useFeed, useMember, useChatSeed, useLoadState, useRepository } from '../data/repo';
 import type { FeedPost, ThreadComment } from '../data/repo';
 import { usePavStore } from '../store/store';
+import { confirmDestructive } from '../components/ConfirmSheet';
+import { emitAppSuccess } from '../lib/errorBus';
 
 const SEG_OPTIONS = [
   { key: 'feed', label: 'Feed' },
@@ -26,6 +29,9 @@ export function Commons() {
   const feed = useFeed();
   const member = useMember();
   const chatIndex = useChatSeed();
+  // Board members can fill the empty directory themselves; residents cannot.
+  const isBoard = !repo.isDemo() && member?.role === 'board';
+  const feedLoad = useLoadState('feed');
   const unreadTotal = Object.values(chatIndex).reduce((n, e) => n + (e.unread || 0), 0);
 
   const addComment = () => {
@@ -57,15 +63,15 @@ export function Commons() {
 
       {state.commonsView === 'feed' && (
         <div>
-          <div
+          <button type="button"
             onClick={() => set({ composeOpen: true })}
-            className="bg-paper rounded-2xl px-3.5 py-3 mb-2 flex items-center gap-2.5 cursor-pointer"
+            className="w-full border-none font-sans text-left bg-paper rounded-2xl px-3.5 py-3 mb-2 flex items-center gap-2.5 cursor-pointer"
             style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
           >
             <Avatar initial={member?.initial ?? 'A'} color={member?.color ?? 'rgb(var(--navy))'} size={32} />
             <span className="flex-1 text-[13.5px] text-stonelight font-semibold">Share something…</span>
             <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--stonelight))" />
-          </div>
+          </button>
           <button
             onClick={() => set({ reportOpen: true })}
             className="flex items-center gap-1.5 mb-4 border-none bg-transparent cursor-pointer px-1 py-0.5 text-left"
@@ -81,13 +87,14 @@ export function Commons() {
 
           <div className="flex flex-col gap-3">
             {feed.length === 0 ? (
-              <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-                <PhIcon name="ph-fill ph-chats-circle" size={26} color="rgb(var(--claypale))" />
-                <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">Nothing shared yet</p>
-                <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-                  Be the first to share something with your neighbors.
-                </p>
-              </div>
+              <EmptyState
+                icon="ph-fill ph-chats-circle"
+                title="Nothing shared yet"
+                body="Be the first to share something with your neighbors."
+                status={feedLoad}
+                actionLabel="Share something"
+                onAction={() => set({ composeOpen: true })}
+              />
             ) : !repo.isDemo() ? (
               // Live: real feed posts with reactions, comments, photos, pins.
               feed.map((p) => <LivePostCard key={p.id} post={p} isBoard={member?.role === 'board'} />)
@@ -116,14 +123,14 @@ export function Commons() {
                 <div className="flex items-center gap-4 mt-3">
                   <button
                     onClick={() => set({ liked: !state.liked })}
-                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
                   >
                     <PhIcon name={heartClass} size={19} color={heartColor} className={state.liked ? 'animate-heartpop' : undefined} />
                     <span className="text-[13px] font-bold text-stone">{likeCount}</span>
                   </button>
                   <button
                     onClick={() => set({ commentsOpen: !state.commentsOpen })}
-                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+                    className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
                   >
                     <PhIcon name="ph ph-chat-circle" size={19} color="rgb(var(--stone))" />
                     <span className="text-[13px] font-bold text-stone">{commentCount}</span>
@@ -185,7 +192,7 @@ export function Commons() {
                   Anyone have an 8-ft ladder I could borrow Sunday? Painting the trim — ARC-approved, promise.
                 </p>
                 {state.offered ? (
-                  <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-sage">
+                  <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-sagedark">
                     <PhIcon name="ph-fill ph-check-circle" size={16} />
                     You offered yours — Dev will message you
                   </span>
@@ -287,10 +294,11 @@ export function Commons() {
                     const upcomingEvents = g.events.filter((e) => !e.rsvped).length;
                     const lastMsg = g.messages[g.messages.length - 1];
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={g.key}
                         onClick={() => set({ activeGroup: g.key })}
-                        className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
+                        className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
                         style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
                       >
                         <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: g.color + '18' }}>
@@ -307,7 +315,7 @@ export function Commons() {
                           {(openPolls > 0 || upcomingEvents > 0) && (
                             <div className="flex gap-2 mt-1">
                               {openPolls > 0 && (
-                                <span className="text-[10px] font-bold rounded-full px-2 py-0.5" style={{ background: 'rgb(var(--goldpale))', color: 'rgb(var(--goldmid))' }}>
+                                <span className="text-[10px] font-bold rounded-full px-2 py-0.5" style={{ background: 'rgb(var(--goldpale))', color: 'rgb(var(--golddark))' }}>
                                   {openPolls} poll{openPolls > 1 ? 's' : ''}
                                 </span>
                               )}
@@ -322,7 +330,7 @@ export function Commons() {
                         <span className="text-[12.5px] font-extrabold flex-shrink-0 text-terracotta">
                           Open →
                         </span>
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
@@ -338,10 +346,11 @@ export function Commons() {
                   {discover.map((g) => {
                     const nextEvent = g.events[0];
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={g.key}
                         onClick={() => set({ activeGroup: g.key })}
-                        className="bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
+                        className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer"
                         style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
                       >
                         <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: g.color + '18' }}>
@@ -361,16 +370,16 @@ export function Commons() {
                         >
                           Join
                         </button>
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
               </>
             )}
 
-            <div
+            <button type="button"
               onClick={() => set({ createGroupOpen: true })}
-              className="rounded-[18px] p-4 flex items-center gap-3 cursor-pointer"
+              className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-4 flex items-center gap-3 cursor-pointer"
               style={{ border: '1.5px dashed rgb(var(--navy) / 0.2)' }}
             >
               <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-sand">
@@ -382,16 +391,16 @@ export function Commons() {
                   Any interest counts — 5 neighbors makes it official
                 </p>
               </div>
-            </div>
+            </button>
           </div>
         );
       })()}
 
       {state.commonsView === 'dir' && (
         <div className="animate-fadeup">
-          <div
+          <button type="button"
             onClick={() => set({ msgsOpen: true })}
-            className="bg-navy rounded-2xl px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
+            className="w-full border-none font-sans text-left bg-navy rounded-2xl px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
           >
             <PhIcon name="ph-fill ph-chats-circle" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
             <div className="flex-1">
@@ -405,11 +414,11 @@ export function Commons() {
               </p>
             </div>
             {(repo.isDemo() || unreadTotal > 0) && (
-            <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 bg-ember">
+            <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 bg-emberdeep">
               {repo.isDemo() ? 3 : unreadTotal}
             </span>
             )}
-          </div>
+          </button>
           <div className="flex items-start gap-1.5 mx-1 mb-3.5">
             <PhIcon name="ph-fill ph-lock-simple" size={12} color="rgb(var(--stone))" className="mt-0.5" />
             <p className="m-0 text-[11.5px] text-stone font-bold">
@@ -418,13 +427,17 @@ export function Commons() {
             </p>
           </div>
           {DIR.length === 0 && (
-            <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-              <PhIcon name="ph-fill ph-users-three" size={26} color="rgb(var(--claypale))" />
-              <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">No neighbors here yet</p>
-              <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-                Neighbors appear as they join and opt in to the directory.
-              </p>
-            </div>
+            <EmptyState
+              icon="ph-fill ph-users-three"
+              title="No neighbors here yet"
+              body={
+                isBoard
+                  ? 'Invite your neighbors and the directory fills itself as they join and opt in.'
+                  : 'Neighbors appear as they join and opt in to the directory.'
+              }
+              actionLabel={isBoard ? 'Send invites' : undefined}
+              onAction={isBoard ? () => set({ boardMode: true, boardTab: 'desk' }) : undefined}
+            />
           )}
           <div className="flex flex-col gap-2.5">
             {DIR.map((d) => {
@@ -434,7 +447,7 @@ export function Commons() {
                   className="bg-paper rounded-[18px] px-4 py-3.5"
                   style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
                 >
-                  <div onClick={() => set({ chatWith: d.key })} className="flex items-center gap-2.5 mb-2.5 cursor-pointer">
+                  <button type="button" onClick={() => set({ chatWith: d.key })} className="w-full flex items-center gap-2.5 mb-2.5 cursor-pointer border-none bg-transparent text-left font-sans">
                     <Avatar initial={d.initial} color={d.color} size={40} />
                     <div className="flex-1 min-w-0">
                       <p className="m-0 text-sm font-bold text-navy">
@@ -442,7 +455,7 @@ export function Commons() {
                       </p>
                       <p className="m-0 text-[11.5px] text-stone font-semibold">{d.note}</p>
                     </div>
-                  </div>
+                  </button>
                   <div className="flex items-center gap-2">
                     {d.tags.length > 0 ? (
                       <span
@@ -478,13 +491,11 @@ export function Commons() {
             </p>
           </div>
           {FREE.length === 0 && (
-            <div className="bg-paper rounded-[18px] p-6 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-              <PhIcon name="ph-fill ph-gift" size={26} color="rgb(var(--claypale))" />
-              <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">Nothing listed right now</p>
-              <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone">
-                Have something to give away? Listings are on the way.
-              </p>
-            </div>
+            <EmptyState
+              icon="ph-fill ph-gift"
+              title="Nothing listed right now"
+              body="Have something to give away? Listings are on the way."
+            />
           )}
           <div className="grid grid-cols-2 gap-2.5">
             {FREE.map((f) => {
@@ -569,7 +580,12 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
         )}
         {(p.mine || isBoard) && (
           <button
-            onClick={() => void repo.deleteFeedPost(p.id)}
+            onClick={() => confirmDestructive({
+            title: 'Delete this post?',
+            body: 'It disappears from the feed for everyone, along with its comments and reactions.',
+            confirmLabel: 'Delete post',
+            onConfirm: () => { void repo.deleteFeedPost(p.id); emitAppSuccess('Post deleted.'); },
+          })}
             title="Delete post"
             className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-50"
           >
@@ -578,14 +594,20 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
         )}
       </div>
       {p.body && <p className="m-0 text-[13.5px] leading-[1.55] font-semibold text-bark">{p.body}</p>}
-      {(p.photoUrls ?? []).map((u) => (
-        <img key={u} src={u} alt="" className="mt-2.5 rounded-[13px] w-full block" style={{ maxHeight: 260, objectFit: 'cover' }} />
+      {(p.photoUrls ?? []).map((u, i, arr) => (
+        <img
+          key={u}
+          src={u}
+          alt={arr.length > 1 ? `Photo ${i + 1} of ${arr.length} from ${p.authorName}'s post` : `Photo from ${p.authorName}'s post`}
+          className="mt-2.5 rounded-[13px] w-full block"
+          style={{ maxHeight: 260, objectFit: 'cover' }}
+        />
       ))}
       <div className="flex items-center gap-4 mt-3">
         <button
           onClick={() => void repo.togglePostLike(p.id)}
           aria-label={p.likedByMe ? 'Unlike' : 'Like'}
-          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
         >
           <PhIcon
             name={p.likedByMe ? 'ph-fill ph-heart' : 'ph ph-heart'}
@@ -598,7 +620,7 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
         <button
           onClick={toggleComments}
           aria-label="Comments"
-          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer p-0"
+          className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
         >
           <PhIcon name="ph ph-chat-circle" size={18} color="rgb(var(--stone))" />
           <span className="text-xs font-bold text-stone">{p.commentCount || ''}</span>
@@ -622,6 +644,8 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
               style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
             />
             <button
+              type="button"
+              aria-label="Send reply"
               onClick={sendReply}
               className="w-8 h-8 border-0 rounded-full cursor-pointer flex items-center justify-center flex-shrink-0"
               style={{ background: reply.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}

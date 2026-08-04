@@ -13,7 +13,9 @@ export function PassSheet() {
   const closePass = () => set({ passOpen: false });
 
   return (
-    <Sheet open={state.passOpen} onClose={closePass}>
+    <Sheet
+      label="Guest and parking pass"
+      open={state.passOpen} onClose={closePass}>
       {!state.passIssued ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">Guest pass</p>

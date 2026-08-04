@@ -24,8 +24,8 @@ const STORAGE_KEY = 'pavilion-demo-data';
 const freshState = (): MockDomainState => ({
   reservation: { booked: false, summary: null },
   comments: [
-    { who: 'Tom B.', color: '#4A90E2', text: 'Anytime, Maria!' },
-    { who: 'Priya S.', color: '#2A9D5C', text: 'This is what the Ridge is about.' },
+    { who: 'Tom B.', color: 'rgb(var(--sky))', text: 'Anytime, Maria!' },
+    { who: 'Priya S.', color: 'rgb(var(--sage))', text: 'This is what the Ridge is about.' },
   ],
   chats: {},
   groups: structuredClone(GROUPS_SEED),

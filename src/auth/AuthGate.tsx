@@ -100,18 +100,29 @@ function NoCommunity({ email }: { email: string }) {
           <span className="text-navy">{email}</span> isn’t part of a community yet. Pavilion is
           invite-based — your HOA board adds you to your community.
         </p>
-        <div className="rounded-2xl px-4 py-3.5 mb-5 text-left" style={{ background: 'rgb(var(--parchment))', border: '1px solid rgb(var(--navy) / 0.08)' }}>
+        <div className="rounded-2xl px-4 py-3.5 mb-4 text-left" style={{ background: 'rgb(var(--parchment))', border: '1px solid rgb(var(--navy) / 0.08)' }}>
           <p className="m-0 mb-1 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.1em' }}>What’s next</p>
           <p className="m-0 text-[13px] font-semibold text-bark leading-[1.5]">
-            Ask your board or manager to invite this email. Once you’re added, you’ll land right in your community.
+            Ask your board to invite this email. Once you’re added, you’ll land right in your community.
           </p>
         </div>
+
+        {/*
+          The most likely reason someone lands here is a mismatch, not a
+          missing invite: the board invited a different address than the one
+          they just signed in with. Naming that turns a dead end into a
+          one-tap retry — and it costs nothing to offer.
+        */}
+        <p className="m-0 mb-3 text-[11.5px] font-semibold text-stone leading-[1.45]">
+          Invited under a different address? Sign in with that one instead.
+        </p>
         <button
+          type="button"
           onClick={() => void signOutLive()}
-          className="w-full bg-transparent rounded-xl py-3 text-[13px] font-bold cursor-pointer"
+          className="w-full bg-transparent rounded-xl py-3 text-[13px] font-bold cursor-pointer font-sans"
           style={{ border: '1px solid rgb(var(--navy) / 0.14)', color: 'rgb(var(--navy))' }}
         >
-          Sign out
+          Sign out and try another email
         </button>
       </div>
     </div>
@@ -176,7 +187,7 @@ function LiveSignIn() {
               onClick={sendLink}
               disabled={busy || !email.trim()}
               className="w-full border-none rounded-xl py-3 text-[14px] font-extrabold cursor-pointer"
-              style={{ background: 'rgb(var(--ember))', color: 'rgb(var(--white))', opacity: busy || !email.trim() ? 0.6 : 1 }}
+              style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))', opacity: busy || !email.trim() ? 0.6 : 1 }}
             >
               {busy ? 'Sending…' : 'Send sign-in link'}
             </button>
