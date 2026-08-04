@@ -158,7 +158,7 @@ export function Reserve() {
                         ? '1px solid rgb(var(--sage) / 0.35)'
                         : '1px solid rgb(var(--navy) / 0.12)',
                     background: taken ? (wl ? 'rgb(var(--mint))' : 'rgb(var(--sand))') : sel ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                    color: taken ? (wl ? 'rgb(var(--sagedark))' : 'rgb(var(--claygray))') : sel ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
+                    color: taken ? (wl ? 'rgb(var(--sagedark))' : 'rgb(var(--bark))') : sel ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
                     textDecoration: taken && !wl ? 'line-through' : 'none',
                   }}
                 >
@@ -199,7 +199,7 @@ export function Reserve() {
               onClick={book}
               className="w-full border-none rounded-2xl py-4 text-[15px] font-extrabold"
               style={{
-                background: canBook ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
+                background: canBook ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))',
                 color: canBook ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
                 cursor: canBook ? 'pointer' : 'default',
               }}
@@ -215,7 +215,7 @@ export function Reserve() {
                 <PhIcon name="ph-fill ph-check-circle" size={28} color="rgb(var(--sage))" className="flex-shrink-0" />
                 <div>
                   <p className="m-0 mb-0.5 text-[15px] font-bold text-navy">Booked!</p>
-                  <p className="m-0 text-[13px] font-bold" style={{ color: 'rgb(var(--sagegray))' }}>
+                  <p className="m-0 text-[13px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
                     {reservation.summary}
                   </p>
                 </div>
@@ -287,7 +287,7 @@ export function Reserve() {
             <PhIcon name="ph-fill ph-ticket" size={21} color="rgb(var(--sage))" className="flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{reservation.summary}</p>
-              <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--sagegray))' }}>
+              <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
                 We&apos;ll remind you an hour before
               </p>
             </div>

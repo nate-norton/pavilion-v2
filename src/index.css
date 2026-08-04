@@ -68,7 +68,6 @@
   --taupepale: 213 207 191;
   --taupedim: 201 193 176;
   --claypale: 201 192 174;
-  --claygray: 180 172 156;
   --stonegray: 138 127 111;
   --barkgray: 110 103 89;
   --creamlight: 247 243 234;
@@ -80,7 +79,6 @@
   --sandwarm: 228 220 200;
   --blushpale: 254 243 238;
   --blushdim: 251 228 224;
-  --sagegray: 95 138 111;
   --sagelight: 116 185 146;
   --sagebright: 111 211 156;
   --sagemid: 85 172 124;
@@ -157,6 +155,26 @@ body { font-family: 'Nunito Sans', system-ui, sans-serif; }
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/*
+ * Large type (PRODUCT.md commits to this as a first-class feature; the switch
+ * shipped wired to nothing).
+ *
+ * The obvious implementation — scale the root font-size — does nothing here,
+ * because the whole type scale is literal px in Tailwind arbitrary values
+ * (text-[13px]), which ignore the root. Converting ~26 sizes to rem across
+ * 10k lines is the "right" fix and also the one most likely to break layout
+ * before a pilot.
+ *
+ * `zoom` scales the rendered result including px, so it actually delivers what
+ * the switch promises: bigger text AND proportionally bigger tap targets. It
+ * applies to the screen layer only, so the phone frame itself and the fixed
+ * dock keep their geometry. Trade-off, stated honestly: less content fits on
+ * screen, which is inherent to large type rather than a defect.
+ */
+[data-large-type] .pav-zoom {
+  zoom: 1.15;
 }
 
 /* Button press feedback */

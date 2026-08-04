@@ -278,7 +278,7 @@ export function Today() {
         {showAllClear && (
           <div className="flex items-center gap-[13px] animate-fadeup" style={{ padding: '16px 0' }}>
             <PhIcon name="ph-fill ph-check-circle" size={18} color="rgb(var(--sage))" className="flex-shrink-0 -ml-1" />
-            <p className="m-0 text-[13.5px] font-bold" style={{ color: 'rgb(var(--sagegray))' }}>
+            <p className="m-0 text-[13.5px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
               All caught up — nothing needs you today.
             </p>
           </div>

@@ -113,7 +113,7 @@ export function Chat() {
                 ))}
               </div>
             </div>
-            <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--claygray))' }}>
+            <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--stone))' }}>
               {m.time || ''}
             </span>
           </div>

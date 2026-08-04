@@ -215,7 +215,7 @@ export function BoardDesk() {
                   </button>
                 )}
                 {state.reportTicketed && (
-                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                     #M-88 ✓
                     <br />
                     BrightPath Electric
@@ -246,7 +246,7 @@ export function BoardDesk() {
                     </button>
                   )}
                   {state.m89Assigned && (
-                    <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                    <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                       GreenScape ✓
                       <br />
                       Mon, Jul 6
@@ -328,7 +328,7 @@ export function BoardDesk() {
                   </button>
                 )}
                 {state.gateScheduled && (
-                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                  <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                     AquaFix ✓
                     <br />
                     Thu, Jul 3
@@ -475,7 +475,7 @@ export function BoardDesk() {
                             )}
                           </>
                         ) : (
-                          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sage))' }}>
+                          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
                             Joined ✓
                           </span>
                         )}
@@ -1301,7 +1301,7 @@ export function BoardDesk() {
                 </button>
               )}
               {state.invApproved && (
-                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                   2 of 3 ✓
                   <br />
                   ACH Thursday
@@ -1322,10 +1322,10 @@ export function BoardDesk() {
               <div className="rounded-[13px] p-3.5 flex items-start gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0 mt-px" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedark">
+                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedarkdark">
                     Ballot is open — &quot;{voteQPreview}&quot;
                   </p>
-                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagegray))' }}>
+                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagedark))' }}>
                     Live on every resident&apos;s Today screen · watch the tally on the Desk tab
                   </p>
                   <button
@@ -1633,7 +1633,7 @@ export function BoardDesk() {
             {state.broadcastSent && (
               <div className="rounded-[13px] p-3.5 flex items-center gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0" />
-                <span className="text-[13px] font-bold text-sagedark">
+                <span className="text-[13px] font-bold text-sagedarkdark">
                   Sent — live in the Commons, email digest goes out at 6 PM
                 </span>
               </div>
@@ -1739,10 +1739,10 @@ export function BoardDesk() {
               <div className="rounded-[13px] p-3.5 flex items-start gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0 mt-px" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedark">
+                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedarkdark">
                     Ballot is open — &quot;{voteQPreview}&quot;
                   </p>
-                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagegray))' }}>
+                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagedark))' }}>
                     Live on every resident&apos;s Today screen · closes in 7 days · you&apos;ll see the tally here
                   </p>
                 </div>
@@ -1852,7 +1852,7 @@ export function BoardDesk() {
                 </button>
               )}
               {state.minutesPublished && (
-                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sage))' }}>
+                <span className="text-[11.5px] font-bold flex-shrink-0 text-right" style={{ color: 'rgb(var(--sagedark))' }}>
                   Published ✓
                   <br />
                   in Documents

@@ -159,7 +159,7 @@ export function Events() {
                 Popcorn duty · 2 of 3
               </span>
               {state.volPopcorn ? (
-                <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sage))' }}>
+                <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
                   You&apos;re in ✓
                 </span>
               ) : (

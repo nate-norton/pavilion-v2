@@ -32,7 +32,7 @@ export function CircleDetail() {
       >
         <span
           className="font-mono text-[10px] rounded-[5px]"
-          style={{ color: 'rgb(var(--sagegray))', background: 'rgb(var(--paper) / 0.85)', padding: '3px 8px' }}
+          style={{ color: 'rgb(var(--sagedark))', background: 'rgb(var(--paper) / 0.85)', padding: '3px 8px' }}
         >
           photo — the garden in June
         </span>

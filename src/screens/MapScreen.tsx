@@ -101,7 +101,7 @@ export function MapScreen() {
           className="absolute flex items-center justify-center"
           style={{ left: '53%', top: '5%', width: '36%', height: '16%', background: 'rgb(var(--sagepale))', borderRadius: 18 }}
         >
-          <span className="text-[9.5px] font-bold" style={{ color: 'rgb(var(--sagegray))', letterSpacing: '0.1em' }}>
+          <span className="text-[9.5px] font-bold" style={{ color: 'rgb(var(--sagedark))', letterSpacing: '0.1em' }}>
             THE GREEN
           </span>
         </div>

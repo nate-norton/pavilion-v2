@@ -85,7 +85,7 @@ export function PaySheet() {
                 {state.payMethod === 'jcu' ? 'No card fees — ACH is free' : state.payMethod === 'visa' ? '$2.85 processing fee' : 'No card fees'}
               </p>
             </div>
-            <span className="text-xs font-bold" style={{ color: 'rgb(var(--sky))' }}>
+            <span className="text-xs font-bold" style={{ color: 'rgb(var(--skydeep))' }}>
               Change
             </span>
           </button>

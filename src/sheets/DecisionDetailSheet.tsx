@@ -70,7 +70,7 @@ export function DecisionDetailSheet() {
       <div className="mb-5">
         <ProgressBar pct={pct} color={d.passed ? 'rgb(var(--sage))' : 'rgb(var(--terracotta))'} />
         <div className="flex justify-between mt-1.5">
-          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sage))' }}>
+          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
             Yes {pct}%
           </span>
           <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--terracotta))' }}>

@@ -192,7 +192,7 @@ export function Commons() {
                   Anyone have an 8-ft ladder I could borrow Sunday? Painting the trim — ARC-approved, promise.
                 </p>
                 {state.offered ? (
-                  <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-sage">
+                  <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-sagedark">
                     <PhIcon name="ph-fill ph-check-circle" size={16} />
                     You offered yours — Dev will message you
                   </span>

@@ -61,7 +61,7 @@ export function Notifications() {
           type="button"
           onClick={() => set({ notifsRead: true })}
           className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer font-sans p-0"
-          style={{ color: 'rgb(var(--sky))' }}
+          style={{ color: 'rgb(var(--skydeep))' }}
         >
           Mark all read
         </button>
