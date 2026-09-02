@@ -41,6 +41,9 @@ Standing rules for every stage:
 - Stage 1 primitives approved as shown in the design-system gallery.
 - Stage 2 board pass approved. Stages 0 to 2 merged to `dev` together.
 - Stage 3 cuts from `dev` as `impeccable/3-resident`.
+- Check-in 4: resident pass approved, all eight Stage 0 defects closed,
+  ballot receipt migration applied to `pavilion-dev`. Stage 3 merged to
+  `dev`; Stage 4 cuts as `impeccable/4-closeout`.
 
 ## Stage 0: Baseline (evidence only, no edits)
 
