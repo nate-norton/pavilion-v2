@@ -5,6 +5,16 @@ stages, five check-ins. Each stage lands on its own branch cut from `dev` and
 merges at its check-in, so `dev` (production) only moves when a stage is
 signed off.
 
+Two priorities shape the order and the commands:
+
+1. **Board members first.** Board Desk, Meeting, Reserve, Portfolio, Documents
+   and the board sheets are the most important surfaces in the app. They
+   are critiqued first, refined first, and walked first at every check-in.
+2. **Less flat, less plain.** The current app reads as flat and boring. Each
+   refinement stage therefore includes `/impeccable bolder`, `/impeccable
+   colorize` and `/impeccable delight`, pointed at depth, warmth and
+   personality inside the existing brand, not at a new look.
+
 Standing rules for every stage:
 
 - `npx vitest run` and `npm run build` green before every commit.
@@ -19,9 +29,9 @@ Standing rules for every stage:
 
 ## Stage 0: Baseline (evidence only, no edits)
 
-Commands: `/impeccable critique` on the four resident surfaces (Today, My
-Place, HOA, Commons) and on Board Desk; `/impeccable audit src` for the whole
-tree (accessibility, performance, responsive).
+Commands: `/impeccable critique` on Board Desk and Meeting first, then on
+Today, My Place and HOA; `/impeccable audit src` for the whole tree
+(accessibility, performance, responsive).
 
 Output: scored critique snapshots per surface, an audit findings list, and a
 proposed priority order. Nothing changes in the code.
@@ -36,15 +46,33 @@ Targets: `NavDock`, `Sheet`, `Pill`, `Chip`, `StackedCard`, `EmptyState`,
 `ProgressBar`, `SegmentedControl`, `Toggle`, `Hint`, `AppToast`, and the
 `:root` token block in `src/index.css`.
 
-Commands: `/impeccable layout`, `/impeccable typeset`, then `/impeccable
-polish` on the component set. Fixes here propagate to every screen, so this
+Commands: `/impeccable bolder` and `/impeccable colorize` on the component
+set and tokens to give cards, chrome and controls depth and warmth, then
+`/impeccable layout`, `/impeccable typeset` and `/impeccable polish`. Fixes here propagate to every screen, so this
 stage happens before any screen work.
 
 **Check-in 2:** screenshots of before and after on Today and My Place, which
 exercise most shared components. Confirm the rhythm and type scale before
 rolling it out.
 
-## Stage 2: Resident loop
+## Stage 2: Board and onboarding
+
+Targets: `SignIn`, `Onboarding`, `BoardSetupCard`, `SetupGuideSheet`,
+`RosterInvite`, `BoardDesk`, `BoardChat`, `Meeting`, `Reserve`, `Portfolio`,
+`Documents`, `MapScreen`, `IssueDetailSheet`, `ReportSheet`,
+`ManageAmenitiesSheet`, `ExportSheet`, `PassSheet`, `SASheet`,
+`CreateGroupSheet`, `ComposeSheet`.
+
+Commands: `/impeccable onboard` on the sign-in and first-run flow,
+`/impeccable polish` and `/impeccable harden` on the board surfaces,
+`/impeccable clarify` on board copy, which is the densest in the app, and
+`/impeccable delight` on the moments a volunteer should feel good about:
+approving a request, closing a vote, publishing minutes.
+
+**Check-in 3:** walk the founder path from invite to first board action, and
+the board path through approve, answer, open a vote, publish minutes.
+
+## Stage 3: Resident loop
 
 Targets, in order: `Today`, `MyPlace` with `PaySheet` and
 `PaymentDetailSheet`, `Hoa` with `ArcSheet`, `ArcDetailSheet`,
@@ -55,23 +83,8 @@ Commands per surface: `/impeccable polish`, `/impeccable clarify` for labels
 and error copy, `/impeccable harden` for loading, error, and empty states in
 live mode.
 
-**Check-in 3:** walk the resident loop in the browser on the phone frame:
+**Check-in 4:** walk the resident loop in the browser on the phone frame:
 pay dues, check a vote, RSVP, read the feed. Sign off or redirect.
-
-## Stage 3: Board and onboarding
-
-Targets: `SignIn`, `Onboarding`, `BoardSetupCard`, `SetupGuideSheet`,
-`RosterInvite`, `BoardDesk`, `BoardChat`, `Meeting`, `Reserve`, `Portfolio`,
-`Documents`, `MapScreen`, `IssueDetailSheet`, `ReportSheet`,
-`ManageAmenitiesSheet`, `ExportSheet`, `PassSheet`, `SASheet`,
-`CreateGroupSheet`, `ComposeSheet`.
-
-Commands: `/impeccable onboard` on the sign-in and first-run flow,
-`/impeccable polish` and `/impeccable harden` on the board surfaces,
-`/impeccable clarify` on board copy, which is the densest in the app.
-
-**Check-in 4:** walk the founder path from invite to first board action, and
-the board path through approve, answer, open a vote, publish minutes.
 
 ## Stage 4: Verification and closeout
 
@@ -91,6 +104,6 @@ the decision on whether to re-release the demo from the new `dev`.
 |---|---|---|
 | 0 Baseline | `impeccable/0-baseline` | Check-in 1: priorities |
 | 1 Foundations | `impeccable/1-foundations` | Check-in 2: component sign-off |
-| 2 Resident loop | `impeccable/2-resident` | Check-in 3: resident walkthrough |
-| 3 Board and onboarding | `impeccable/3-board` | Check-in 4: board walkthrough |
+| 2 Board and onboarding | `impeccable/2-board` | Check-in 3: board walkthrough |
+| 3 Resident loop | `impeccable/3-resident` | Check-in 4: resident walkthrough |
 | 4 Closeout | `impeccable/4-closeout` | Check-in 5: deltas and demo release |
