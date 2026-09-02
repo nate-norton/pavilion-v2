@@ -14,7 +14,7 @@ import { useId, type ReactNode, type InputHTMLAttributes, type TextareaHTMLAttri
  * column of grey boxes.
  */
 const CONTROL =
-  'w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none font-sans min-w-0';
+  'w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none font-sans min-w-0 min-h-[44px]';
 const CONTROL_STYLE = { border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' } as const;
 const CONTROL_ERROR_STYLE = { border: '1px solid rgb(var(--reddeep) / 0.6)', background: 'rgb(var(--mistpale))' } as const;
 

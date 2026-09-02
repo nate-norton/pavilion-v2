@@ -2,6 +2,10 @@ import { Sheet } from '../components/Sheet';
 import { StatusTimeline } from '../components/StatusTimeline';
 import type { StatusStep } from '../components/StatusTimeline';
 import { PhIcon } from '../components/PhIcon';
+import { Card } from '../components/Card';
+import { Pill } from '../components/Pill';
+import { SectionHeading } from '../components/SectionHeading';
+import { useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
 
 interface IssueItem {
@@ -65,12 +69,19 @@ function getIssues(state: ReturnType<typeof usePavStore.getState>): Record<strin
   };
 }
 
+/**
+ * The scripted issue detail behind the demo's "Known issues" rows. Live rows
+ * carry only a title and a status line, so the HOA screen never makes them
+ * tappable there; this sheet is demo-only and says so in code rather than by
+ * accident.
+ */
 export function IssueDetailSheet() {
   const issueDetailId = usePavStore((s) => s.issueDetailId);
   const state = usePavStore();
   const set = usePavStore((s) => s.set);
+  const repo = useRepository();
 
-  if (!issueDetailId) return null;
+  if (!issueDetailId || !repo.isDemo()) return null;
 
   const issues = getIssues(state);
   const issue = issues[issueDetailId];
@@ -79,7 +90,7 @@ export function IssueDetailSheet() {
   const isResolved = issue.steps.every((s) => s.state === 'done');
 
   return (
-    <Sheet open onClose={() => set({ issueDetailId: null })}>
+    <Sheet open onClose={() => set({ issueDetailId: null })} label={`Issue: ${issue.title}`}>
       <div className="flex items-center gap-3 mb-4">
         <div
           className="w-[38px] h-[38px] rounded-[12px] flex items-center justify-center flex-shrink-0"
@@ -87,25 +98,17 @@ export function IssueDetailSheet() {
         >
           <PhIcon name={issue.icon} size={20} color={issue.iconColor} />
         </div>
-        <div className="flex-1">
-          <p className="m-0 font-serif text-[19px] text-navy">{issue.title}</p>
+        <h2 className="m-0 flex-1 min-w-0 font-serif font-normal text-[19px] text-navy leading-[1.25]">{issue.title}</h2>
+        <div className="flex-shrink-0">
+          <Pill label={isResolved ? 'Resolved' : 'Open'} tone={isResolved ? 'success' : 'warning'} size="md" />
         </div>
-        <span
-          className="rounded-full px-2.5 py-1 text-[11px] font-bold flex-shrink-0"
-          style={{
-            background: isResolved ? 'rgb(var(--mint))' : 'rgb(var(--goldpale))',
-            color: isResolved ? 'rgb(var(--sagedark))' : 'rgb(var(--golddark))',
-          }}
-        >
-          {isResolved ? 'Resolved' : 'Open'}
-        </span>
       </div>
 
       <div className="mb-5">
         <StatusTimeline steps={issue.steps} />
       </div>
 
-      <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3">
+      <Card className="mb-3">
         <div className="flex items-center gap-2.5 mb-2">
           <PhIcon name="ph-fill ph-map-trifold" size={14} color="rgb(var(--slate))" />
           <p className="m-0 text-[13px] font-bold text-navy">{issue.location}</p>
@@ -114,15 +117,13 @@ export function IssueDetailSheet() {
           <PhIcon name="ph-fill ph-users" size={14} color="rgb(var(--slate))" />
           <p className="m-0 text-[13px] font-bold text-navy">{issue.reporters}</p>
         </div>
-      </div>
+      </Card>
 
       {issue.vendor && (
-        <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3">
-          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--slatelight))' }}>
-            Vendor
-          </p>
+        <Card className="mb-3">
+          <SectionHeading title="Vendor" />
           <p className="m-0 text-[13.5px] font-bold text-navy">{issue.vendor}</p>
-        </div>
+        </Card>
       )}
 
       <div

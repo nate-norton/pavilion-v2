@@ -1,7 +1,10 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { isLiveMode, getSupabaseClient } from '../data/repo/supabaseClient';
-import { AuthShell, AuthError, PrimaryButton, GhostButton, TextButton, IconBadge, Eyebrow, FIELD, FIELD_STYLE } from './shell';
+import { AuthShell, AuthError, PrimaryButton, GhostButton, TextButton, IconBadge, SHELL_BG } from './shell';
+import { Field } from '../components/Field';
+import { PhIcon } from '../components/PhIcon';
+import { StackedCards, StackedPanel, type StackedTint } from '../components/StackedCard';
 import { InvitedFlow, MIN_PASSWORD, COMMUNITY_KEY, INVITE_KEY, stashInviteCode, readInviteCode, clearInviteCode, type InvitePeek } from './InvitedFlow';
 import { Arrival } from './Arrival';
 
@@ -137,6 +140,61 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+/*
+ * The front door as a place rather than a form. The three screens a person
+ * meets first — sign-in, the name step, and "not in a community yet" — open
+ * on a hero panel that speaks in the community's chrome, with the form
+ * tucked under it on paper (the StackedCards overlap). Utility steps that
+ * follow (check your email, new password, paste a code) stay on the plain
+ * AuthShell card, since by then the person is already inside the door.
+ */
+function Door({ tint = 'skydeep', icon, title, lede, children }: {
+  tint?: StackedTint; icon: string; title: string; lede: ReactNode; children: ReactNode;
+}) {
+  const chrome = tint === 'skydeep';
+  const titleColor = chrome ? 'rgb(var(--mist))' : 'rgb(var(--navy))';
+  const ledeColor = chrome ? 'rgb(var(--mist) / 0.95)' : 'rgb(var(--slatedeep))';
+  return (
+    <div className="min-h-dvh flex items-center justify-center p-6" style={{ background: SHELL_BG }}>
+      <div className="w-full flex flex-col items-center gap-4" style={{ maxWidth: 380 }}>
+        <StackedCards className="w-full">
+          <StackedPanel tint={tint}>
+            <div
+              className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
+              style={{ background: chrome ? 'rgb(var(--mist) / 0.14)' : 'rgb(var(--paper))' }}
+            >
+              <PhIcon name={icon} size={24} color={chrome ? 'rgb(var(--peach))' : 'rgb(var(--skydeep))'} />
+            </div>
+            <h1 className="m-0 font-serif text-[24px] leading-[1.2]" style={{ color: titleColor }}>{title}</h1>
+            <p className="m-0 mt-2 text-[13.5px] font-semibold leading-[1.5]" style={{ color: ledeColor }}>{lede}</p>
+          </StackedPanel>
+          <StackedPanel tint="paper" className="pt-6">
+            {children}
+          </StackedPanel>
+        </StackedCards>
+        <p className="m-0 text-[11px] font-extrabold uppercase" style={{ letterSpacing: '0.14em', color: 'rgb(var(--slate))' }}>
+          Pavilion
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/** Show/Hide for a password field: a quiet text control under the field, 44px tall. */
+function ShowPassword({ shown, onToggle }: { shown: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-pressed={shown}
+      className="min-h-[44px] bg-transparent border-none px-1 text-[12.5px] font-extrabold cursor-pointer font-sans"
+      style={{ color: 'rgb(var(--accent))' }}
+    >
+      {shown ? 'Hide password' : 'Show password'}
+    </button>
+  );
+}
+
 /**
  * A signed-in person who isn't in any community. The likely reasons, in
  * order: the board invited a different address; they have a link they
@@ -148,20 +206,19 @@ function NoCommunity({ email, onRetry }: { email: string; onRetry: () => void })
   if (panel === 'code') return <PasteInviteCode onBack={() => setPanel('menu')} onClaim={onRetry} />;
   if (panel === 'request') return <RequestCommunity email={email} onBack={() => setPanel('menu')} />;
   return (
-    <AuthShell width={380}>
-      <IconBadge icon="ph-fill ph-house-line" />
-      <Eyebrow>Signed in</Eyebrow>
-      <h1 className="m-0 mb-2 font-serif text-[24px] text-navy">You’re not in a community yet</h1>
-      <p className="m-0 mb-4 text-[13.5px] font-semibold leading-[1.55]" style={{ color: 'rgb(var(--slatedeep))' }}>
-        <span className="text-navy">{email}</span> has no invitation. Pavilion is invite-only — your HOA board adds you.
-      </p>
-      <div className="rounded-2xl mb-4 overflow-hidden" style={{ border: '1px solid rgb(var(--navy) / 0.1)' }}>
+    <Door
+      tint="sky"
+      icon="ph-fill ph-house-line"
+      title="You’re not in a community yet"
+      lede={<><span className="text-navy font-extrabold">{email}</span> has no invitation. Pavilion is invite-only — your HOA board adds you.</>}
+    >
+      <div className="mb-4">
         <NextStep title="Invited under another email?" action="Switch" onClick={() => void signOutLive()} />
         <NextStep title="Have an invite link?" action="Open it" onClick={() => setPanel('code')} />
         <NextStep title="Starting a new HOA on Pavilion?" action="Request" onClick={() => setPanel('request')} />
       </div>
       <GhostButton label="Sign out" onClick={() => void signOutLive()} />
-    </AuthShell>
+    </Door>
   );
 }
 
@@ -170,12 +227,13 @@ function NextStep({ title, action, onClick }: { title: string; action: string; o
     <button
       type="button"
       onClick={onClick}
-      className="w-full flex items-center justify-between gap-3 bg-paper border-none px-4 py-3.5 text-left cursor-pointer font-sans active:scale-[0.99]"
-      style={{ borderTop: '1px solid rgb(var(--navy) / 0.08)', background: 'rgb(var(--mistpale))' }}
+      className="w-full min-h-[52px] flex items-center justify-between gap-3 bg-transparent border-none px-0 py-3.5 text-left cursor-pointer font-sans active:scale-[0.99]"
+      style={{ borderBottom: '1px solid rgb(var(--navy) / 0.08)' }}
     >
-      <span className="text-[13px] font-bold text-navy">{title}</span>
-      <span className="text-[11px] font-extrabold uppercase rounded-full px-2.5 py-1 flex-shrink-0" style={{ letterSpacing: '0.08em', background: 'rgb(var(--goldpale))', color: 'rgb(var(--golddark))' }}>
+      <span className="text-[13.5px] font-bold text-navy">{title}</span>
+      <span className="inline-flex items-center gap-1 flex-shrink-0 text-[12.5px] font-extrabold" style={{ color: 'rgb(var(--accent))' }}>
         {action}
+        <PhIcon name="ph-bold ph-caret-right" size={14} color="rgb(var(--accent))" />
       </span>
     </button>
   );
@@ -196,19 +254,18 @@ function PasteInviteCode({ onBack, onClaim }: { onBack: () => void; onClaim: () 
     <AuthShell width={380}>
       <IconBadge icon="ph-fill ph-envelope-simple" />
       <h1 className="m-0 mb-2 font-serif text-[24px] text-navy">Open your invitation</h1>
-      <p className="m-0 mb-4 text-[13.5px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
+      <p className="m-0 mb-5 text-[13.5px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
         Paste the link your board sent, or just the code at the end of it.
       </p>
-      <input
+      <Field
+        label="Invite link or code"
         type="text"
         autoFocus
         value={raw}
         onChange={(e) => setRaw(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter') go(); }}
         placeholder="https://app.pavilion.community/?invite=…"
-        aria-label="Invite link or code"
-        className={`${FIELD} mb-3`}
-        style={FIELD_STYLE}
+        className="mb-4"
       />
       <PrimaryButton label="Join my community" disabled={!code} onClick={go} />
       <div className="flex justify-center mt-2"><TextButton label="Back" onClick={onBack} /></div>
@@ -259,15 +316,17 @@ function RequestCommunity({ email, onBack }: { email: string; onBack: () => void
 
   return (
     <AuthShell width={380}>
-      <Eyebrow>New community</Eyebrow>
+      <IconBadge icon="ph-fill ph-buildings" />
       <h1 className="m-0 mb-2 font-serif text-[24px] text-navy">Bring your HOA to Pavilion</h1>
-      <p className="m-0 mb-4 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
+      <p className="m-0 mb-5 text-[13.5px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
         Tell us a little and we’ll set it up with you. You’ll be its first board member.
       </p>
-      <input type="text" autoComplete="name" autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" aria-label="Your name" className={`${FIELD} mb-2.5`} style={FIELD_STYLE} />
-      <input type="text" value={community} onChange={(e) => setCommunity(e.target.value)} placeholder="Community name" aria-label="Community name" className={`${FIELD} mb-2.5`} style={FIELD_STYLE} />
-      <input type="number" inputMode="numeric" min={1} value={homes} onChange={(e) => setHomes(e.target.value)} placeholder="How many homes? (optional)" aria-label="How many homes, optional" className={`${FIELD} mb-2.5`} style={FIELD_STYLE} />
-      <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Anything we should know? (optional)" aria-label="Anything we should know, optional" rows={3} className={`${FIELD} mb-3 resize-none`} style={FIELD_STYLE} />
+      <div className="flex flex-col gap-3 mb-4">
+        <Field label="Your name" type="text" autoComplete="name" autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder="Jordan Rivera" />
+        <Field label="Community name" type="text" value={community} onChange={(e) => setCommunity(e.target.value)} placeholder="Cedar Hollow HOA" />
+        <Field label="How many homes (optional)" type="number" inputMode="numeric" min={1} value={homes} onChange={(e) => setHomes(e.target.value)} placeholder="120" />
+        <Field label="Anything we should know (optional)" as="textarea" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Self-managed, about 80 townhomes, dues are quarterly." rows={3} />
+      </div>
       <AuthError message={error} />
       <PrimaryButton label="Send request" busyLabel="Sending…" busy={busy} disabled={!canSubmit} onClick={() => void submit()} />
       <div className="flex justify-center mt-2"><TextButton label="Back" onClick={onBack} /></div>
@@ -333,6 +392,11 @@ function LiveSignIn({ initialEmail = '' }: { initialEmail?: string }) {
     );
   };
 
+  // "Enter your email first" is about one field, so it sits under that
+  // field; anything the server says about the pair stays a form-level alert.
+  const emailError = error?.startsWith('Enter your email') ? error : null;
+  const formError = emailError ? null : error;
+
   if (stage !== 'form') {
     const copy = {
       linkSent: `We sent a sign-in link to ${cleanEmail}. Open it on this device and you’ll be signed in.`,
@@ -341,72 +405,54 @@ function LiveSignIn({ initialEmail = '' }: { initialEmail?: string }) {
     return (
       <AuthShell>
         <IconBadge icon="ph-fill ph-envelope-simple" />
-        <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Check your email</h1>
-        <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>{copy}</p>
+        <h1 className="m-0 mb-2 font-serif text-[24px] text-navy">Check your email</h1>
+        <p className="m-0 mb-5 text-[13.5px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>{copy}</p>
         <GhostButton label="Back to sign in" onClick={() => { setStage('form'); setError(null); }} />
       </AuthShell>
     );
   }
 
   return (
-    <AuthShell>
-      <IconBadge icon="ph-fill ph-house-line" />
-      <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Welcome back</h1>
-      <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
-        Sign in to your community.
-      </p>
-
-      <input
+    <Door icon="ph-fill ph-house-line" title="Welcome back" lede="Sign in to your community.">
+      <Field
+        label="Email"
         type="email"
         autoComplete="email"
         autoFocus={!initialEmail}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="you@email.com"
-        aria-label="Email"
-        className={`${FIELD} mb-2.5`}
-        style={FIELD_STYLE}
+        error={emailError}
+        className="mb-3"
       />
-      <div className="relative mb-2">
-        <input
-          type={showPw ? 'text' : 'password'}
-          autoComplete="current-password"
-          autoFocus={!!initialEmail}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter') submit(); }}
-          placeholder="Password"
-          aria-label="Password"
-          className={`${FIELD} pr-16`}
-          style={FIELD_STYLE}
-        />
-        <button
-          type="button"
-          onClick={() => setShowPw((v) => !v)}
-          aria-pressed={showPw}
-          className="absolute right-2 top-1/2 -translate-y-1/2 bg-transparent border-none px-2 py-1 text-[12px] font-extrabold cursor-pointer font-sans"
-          style={{ color: 'rgb(var(--accent))' }}
-        >
-          {showPw ? 'Hide' : 'Show'}
-        </button>
-      </div>
-      <div className="flex justify-end mb-3">
+      <Field
+        label="Password"
+        type={showPw ? 'text' : 'password'}
+        autoComplete="current-password"
+        autoFocus={!!initialEmail}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Enter') submit(); }}
+        placeholder="At least 12 characters"
+      />
+      <div className="flex items-center justify-between mb-2">
+        <ShowPassword shown={showPw} onToggle={() => setShowPw((v) => !v)} />
         <TextButton label="Forgot password?" onClick={sendReset} />
       </div>
 
-      <AuthError message={error} />
+      <AuthError message={formError} />
       <PrimaryButton label="Sign in" busyLabel="Signing in…" busy={busy} disabled={!canSubmit} onClick={submit} />
 
-      <div className="flex items-center gap-2.5 my-3">
+      <div className="flex items-center gap-2.5 my-4">
         <span className="flex-1 h-px" style={{ background: 'rgb(var(--navy) / 0.1)' }} />
-        <span className="text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--slatelight))' }}>or</span>
+        <span className="text-[12px] font-bold" style={{ color: 'rgb(var(--slate))' }}>or</span>
         <span className="flex-1 h-px" style={{ background: 'rgb(var(--navy) / 0.1)' }} />
       </div>
       <GhostButton label="Email me a sign-in link instead" onClick={sendLink} disabled={busy} />
-      <p className="m-0 mt-4 text-[11.5px] font-semibold leading-[1.45] text-center" style={{ color: 'rgb(var(--slate))' }}>
+      <p className="m-0 mt-5 text-[12.5px] font-semibold leading-[1.5] text-center" style={{ color: 'rgb(var(--slate))' }}>
         New here? Open the invitation link your board sent — that’s how you join.
       </p>
-    </AuthShell>
+    </Door>
   );
 }
 
@@ -437,31 +483,25 @@ function SetNewPassword({ onDone }: { onDone: () => void }) {
   return (
     <AuthShell>
       <IconBadge icon="ph-fill ph-lock-simple" />
-      <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Choose a new password</h1>
-      <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
+      <h1 className="m-0 mb-2 font-serif text-[24px] text-navy">Choose a new password</h1>
+      <p className="m-0 mb-5 text-[13.5px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
         You’re signed in from the reset link. Pick a password and you’re set.
       </p>
-      <div className="relative mb-2">
-        <input
-          type={showPw ? 'text' : 'password'}
-          autoComplete="new-password"
-          autoFocus
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter' && password.length >= MIN_PASSWORD) void save(); }}
-          placeholder="New password"
-          aria-label="New password"
-          className={`${FIELD} pr-16`}
-          style={FIELD_STYLE}
-        />
-        <button type="button" onClick={() => setShowPw((v) => !v)} aria-pressed={showPw} className="absolute right-2 top-1/2 -translate-y-1/2 bg-transparent border-none px-2 py-1 text-[12px] font-extrabold cursor-pointer font-sans" style={{ color: 'rgb(var(--accent))' }}>
-          {showPw ? 'Hide' : 'Show'}
-        </button>
+      <Field
+        label="New password"
+        type={showPw ? 'text' : 'password'}
+        autoComplete="new-password"
+        autoFocus
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Enter' && password.length >= MIN_PASSWORD) void save(); }}
+        placeholder="At least 12 characters"
+        hint={`At least ${MIN_PASSWORD} characters. That’s the only rule.`}
+        error={error}
+      />
+      <div className="flex mb-3">
+        <ShowPassword shown={showPw} onToggle={() => setShowPw((v) => !v)} />
       </div>
-      <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
-        At least {MIN_PASSWORD} characters. That’s the only rule.
-      </p>
-      <AuthError message={error} />
       <PrimaryButton label="Save password" busyLabel="Saving…" busy={busy} disabled={password.length < MIN_PASSWORD} onClick={() => void save()} />
     </AuthShell>
   );
@@ -499,37 +539,31 @@ function LiveOnboarding({ profile, email, onDone }: {
   };
 
   return (
-    <AuthShell width={380}>
-      <IconBadge icon="ph-fill ph-hand-waving" />
-      <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Introduce yourself</h1>
-      <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
-        This is the name your neighbors see on votes, posts, and the directory. You can change it later in My Place.
-      </p>
-
-      <input
-        type="text"
-        autoComplete="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Full name"
-        aria-label="Full name"
-        className={`${FIELD} mb-2.5`}
-        style={FIELD_STYLE}
-      />
-      <input
-        type="tel"
-        autoComplete="tel"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        onKeyDown={(e) => { if (e.key === 'Enter' && name.trim()) void save(); }}
-        placeholder="Phone (optional)"
-        aria-label="Phone number, optional"
-        className={`${FIELD} mb-2`}
-        style={FIELD_STYLE}
-      />
-      <p className="m-0 mb-3 text-[11.5px] font-semibold leading-[1.45]" style={{ color: 'rgb(var(--slate))' }}>
-        Your phone is only shown to neighbors in your community, and you can hide it in My Place.
-      </p>
+    <Door
+      icon="ph-fill ph-hand-waving"
+      title="Introduce yourself"
+      lede="This is the name your neighbors see on votes, posts, and the directory. You can change it later in My Place."
+    >
+      <div className="flex flex-col gap-3 mb-4">
+        <Field
+          label="Full name"
+          type="text"
+          autoComplete="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Jordan Rivera"
+        />
+        <Field
+          label="Phone (optional)"
+          type="tel"
+          autoComplete="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter' && name.trim()) void save(); }}
+          placeholder="(303) 555-0142"
+          hint="Only neighbors in your community see it, and you can hide it in My Place."
+        />
+      </div>
 
       <AuthError message={error} />
       <PrimaryButton
@@ -539,6 +573,6 @@ function LiveOnboarding({ profile, email, onDone }: {
         disabled={!name.trim()}
         onClick={() => void save()}
       />
-    </AuthShell>
+    </Door>
   );
 }
