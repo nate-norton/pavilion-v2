@@ -3,6 +3,19 @@
 @tailwind utilities;
 
 /*
+ * Brand display type: Nunito 900 with -0.03em tracking. The `.font-serif`
+ * name is historical (the display face used to be a serif); the doubled
+ * selector raises specificity above the `font-normal` utility that 25 call
+ * sites pair with it, so headings render at Black without touching them.
+ * Body copy stays Nunito Sans — the brand sheet forbids Nunito 900 in body.
+ */
+.font-serif.font-serif,
+.font-display.font-display {
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+/*
  * Design tokens (Phase 0). Colors live here as space-separated RGB triplets so
  * Tailwind can compose them with alpha via `rgb(var(--x) / <alpha-value>)`.
  * Raw ramp = the named palette; semantic aliases = intent-based names screens
@@ -10,93 +23,116 @@
  * edit. Changing a raw value here restyles every utility that references it.
  */
 :root {
-  /* Raw ramp */
-  --navy: 26 51 82;
-  --cream: 245 240 230;
-  --paper: 255 254 250;
-  --sand: 237 230 214;
-  --parchment: 249 245 236;
-  --ember: 224 106 62;
   /*
-   * Decorative vs. text-bearing accent. --ember is a fill: status dots,
-   * progress, gradients, large display type. Anything that carries text —
-   * a CTA background under white, or ember-colored copy on a light bed —
-   * uses --emberdeep, which clears 4.5:1 both ways (white on it: 5.33;
-   * it on blush: 4.65). Swapping one for the other reintroduces the
-   * WCAG 1.4.3 failure the audit found on every primary button.
-   */
-  --emberdeep: 172 80 45;
-  /*
-   * --terracotta is the *themed* text-bearing accent: brand themes remap it
-   * per community (see src/theme/themes.ts) and it is what accent-coloured
-   * copy, status pills and inline links resolve to. It was 199 90 49, which
-   * measured 3.75:1 on cream and 3.72:1 on blush — below AA — and it is set
-   * as type on ~40 surfaces including the "Review & pay" pill on Today. The
-   * value below clears 4.5:1 on every warm bed in the system (cream 5.03,
-   * blush 4.99, paper 5.67, parchment 5.26, sand 4.60; white on it 5.72).
-   * A brand theme that overrides it must clear the same floor on its own
-   * blush — Meadow Park's original 34 128 73 did not (4.44) and was darkened.
-   */
-  --terracotta: 168 74 38;
-  --blush: 251 237 228;
-  --peach: 232 167 136;
-  --sage: 42 157 92;
-  --mint: 233 246 238;
-  /* Text-bearing variants: sage/gold are fills. Sage text on mint was
-   * 3.11:1 and gold text on goldpale 2.03:1 — the darks below clear
-   * 4.5:1 on their own beds (sagedark on mint 4.92, on cream 4.82;
-   * golddark on goldpale 5.16, on cream 5.02).
+   * Raw ramp — the Pavilion brand system: sky primary, sunset accent, ink
+   * text on a mist ground. Token *names* are historical (they were warm) and
+   * kept deliberately: ~900 references across the app resolve through them,
+   * so a rename would be a large diff for no user-visible gain. Read them by
+   * their role comment, not their name.
    *
-   * --golddark was 140 105 40, which cleared goldpale (4.56) but measured
-   * 4.44 on cream — and cream is the page every screen sits on, so gold
-   * metadata text was failing AA wherever it sat outside a goldpale pill.
-   * Darkened until it clears cream and sand too. */
-  --sagedark: 32 120 71;
-  --gold: 217 164 65;
-  --goldpale: 251 243 224;
-  --golddark: 130 97 36;
-  --sky: 74 144 226;
-  --skydeep: 58 115 181;
-  --skypale: 234 243 253;
-  --ink: 62 76 99;
-  /*
-   * Secondary-text ramp. Every step clears 4.5:1 on cream (the lightest
-   * page bg is paper, so cream is the worst case): stonelight 4.52,
-   * stone 5.32, taupe 5.79, bark 6.50. The ramp is compressed compared
-   * with its original 163→91 spread because anything lighter than ~115
-   * cannot reach AA on a warm background — the four steps stay
-   * distinguishable, just closer together.
+   * Every text-bearing value below was solved against the cool surfaces, not
+   * carried over from the brand sheet. The sheet's own pairs do not clear AA
+   * — sunset #F97B4B under white is 2.64:1 and sky #4A90E2 under white is
+   * 3.29:1 — so each has a darker twin, exactly as the warm system did.
    */
-  --stone: 107 101 89;
-  --stonelight: 115 109 97;
-  --bark: 91 85 74;
-  --taupe: 99 93 82;
-  --red: 199 64 46;
+  --navy: 26 51 82;          /* brand "ink" — primary text + dark surfaces. NEVER #000 */
+  --cream: 238 246 255;      /* brand "mist" — the app background */
+  --paper: 255 255 255;      /* card surfaces */
+  --sand: 212 232 248;       /* brand "sky-border" — borders, dividers */
+  --parchment: 244 249 255;  /* resting input bg */
 
   /*
-   * Extended one-off tokens (provisional names). These were inline hex
-   * literals scattered across screens; tokenized at their exact values so
-   * nothing shifts. Several neutrals/greens are near-duplicate drift
-   * (e.g. --claypale vs --taupedim, the --sage* pale ramp) and are prime
-   * candidates to collapse into a tighter ramp once design signs off.
+   * Decorative vs. text-bearing accent — the rule that survives from the warm
+   * system, with new values. --ember is brand "sunset", a fill: status dots,
+   * progress, gradients, large display type. Anything carrying text — a CTA
+   * background under white, or accent copy on a light bed — uses --emberdeep
+   * (white on it 5.81; it on every page surface >= 4.62). Swapping one for
+   * the other reintroduces a WCAG 1.4.3 failure on every primary button.
    */
-  --sandpale: 221 213 194;
-  --sanddim: 217 207 184;
-  --taupepale: 213 207 191;
-  --taupedim: 201 193 176;
-  --claypale: 201 192 174;
-  --creamlight: 247 243 234;
-  --creamdim: 243 237 224;
-  --creamtint: 242 235 220;
-  --sandtint: 235 227 208;
-  --sanddeep: 229 220 198;
-  --blushpale: 254 243 238;
-  --blushdim: 251 228 224;
+  --ember: 249 123 75;
+  --emberdeep: 185 55 6;
+  /*
+   * Darker end for the sunset gradient. The brand gradient runs sunset ->
+   * deeper sunset, but white on --ember measures 2.64:1 and on --emberbright
+   * 2.00:1, so any gradient carrying white text or icons runs
+   * --emberdeep -> --embershade instead (white 5.81 / 8.07).
+   */
+  --embershade: 150 40 4;
+  /*
+   * --terracotta is the *themed* text-bearing accent: brand themes remap it
+   * per community (src/theme/themes.ts) and accent copy, status pills and
+   * inline links resolve to it. Any theme override must clear 4.5:1 on its
+   * own blush and on --cream.
+   */
+  --terracotta: 185 55 6;
+  --blush: 255 243 238;      /* brand "sunset-tint" — accent bed */
+  --peach: 255 179 71;       /* sunset gradient endpoint; on navy 7.19:1 */
+
+  /* Success. --sage is a fill; --sagedark carries text (on mint 4.53, white 5.69). */
+  --sage: 42 157 92;
+  --mint: 232 248 239;
+  --sagedark: 31 117 69;
+
+  /* Warning. Same split: --gold fills, --golddark carries text (4.51 worst). */
+  --gold: 245 158 11;
+  --goldpale: 255 246 229;
+  --golddark: 143 92 6;
+
+  /*
+   * Sky — the primary brand family. --sky and --skydeep are the brand sheet's
+   * own #4A90E2 / #3A73B5 and are unchanged; --skydeep already clears 4.88:1
+   * under white, so it is the one brand-sheet value that needed no correction.
+   * --skydark carries sky-coloured text on light beds.
+   *
+   * Two corrections the brand sheet needed here. Its --skypale (#EEF6FF) is
+   * the same value as the page ground, which makes a sky pill invisible on
+   * the page — it is nudged to 220 235 251 so the pill reads as a surface.
+   * And its --skydeep (#3A73B5) clears 4.88:1 on white but only 4.48:1 on the
+   * mist ground, and ~20 call sites set it as text on exactly that bed; the
+   * value below clears 4.63 on every surface (white on it 5.82).
+   */
+  --sky: 74 144 226;
+  --skydeep: 52 103 162;
+  --skypale: 220 235 251;
+  --skydark: 30 102 186;
+
+  --ink: 62 76 99;           /* body copy — 6.90:1 worst case */
+  /*
+   * Secondary-text ramp, brand "slate" hue. The sheet's #6B8BA4 measures
+   * 3.29:1 on mist and fails, so the ramp is anchored at the AA floor and
+   * stepped down from there: stonelight 4.52, stone 5.31, taupe 6.19,
+   * bark 7.54. Four distinguishable steps, all legal.
+   */
+  --stonelight: 78 106 128;
+  --stone: 70 95 115;
+  --taupe: 62 85 102;
+  --bark: 53 72 87;
+
+  --red: 239 68 68;
+
+  /*
+   * Extended one-off tokens. These were warm neutrals tokenized at their
+   * exact values; re-derived onto the cool ground so surfaces keep the same
+   * relative weight (borders slightly darker than beds, beds off-white).
+   */
+  --sandpale: 196 220 240;
+  --sanddim: 186 214 238;
+  --taupepale: 190 206 220;
+  --taupedim: 175 194 212;
+  --claypale: 172 192 210;
+  --creamlight: 244 250 255;
+  --creamdim: 236 245 255;
+  --creamtint: 232 242 254;
+  --sandtint: 222 236 250;
+  --sanddeep: 208 228 246;
+  --blushpale: 255 248 244;
+  --blushdim: 255 232 222;
   /*
    * Sequential scale — reserve-funding forecast (Hoa.tsx FORECAST_BARS).
-   * Six steps of one hue, lightest year to darkest, ending on --sage. These
-   * look like duplicates in a flat token list and are not: collapsing any of
-   * them flattens a chart. Ordered here as they appear in the chart.
+   * Six steps of one hue, lightest year to darkest, ending on --sage. Kept
+   * green rather than recoloured to sky: green is the success hue in this
+   * brand sheet too (#2A9D5C), and the chart's meaning is "healthy through
+   * 2032". Collapsing any step flattens the chart.
    */
   --sagemist: 191 220 201;   /* '26 */
   --sagesoft: 169 210 184;   /* '27 */
@@ -104,17 +140,17 @@
   --sagelight: 116 185 146;  /* '29 */
   --sagemid: 85 172 124;     /* '30 — '31 uses --sage */
   /* Surfaces, not scale steps. */
-  --sagepale: 220 233 221;
+  --sagepale: 219 240 228;
   --sagebright: 111 211 156;
-  --emberbright: 249 123 75;
-  --brown: 138 81 56;
-  --reddeep: 178 58 43;
-  --skytint: 216 230 244;
-  --skydark: 58 100 145;
+  --emberbright: 255 160 110;
+  --brown: 150 60 20;
+  --reddeep: 205 18 18;
+  --skytint: 212 232 248;
   --violet: 139 92 246;
-  /* Mechanical (non-brand): scrims, shadows, pure white/black */
-  --scrim: 26 30 20;
-  --shadow: 50 42 26;
+  /* Mechanical (non-brand): scrims, shadows, pure white/black.
+   * Shadows are ink-based per the brand sheet, never neutral grey. */
+  --scrim: 12 20 35;
+  --shadow: 26 51 82;
   --white: 255 255 255;
   --black: 0 0 0;
 

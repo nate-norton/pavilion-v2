@@ -291,7 +291,7 @@ function LiveSignIn() {
     }[stage];
     return (
       <AuthShell>
-        <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}>
+        <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}>
           <PhIcon name="ph-fill ph-envelope-simple" size={24} color="rgb(var(--white))" />
         </div>
         <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Check your email</h1>
@@ -310,7 +310,7 @@ function LiveSignIn() {
 
   return (
     <AuthShell>
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}>
+      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}>
         <PhIcon name="ph-fill ph-house-line" size={24} color="rgb(var(--white))" />
       </div>
       <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">
@@ -425,7 +425,7 @@ function SetNewPassword({ onDone }: { onDone: () => void }) {
 
   return (
     <AuthShell>
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}>
+      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}>
         <PhIcon name="ph-fill ph-lock-simple" size={24} color="rgb(var(--white))" />
       </div>
       <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Choose a new password</h1>
@@ -491,7 +491,7 @@ function LiveOnboarding({ profile, email, onDone }: {
 
   return (
     <AuthShell width={380}>
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}>
+      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}>
         <PhIcon name="ph-fill ph-hand-waving" size={24} color="rgb(var(--white))" />
       </div>
       <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Introduce yourself</h1>
