@@ -39,8 +39,8 @@ export function Onboarding() {
   return (
     <div
       data-screen-label="Onboarding"
-      className="absolute inset-0 z-[95] bg-mist flex flex-col"
-      style={{ padding: '60px 24px 26px' }}
+      className="pav-fixed absolute inset-0 z-[95] bg-mist flex flex-col"
+      style={{ padding: 'calc(60px + var(--pav-chrome-top)) 24px calc(26px + var(--pav-safe-bottom))' }}
     >
       <div className="flex items-center justify-between mb-[26px]">
         <div className="flex gap-1.5">

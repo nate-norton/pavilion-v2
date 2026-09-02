@@ -1,5 +1,6 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePavStore } from '../store/store';
+import { usePageMode } from '../lib/pageMode';
 import { isLiveMode } from '../auth/AuthGate';
 import { AppToast } from './AppToast';
 import { ConfirmSheet } from './ConfirmSheet';
@@ -22,6 +23,17 @@ export function PhoneFrame() {
   prevTab.current = tab;
 
   const slideClass = goingRight ? 'animate-slideleft' : 'animate-slideright';
+
+  /*
+   * In frame mode each tab has its own scroller and the `key={tab}` remount
+   * discards its position, so a tab always opens at the top. Page mode scrolls
+   * the document instead, which the browser would happily leave halfway down
+   * the previous tab — so the same guarantee has to be restated here.
+   */
+  const pageMode = usePageMode();
+  useEffect(() => {
+    if (pageMode) window.scrollTo(0, 0);
+  }, [tab, pageMode]);
 
   /*
    * Desktop board mode. Residents stay phone-shaped everywhere — that is the
@@ -50,12 +62,11 @@ export function PhoneFrame() {
       data-testid="phone-frame"
       data-desk-board={deskBoard ? '' : undefined}
       data-large-type={largeType ? '' : undefined}
-      className="pav-frame relative w-[393px] h-[830px] max-h-[calc(100vh-48px)] rounded-[44px] overflow-hidden bg-mist shrink-0 max-[500px]:w-full max-[500px]:h-dvh max-[500px]:max-h-dvh max-[500px]:rounded-none"
-      style={{ boxShadow: '0 40px 90px -30px rgb(var(--shadow) / 0.5), 0 0 0 1px rgb(var(--navy) / 0.05)' }}
+      className="pav-frame relative w-[393px] h-[830px] max-h-[calc(100svh-48px)] rounded-[44px] overflow-hidden bg-mist shrink-0"
     >
       <ErrorBoundary>
-        <div key={tab} className={`absolute inset-0 ${slideClass}`}>
-          <main className="pav-zoom w-full h-full relative">
+        <div key={tab} className={`pav-tabslide absolute inset-0 ${slideClass}`}>
+          <main className="pav-screen pav-zoom w-full h-full relative">
           {tab === 'today' ? (
             <Today />
           ) : tab === 'commons' ? (

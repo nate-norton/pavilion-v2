@@ -22,8 +22,8 @@ export function Search() {
   return (
     <div
       data-screen-label="Search"
-      className="absolute inset-0 z-[96] flex flex-col animate-scpop"
-      style={{ background: 'rgb(var(--mist))', padding: '58px 18px 20px' }}
+      className="pav-fixed absolute inset-0 z-[96] flex flex-col animate-scpop"
+      style={{ background: 'rgb(var(--mist))', padding: 'calc(58px + var(--pav-chrome-top)) 18px 20px' }}
     >
       <div className="flex gap-[9px] items-center mb-3.5">
         <div
@@ -73,7 +73,10 @@ export function Search() {
       )}
 
       {rows.length > 0 && (
-        <div className="pav-scroll flex-1 overflow-y-auto flex flex-col gap-[9px]">
+        <div
+          className="pav-scroll flex-1 overflow-y-auto flex flex-col gap-[9px]"
+          style={{ paddingBottom: 'var(--pav-safe-bottom)' }}
+        >
           {rows.map((r) => (
             <div
               key={r.title}

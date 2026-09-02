@@ -103,9 +103,9 @@ export function BoardChat() {
   );
 
   return (
-    <div className="absolute inset-0 z-[86] bg-mist flex flex-col animate-scpop">
+    <div className="pav-fixed absolute inset-0 z-[86] bg-mist flex flex-col animate-scpop">
       {/* Header */}
-      <div className="flex items-center gap-2.5 flex-shrink-0" style={{ padding: '64px 18px 10px' }}>
+      <div className="flex items-center gap-2.5 flex-shrink-0" style={{ padding: 'calc(64px + var(--pav-chrome-top)) 18px 10px' }}>
         <button
           onClick={() => (topic !== null ? set({ boardChatTopic: null }) : close())}
           className="border-0 bg-transparent p-0 cursor-pointer flex items-center"
@@ -163,7 +163,7 @@ export function BoardChat() {
 
       {topic === null ? (
         /* ── Topic list ── */
-        <div className="flex-1 overflow-y-auto pav-scroll" style={{ padding: '4px 18px 44px' }}>
+        <div className="flex-1 overflow-y-auto pav-scroll" style={{ padding: '4px 18px calc(44px + var(--pav-safe-bottom))' }}>
           {threads.map(([name, msgs]) => {
             const last = msgs[msgs.length - 1];
             return (
@@ -287,7 +287,7 @@ export function BoardChat() {
           </div>
 
           {/* Composer */}
-          <div className="flex-shrink-0" style={{ padding: '10px 18px 40px', borderTop: '1px solid rgb(var(--navy) / 0.08)', background: 'rgb(var(--mist))' }}>
+          <div className="flex-shrink-0" style={{ padding: '10px 18px calc(40px + var(--pav-safe-bottom))', borderTop: '1px solid rgb(var(--navy) / 0.08)', background: 'rgb(var(--mist))' }}>
             {photos.length > 0 && (
               <p className="m-0 mb-1.5 text-[11.5px] font-bold" style={{ color: 'rgb(var(--sage))' }}>
                 {photos.length} photo{photos.length > 1 ? 's' : ''} attached ✓

@@ -51,11 +51,11 @@ export function GroupDetail() {
   return (
     <div
       data-screen-label="Group Detail"
-      className="absolute inset-0 z-[78] flex flex-col animate-scpop"
+      className="pav-fixed absolute inset-0 z-[78] flex flex-col animate-scpop"
       style={{ background: 'rgb(var(--mist))' }}
     >
       {/* Header */}
-      <div style={{ padding: '58px 18px 0' }}>
+      <div style={{ padding: 'calc(58px + var(--pav-chrome-top)) 18px 0' }}>
         <div className="flex items-center gap-[11px] mb-3">
           <BackButton onClick={() => set({ activeGroup: null })} className="" />
           <div
@@ -172,7 +172,7 @@ export function GroupDetail() {
                   ))
                 )}
               </div>
-              <div className="flex gap-[9px] items-center" style={{ padding: '10px 18px 26px' }}>
+              <div className="flex gap-[9px] items-center" style={{ padding: '10px 18px calc(26px + var(--pav-safe-bottom))' }}>
                 <input
                   value={state.groupChatInput}
                   onChange={(e) => set({ groupChatInput: e.target.value })}
@@ -491,7 +491,7 @@ export function GroupDetail() {
 
       {/* Join bar for non-members */}
       {!group.joined && tab !== 'chat' && (
-        <div className="flex items-center gap-3" style={{ padding: '12px 18px 26px' }}>
+        <div className="flex items-center gap-3" style={{ padding: '12px 18px calc(26px + var(--pav-safe-bottom))' }}>
           <button
             onClick={() => toggleGroupJoin(group.key)}
             className="flex-1 border-none rounded-full py-3 text-sm font-extrabold cursor-pointer"

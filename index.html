@@ -9,7 +9,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- interactive-widget=resizes-content makes Android Chrome shrink the
+         layout viewport when the software keyboard opens, so fixed chrome (the
+         nav dock, a chat composer) rides above it instead of hiding behind it.
+         iOS ignores this and is handled by useKeyboardInset instead. No
+         maximum-scale or user-scalable=no here: pinch-zoom is a WCAG 1.4.4
+         requirement, and the iOS focus-zoom it would have suppressed is fixed
+         properly by the 16px minimum field size in index.css. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#EEF6FF" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />

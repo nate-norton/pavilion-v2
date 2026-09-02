@@ -48,10 +48,10 @@ export function Chat() {
   return (
     <div
       data-screen-label="Chat"
-      className="absolute inset-0 z-[78] flex flex-col animate-scpop"
+      className="pav-fixed absolute inset-0 z-[78] flex flex-col animate-scpop"
       style={{ background: 'rgb(var(--mist))' }}
     >
-      <div className="flex items-center gap-[11px]" style={{ padding: '58px 18px 12px', borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
+      <div className="flex items-center gap-[11px]" style={{ padding: 'calc(58px + var(--pav-chrome-top)) 18px 12px', borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
         <button
           type="button"
           aria-label="Back to messages"
@@ -120,7 +120,7 @@ export function Chat() {
         ))}
       </div>
 
-      <div className="flex gap-[9px] items-center" style={{ padding: '10px 18px 26px' }}>
+      <div className="flex gap-[9px] items-center" style={{ padding: '10px 18px calc(26px + var(--pav-safe-bottom))' }}>
         <input
           ref={fileRef}
           type="file"

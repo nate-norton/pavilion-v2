@@ -118,8 +118,8 @@ export function BoardDesk() {
   return (
     <div
       data-testid="board-desk"
-      className="absolute inset-0 z-[75] bg-mist overflow-y-auto pav-scroll animate-scpop"
-      style={{ padding: '64px 18px 44px' }}
+      className="pav-fixed absolute inset-0 z-[75] bg-mist overflow-y-auto pav-scroll animate-scpop"
+      style={{ padding: 'calc(64px + var(--pav-chrome-top)) 18px calc(44px + var(--pav-safe-bottom))' }}
     >
       <div className="flex items-center justify-between gap-2.5 mb-2.5">
         <button

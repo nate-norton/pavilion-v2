@@ -97,8 +97,8 @@ export function Today() {
 
   return (
     <div
-      className="absolute inset-0 overflow-y-auto pav-scroll"
-      style={{ padding: '64px 20px 150px' }}
+      className="pav-tabscroll absolute inset-0 overflow-y-auto pav-scroll"
+      style={{ padding: 'calc(64px + var(--pav-chrome-top)) 20px var(--pav-screen-bottom)' }}
     >
       {showAlert && (
         <div className="rounded-2xl px-3.5 py-3 flex gap-2.5 items-start mb-[18px] text-white" style={{ background: 'rgb(var(--red))' }}>

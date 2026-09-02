@@ -142,15 +142,24 @@ export function Sheet({ open, onClose, children, maxHeight, label = 'Dialog' }: 
     transform: closing ? undefined : `translateY(${dy}px)`,
     transition: dragging ? 'none' : settling ? 'transform 0.28s cubic-bezier(0.32,1.2,0.5,1)' : undefined,
     ['--sheet-from' as string]: `${dy}px`,
+    /*
+     * The last row of a sheet used to land in the home-indicator strip on a
+     * notched phone: pb-6 was a flat 24px with no safe-area term. And
+     * `--pav-keyboard` lifts the panel above the software keyboard (0 when
+     * there isn't one), so a sheet with a field in it stays usable instead of
+     * being typed at from underneath.
+     */
+    paddingBottom: 'calc(24px + var(--pav-safe-bottom))',
+    bottom: 'var(--pav-keyboard)',
   };
   const scrimOpacity = closing ? undefined : Math.max(0, 1 - dy / 400);
 
   return (
-    <div className="absolute inset-0 z-[80]">
+    <div className="pav-fixed pav-sheet-root absolute inset-0 z-[80]">
       <div
         data-testid="sheet-scrim"
         onClick={onClose}
-        className={`absolute inset-0 ${closing ? 'animate-scrimfadeout' : 'animate-scrimfade'}`}
+        className={`pav-scrim absolute inset-0 ${closing ? 'animate-scrimfadeout' : 'animate-scrimfade'}`}
         style={{ background: 'rgb(var(--scrim) / 0.4)', opacity: scrimOpacity, transition: dragging ? 'none' : 'opacity 0.2s ease' }}
       />
       <div
@@ -158,7 +167,7 @@ export function Sheet({ open, onClose, children, maxHeight, label = 'Dialog' }: 
         role="dialog"
         aria-modal="true"
         aria-label={label}
-        className={`absolute left-0 right-0 bottom-0 bg-mistpale rounded-t-[28px] px-5 pt-3.5 pb-6 overflow-y-auto ${closing ? 'animate-sheetdown' : dy === 0 && !settling ? 'animate-sheetup' : ''}`}
+        className={`pav-sheet absolute left-0 right-0 bottom-0 bg-mistpale rounded-t-[28px] px-5 pt-3.5 overflow-y-auto ${closing ? 'animate-sheetdown' : dy === 0 && !settling ? 'animate-sheetup' : ''}`}
         style={panelStyle}
         onPointerDown={onPointerDown(false)}
         onPointerMove={onPointerMove}

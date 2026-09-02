@@ -36,16 +36,24 @@ export function AiSheet() {
   const send = () => sendAiMessage(aiInput);
 
   return (
-    <div className="absolute inset-0 z-[85]">
+    <div className="pav-fixed pav-sheet-root absolute inset-0 z-[85]">
       <div
         data-testid="ai-scrim"
         onClick={close}
-        className="absolute inset-0 animate-scrimfade"
+        className="pav-scrim absolute inset-0 animate-scrimfade"
         style={{ background: 'rgb(var(--scrim) / 0.4)' }}
       />
       <div
-        className="absolute left-0 right-0 bottom-0 bg-mistpale rounded-t-[28px] flex flex-col animate-sheetup"
-        style={{ height: '78%', boxShadow: '0 -18px 50px rgb(var(--scrim) / 0.25)' }}
+        className="pav-sheet absolute left-0 right-0 bottom-0 bg-mistpale rounded-t-[28px] flex flex-col animate-sheetup"
+        style={{
+          height: '78%',
+          // The composer is the point of this sheet, so it rides above the
+          // software keyboard rather than sitting behind it, and gives back
+          // the height it borrowed.
+          bottom: 'var(--pav-keyboard)',
+          maxHeight: 'calc(100% - var(--pav-keyboard))',
+          boxShadow: '0 -18px 50px rgb(var(--scrim) / 0.25)',
+        }}
       >
         <div
           className="flex items-center gap-[11px] px-[18px] pt-4 pb-3"
@@ -144,7 +152,10 @@ export function AiSheet() {
             </button>
           ))}
         </div>
-        <div className="px-[18px] pb-5 pt-2 flex gap-[9px]">
+        <div
+          className="px-[18px] pt-2 flex gap-[9px]"
+          style={{ paddingBottom: 'calc(20px + var(--pav-safe-bottom))' }}
+        >
           <input
             value={aiInput}
             onChange={(e) => set({ aiInput: e.target.value })}
