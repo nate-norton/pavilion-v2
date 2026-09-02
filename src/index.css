@@ -177,8 +177,8 @@
  * users never see it. Declared once at the global layer so it survives the
  * `outline-none` utilities scattered through the screens — those kill the
  * default ring, and :focus-visible here restores an intentional one.
- * The ring is emberdeep against a cream offset so it reads on the light
- * surfaces; chrome inverts it below.
+ * The ring is --sunsetdeep on the light surfaces: warm against a cool ground,
+ * so it reads as a ring rather than as more sky. Chrome inverts it below.
  */
 :focus-visible {
   outline: 2px solid rgb(var(--sunsetdeep));
