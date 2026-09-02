@@ -117,8 +117,8 @@ export function Search() {
           <button
             type="button"
             onClick={() => set({ searchOpen: false, aiOpen: true })}
-            className="border-none text-white rounded-full text-[13px] font-extrabold cursor-pointer font-sans inline-flex items-center gap-[7px]"
-            style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))', padding: '11px 18px' }}
+            className="bg-ai border-none rounded-full text-[13px] font-extrabold cursor-pointer font-sans inline-flex items-center gap-[7px]"
+            style={{ padding: '11px 18px' }}
           >
             <PhIcon name="ph-fill ph-sparkle" size={14} />
             Ask AI instead
