@@ -9,7 +9,7 @@ import type { LoadDomain, LoadState } from './Repository';
 import type { Database } from './database.types';
 import { getSupabaseClient } from './supabaseClient';
 import { emitAppError } from '../../lib/errorBus';
-import type { AdminMember, ArcDecision, ArcState, ArcStep, AuditEntry, BoardArcItem, BoardBooking, BoardMessage, BoardTriage, BoardViolation, ClosedVote, CommunityEvent, Decision, DuesState, DuesStatement, DuesStatus, FeedPost, Invite, KnownIssue, Meeting, MemberContext, NewArcRequest, NewGroup, NewReport, NewReservation, NewViolation, NewVote, ReservationState, Repository, SpecialAssessment, ThreadComment, TriageItem, UnitRef, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { AdminMember, ArcDecision, ArcState, ArcStep, AuditEntry, BoardArcItem, BoardBooking, BoardMessage, BoardTriage, BoardViolation, ClosedVote, CommunityEvent, Decision, DuesState, DuesStatement, DuesStatus, FeedPost, Invite, KnownIssue, Meeting, MemberContext, Membership, NewArcRequest, NewGroup, NewReport, NewReservation, NewViolation, NewVote, ReservationState, Repository, SpecialAssessment, ThreadComment, TriageItem, UnitRef, ViolationNotice, VoteChoice, VotesState } from './Repository';
 
 type MockChatMap = Record<string, ChatMsg[]>;
 type GroupMap = Record<string, GroupData>;
@@ -51,6 +51,7 @@ export class SupabaseRepository implements Repository {
 
   private cache = {
     member: null as MemberContext | null,
+    memberships: [] as Membership[],
     dues: { current: null, cardTitle: '', cardSub: '', cardBtn: '', history: [] } as DuesState,
     votes: { open: null, openAll: [], closed: [] } as VotesState,
     violation: null as ViolationNotice | null,
@@ -205,17 +206,48 @@ export class SupabaseRepository implements Repository {
   };
   private notify() { this.listeners.forEach((l) => l()); }
 
+  /** localStorage key remembering which community this device last showed. */
+  private static readonly ACTIVE_KEY = 'pav-community';
+
   private async resolveContext() {
     const { data: { user } } = await this.client.auth.getUser();
-    if (!user) { this.profileId = null; this.communityId = null; return; }
+    if (!user) { this.profileId = null; this.communityId = null; this.cache.memberships = []; return; }
     const { data: profile } = await this.client.from('profiles').select('id').eq('user_id', user.id).maybeSingle();
     this.profileId = profile?.id ?? null;
-    if (!this.profileId) { this.communityId = null; this.unitId = null; return; }
-    const { data: membership } = await this.client.from('memberships')
-      .select('community_id, unit_id').eq('profile_id', this.profileId).eq('status', 'active').maybeSingle();
-    this.communityId = membership?.community_id ?? null;
-    this.unitId = membership?.unit_id ?? null;
+    if (!this.profileId) { this.communityId = null; this.unitId = null; this.cache.memberships = []; return; }
+    // Every active membership, newest first: a member can belong to more than
+    // one community. The device's remembered pick wins when it's still valid;
+    // otherwise the most recently joined — which after an invite claim is the
+    // community they just accepted into.
+    const { data: rows } = await this.client.from('memberships')
+      .select('community_id, unit_id, role, communities(name), units(label)')
+      .eq('profile_id', this.profileId).eq('status', 'active')
+      .order('created_at', { ascending: false });
+    type Row = { community_id: string; unit_id: string | null; role: string;
+      communities: { name: string } | null; units: { label: string } | null };
+    const list = (rows ?? []) as unknown as Row[];
+    this.cache.memberships = list.map((m) => ({
+      communityId: m.community_id,
+      communityName: m.communities?.name ?? '',
+      role: (m.role as 'resident' | 'board') ?? 'resident',
+      unitLabel: m.units?.label ?? '',
+    }));
+    let remembered: string | null = null;
+    try { remembered = localStorage.getItem(SupabaseRepository.ACTIVE_KEY); } catch { /* no-op */ }
+    const pick = list.find((m) => m.community_id === remembered) ?? list[0] ?? null;
+    this.communityId = pick?.community_id ?? null;
+    this.unitId = pick?.unit_id ?? null;
   }
+
+  getMemberships = () => this.cache.memberships;
+  getActiveCommunityId = () => this.communityId;
+
+  switchCommunity = async (communityId: string) => {
+    if (communityId === this.communityId) return;
+    if (!this.cache.memberships.some((m) => m.communityId === communityId)) return;
+    try { localStorage.setItem(SupabaseRepository.ACTIVE_KEY, communityId); } catch { /* no-op */ }
+    await this.refresh();
+  };
 
   /** Re-read the current user's context + domain slices. Notifies after the
    * member context and then after each wave, so the first paint (greeting,
@@ -1093,18 +1125,14 @@ export class SupabaseRepository implements Repository {
     const { data: profile } = await this.client.from('profiles')
       .select('name, initial, color, phone, avatar_url, hide_directory').eq('id', this.profileId).maybeSingle();
     if (!profile) { this.cache.member = null; return; }
-    const { data: membership } = await this.client.from('memberships')
-      .select('role, communities(name), units(label)')
-      .eq('profile_id', this.profileId).eq('status', 'active').maybeSingle();
-    const community = (membership as { communities: { name: string } | null } | null)?.communities;
-    const unit = (membership as { units: { label: string } | null } | null)?.units;
+    const membership = this.cache.memberships.find((m) => m.communityId === this.communityId);
     this.cache.member = {
       name: profile.name,
       initial: profile.initial,
       color: profile.color,
-      role: (membership?.role as 'resident' | 'board') ?? 'resident',
-      communityName: community?.name ?? '',
-      unitLabel: unit?.label ?? '',
+      role: membership?.role ?? 'resident',
+      communityName: membership?.communityName ?? '',
+      unitLabel: membership?.unitLabel ?? '',
       phone: profile.phone,
       avatarUrl: profile.avatar_url,
       hideDirectory: profile.hide_directory,

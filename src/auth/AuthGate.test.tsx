@@ -14,6 +14,7 @@ const state = {
   profile: null as ProfileRow,
   membershipCount: 0,
   claimInvite: false,
+  claimCode: false,
   signInWithPassword: vi.fn(),
   signUp: vi.fn(),
   signInWithOtp: vi.fn(),
@@ -34,7 +35,7 @@ vi.mock('../data/repo/supabaseClient', () => ({
       refreshSession: () => Promise.resolve({}),
       updateUser: () => Promise.resolve({ error: null }),
     },
-    rpc: (name: string) => Promise.resolve({ data: name === 'claim_invite' ? state.claimInvite : false }),
+    rpc: (name: string) => Promise.resolve({ data: name === 'claim_invite' ? state.claimInvite : name === 'claim_invite_code' ? state.claimCode : false }),
     from: (table: string) => {
       if (table === 'profiles') {
         return {
@@ -59,6 +60,7 @@ beforeEach(() => {
   state.profile = null;
   state.membershipCount = 0;
   state.claimInvite = false;
+  state.claimCode = false;
   Object.values(state).forEach((v) => { if (typeof v === 'function' && 'mockReset' in v) v.mockReset(); });
   state.signInWithPassword.mockResolvedValue({ error: null });
   state.signUp.mockResolvedValue({ data: { session: {} }, error: null });
@@ -144,4 +146,17 @@ it('an onboarded member with no invite gets the no-community screen', async () =
   state.membershipCount = 0;
   render(app);
   expect(await screen.findByText(/isn’t part of a community yet/i)).toBeInTheDocument();
+});
+
+it('claims a copied invite link even when the member already belongs elsewhere', async () => {
+  state.session = { user: { id: 'u1', email: 'nate@example.com' } };
+  state.profile = { id: 'p1', name: 'Nate', phone: '', onboarded_at: '2026-01-01' };
+  state.membershipCount = 1;
+  localStorage.setItem('pav-invite-code', 'abc123');
+  localStorage.setItem('pav-community', 'old-community');
+  state.claimCode = true;
+  render(app);
+  await screen.findByText('Community home');
+  await waitFor(() => expect(localStorage.getItem('pav-invite-code')).toBeNull());
+  expect(localStorage.getItem('pav-community')).toBeNull();
 });

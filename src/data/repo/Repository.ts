@@ -385,6 +385,16 @@ export interface MemberContext {
   hideDirectory?: boolean;
 }
 
+/** One of the signed-in member's communities. A person can belong to more
+ * than one (a founder testing a pilot, a board member who also owns elsewhere);
+ * the repository hydrates against exactly one of them at a time. */
+export interface Membership {
+  communityId: string;
+  communityName: string;
+  role: 'resident' | 'board';
+  unitLabel: string;
+}
+
 export interface Repository {
   /**
    * Subscribe to mutable-domain changes (bookings, groups, …). Returns an
@@ -418,6 +428,16 @@ export interface Repository {
 
   /** The current member's identity/community. null until resolved (live mode). */
   getMember(): MemberContext | null;
+
+  /** Every community the member belongs to; the demo has exactly one. */
+  getMemberships(): Membership[];
+
+  /** Which of those the app is currently showing. null until resolved. */
+  getActiveCommunityId(): string | null;
+
+  /** Re-hydrate every domain against another of the member's communities.
+   * The choice sticks per device. No-op in the demo. */
+  switchCommunity(communityId: string): Promise<void>;
 
   /** The member's dues: the actionable statement + payment history (empty in live). */
   getDues(): DuesState;
