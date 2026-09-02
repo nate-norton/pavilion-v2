@@ -53,6 +53,7 @@ const PaymentDetailSheet = lazy(() => import('../sheets/PaymentDetailSheet').the
 const DecisionDetailSheet = lazy(() => import('../sheets/DecisionDetailSheet').then((m) => ({ default: m.DecisionDetailSheet })));
 const ComposeSheet = lazy(() => import('../sheets/ComposeSheet').then((m) => ({ default: m.ComposeSheet })));
 const ManageAmenitiesSheet = lazy(() => import('../sheets/ManageAmenitiesSheet').then((m) => ({ default: m.ManageAmenitiesSheet })));
+const SetupGuideSheet = lazy(() => import('../sheets/SetupGuideSheet').then((m) => ({ default: m.SetupGuideSheet })));
 const CreateGroupSheet = lazy(() => import('../sheets/CreateGroupSheet').then((m) => ({ default: m.CreateGroupSheet })));
 
 /** Mounts `Cmp` only while `on` is true, so its chunk loads on first open. */
@@ -85,6 +86,7 @@ export function Overlays() {
       <Gate on={s.portfolioOpen} Cmp={Portfolio} />
 
       {/* Sheets (z 80+) */}
+      <Gate on={!!s.setupGuideStep} Cmp={SetupGuideSheet} />
       <Gate on={s.passOpen} Cmp={PassSheet} />
       <Gate on={s.paySheetOpen} Cmp={PaySheet} />
       <Gate on={s.saSheetOpen} Cmp={SASheet} />

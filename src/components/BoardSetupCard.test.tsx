@@ -9,10 +9,12 @@ vi.mock('../auth/AuthGate', () => ({ isLiveMode: true, signOutLive: vi.fn() }));
 
 const state = {
   member: { name: 'Dana', initial: 'D', color: '', role: 'board', communityName: 'Juniper Ridge', unitLabel: '#4' },
-  members: [{ membershipId: 'm1' }],
+  members: [{ membershipId: 'm1', name: 'Dana', unitLabel: '#4', role: 'board', status: 'active' }] as { membershipId: string; name?: string; unitLabel?: string; role?: string; status: string }[],
   docs: [] as unknown[],
   amenities: [] as unknown[],
   votes: { openAll: [] as unknown[], closed: [] as unknown[] },
+  invites: [] as unknown[],
+  feed: [] as unknown[],
 };
 
 vi.mock('../data/repo', () => ({
@@ -21,6 +23,8 @@ vi.mock('../data/repo', () => ({
   useDocuments: () => state.docs,
   useAmenities: () => state.amenities,
   useVotes: () => state.votes,
+  useInvites: () => state.invites,
+  useFeed: () => state.feed,
 }));
 
 const { BoardSetupCard } = await import('./BoardSetupCard');
@@ -29,7 +33,8 @@ describe('BoardSetupCard', () => {
   beforeEach(() => {
     act(() => usePavStore.setState(initialState));
     state.member = { name: 'Dana', initial: 'D', color: '', role: 'board', communityName: 'Juniper Ridge', unitLabel: '#4' };
-    state.members = [{ membershipId: 'm1' }];
+    state.members = [{ membershipId: 'm1', name: 'Dana', unitLabel: '#4', role: 'board', status: 'active' }];
+    state.invites = []; state.feed = [];
     state.docs = []; state.amenities = []; state.votes = { openAll: [], closed: [] };
   });
 
@@ -47,19 +52,20 @@ describe('BoardSetupCard', () => {
   });
 
   it('retires permanently once every step is satisfied', () => {
-    state.members = [{ membershipId: 'm1' }, { membershipId: 'm2' }];
+    state.members = [{ membershipId: 'm1', status: 'active' }, { membershipId: 'm2', status: 'active' }];
     state.docs = [{ id: 'd' }];
     state.amenities = [{ id: 'a' }];
-    state.votes = { openAll: [{ id: 'v' }], closed: [] };
+    state.votes = { openAll: [{ id: 'v', title: 'Fence' }], closed: [] };
+    state.feed = [{ id: 'p', authorName: 'Dana', body: 'Hello' }];
     const { container } = render(<BoardSetupCard />);
     expect(container.firstChild).toBeNull();
   });
 
   it('derives progress from real domain state, not stored flags', () => {
     state.docs = [{ id: 'd' }];
-    state.members = [{ membershipId: 'm1' }, { membershipId: 'm2' }];
+    state.members = [{ membershipId: 'm1', status: 'active' }, { membershipId: 'm2', status: 'active' }];
     render(<BoardSetupCard />);
-    expect(screen.getByText(/2 of 4 done/)).toBeTruthy();
+    expect(screen.getByText(/2 of 5 done/)).toBeTruthy();
     // Next incomplete step owns the ember CTA.
     expect(screen.getByText('Set up amenities')).toBeTruthy();
   });

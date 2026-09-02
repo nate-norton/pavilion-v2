@@ -147,6 +147,8 @@ export interface PavData {
   paymentDetailIdx: number | null;
   decisionDetailIdx: number | null;
   composeOpen: boolean;
+  /** Which setup-guide step's sheet is open (live, board). */
+  setupGuideStep: string | null;
   manageAmenOpen: boolean;
   boardChatOpen: boolean;
   /** Topic thread the board chat sheet opens on; null = topic list. */
@@ -323,6 +325,7 @@ export const dataDefaults: PavData = {
   paymentDetailIdx: null,
   decisionDetailIdx: null,
   composeOpen: false,
+  setupGuideStep: null,
   manageAmenOpen: false,
   boardChatOpen: false,
   boardChatTopic: null,
