@@ -68,7 +68,7 @@ export function SASheet() {
           <button
             onClick={paySA}
             className="w-full border-none rounded-2xl py-4 text-[14px] font-extrabold cursor-pointer text-white mb-2.5"
-            style={{ background: 'rgb(var(--emberdeep))' }}
+            style={{ background: 'rgb(var(--skydeep))' }}
           >
             Pay $450.00
           </button>
@@ -92,7 +92,7 @@ export function SASheet() {
           </p>
           <button
             onClick={closeSA}
-            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-navy"
+            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>
@@ -109,7 +109,7 @@ export function SASheet() {
           </p>
           <button
             onClick={closeSA}
-            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-navy"
+            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>

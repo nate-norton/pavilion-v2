@@ -129,7 +129,7 @@ export function BoardDesk() {
           Resident view
         </button>
         <div className="flex flex-col items-end gap-1.5">
-          <span className="rounded-full px-3 py-[5px] text-[10.5px] font-bold bg-navy text-cream" style={{ letterSpacing: '0.1em' }}>
+          <span className="rounded-full px-3 py-[5px] text-[10.5px] font-bold bg-skydeep text-cream" style={{ letterSpacing: '0.1em' }}>
             BOARD
           </span>
           {!demo && (
@@ -138,7 +138,7 @@ export function BoardDesk() {
               className="flex items-center gap-1.5 rounded-full px-3 py-[5px] text-[11px] font-extrabold cursor-pointer bg-paper text-navy"
               style={{ border: '1px solid rgb(var(--navy) / 0.15)' }}
             >
-              <PhIcon name="ph-fill ph-chats-circle" size={13} color="rgb(var(--navy))" />
+              <PhIcon name="ph-fill ph-chats-circle" size={13} color="rgb(var(--skydeep))" />
               Board chat
             </button>
           )}
@@ -228,7 +228,7 @@ export function BoardDesk() {
                 {!state.reportTicketed && (
                   <button
                     onClick={createTicket}
-                    className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                    className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
                   >
                     Create ticket
                   </button>
@@ -259,7 +259,7 @@ export function BoardDesk() {
                   {!state.m89Assigned && (
                     <button
                       onClick={assignM89}
-                      className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                      className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
                     >
                       Assign vendor
                     </button>
@@ -341,7 +341,7 @@ export function BoardDesk() {
                 {!state.gateScheduled && (
                   <button
                     onClick={scheduleVendor}
-                    className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                    className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
                   >
                     Schedule
                   </button>
@@ -558,7 +558,7 @@ export function BoardDesk() {
                             />
                             <button
                               onClick={() => { if (rosterUnit.trim()) { void repo.assignMemberUnit(m.membershipId, rosterUnit); setRosterUnit(''); } }}
-                              className="border-0 rounded-[11px] px-3 text-[11px] font-extrabold cursor-pointer bg-navy text-cream"
+                              className="border-0 rounded-[11px] px-3 text-[11px] font-extrabold cursor-pointer bg-skydeep text-cream"
                             >
                               Move
                             </button>
@@ -633,7 +633,7 @@ export function BoardDesk() {
                         onClick={() => setViolSeverity(s)}
                         className="flex-1 rounded-full py-2 text-[11.5px] font-extrabold cursor-pointer capitalize"
                         style={violSeverity === s
-                          ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                          ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
                           : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
                       >
                         {s}
@@ -822,13 +822,13 @@ export function BoardDesk() {
           <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
             Vote monitor
           </p>
-          <div className="bg-navy rounded-[20px] p-[18px] mb-[22px] text-cream">
+          <div className="bg-skydeep rounded-[20px] p-[18px] mb-[22px] text-cream">
             <p className="m-0 mb-1 font-serif text-base">{demo ? `${vote.title} · closes Thu` : vote.title}</p>
             <div className="flex items-center justify-between my-2.5 mb-1.5">
-              <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+              <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
                 QUORUM
               </span>
-              <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+              <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
                 {quorum.count} of {quorumTotal} households
               </span>
             </div>
@@ -916,7 +916,7 @@ export function BoardDesk() {
                       ) : (
                         <button
                           onClick={() => { setArcDecideId(deciding ? null : r.id); setArcNote(''); }}
-                          className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                          className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
                         >
                           {deciding ? 'Cancel' : 'Decide'}
                         </button>
@@ -1030,7 +1030,7 @@ export function BoardDesk() {
                 {!state.m89Assigned && (
                   <button
                     onClick={assignM89}
-                    className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                    className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
                   >
                     Assign
                   </button>
@@ -1053,7 +1053,7 @@ export function BoardDesk() {
               {!state.gateScheduled && (
                 <button
                   onClick={scheduleVendor}
-                  className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                  className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
                 >
                   Schedule
                 </button>
@@ -1314,7 +1314,7 @@ export function BoardDesk() {
               {!state.invApproved && (
                 <button
                   onClick={approveInv}
-                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
                 >
                   Sign
                 </button>
@@ -1369,7 +1369,7 @@ export function BoardDesk() {
                 </div>
                 <button
                   onClick={openVoteDraft}
-                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
                 >
                   New vote
                 </button>
@@ -1391,7 +1391,7 @@ export function BoardDesk() {
                       onClick={() => setVoteKind(k)}
                       className="flex-1 rounded-[11px] py-2 text-[12px] font-extrabold cursor-pointer"
                       style={voteKind === k
-                        ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                        ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
                         : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
                     >
                       {k === 'yesno' ? 'Yes / No' : 'Multiple choice'}
@@ -1467,7 +1467,7 @@ export function BoardDesk() {
                       onClick={() => setVoteDays(days)}
                       className="flex-1 rounded-[11px] py-2 text-[11.5px] font-extrabold cursor-pointer"
                       style={voteDays === days
-                        ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                        ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
                         : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
                     >
                       {label}
@@ -1501,7 +1501,7 @@ export function BoardDesk() {
                           .catch(reportedByDataLayer); // failure surfaced via the app toast
                       }}
                       className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                      style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
+                      style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--white))' }}
                     >
                       Confirm — open to all households
                     </button>
@@ -1718,7 +1718,7 @@ export function BoardDesk() {
                         <button
                           onClick={() => { postVote(); setVoteConfirm(false); }}
                           className="flex-1 border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                          style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))' }}
+                          style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--white))' }}
                         >
                           Confirm — open to 136 households
                         </button>
@@ -1746,7 +1746,7 @@ export function BoardDesk() {
                     </div>
                     <button
                       onClick={openVoteDraft}
-                      className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                      className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
                     >
                       New vote
                     </button>
@@ -1865,7 +1865,7 @@ export function BoardDesk() {
               {!state.minutesPublished && (
                 <button
                   onClick={publishMinutes}
-                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
                 >
                   Publish
                 </button>
@@ -1944,7 +1944,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
         {t.status === 'open' && (
           <button
             onClick={() => void repo.setReportStatus(t.id, 'ticketed')}
-            className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-navy text-cream"
+            className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
           >
             Create ticket
           </button>
@@ -1987,7 +1987,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
               />
               <button
                 onClick={() => { if (vendor.trim()) void repo.assignReport(t.id, vendor); }}
-                className="border-0 rounded-[11px] px-3 text-[11.5px] font-extrabold cursor-pointer bg-navy text-cream flex-shrink-0"
+                className="border-0 rounded-[11px] px-3 text-[11.5px] font-extrabold cursor-pointer bg-skydeep text-cream flex-shrink-0"
               >
                 Assign
               </button>

@@ -39,9 +39,9 @@ export function Portfolio() {
       </p>
 
       <div className="grid grid-cols-3 gap-[9px] mb-4">
-        <div className="bg-navy rounded-[15px] p-[13px_10px] text-center text-cream">
+        <div className="bg-skydeep rounded-[15px] p-[13px_10px] text-center text-cream">
           <p className="m-0 mb-0.5 font-serif text-xl">{pfCollected}%</p>
-          <p className="m-0 text-[9.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.6)', letterSpacing: '0.05em' }}>
+          <p className="m-0 text-[9.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)', letterSpacing: '0.05em' }}>
             COLLECTED
           </p>
         </div>
@@ -73,7 +73,7 @@ export function Portfolio() {
             >
               <div className="flex items-center gap-2.5 mb-[11px]">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-sand">
-                  <PhIcon name="ph-fill ph-buildings" size={19} color="rgb(var(--navy))" />
+                  <PhIcon name="ph-fill ph-buildings" size={19} color="rgb(var(--skydeep))" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="m-0 text-[14.5px] font-bold text-navy">{c.name}</p>

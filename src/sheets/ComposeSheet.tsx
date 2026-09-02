@@ -71,7 +71,7 @@ export function ComposeSheet() {
                   onClick={() => setKind(k.key)}
                   className="rounded-full px-3 py-1.5 text-[11.5px] font-extrabold cursor-pointer"
                   style={kind === k.key
-                    ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                    ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
                     : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
                 >
                   {k.label}

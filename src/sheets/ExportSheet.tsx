@@ -67,7 +67,7 @@ export function ExportSheet() {
           </p>
           <button
             onClick={closeExport}
-            className="w-full border-none text-cream rounded-2xl py-[14px] text-sm font-extrabold cursor-pointer bg-navy"
+            className="w-full border-none text-cream rounded-2xl py-[14px] text-sm font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>

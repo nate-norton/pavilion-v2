@@ -54,7 +54,7 @@ export function EmptyState({ icon, title, body, actionLabel, onAction, status = 
           type="button"
           onClick={() => repo.retry()}
           className="mt-3.5 border-none rounded-[11px] text-[12.5px] font-extrabold cursor-pointer font-sans text-white"
-          style={{ background: 'rgb(var(--emberdeep))', padding: '9px 16px' }}
+          style={{ background: 'rgb(var(--skydeep))', padding: '9px 16px' }}
         >
           Try again
         </button>
@@ -79,7 +79,7 @@ export function EmptyState({ icon, title, body, actionLabel, onAction, status = 
           type="button"
           onClick={onAction}
           className="mt-3.5 border-none rounded-[11px] text-[12.5px] font-extrabold cursor-pointer font-sans text-white"
-          style={{ background: 'rgb(var(--emberdeep))', padding: '9px 16px' }}
+          style={{ background: 'rgb(var(--skydeep))', padding: '9px 16px' }}
         >
           {actionLabel}
         </button>

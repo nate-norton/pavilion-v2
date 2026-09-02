@@ -40,12 +40,12 @@ export function Meeting() {
       </p>
 
       {/* Quorum pledged */}
-      <div className="bg-navy rounded-[18px] p-4 text-cream mb-3.5">
+      <div className="bg-skydeep rounded-[18px] p-4 text-cream mb-3.5">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+          <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
             QUORUM PLEDGED
           </span>
-          <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+          <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
             {quorum.count} of 136 households
           </span>
         </div>
@@ -55,7 +55,7 @@ export function Meeting() {
             style={{ transform: `scaleX(${quorum.pct / 100})`, background: 'linear-gradient(90deg,rgb(var(--ember)),rgb(var(--emberbright)))', transition: 'transform 0.6s ease' }}
           />
         </div>
-        <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+        <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
           34 attending remotely · proxies count toward quorum
         </p>
       </div>
@@ -90,7 +90,7 @@ export function Meeting() {
           type="button"
           onClick={() => set({ handRaised: true })}
           className="w-full border-none text-white rounded-2xl text-sm font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3"
-          style={{ background: 'rgb(var(--emberdeep))', padding: '15px 0' }}
+          style={{ background: 'rgb(var(--skydeep))', padding: '15px 0' }}
         >
           <PhIcon name="ph-fill ph-hand-waving" size={16} />
           Raise your hand for open comment
@@ -111,7 +111,7 @@ export function Meeting() {
       {!state.proxyPick ? (
         <div style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '13px 15px' }}>
           <button type="button" onClick={() => set({ proxyOpen: !state.proxyOpen })} className="w-full flex items-center gap-[11px] cursor-pointer border-none bg-transparent text-left font-sans">
-            <PhIcon name="ph-fill ph-user-switch" size={18} color="rgb(var(--navy))" className="flex-shrink-0" />
+            <PhIcon name="ph-fill ph-user-switch" size={18} color="rgb(var(--skydeep))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[12.5px] font-bold text-navy">Can&apos;t make it? Assign your vote to a proxy</p>
             <PhIcon name={state.proxyOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'} size={14} color="rgb(var(--stonelight))" />
           </button>

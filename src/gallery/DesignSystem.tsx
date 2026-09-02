@@ -316,7 +316,7 @@ export function DesignSystem() {
               <button className={btnBase + ' text-white'} style={{ background: 'rgb(var(--ember))' }}>Pay dues</button>
             </Spec>
             <Spec name="Secondary" use="Strong but not the hero action">
-              <button className={btnBase} style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }}>View details</button>
+              <button className={btnBase} style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}>View details</button>
             </Spec>
             <Spec name="Ghost" use="Low-emphasis, tertiary">
               <button className={btnBase + ' bg-transparent'} style={{ boxShadow: 'inset 0 0 0 1.5px rgb(var(--sagedark) / 0.35)', color: 'rgb(var(--sagedark))' }}>Maybe later</button>
@@ -377,7 +377,7 @@ export function DesignSystem() {
         <Section title="Identity & media">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Spec name="Avatar" use="People — sized 26 / 36 / 48 / 64">
-              <Avatar initial="A" color="rgb(var(--navy))" size={26} />
+              <Avatar initial="A" color="rgb(var(--skydeep))" size={26} />
               <Avatar initial="M" color="rgb(var(--terracotta))" size={36} />
               <Avatar initial="R" color="rgb(var(--sage))" size={48} />
               <Avatar initial="D" color="rgb(var(--sky))" size={64} />
@@ -428,7 +428,7 @@ export function DesignSystem() {
               StackedPanel — bare layered surface for existing rich content (used on Today &amp; HOA)
             </p>
             <StackedCards overlap={22}>
-              <StackedPanel tint="navy">
+              <StackedPanel tint="skydeep">
                 <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
                   Tonight · 5–8 PM
                 </p>
@@ -445,7 +445,7 @@ export function DesignSystem() {
           <div className="rounded-2xl p-5 flex flex-wrap gap-5" style={{ background: 'rgb(var(--paper))', boxShadow: 'inset 0 0 0 1px rgb(var(--navy) / 0.08)' }}>
             {ICON_SAMPLE.map((n) => (
               <div key={n} className="flex flex-col items-center gap-1.5 w-[64px]">
-                <PhIcon name={`ph-fill ph-${n}`} size={26} color="rgb(var(--navy))" />
+                <PhIcon name={`ph-fill ph-${n}`} size={26} color="rgb(var(--skydeep))" />
                 <span className="text-[9.5px] text-taupe font-mono text-center leading-tight">{n}</span>
               </div>
             ))}

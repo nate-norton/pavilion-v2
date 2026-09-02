@@ -45,13 +45,13 @@ export function Messages() {
               className="w-9 h-9 rounded-full border-none flex items-center justify-center cursor-pointer"
               style={{ background: 'rgb(var(--navy) / 0.06)' }}
             >
-              <PhIcon name="ph-bold ph-plus" size={16} color="rgb(var(--navy))" />
+              <PhIcon name="ph-bold ph-plus" size={16} color="rgb(var(--skydeep))" />
             </button>
           )}
           <button
             type="button"
             onClick={() => set({ newMsgOpen: true })}
-            className="w-9 h-9 rounded-full border-none flex items-center justify-center cursor-pointer bg-navy"
+            className="w-9 h-9 rounded-full border-none flex items-center justify-center cursor-pointer bg-skydeep"
           >
             <PhIcon name="ph-bold ph-pencil-simple-line" size={16} color="rgb(var(--cream))" />
           </button>
@@ -71,7 +71,7 @@ export function Messages() {
               className="border-none rounded-full px-3 py-[7px] text-[12px] font-extrabold cursor-pointer flex items-center gap-1.5"
               style={
                 msgTab === t.key
-                  ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }
+                  ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }
                   : { background: 'rgb(var(--navy) / 0.06)', color: 'rgb(var(--navy))' }
               }
             >
@@ -273,7 +273,7 @@ function EmptyState({ icon, text, actionLabel, onAction }: { icon: string; text:
       <button
         onClick={onAction}
         className="mt-3 border-none rounded-full px-4 py-2.5 text-[12.5px] font-extrabold cursor-pointer"
-        style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }}
+        style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
       >
         {actionLabel}
       </button>

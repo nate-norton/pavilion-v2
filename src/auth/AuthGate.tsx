@@ -60,7 +60,7 @@ function PrimaryButton({ label, busyLabel, busy, disabled, onClick }: {
       onClick={onClick}
       disabled={busy || disabled}
       className="w-full border-none rounded-xl py-3 text-[14px] font-extrabold cursor-pointer font-sans"
-      style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))', opacity: busy || disabled ? 0.6 : 1 }}
+      style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--white))', opacity: busy || disabled ? 0.6 : 1 }}
     >
       {busy ? busyLabel : label}
     </button>
@@ -170,7 +170,7 @@ function NoCommunity({ email }: { email: string }) {
     >
       <div className="w-full max-w-[380px] bg-paper rounded-[24px] p-7 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)', boxShadow: '0 18px 50px rgb(var(--scrim) / 0.12)' }}>
         <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto" style={{ background: 'rgb(var(--navy) / 0.06)' }}>
-          <PhIcon name="ph-fill ph-house-line" size={26} color="rgb(var(--navy))" />
+          <PhIcon name="ph-fill ph-house-line" size={26} color="rgb(var(--skydeep))" />
         </div>
         <h1 className="m-0 mb-2 font-serif text-[23px] text-navy">You’re signed in</h1>
         <p className="m-0 mb-4 text-[13.5px] font-semibold leading-[1.55]" style={{ color: 'rgb(var(--taupe))' }}>

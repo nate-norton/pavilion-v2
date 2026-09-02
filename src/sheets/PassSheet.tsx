@@ -75,7 +75,7 @@ export function PassSheet() {
         </div>
       ) : (
         <div className="animate-fadeup">
-          <div className="rounded-[20px] p-[18px] flex gap-4 items-center mb-3.5 bg-navy text-cream">
+          <div className="rounded-[20px] p-[18px] flex gap-4 items-center mb-3.5 bg-skydeep text-cream">
             <div
               className="w-[92px] h-[92px] bg-paper rounded-[14px] p-2.5 grid flex-shrink-0"
               style={{ gridTemplateColumns: 'repeat(5,1fr)', gridTemplateRows: 'repeat(5,1fr)', gap: 3 }}
@@ -94,7 +94,7 @@ export function PassSheet() {
               <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.25]">
                 {state.passName} · {state.passPlate}
               </p>
-              <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+              <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
                 {PASS_DURS[state.passDur]} · Lot B · expires automatically
               </p>
             </div>
@@ -110,7 +110,7 @@ export function PassSheet() {
             </button>
             <button
               onClick={closePass}
-              className="flex-1 border-none text-cream rounded-[13px] py-3 text-[13px] font-extrabold cursor-pointer bg-navy"
+              className="flex-1 border-none text-cream rounded-[13px] py-3 text-[13px] font-extrabold cursor-pointer bg-skydeep"
             >
               Done
             </button>

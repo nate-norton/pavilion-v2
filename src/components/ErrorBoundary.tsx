@@ -35,7 +35,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             <button
               type="button"
               onClick={this.handleRestart}
-              className="border-0 bg-navy text-cream rounded-[12px] px-5 py-2.5 text-[13px] font-extrabold cursor-pointer font-sans"
+              className="border-0 bg-skydeep text-cream rounded-[12px] px-5 py-2.5 text-[13px] font-extrabold cursor-pointer font-sans"
             >
               Restart demo
             </button>

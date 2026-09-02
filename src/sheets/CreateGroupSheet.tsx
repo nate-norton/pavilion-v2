@@ -86,7 +86,7 @@ export function CreateGroupSheet() {
               className="flex items-center gap-1.5 rounded-full border-none px-3 py-2 text-[11.5px] font-bold cursor-pointer"
               style={
                 state.createGroupIcon === opt.icon
-                  ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }
+                  ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }
                   : { background: 'rgb(var(--navy) / 0.06)', color: 'rgb(var(--navy))' }
               }
             >
