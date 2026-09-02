@@ -24,6 +24,10 @@ export function RosterInvite() {
   const parsed = parseRoster(text);
   const pending = invites.filter((i) => i.status === 'pending');
 
+  // The presenter demo is a scripted, fully-populated community; it has no
+  // roster to bring in, and its Desk stays byte-for-byte as rehearsed.
+  if (repo.isDemo()) return null;
+
   const create = () => {
     if (parsed.ready.length === 0 || busy) return;
     setBusy(true);
