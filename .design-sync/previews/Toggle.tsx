@@ -8,7 +8,7 @@ function SettingRow({ label, size, initial }: { label: string; size?: 'sm' | 'lg
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
       <Toggle on={on} onToggle={() => setOn((v) => !v)} size={size} />
-      <span style={{ fontFamily: "'Nunito Sans', sans-serif", fontSize: 13, fontWeight: 700, color: 'rgb(var(--bark))' }}>
+      <span style={{ fontFamily: "'Nunito Sans', sans-serif", fontSize: 13, fontWeight: 700, color: 'rgb(var(--slatedark))' }}>
         {label}
       </span>
     </div>

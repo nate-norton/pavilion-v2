@@ -384,10 +384,10 @@ export class SupabaseRepository implements Repository {
       return {
         id: r.id,
         icon: resolved ? 'ph-fill ph-check-circle' : 'ph-fill ph-wrench',
-        iconColor: resolved ? 'rgb(var(--stonelight))' : 'rgb(var(--terracotta))',
+        iconColor: resolved ? 'rgb(var(--slatelight))' : 'rgb(var(--accent))',
         title: r.title,
         statusLabel: resolved ? 'Resolved' : handled ? (r.vendor || 'Ticketed') : 'In triage',
-        tone: resolved ? 'sand' : handled ? 'mint' : 'gold',
+        tone: resolved ? 'skyborder' : handled ? 'mint' : 'gold',
         resolved,
       };
     });
@@ -1367,7 +1367,7 @@ export class SupabaseRepository implements Repository {
     this.mark('amenities', error);
     this.cache.amenities = (data ?? []).map((a) => ({
       id: a.id, name: a.name, sub: a.sub, icon: a.icon, rules: a.rules,
-      avail: a.avail_label, occ: a.occ_label, occColor: 'rgb(var(--stonelight))', taken: [],
+      avail: a.avail_label, occ: a.occ_label, occColor: 'rgb(var(--slatelight))', taken: [],
       openHour: a.open_hour, closeHour: a.close_hour, slotMinutes: a.slot_minutes,
       capacity: a.capacity, maxDaysAhead: a.max_days_ahead,
     }));

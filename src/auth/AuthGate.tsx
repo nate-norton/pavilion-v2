@@ -26,10 +26,10 @@ type OnboardingProfile = { id: string; name: string; phone: string; onboarded_at
 /** Supabase's own floor is 6; 8 is the cheapest real improvement we control. */
 const MIN_PASSWORD = 8;
 
-const SHELL_BG = 'radial-gradient(120% 90% at 50% 0%, rgb(var(--creamtint)) 0%, rgb(var(--sandtint)) 60%, rgb(var(--sanddeep)) 100%)';
+const SHELL_BG = 'radial-gradient(120% 90% at 50% 0%, rgb(var(--misttint)) 0%, rgb(var(--skywash)) 60%, rgb(var(--skyedge)) 100%)';
 const CARD_STYLE = { border: '1px solid rgb(var(--navy) / 0.08)', boxShadow: '0 18px 50px rgb(var(--scrim) / 0.12)' } as const;
 const FIELD = 'w-full rounded-xl px-4 py-3 text-[14px] font-semibold text-navy outline-none font-sans';
-const FIELD_STYLE = { border: '1px solid rgb(var(--navy) / 0.14)', background: 'rgb(var(--parchment))' } as const;
+const FIELD_STYLE = { border: '1px solid rgb(var(--navy) / 0.14)', background: 'rgb(var(--mistpale))' } as const;
 
 /** Centered card shell shared by every auth screen. */
 function AuthShell({ children, width = 360 }: { children: ReactNode; width?: number }) {
@@ -45,7 +45,7 @@ function AuthShell({ children, width = 360 }: { children: ReactNode; width?: num
 function AuthError({ message }: { message: string | null }) {
   if (!message) return null;
   return (
-    <p role="alert" className="m-0 mb-3 text-[12.5px] font-bold" style={{ color: 'rgb(var(--terracotta))' }}>
+    <p role="alert" className="m-0 mb-3 text-[12.5px] font-bold" style={{ color: 'rgb(var(--accent))' }}>
       {message}
     </p>
   );
@@ -166,20 +166,20 @@ function NoCommunity({ email }: { email: string }) {
   return (
     <div
       className="min-h-dvh flex items-center justify-center p-6"
-      style={{ background: 'radial-gradient(120% 90% at 50% 0%, rgb(var(--creamtint)) 0%, rgb(var(--sandtint)) 60%, rgb(var(--sanddeep)) 100%)' }}
+      style={{ background: 'radial-gradient(120% 90% at 50% 0%, rgb(var(--misttint)) 0%, rgb(var(--skywash)) 60%, rgb(var(--skyedge)) 100%)' }}
     >
       <div className="w-full max-w-[380px] bg-paper rounded-[24px] p-7 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)', boxShadow: '0 18px 50px rgb(var(--scrim) / 0.12)' }}>
         <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto" style={{ background: 'rgb(var(--navy) / 0.06)' }}>
           <PhIcon name="ph-fill ph-house-line" size={26} color="rgb(var(--skydeep))" />
         </div>
         <h1 className="m-0 mb-2 font-serif text-[23px] text-navy">You’re signed in</h1>
-        <p className="m-0 mb-4 text-[13.5px] font-semibold leading-[1.55]" style={{ color: 'rgb(var(--taupe))' }}>
+        <p className="m-0 mb-4 text-[13.5px] font-semibold leading-[1.55]" style={{ color: 'rgb(var(--slatedeep))' }}>
           <span className="text-navy">{email}</span> isn’t part of a community yet. Pavilion is
           invite-based — your HOA board adds you to your community.
         </p>
-        <div className="rounded-2xl px-4 py-3.5 mb-4 text-left" style={{ background: 'rgb(var(--parchment))', border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <p className="m-0 mb-1 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.1em' }}>What’s next</p>
-          <p className="m-0 text-[13px] font-semibold text-bark leading-[1.5]">
+        <div className="rounded-2xl px-4 py-3.5 mb-4 text-left" style={{ background: 'rgb(var(--mistpale))', border: '1px solid rgb(var(--navy) / 0.08)' }}>
+          <p className="m-0 mb-1 text-[11px] font-bold uppercase text-slate" style={{ letterSpacing: '0.1em' }}>What’s next</p>
+          <p className="m-0 text-[13px] font-semibold text-slatedark leading-[1.5]">
             Ask your board to invite this email. Once you’re added, you’ll land right in your community.
           </p>
         </div>
@@ -190,7 +190,7 @@ function NoCommunity({ email }: { email: string }) {
           they just signed in with. Naming that turns a dead end into a
           one-tap retry — and it costs nothing to offer.
         */}
-        <p className="m-0 mb-3 text-[11.5px] font-semibold text-stone leading-[1.45]">
+        <p className="m-0 mb-3 text-[11.5px] font-semibold text-slate leading-[1.45]">
           Invited under a different address? Sign in with that one instead.
         </p>
         <button
@@ -291,11 +291,11 @@ function LiveSignIn() {
     }[stage];
     return (
       <AuthShell>
-        <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}>
+        <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}>
           <PhIcon name="ph-fill ph-envelope-simple" size={24} color="rgb(var(--white))" />
         </div>
         <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Check your email</h1>
-        <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--taupe))' }}>{copy}</p>
+        <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>{copy}</p>
         <button
           type="button"
           onClick={() => { setStage('form'); setError(null); }}
@@ -310,13 +310,13 @@ function LiveSignIn() {
 
   return (
     <AuthShell>
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}>
+      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}>
         <PhIcon name="ph-fill ph-house-line" size={24} color="rgb(var(--white))" />
       </div>
       <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">
         {isSignup ? 'Create your account' : 'Welcome to Pavilion'}
       </h1>
-      <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--taupe))' }}>
+      <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
         {isSignup
           ? 'Your board invites you by email — use the address they invited, and we’ll put you in your community.'
           : 'Sign in with your email and password.'}
@@ -356,7 +356,7 @@ function LiveSignIn() {
         style={FIELD_STYLE}
       />
       {isSignup && (
-        <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+        <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
           At least {MIN_PASSWORD} characters.
         </p>
       )}
@@ -384,7 +384,7 @@ function LiveSignIn() {
             type="button"
             onClick={sendReset}
             className="bg-transparent border-none p-1 text-[12.5px] font-bold cursor-pointer font-sans"
-            style={{ color: 'rgb(var(--stone))' }}
+            style={{ color: 'rgb(var(--slate))' }}
           >
             Forgot password?
           </button>
@@ -393,7 +393,7 @@ function LiveSignIn() {
 
       <div className="flex items-center gap-2.5 my-3">
         <span className="flex-1 h-px" style={{ background: 'rgb(var(--navy) / 0.1)' }} />
-        <span className="text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--stonelight))' }}>or</span>
+        <span className="text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--slatelight))' }}>or</span>
         <span className="flex-1 h-px" style={{ background: 'rgb(var(--navy) / 0.1)' }} />
       </div>
       <button
@@ -425,11 +425,11 @@ function SetNewPassword({ onDone }: { onDone: () => void }) {
 
   return (
     <AuthShell>
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}>
+      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}>
         <PhIcon name="ph-fill ph-lock-simple" size={24} color="rgb(var(--white))" />
       </div>
       <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Choose a new password</h1>
-      <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--taupe))' }}>
+      <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
         You’re signed in from the reset link. Pick a password and you’re set.
       </p>
       <input
@@ -443,7 +443,7 @@ function SetNewPassword({ onDone }: { onDone: () => void }) {
         className={`${FIELD} mb-2`}
         style={FIELD_STYLE}
       />
-      <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+      <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
         At least {MIN_PASSWORD} characters.
       </p>
       <AuthError message={error} />
@@ -491,11 +491,11 @@ function LiveOnboarding({ profile, email, onDone }: {
 
   return (
     <AuthShell width={380}>
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}>
+      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}>
         <PhIcon name="ph-fill ph-hand-waving" size={24} color="rgb(var(--white))" />
       </div>
       <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Introduce yourself</h1>
-      <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--taupe))' }}>
+      <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
         This is the name your neighbors see on votes, posts, and the directory. You can change it later in My Place.
       </p>
 
@@ -520,7 +520,7 @@ function LiveOnboarding({ profile, email, onDone }: {
         className={`${FIELD} mb-2`}
         style={FIELD_STYLE}
       />
-      <p className="m-0 mb-3 text-[11.5px] font-semibold leading-[1.45]" style={{ color: 'rgb(var(--stone))' }}>
+      <p className="m-0 mb-3 text-[11.5px] font-semibold leading-[1.45]" style={{ color: 'rgb(var(--slate))' }}>
         Your phone is only shown to neighbors in your community, and you can hide it in My Place.
       </p>
 

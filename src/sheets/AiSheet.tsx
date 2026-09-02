@@ -44,7 +44,7 @@ export function AiSheet() {
         style={{ background: 'rgb(var(--scrim) / 0.4)' }}
       />
       <div
-        className="absolute left-0 right-0 bottom-0 bg-parchment rounded-t-[28px] flex flex-col animate-sheetup"
+        className="absolute left-0 right-0 bottom-0 bg-mistpale rounded-t-[28px] flex flex-col animate-sheetup"
         style={{ height: '78%', boxShadow: '0 -18px 50px rgb(var(--scrim) / 0.25)' }}
       >
         <div
@@ -53,13 +53,13 @@ export function AiSheet() {
         >
           <div
             className="w-[38px] h-[38px] rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}
+            style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}
           >
             <PhIcon name="ph-fill ph-sparkle" size={18} color="rgb(var(--white))" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[14px] font-bold text-navy">AI</p>
-            <p className="m-0 text-[11.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+            <p className="m-0 text-[11.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
               {demo ? "Answers cite Juniper Ridge's actual documents" : 'Coming soon'}
             </p>
           </div>
@@ -67,17 +67,17 @@ export function AiSheet() {
             type="button"
             aria-label="Close"
             onClick={close}
-            className="border-none w-[30px] h-[30px] rounded-full flex items-center justify-center flex-shrink-0 bg-sand cursor-pointer"
+            className="border-none w-[30px] h-[30px] rounded-full flex items-center justify-center flex-shrink-0 bg-skyborder cursor-pointer"
           >
-            <PhIcon name="ph-bold ph-x" size={13} color="rgb(var(--bark))" />
+            <PhIcon name="ph-bold ph-x" size={13} color="rgb(var(--slatedark))" />
           </button>
         </div>
 
         {!demo ? (
           <div className="flex-1 flex flex-col items-center justify-center px-8 pb-10 text-center">
-            <PhIcon name="ph-fill ph-sparkle" size={30} color="rgb(var(--claypale))" />
+            <PhIcon name="ph-fill ph-sparkle" size={30} color="rgb(var(--slatefaint))" />
             <p className="m-0 mt-3 text-[14px] font-bold text-navy">Ask AI is on the way</p>
-            <p className="m-0 mt-1.5 text-[13px] font-semibold leading-[1.5] text-stone">
+            <p className="m-0 mt-1.5 text-[13px] font-semibold leading-[1.5] text-slate">
               It will answer questions about rules, dues, and amenities — grounded in your
               community&apos;s actual documents, with citations.
             </p>
@@ -95,7 +95,7 @@ export function AiSheet() {
                 className="max-w-[82%] animate-msgbubble"
                 style={{
                   background: m.me ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                  color: m.me ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
+                  color: m.me ? 'rgb(var(--mist))' : 'rgb(var(--navy))',
                   border: m.me ? 'none' : '1px solid rgb(var(--navy) / 0.08)',
                   borderRadius: m.me ? '18px 18px 6px 18px' : '18px 18px 18px 6px',
                   padding: '11px 14px',
@@ -106,13 +106,13 @@ export function AiSheet() {
                   <button
                     onClick={openCite}
                     className="inline-flex items-center gap-[5px] mt-[9px] rounded-lg px-[9px] py-[5px] cursor-pointer font-sans"
-                    style={{ background: 'rgb(var(--cream))', border: '1px solid rgb(var(--navy) / 0.14)' }}
+                    style={{ background: 'rgb(var(--mist))', border: '1px solid rgb(var(--navy) / 0.14)' }}
                   >
-                    <PhIcon name="ph-fill ph-file-text" size={12} color="rgb(var(--terracotta))" />
-                    <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
+                    <PhIcon name="ph-fill ph-file-text" size={12} color="rgb(var(--accent))" />
+                    <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
                       {m.cite}
                     </span>
-                    <PhIcon name="ph-bold ph-arrow-up-right" size={10} color="rgb(var(--stonelight))" />
+                    <PhIcon name="ph-bold ph-arrow-up-right" size={10} color="rgb(var(--slatelight))" />
                   </button>
                 )}
                 {m.askBoard && (
@@ -122,7 +122,7 @@ export function AiSheet() {
                     style={{ background: 'rgb(var(--skydeep))' }}
                   >
                     <PhIcon name="ph-fill ph-paper-plane-tilt" size={14} color="rgb(var(--peach))" />
-                    <span className="text-[12.5px] font-extrabold" style={{ color: 'rgb(var(--cream))' }}>
+                    <span className="text-[12.5px] font-extrabold" style={{ color: 'rgb(var(--mist))' }}>
                       Pass this to the board
                     </span>
                   </button>
@@ -163,7 +163,7 @@ export function AiSheet() {
             className="w-11 h-11 border-none rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
             style={{ background: 'rgb(var(--skydeep))' }}
           >
-            <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--cream))" />
+            <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--mist))" />
           </button>
         </div>
         </>

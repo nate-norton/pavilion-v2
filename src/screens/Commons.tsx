@@ -43,7 +43,7 @@ export function Commons() {
 
   const likeCount = 14 + (state.liked ? 1 : 0);
   const heartClass = state.liked ? 'ph-fill ph-heart' : 'ph ph-heart';
-  const heartColor = state.liked ? 'rgb(var(--ember))' : 'rgb(var(--stone))';
+  const heartColor = state.liked ? 'rgb(var(--sunset))' : 'rgb(var(--slate))';
 
   const commentCount = comments.length;
   const movieGoing = 23 + (state.rsvpMovie ? 1 : 0);
@@ -55,7 +55,7 @@ export function Commons() {
   return (
     <div className="absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: '64px 18px 150px' }}>
       <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">The Commons</h1>
-      <p className="m-0 mb-3.5 text-[13.5px] text-taupe font-semibold">What neighbors are sharing this week.</p>
+      <p className="m-0 mb-3.5 text-[13.5px] text-slatedeep font-semibold">What neighbors are sharing this week.</p>
 
       <div className="mb-4">
         <SegmentedControl options={SEG_OPTIONS} value={state.commonsView} onChange={(key) => set({ commonsView: key })} variant="light" />
@@ -69,18 +69,18 @@ export function Commons() {
             style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
           >
             <Avatar initial={member?.initial ?? 'A'} color={member?.color ?? 'rgb(var(--navy))'} size={32} />
-            <span className="flex-1 text-[13.5px] text-stonelight font-semibold">Share something…</span>
-            <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--stonelight))" />
+            <span className="flex-1 text-[13.5px] text-slatelight font-semibold">Share something…</span>
+            <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--slatelight))" />
           </button>
           <button
             onClick={() => set({ reportOpen: true })}
             className="flex items-center gap-1.5 mb-4 border-none bg-transparent cursor-pointer px-1 py-0.5 text-left"
           >
-            <PhIcon name="ph-fill ph-shield-check" size={13} color="rgb(var(--stone))" className="flex-shrink-0" />
-            <span className="text-[11.5px] text-stone font-bold">
+            <PhIcon name="ph-fill ph-shield-check" size={13} color="rgb(var(--slate))" className="flex-shrink-0" />
+            <span className="text-[11.5px] text-slate font-bold">
               See a problem? Report it privately to the board — never the feed.
             </span>
-            <span className="text-[11.5px] font-extrabold flex-shrink-0" style={{ color: 'rgb(var(--terracotta))' }}>
+            <span className="text-[11.5px] font-extrabold flex-shrink-0" style={{ color: 'rgb(var(--accent))' }}>
               Report →
             </span>
           </button>
@@ -105,13 +105,13 @@ export function Commons() {
                 style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
               >
                 <div className="flex items-center gap-2.5 mb-2.5">
-                  <Avatar initial="M" color="rgb(var(--terracotta))" size={36} />
+                  <Avatar initial="M" color="rgb(var(--accent))" size={36} />
                   <div className="flex-1">
                     <p className="m-0 text-[13.5px] font-bold text-navy">
-                      Maria R. <span className="font-semibold text-stonelight">· #7 · 2h</span>
+                      Maria R. <span className="font-semibold text-slatelight">· #7 · 2h</span>
                     </p>
                   </div>
-                  <span className="rounded-full px-2.5 py-1 text-[11px] font-bold" style={{ background: 'rgb(var(--blush))', color: 'rgb(var(--terracotta))' }}>
+                  <span className="rounded-full px-2.5 py-1 text-[11px] font-bold" style={{ background: 'rgb(var(--accenttint))', color: 'rgb(var(--accent))' }}>
                     Shoutout
                   </span>
                 </div>
@@ -126,14 +126,14 @@ export function Commons() {
                     className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
                   >
                     <PhIcon name={heartClass} size={19} color={heartColor} className={state.liked ? 'animate-heartpop' : undefined} />
-                    <span className="text-[13px] font-bold text-stone">{likeCount}</span>
+                    <span className="text-[13px] font-bold text-slate">{likeCount}</span>
                   </button>
                   <button
                     onClick={() => set({ commentsOpen: !state.commentsOpen })}
                     className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
                   >
-                    <PhIcon name="ph ph-chat-circle" size={19} color="rgb(var(--stone))" />
-                    <span className="text-[13px] font-bold text-stone">{commentCount}</span>
+                    <PhIcon name="ph ph-chat-circle" size={19} color="rgb(var(--slate))" />
+                    <span className="text-[13px] font-bold text-slate">{commentCount}</span>
                   </button>
                 </div>
                 {state.commentsOpen && (
@@ -142,7 +142,7 @@ export function Commons() {
                       {comments.map((cm, i) => (
                         <div key={i} className="flex gap-2.5 items-start">
                           <Avatar initial={cm.who} color={cm.color} size={26} />
-                          <div className="bg-cream rounded-xl px-2.5 py-2 flex-1">
+                          <div className="bg-mist rounded-xl px-2.5 py-2 flex-1">
                             <p className="m-0 mb-0.5 text-[11.5px] font-bold text-navy">{cm.who}</p>
                             <p className="m-0 text-[12.5px] leading-[1.45] font-semibold" style={{ color: 'rgb(var(--ink))' }}>
                               {cm.text}
@@ -157,14 +157,14 @@ export function Commons() {
                         onChange={(e) => set({ commentInput: e.target.value })}
                         onKeyDown={onCommentKey}
                         placeholder="Add a comment…"
-                        className="flex-1 rounded-full px-3.5 py-2 text-[12.5px] font-semibold text-navy outline-none bg-parchment"
+                        className="flex-1 rounded-full px-3.5 py-2 text-[12.5px] font-semibold text-navy outline-none bg-mistpale"
                         style={{ border: '1px solid rgb(var(--navy) / 0.12)' }}
                       />
                       <button
                         onClick={() => addComment()}
                         className="w-9 h-9 border-none rounded-full bg-skydeep flex items-center justify-center cursor-pointer flex-shrink-0"
                       >
-                        <PhIcon name="ph-fill ph-paper-plane-right" size={14} color="rgb(var(--cream))" />
+                        <PhIcon name="ph-fill ph-paper-plane-right" size={14} color="rgb(var(--mist))" />
                       </button>
                     </div>
                   </div>
@@ -181,7 +181,7 @@ export function Commons() {
                   <Avatar initial="D" color="rgb(var(--sky))" size={36} />
                   <div className="flex-1">
                     <p className="m-0 text-[13.5px] font-bold text-navy">
-                      Dev P. <span className="font-semibold text-stonelight">· #23 · 5h</span>
+                      Dev P. <span className="font-semibold text-slatelight">· #23 · 5h</span>
                     </p>
                   </div>
                   <span className="rounded-full px-2.5 py-1 text-[11px] font-bold" style={{ background: 'rgb(var(--skypale))', color: 'rgb(var(--skydeep))' }}>
@@ -216,16 +216,16 @@ export function Commons() {
                 <PhotoPlaceholder label="event photo — movie night" height={96} />
                 <div className="px-4 py-3.5">
                   <div className="flex items-center justify-between gap-2.5 mb-1.5">
-                    <p className="m-0 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--terracotta))' }}>
+                    <p className="m-0 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--accent))' }}>
                       Sat, Jul 5 · Dusk · The Green
                     </p>
-                    <span className="rounded-full px-2.5 py-1 text-[11px] font-bold bg-sand text-bark">
+                    <span className="rounded-full px-2.5 py-1 text-[11px] font-bold bg-skyborder text-slatedark">
                       Social Committee
                     </span>
                   </div>
                   <p className="m-0 mb-1 font-serif text-[17px] text-navy">Movie on the lawn</p>
                   <div className="flex items-center justify-between gap-2.5 mt-2.5">
-                    <p className="m-0 text-[12.5px] text-stone font-bold">{movieGoing} going · bring a blanket</p>
+                    <p className="m-0 text-[12.5px] text-slate font-bold">{movieGoing} going · bring a blanket</p>
                     {state.rsvpMovie ? (
                       <button
                         onClick={() => set({ rsvpMovie: !state.rsvpMovie })}
@@ -237,7 +237,7 @@ export function Commons() {
                     ) : (
                       <button
                         onClick={() => set({ rsvpMovie: !state.rsvpMovie })}
-                        className="border-none text-white rounded-full px-3.5 py-2 text-[12.5px] font-extrabold cursor-pointer bg-emberdeep"
+                        className="border-none text-white rounded-full px-3.5 py-2 text-[12.5px] font-extrabold cursor-pointer bg-sunsetdeep"
                       >
                         RSVP
                       </button>
@@ -256,7 +256,7 @@ export function Commons() {
                   <Avatar initial="G" color="rgb(var(--sage))" size={36} />
                   <div className="flex-1">
                     <p className="m-0 text-[13.5px] font-bold text-navy">
-                      Garden Circle <span className="font-semibold text-stonelight">· 1d</span>
+                      Garden Circle <span className="font-semibold text-slatelight">· 1d</span>
                     </p>
                   </div>
                   <button
@@ -285,7 +285,7 @@ export function Commons() {
           <div className="animate-fadeup">
             {joined.length > 0 && (
               <>
-                <p className="m-0 mx-1 mb-2.5 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+                <p className="m-0 mx-1 mb-2.5 text-[11px] font-bold uppercase text-slate" style={{ letterSpacing: '0.12em' }}>
                   Yours
                 </p>
                 <div className="flex flex-col gap-2.5 mb-5">
@@ -307,9 +307,9 @@ export function Commons() {
                         <div className="flex-1 min-w-0">
                           <p className="m-0 mb-px text-sm font-bold text-navy flex items-center gap-1.5">
                             {g.name}
-                            {g.muted && <PhIcon name="ph-fill ph-bell-slash" size={11} color="rgb(var(--stonelight))" />}
+                            {g.muted && <PhIcon name="ph-fill ph-bell-slash" size={11} color="rgb(var(--slatelight))" />}
                           </p>
-                          <p className="m-0 text-[11.5px] text-stone font-semibold overflow-hidden text-ellipsis whitespace-nowrap">
+                          <p className="m-0 text-[11.5px] text-slate font-semibold overflow-hidden text-ellipsis whitespace-nowrap">
                             {lastMsg ? lastMsg.text : `${g.memberCount} ${g.memberCount === 1 ? "member" : "members"}`}
                           </p>
                           {(openPolls > 0 || upcomingEvents > 0) && (
@@ -327,7 +327,7 @@ export function Commons() {
                             </div>
                           )}
                         </div>
-                        <span className="text-[12.5px] font-extrabold flex-shrink-0 text-terracotta">
+                        <span className="text-[12.5px] font-extrabold flex-shrink-0 text-accent">
                           Open →
                         </span>
                       </button>
@@ -339,7 +339,7 @@ export function Commons() {
 
             {discover.length > 0 && (
               <>
-                <p className="m-0 mx-1 mb-2.5 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+                <p className="m-0 mx-1 mb-2.5 text-[11px] font-bold uppercase text-slate" style={{ letterSpacing: '0.12em' }}>
                   Discover
                 </p>
                 <div className="flex flex-col gap-2.5 mb-5">
@@ -358,7 +358,7 @@ export function Commons() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="m-0 mb-px text-sm font-bold text-navy">{g.name}</p>
-                          <p className="m-0 text-[11.5px] text-stone font-semibold">
+                          <p className="m-0 text-[11.5px] text-slate font-semibold">
                             {g.memberCount} {g.memberCount === 1 ? "member" : "members"}{nextEvent ? ` · ${nextEvent.title}` : ''}
                           </p>
                         </div>
@@ -366,7 +366,7 @@ export function Commons() {
                           type="button"
                           onClick={(e) => { e.stopPropagation(); repo.toggleGroupJoin(g.key); }}
                           className="border-none rounded-full px-3.5 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"
-                          style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
+                          style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))' }}
                         >
                           Join
                         </button>
@@ -382,12 +382,12 @@ export function Commons() {
               className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-4 flex items-center gap-3 cursor-pointer"
               style={{ border: '1.5px dashed rgb(var(--navy) / 0.2)' }}
             >
-              <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-sand">
-                <PhIcon name="ph-bold ph-plus" size={18} color="rgb(var(--stone))" />
+              <div className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 bg-skyborder">
+                <PhIcon name="ph-bold ph-plus" size={18} color="rgb(var(--slate))" />
               </div>
               <div className="flex-1">
-                <p className="m-0 mb-px text-sm font-bold text-bark">Start a group</p>
-                <p className="m-0 text-[11.5px] text-stonelight font-semibold">
+                <p className="m-0 mb-px text-sm font-bold text-slatedark">Start a group</p>
+                <p className="m-0 text-[11.5px] text-slatelight font-semibold">
                   Any interest counts — 5 neighbors makes it official
                 </p>
               </div>
@@ -404,8 +404,8 @@ export function Commons() {
           >
             <PhIcon name="ph-fill ph-chats-circle" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
             <div className="flex-1">
-              <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Messages</p>
-              <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+              <p className="m-0 mb-px text-[13.5px] font-bold text-mist">Messages</p>
+              <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
                 {repo.isDemo()
                   ? '3 unread from your neighbors'
                   : unreadTotal > 0
@@ -414,14 +414,14 @@ export function Commons() {
               </p>
             </div>
             {(repo.isDemo() || unreadTotal > 0) && (
-            <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 bg-emberdeep">
+            <span className="rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 bg-sunsetdeep">
               {repo.isDemo() ? 3 : unreadTotal}
             </span>
             )}
           </button>
           <div className="flex items-start gap-1.5 mx-1 mb-3.5">
-            <PhIcon name="ph-fill ph-lock-simple" size={12} color="rgb(var(--stone))" className="mt-0.5" />
-            <p className="m-0 text-[11.5px] text-stone font-bold">
+            <PhIcon name="ph-fill ph-lock-simple" size={12} color="rgb(var(--slate))" className="mt-0.5" />
+            <p className="m-0 text-[11.5px] text-slate font-bold">
               Only neighbors who opt in appear here. You&apos;re visible as &quot;
               {repo.isDemo() ? 'Alex · #27' : [member?.name, member?.unitLabel].filter(Boolean).join(' · ')}&quot;.
             </p>
@@ -451,9 +451,9 @@ export function Commons() {
                     <Avatar initial={d.initial} color={d.color} size={40} />
                     <div className="flex-1 min-w-0">
                       <p className="m-0 text-sm font-bold text-navy">
-                        {d.name} <span className="font-semibold text-stonelight">· {d.unit}</span>
+                        {d.name} <span className="font-semibold text-slatelight">· {d.unit}</span>
                       </p>
-                      <p className="m-0 text-[11.5px] text-stone font-semibold">{d.note}</p>
+                      <p className="m-0 text-[11.5px] text-slate font-semibold">{d.note}</p>
                     </div>
                   </button>
                   <div className="flex items-center gap-2">
@@ -470,7 +470,7 @@ export function Commons() {
                     <button
                       onClick={() => set({ chatWith: d.key })}
                       className="border-none rounded-full px-3 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"
-                      style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
+                      style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))' }}
                     >
                       Send message
                     </button>
@@ -485,8 +485,8 @@ export function Commons() {
       {state.commonsView === 'free' && (
         <div className="animate-fadeup">
           <div className="flex items-start gap-1.5 mx-1 mb-3.5">
-            <PhIcon name="ph-fill ph-recycle" size={12} color="rgb(var(--stone))" className="mt-0.5" />
-            <p className="m-0 text-[11.5px] text-stone font-bold">
+            <PhIcon name="ph-fill ph-recycle" size={12} color="rgb(var(--slate))" className="mt-0.5" />
+            <p className="m-0 text-[11.5px] text-slate font-bold">
               Give it away, don&apos;t throw it away. Claimed items get picked up from the porch.
             </p>
           </div>
@@ -509,13 +509,13 @@ export function Commons() {
                   <PhotoPlaceholder label={f.ph} height={74} />
                   <div className="px-3 pt-2.5 pb-3">
                     <p className="m-0 mb-0.5 text-[13px] font-bold text-navy leading-[1.25]">{f.title}</p>
-                    <p className="m-0 mb-2.5 text-[11px] text-stone font-semibold">
+                    <p className="m-0 mb-2.5 text-[11px] text-slate font-semibold">
                       {claimed ? `Pick up: porch · ${f.giver}` : f.giver}
                     </p>
                     <button
                       onClick={() => set({ claimed: { ...state.claimed, [f.key]: true } })}
                       className="w-full border-none rounded-[10px] py-2 text-xs font-extrabold cursor-pointer"
-                      style={claimed ? { background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' } : { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
+                      style={claimed ? { background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' } : { background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))' }}
                     >
                       {claimed ? 'Claimed ✓' : 'Claim'}
                     </button>
@@ -559,12 +559,12 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
         <div className="flex-1 min-w-0">
           <p className="m-0 text-[13.5px] font-bold text-navy">
             {p.authorName}{' '}
-            <span className="font-semibold text-stonelight">
+            <span className="font-semibold text-slatelight">
               {p.unitLabel ? `· ${p.unitLabel} ` : ''}· {p.timeLabel}
             </span>
           </p>
           {p.tagLabel && (
-            <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--terracotta))' }}>
+            <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--accent))' }}>
               {p.tagLabel}
             </p>
           )}
@@ -575,7 +575,7 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
             title={p.pinned ? 'Unpin' : 'Pin to top'}
             className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0"
           >
-            <PhIcon name={p.pinned ? 'ph-fill ph-push-pin-slash' : 'ph ph-push-pin'} size={14} color="rgb(var(--stone))" />
+            <PhIcon name={p.pinned ? 'ph-fill ph-push-pin-slash' : 'ph ph-push-pin'} size={14} color="rgb(var(--slate))" />
           </button>
         )}
         {(p.mine || isBoard) && (
@@ -589,11 +589,11 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
             title="Delete post"
             className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-50"
           >
-            <PhIcon name="ph-fill ph-trash" size={13} color="rgb(var(--stone))" />
+            <PhIcon name="ph-fill ph-trash" size={13} color="rgb(var(--slate))" />
           </button>
         )}
       </div>
-      {p.body && <p className="m-0 text-[13.5px] leading-[1.55] font-semibold text-bark">{p.body}</p>}
+      {p.body && <p className="m-0 text-[13.5px] leading-[1.55] font-semibold text-slatedark">{p.body}</p>}
       {(p.photoUrls ?? []).map((u, i, arr) => (
         <img
           key={u}
@@ -612,18 +612,18 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
           <PhIcon
             name={p.likedByMe ? 'ph-fill ph-heart' : 'ph ph-heart'}
             size={18}
-            color={p.likedByMe ? 'rgb(var(--terracotta))' : 'rgb(var(--stone))'}
+            color={p.likedByMe ? 'rgb(var(--accent))' : 'rgb(var(--slate))'}
             className={p.likedByMe ? 'animate-heartpop' : undefined}
           />
-          <span className="text-xs font-bold text-stone">{p.likes || ''}</span>
+          <span className="text-xs font-bold text-slate">{p.likes || ''}</span>
         </button>
         <button
           onClick={toggleComments}
           aria-label="Comments"
           className="border-none bg-transparent flex items-center gap-1.5 cursor-pointer px-0.5 py-1"
         >
-          <PhIcon name="ph ph-chat-circle" size={18} color="rgb(var(--stone))" />
-          <span className="text-xs font-bold text-stone">{p.commentCount || ''}</span>
+          <PhIcon name="ph ph-chat-circle" size={18} color="rgb(var(--slate))" />
+          <span className="text-xs font-bold text-slate">{p.commentCount || ''}</span>
         </button>
       </div>
       {open && (
@@ -631,7 +631,7 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
           {thread.map((c) => (
             <p key={c.id} className="m-0 mb-1 text-[12.5px] font-semibold text-navy">
               <strong>{c.me ? 'You' : c.authorName}:</strong> {c.body}{' '}
-              <span className="text-stone" style={{ fontSize: 10.5 }}>· {c.time}</span>
+              <span className="text-slate" style={{ fontSize: 10.5 }}>· {c.time}</span>
             </p>
           ))}
           <div className="flex gap-2 mt-1.5">
@@ -641,16 +641,16 @@ function LivePostCard({ post: p, isBoard }: { post: FeedPost; isBoard: boolean }
               onKeyDown={(e) => { if (e.key === 'Enter') sendReply(); }}
               placeholder="Add a comment…"
               className="flex-1 rounded-full px-3 py-2 text-[12.5px] font-bold text-navy outline-none min-w-0"
-              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
             />
             <button
               type="button"
               aria-label="Send reply"
               onClick={sendReply}
               className="w-8 h-8 border-0 rounded-full cursor-pointer flex items-center justify-center flex-shrink-0"
-              style={{ background: reply.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+              style={{ background: reply.trim() ? 'rgb(var(--navy))' : 'rgb(var(--skyrule))' }}
             >
-              <PhIcon name="ph-fill ph-paper-plane-right" size={12} color="rgb(var(--cream))" />
+              <PhIcon name="ph-fill ph-paper-plane-right" size={12} color="rgb(var(--mist))" />
             </button>
           </div>
         </div>

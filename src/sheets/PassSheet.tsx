@@ -19,7 +19,7 @@ export function PassSheet() {
       {!state.passIssued ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">Guest pass</p>
-          <p className="m-0 mb-4 text-xs font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-4 text-xs font-bold" style={{ color: 'rgb(var(--slate))' }}>
             Gate + Lot B parking · the camera reads the plate, no paper needed.
           </p>
           <input
@@ -37,7 +37,7 @@ export function PassSheet() {
             style={{ border: '1px solid rgb(var(--navy) / 0.12)' }}
           />
           <p
-            className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
+            className="m-0 mb-2 text-[11px] font-bold uppercase text-slate"
             style={{ letterSpacing: '0.12em' }}
           >
             How long?
@@ -53,7 +53,7 @@ export function PassSheet() {
                   style={{
                     border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',
                     background: on ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                    color: on ? 'rgb(var(--cream))' : 'rgb(var(--bark))',
+                    color: on ? 'rgb(var(--mist))' : 'rgb(var(--slatedark))',
                   }}
                 >
                   {label}
@@ -65,8 +65,8 @@ export function PassSheet() {
             onClick={issuePass}
             className="w-full border-none rounded-2xl py-[15px] text-[14.5px] font-extrabold"
             style={{
-              background: canPass ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
-              color: canPass ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
+              background: canPass ? 'rgb(var(--sunset))' : 'rgb(var(--skyrule))',
+              color: canPass ? 'rgb(var(--white))' : 'rgb(var(--slatelight))',
               cursor: canPass ? 'pointer' : 'default',
             }}
           >
@@ -75,7 +75,7 @@ export function PassSheet() {
         </div>
       ) : (
         <div className="animate-fadeup">
-          <div className="rounded-[20px] p-[18px] flex gap-4 items-center mb-3.5 bg-skydeep text-cream">
+          <div className="rounded-[20px] p-[18px] flex gap-4 items-center mb-3.5 bg-skydeep text-mist">
             <div
               className="w-[92px] h-[92px] bg-paper rounded-[14px] p-2.5 grid flex-shrink-0"
               style={{ gridTemplateColumns: 'repeat(5,1fr)', gridTemplateRows: 'repeat(5,1fr)', gap: 3 }}
@@ -94,7 +94,7 @@ export function PassSheet() {
               <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.25]">
                 {state.passName} · {state.passPlate}
               </p>
-              <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+              <p className="m-0 text-xs font-bold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
                 {PASS_DURS[state.passDur]} · Lot B · expires automatically
               </p>
             </div>
@@ -110,7 +110,7 @@ export function PassSheet() {
             </button>
             <button
               onClick={closePass}
-              className="flex-1 border-none text-cream rounded-[13px] py-3 text-[13px] font-extrabold cursor-pointer bg-skydeep"
+              className="flex-1 border-none text-mist rounded-[13px] py-3 text-[13px] font-extrabold cursor-pointer bg-skydeep"
             >
               Done
             </button>

@@ -2,11 +2,11 @@ import { usePavStore } from '../store/store';
 import { PhIcon } from './PhIcon';
 import { isLiveMode } from '../auth/AuthGate';
 
-const ACTIVE = 'rgb(var(--cream))';
+const ACTIVE = 'rgb(var(--mist))';
 // 0.45 measured 3.55:1 against navy — below AA for these 10px labels.
 // 0.62 clears it at 5.34:1 while staying clearly quieter than the
 // active state's 11.28:1.
-const INACTIVE = 'rgb(var(--cream) / 0.92)';
+const INACTIVE = 'rgb(var(--mist) / 0.92)';
 
 const TABS: { key: string; icon: string; label: string }[] = [
   { key: 'today', icon: 'ph-fill ph-sun-horizon', label: 'Today' },
@@ -78,8 +78,8 @@ export function NavDock() {
             <div
               className="w-[50px] h-[50px] rounded-full flex items-center justify-center"
               style={{
-                border: '3px solid rgb(var(--cream))',
-                background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))',
+                border: '3px solid rgb(var(--mist))',
+                background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))',
               }}
             >
               <PhIcon name={orb.icon} size={22} color="rgb(var(--white))" />

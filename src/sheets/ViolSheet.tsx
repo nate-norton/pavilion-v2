@@ -39,7 +39,7 @@ export function ViolSheet() {
             <p className="m-0 mb-0.5 font-serif text-xl text-navy">
               {viol.severity === 'fine' ? 'A notice from your board' : viol.severity === 'warning' ? 'A formal heads-up' : 'A friendly heads-up'}
             </p>
-            <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+            <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
               {viol.severity === 'fine' ? 'Fine notice · see details below'
                 : viol.severity === 'warning' ? 'Formal warning · no fee yet'
                   : 'Courtesy notice · no fee · nothing on your record'}
@@ -49,7 +49,7 @@ export function ViolSheet() {
               style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.1)' }}
             >
               <p className="m-0 mb-1 text-[13.5px] font-bold text-navy">{viol.title}</p>
-              {viol.sub && <p className="m-0 text-xs font-semibold text-stone">{viol.sub}</p>}
+              {viol.sub && <p className="m-0 text-xs font-semibold text-slate">{viol.sub}</p>}
               {viol.description && (
                 <p className="m-0 mt-2 text-[12.5px] leading-[1.5] font-semibold text-navy">{viol.description}</p>
               )}
@@ -84,12 +84,12 @@ export function ViolSheet() {
             <p className="m-0 mt-2.5 mb-[3px] font-serif text-xl text-navy">
               Marked fixed. Thanks, neighbor.
             </p>
-            <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+            <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
               The board confirms on their next walk-through — then it closes with no record and no fee.
             </p>
             <button
               onClick={closeViol}
-              className="w-full border-none text-cream rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-skydeep"
+              className="w-full border-none text-mist rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-skydeep"
             >
               Done
             </button>
@@ -104,7 +104,7 @@ export function ViolSheet() {
       {!state.violFixed ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">A friendly heads-up</p>
-          <p className="m-0 mb-1 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-1 text-[12.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             Courtesy notice #V-31 · no fee · nothing on your record
           </p>
           <div className="mb-3.5">
@@ -126,10 +126,10 @@ export function ViolSheet() {
             </div>
             <span
               className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5"
-              style={{ background: 'rgb(var(--cream))', border: '1px solid rgb(var(--navy) / 0.1)' }}
+              style={{ background: 'rgb(var(--mist))', border: '1px solid rgb(var(--navy) / 0.1)' }}
             >
-              <PhIcon name="ph-fill ph-file-text" size={12} color="rgb(var(--terracotta))" />
-              <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
+              <PhIcon name="ph-fill ph-file-text" size={12} color="rgb(var(--accent))" />
+              <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
                 CC&amp;Rs §6.3 · Bins stored out of street view except pickup day
               </span>
             </span>
@@ -141,9 +141,9 @@ export function ViolSheet() {
 
           <div
             className="rounded-[13px] p-[11px_13px] flex gap-2.5 items-start mb-4"
-            style={{ background: 'rgb(var(--blush))' }}
+            style={{ background: 'rgb(var(--accenttint))' }}
           >
-            <PhIcon name="ph-fill ph-sparkle" size={15} color="rgb(var(--terracotta))" className="mt-px flex-shrink-0" />
+            <PhIcon name="ph-fill ph-sparkle" size={15} color="rgb(var(--accent))" className="mt-px flex-shrink-0" />
             <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: 'rgb(var(--brown))' }}>
               AI: two courtesy reminders always come before any fee (§9). Most notices close
               themselves — 2 neighbors self-cured this month.
@@ -171,13 +171,13 @@ export function ViolSheet() {
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-xl text-navy">
             Marked fixed. Thanks, neighbor.
           </p>
-          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             The board confirms on their next walk-through — then #V-31 closes with no record and no
             fee.
           </p>
           <button
             onClick={closeViol}
-            className="w-full border-none text-cream rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-skydeep"
+            className="w-full border-none text-mist rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>

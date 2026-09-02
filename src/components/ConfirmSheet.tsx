@@ -47,7 +47,7 @@ export function ConfirmSheet() {
       {req && (
         <div>
           <p className="m-0 mb-1 font-serif text-xl text-navy">{req.title}</p>
-          <p className="m-0 mb-5 text-[13px] font-semibold text-stone leading-[1.5]">{req.body}</p>
+          <p className="m-0 mb-5 text-[13px] font-semibold text-slate leading-[1.5]">{req.body}</p>
           <button
             type="button"
             onClick={() => { req.onConfirm(); close(); }}

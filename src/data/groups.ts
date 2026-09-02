@@ -3,12 +3,12 @@ import type { GroupData } from './types';
 /** Seed groups & group-chats for the demo (Juniper Ridge). */
 export const GROUPS_SEED: Record<string, GroupData> = {
   'gc-block-party': {
-    key: 'gc-block-party', name: 'Block Party Planning', icon: 'ph-fill ph-confetti', color: 'rgb(var(--terracotta))',
+    key: 'gc-block-party', name: 'Block Party Planning', icon: 'ph-fill ph-confetti', color: 'rgb(var(--accent))',
     description: 'Coordinating the annual block party — food, music, and good vibes.',
     memberCount: 7, isGroupChat: true, joined: true, muted: false,
     members: [
       { name: 'Tom B.', initial: 'T', color: 'rgb(var(--sky))' },
-      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--terracotta))' },
+      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--accent))' },
       { name: 'You', initial: 'A', color: 'rgb(var(--navy))' },
       { name: 'Priya S.', initial: 'P', color: 'rgb(var(--sage))' },
       { name: 'The Okafors', initial: 'O', color: 'rgb(var(--gold))' },
@@ -51,7 +51,7 @@ export const GROUPS_SEED: Record<string, GroupData> = {
     memberCount: 11, isGroupChat: true, joined: true, muted: false,
     members: [
       { name: 'The Okafors', initial: 'O', color: 'rgb(var(--gold))' },
-      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--terracotta))' },
+      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--accent))' },
       { name: 'You', initial: 'A', color: 'rgb(var(--navy))' },
     ],
     messages: [
@@ -72,7 +72,7 @@ export const GROUPS_SEED: Record<string, GroupData> = {
     description: 'Community garden plots, seed swaps, and growing tips.',
     memberCount: 12, isGroupChat: false, joined: true, muted: false,
     members: [
-      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--terracotta))' },
+      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--accent))' },
       { name: 'Priya S.', initial: 'P', color: 'rgb(var(--sage))' },
       { name: 'You', initial: 'A', color: 'rgb(var(--navy))' },
     ],
@@ -94,7 +94,7 @@ export const GROUPS_SEED: Record<string, GroupData> = {
     description: 'Playdates, babysitter recs, and kid-friendly events.',
     memberCount: 18, isGroupChat: false, joined: false, muted: false,
     members: [
-      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--terracotta))' },
+      { name: 'Rosa M.', initial: 'R', color: 'rgb(var(--accent))' },
       { name: 'The Okafors', initial: 'O', color: 'rgb(var(--gold))' },
     ],
     messages: [
@@ -107,7 +107,7 @@ export const GROUPS_SEED: Record<string, GroupData> = {
     pins: [{ id: 'pk-sitters', text: 'Trusted babysitter list pinned — DM Rosa to add yours', author: 'Rosa M.', time: '1w ago' }],
   },
   'gr-pickle': {
-    key: 'gr-pickle', name: 'Pickleball', icon: 'ph-fill ph-tennis-ball', color: 'rgb(var(--ember))',
+    key: 'gr-pickle', name: 'Pickleball', icon: 'ph-fill ph-tennis-ball', color: 'rgb(var(--sunset))',
     description: 'Casual games, ladder matches, and court reservations.',
     memberCount: 9, isGroupChat: false, joined: false, muted: false,
     members: [

@@ -203,7 +203,7 @@ export interface KnownIssue {
   iconColor: string;   // css color for the icon
   title: string;
   statusLabel: string; // 'In triage' / 'BrightPath · assigned' / 'Fixed Jun 24'
-  tone: 'gold' | 'mint' | 'sand';  // pill styling: pending / handled / closed
+  tone: 'gold' | 'mint' | 'skyborder';  // pill styling: pending / handled / closed
   resolved: boolean;
 }
 

@@ -22,7 +22,7 @@ export function SASheet() {
       {notSaPaid && (
         <div>
           <p className="m-0 mb-0.5 font-serif text-[19px] text-navy">Roof-reserve assessment</p>
-          <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             One-time · #27 Alder Way · approved 91–22 on Jun 18
           </p>
           <div
@@ -30,7 +30,7 @@ export function SASheet() {
             style={{ border: '1px solid rgb(var(--navy) / 0.1)' }}
           >
             <div className="flex items-baseline justify-between mb-2.5">
-              <span className="text-[13px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
+              <span className="text-[13px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
                 Your share
               </span>
               <span className="font-serif text-[24px] text-navy">
@@ -38,7 +38,7 @@ export function SASheet() {
                 <span className="text-base">.00</span>
               </span>
             </div>
-            <p className="m-0 text-xs leading-[1.55] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+            <p className="m-0 text-xs leading-[1.55] font-bold" style={{ color: 'rgb(var(--slate))' }}>
               The 2026 reserve study flagged the clubhouse roof at end-of-life. This one-time
               assessment funds replacement without touching monthly dues.{' '}
               <button
@@ -87,12 +87,12 @@ export function SASheet() {
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-[19px] text-navy">
             Assessment plan set.
           </p>
-          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             3 × $150 · Aug 1, Sep 1, Oct 1 · autopay from Juniper CU ····4821
           </p>
           <button
             onClick={closeSA}
-            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
+            className="w-full border-none text-mist rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>
@@ -104,12 +104,12 @@ export function SASheet() {
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-[19px] text-navy">
             Paid in full — thank you.
           </p>
-          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             $450.00 · receipt #S-118 · Juniper CU ····4821
           </p>
           <button
             onClick={closeSA}
-            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
+            className="w-full border-none text-mist rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>

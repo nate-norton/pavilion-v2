@@ -18,8 +18,8 @@ export const Filters = () => {
 // With a leading icon — the AI/highlight chip pattern.
 export const WithIcon = () => (
   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-    <Chip label="Ask AI" icon={<PhIcon name="ph-fill ph-sparkle" size={12} color="rgb(var(--terracotta))" />} />
-    <Chip label="Board" active icon={<PhIcon name="ph-fill ph-shield-check" size={12} color="rgb(var(--cream))" />} />
+    <Chip label="Ask AI" icon={<PhIcon name="ph-fill ph-sparkle" size={12} color="rgb(var(--accent))" />} />
+    <Chip label="Board" active icon={<PhIcon name="ph-fill ph-shield-check" size={12} color="rgb(var(--mist))" />} />
   </div>
 );
 

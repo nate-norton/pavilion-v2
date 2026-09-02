@@ -117,19 +117,19 @@ export function BoardDesk() {
   return (
     <div
       data-testid="board-desk"
-      className="absolute inset-0 z-[75] bg-cream overflow-y-auto pav-scroll animate-scpop"
+      className="absolute inset-0 z-[75] bg-mist overflow-y-auto pav-scroll animate-scpop"
       style={{ padding: '64px 18px 44px' }}
     >
       <div className="flex items-center justify-between gap-2.5 mb-2.5">
         <button
           onClick={exitBoard}
-          className="border-0 bg-transparent flex items-center gap-[5px] text-[13px] font-extrabold cursor-pointer p-0 text-stone"
+          className="border-0 bg-transparent flex items-center gap-[5px] text-[13px] font-extrabold cursor-pointer p-0 text-slate"
         >
           <PhIcon name="ph-bold ph-arrow-left" size={14} />
           Resident view
         </button>
         <div className="flex flex-col items-end gap-1.5">
-          <span className="rounded-full px-3 py-[5px] text-[10.5px] font-bold bg-skydeep text-cream" style={{ letterSpacing: '0.1em' }}>
+          <span className="rounded-full px-3 py-[5px] text-[10.5px] font-bold bg-skydeep text-mist" style={{ letterSpacing: '0.1em' }}>
             BOARD
           </span>
           {!demo && (
@@ -145,7 +145,7 @@ export function BoardDesk() {
         </div>
       </div>
       <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Board desk</h1>
-      <p className="m-0 mb-3.5 text-[13.5px] font-semibold text-taupe">
+      <p className="m-0 mb-3.5 text-[13.5px] font-semibold text-slatedeep">
         {triage.summary}
       </p>
 
@@ -156,20 +156,20 @@ export function BoardDesk() {
       */}
       <div className={'grid gap-[9px] mb-3 ' + (demo ? 'grid-cols-3' : 'grid-cols-2')}>
         <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--terracotta))' }}>
+          <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--accent))' }}>
             Open
           </p>
           <p className="m-0 font-serif text-lg text-navy">{boardOpenN}</p>
         </div>
         <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--slate))' }}>
             Quorum
           </p>
           <p className="m-0 font-serif text-lg text-navy">{quorum.pct}%</p>
         </div>
         {demo && (
           <div className="bg-paper rounded-[15px] p-[11px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-            <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
+            <p className="m-0 mb-0.5 text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--slate))' }}>
               Collected
             </p>
             <p className="m-0 font-serif text-lg text-navy">96%</p>
@@ -198,14 +198,14 @@ export function BoardDesk() {
             costs nothing once the community is set up.
           */}
           <BoardSetupCard />
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Triage
           </p>
           <div className="flex flex-col gap-2.5 mb-[22px]">
             {!triage.hasItems ? (
-              <div className="rounded-[18px] px-4 py-[13px] flex items-center gap-2.5 bg-sand">
+              <div className="rounded-[18px] px-4 py-[13px] flex items-center gap-2.5 bg-skyborder">
                 <PhIcon name="ph-fill ph-check-circle" size={17} color="rgb(var(--sage))" />
-                <p className="m-0 text-[12.5px] font-bold text-stone">
+                <p className="m-0 text-[12.5px] font-bold text-slate">
                   Triage queue is clear — resident reports land here instantly
                 </p>
               </div>
@@ -216,19 +216,19 @@ export function BoardDesk() {
             {/* Streetlight */}
             <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--blush))' }}>
-                  <PhIcon name="ph-fill ph-siren" size={20} color="rgb(var(--terracotta))" />
+                <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--accenttint))' }}>
+                  <PhIcon name="ph-fill ph-siren" size={20} color="rgb(var(--accent))" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">Streetlight out on Alder Way</p>
-                  <p className="m-0 text-xs font-semibold text-stone">
+                  <p className="m-0 text-xs font-semibold text-slate">
                     Reported privately by #31 · 2h ago
                   </p>
                 </div>
                 {!state.reportTicketed && (
                   <button
                     onClick={createTicket}
-                    className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
+                    className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                   >
                     Create ticket
                   </button>
@@ -247,19 +247,19 @@ export function BoardDesk() {
             {state.reportSubmitted && (
               <div className="bg-paper rounded-[18px] p-[15px_16px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--blush))' }}>
-                    <PhIcon name="ph-fill ph-wrench" size={20} color="rgb(var(--terracotta))" />
+                  <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--accenttint))' }}>
+                    <PhIcon name="ph-fill ph-wrench" size={20} color="rgb(var(--accent))" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">{reportTypeLabel} · #M-89</p>
-                    <p className="m-0 text-xs font-semibold text-stone">
+                    <p className="m-0 text-xs font-semibold text-slate">
                       Reported privately by #27 · just now
                     </p>
                   </div>
                   {!state.m89Assigned && (
                     <button
                       onClick={assignM89}
-                      className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
+                      className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                     >
                       Assign vendor
                     </button>
@@ -284,7 +284,7 @@ export function BoardDesk() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">ARC #A-121 · {arcNewTitle}</p>
-                    <p className="m-0 text-xs font-semibold text-stone">
+                    <p className="m-0 text-xs font-semibold text-slate">
                       #27 Alder Way · submitted today · {arcDescSnippet}
                     </p>
                   </div>
@@ -318,9 +318,9 @@ export function BoardDesk() {
               </div>
             )}
             {!state.arcSubmitted && (
-              <div className="rounded-[18px] px-4 py-[13px] flex items-center gap-2.5 bg-sand">
-                <PhIcon name="ph-fill ph-pencil-ruler" size={17} color="rgb(var(--stone))" />
-                <p className="m-0 text-[12.5px] font-bold text-stone">
+              <div className="rounded-[18px] px-4 py-[13px] flex items-center gap-2.5 bg-skyborder">
+                <PhIcon name="ph-fill ph-pencil-ruler" size={17} color="rgb(var(--slate))" />
+                <p className="m-0 text-[12.5px] font-bold text-slate">
                   ARC queue is clear — new requests land here instantly
                 </p>
               </div>
@@ -334,14 +334,14 @@ export function BoardDesk() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">Pool gate latch sticking</p>
-                  <p className="m-0 text-xs font-semibold text-stone">
+                  <p className="m-0 text-xs font-semibold text-slate">
                     2 reports this week · non-urgent
                   </p>
                 </div>
                 {!state.gateScheduled && (
                   <button
                     onClick={scheduleVendor}
-                    className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
+                    className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                   >
                     Schedule
                   </button>
@@ -360,13 +360,13 @@ export function BoardDesk() {
 
           {!demo && (<>
             <div className="mb-[22px]">
-              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
                 Board chat
               </p>
               <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
                 <div className="flex items-center gap-2 mb-1">
-                  <PhIcon name="ph-fill ph-lock-simple" size={13} color="rgb(var(--stone))" className="flex-shrink-0" />
-                  <p className="m-0 text-[11.5px] font-bold text-stone">
+                  <PhIcon name="ph-fill ph-lock-simple" size={13} color="rgb(var(--slate))" className="flex-shrink-0" />
+                  <p className="m-0 text-[11.5px] font-bold text-slate">
                     Private to board members — residents never see this.
                   </p>
                 </div>
@@ -381,21 +381,21 @@ export function BoardDesk() {
                     >
                       <div
                         className="w-8 h-8 rounded-[11px] flex items-center justify-center flex-shrink-0"
-                        style={{ background: name === 'General' ? 'rgb(var(--navy))' : 'rgb(var(--parchment))' }}
+                        style={{ background: name === 'General' ? 'rgb(var(--navy))' : 'rgb(var(--mistpale))' }}
                       >
                         <PhIcon
                           name={name === 'General' ? 'ph-fill ph-push-pin' : 'ph-fill ph-hash'}
                           size={13}
-                          color={name === 'General' ? 'rgb(var(--cream))' : 'rgb(var(--navy))'}
+                          color={name === 'General' ? 'rgb(var(--mist))' : 'rgb(var(--navy))'}
                         />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="m-0 text-[13px] font-bold text-navy">{name}</p>
-                        <p className="m-0 text-[11.5px] font-semibold text-stone truncate">
+                        <p className="m-0 text-[11.5px] font-semibold text-slate truncate">
                           {last ? `${last.me ? 'You' : last.authorName}: ${last.text}` : 'No messages yet'}
                         </p>
                       </div>
-                      <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--stonelight))" className="flex-shrink-0" />
+                      <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--slatelight))" className="flex-shrink-0" />
                     </button>
                   );
                 })}
@@ -408,7 +408,7 @@ export function BoardDesk() {
                 </button>
               </div>
 
-              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
                 Members
               </p>
               <div className="bg-paper rounded-[18px] p-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -419,7 +419,7 @@ export function BoardDesk() {
                   placeholder="Email address"
                   type="email"
                   className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                 />
                 <div className="flex gap-2 mb-2.5">
                   <input
@@ -427,7 +427,7 @@ export function BoardDesk() {
                     onChange={(e) => setInvUnit(e.target.value)}
                     placeholder="Unit — e.g. #14 Alder Way"
                     className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   />
                   <button
                     onClick={() => setInvRole(invRole === 'resident' ? 'board' : 'resident')}
@@ -448,8 +448,8 @@ export function BoardDesk() {
                   }}
                   className="w-full border-0 rounded-[11px] py-2.5 text-[12.5px] font-extrabold cursor-pointer"
                   style={{
-                    background: invEmail.trim() && !invBusy ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
-                    color: invEmail.trim() && !invBusy ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
+                    background: invEmail.trim() && !invBusy ? 'rgb(var(--sunset))' : 'rgb(var(--skyrule))',
+                    color: invEmail.trim() && !invBusy ? 'rgb(var(--white))' : 'rgb(var(--slatelight))',
                   }}
                 >
                   {invBusy ? 'Inviting…' : 'Send invite'}
@@ -460,7 +460,7 @@ export function BoardDesk() {
                       <div key={inv.id} className="flex items-center gap-2 py-1.5">
                         <div className="flex-1 min-w-0">
                           <p className="m-0 text-[12.5px] font-bold text-navy truncate">{inv.email}</p>
-                          <p className="m-0 text-[11px] font-semibold text-stone">
+                          <p className="m-0 text-[11px] font-semibold text-slate">
                             {[inv.unitLabel, inv.role === 'board' ? 'Board' : 'Resident', inv.expiresLabel].filter(Boolean).join(' · ')}
                           </p>
                         </div>
@@ -473,7 +473,7 @@ export function BoardDesk() {
                                 setTimeout(() => setCopiedInvite(null), 2000);
                               }}
                               className="border-none bg-transparent text-[11.5px] font-extrabold cursor-pointer p-1"
-                              style={{ color: copiedInvite === inv.id ? 'rgb(var(--sage))' : 'rgb(var(--terracotta))' }}
+                              style={{ color: copiedInvite === inv.id ? 'rgb(var(--sage))' : 'rgb(var(--accent))' }}
                             >
                               {copiedInvite === inv.id ? 'Copied ✓' : 'Copy link'}
                             </button>
@@ -487,7 +487,7 @@ export function BoardDesk() {
                             ) : (
                               <button
                                 onClick={() => void repo.revokeInvite(inv.id)}
-                                className="border-none bg-transparent text-[11.5px] font-extrabold cursor-pointer p-1 text-stone"
+                                className="border-none bg-transparent text-[11.5px] font-extrabold cursor-pointer p-1 text-slate"
                               >
                                 Revoke
                               </button>
@@ -502,7 +502,7 @@ export function BoardDesk() {
                     ))}
                   </div>
                 )}
-                <p className="mt-2.5 mb-0 text-[11px] font-semibold text-stone">
+                <p className="mt-2.5 mb-0 text-[11px] font-semibold text-slate">
                   They can sign in with this email, or use the copied invite link with any email.
                 </p>
               </div>
@@ -517,9 +517,9 @@ export function BoardDesk() {
                         <div className="flex-1 min-w-0">
                           <p className="m-0 text-[12.5px] font-bold text-navy truncate">
                             {m.name}
-                            {m.status !== 'active' && <span className="ml-1.5 text-[10.5px] font-extrabold text-stone">INACTIVE</span>}
+                            {m.status !== 'active' && <span className="ml-1.5 text-[10.5px] font-extrabold text-slate">INACTIVE</span>}
                           </p>
-                          <p className="m-0 text-[11px] font-semibold text-stone">
+                          <p className="m-0 text-[11px] font-semibold text-slate">
                             {[m.unitLabel || 'No unit', m.role === 'board' ? 'Board' : 'Resident'].join(' · ')}
                           </p>
                         </div>
@@ -543,7 +543,7 @@ export function BoardDesk() {
                             <button
                               onClick={() => void repo.setMemberStatus(m.membershipId, m.status === 'active' ? 'inactive' : 'active')}
                               className="flex-1 rounded-full py-1.5 text-[11px] font-extrabold cursor-pointer bg-transparent"
-                              style={{ border: '1.5px solid rgb(var(--navy) / 0.2)', color: m.status === 'active' ? 'rgb(var(--terracotta))' : 'rgb(var(--sage))' }}
+                              style={{ border: '1.5px solid rgb(var(--navy) / 0.2)', color: m.status === 'active' ? 'rgb(var(--accent))' : 'rgb(var(--sage))' }}
                             >
                               {m.status === 'active' ? 'Deactivate' : 'Reactivate'}
                             </button>
@@ -554,11 +554,11 @@ export function BoardDesk() {
                               onChange={(e) => setRosterUnit(e.target.value)}
                               placeholder={m.unitLabel || 'Assign a unit'}
                               className="flex-1 rounded-[11px] px-3 py-1.5 text-[12px] font-bold text-navy outline-none min-w-0"
-                              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                             />
                             <button
                               onClick={() => { if (rosterUnit.trim()) { void repo.assignMemberUnit(m.membershipId, rosterUnit); setRosterUnit(''); } }}
-                              className="border-0 rounded-[11px] px-3 text-[11px] font-extrabold cursor-pointer bg-skydeep text-cream"
+                              className="border-0 rounded-[11px] px-3 text-[11px] font-extrabold cursor-pointer bg-skydeep text-mist"
                             >
                               Move
                             </button>
@@ -572,7 +572,7 @@ export function BoardDesk() {
             </div>
 
             {/* Compliance — issue and track violations */}
-            <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+            <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
               Compliance
             </p>
             <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -580,7 +580,7 @@ export function BoardDesk() {
                 <div key={v.id} className="flex items-center gap-2 py-2" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}>
                   <div className="flex-1 min-w-0">
                     <p className="m-0 text-[12.5px] font-bold text-navy truncate">{v.title}</p>
-                    <p className="m-0 text-[11px] font-semibold text-stone">
+                    <p className="m-0 text-[11px] font-semibold text-slate">
                       {[v.unitLabel, v.severity === 'fine' ? `Fine ${v.fineLabel}` : v.severity === 'warning' ? 'Warning' : 'Courtesy', v.status === 'fixed' ? 'Marked fixed by resident' : 'Open'].filter(Boolean).join(' · ')}
                     </p>
                   </div>
@@ -607,7 +607,7 @@ export function BoardDesk() {
                     value={violUnitId}
                     onChange={(e) => setViolUnitId(e.target.value)}
                     className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   >
                     <option value="">Pick a unit…</option>
                     {units.map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
@@ -617,14 +617,14 @@ export function BoardDesk() {
                     onChange={(e) => setViolTitle(e.target.value)}
                     placeholder="Notice — e.g. Trash bins out past pickup day"
                     className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   />
                   <input
                     value={violDesc}
                     onChange={(e) => setViolDesc(e.target.value)}
                     placeholder="Details the resident will see (optional)"
                     className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   />
                   <div className="flex gap-1.5 mb-2">
                     {(['courtesy', 'warning', 'fine'] as const).map((s) => (
@@ -633,7 +633,7 @@ export function BoardDesk() {
                         onClick={() => setViolSeverity(s)}
                         className="flex-1 rounded-full py-2 text-[11.5px] font-extrabold cursor-pointer capitalize"
                         style={violSeverity === s
-                          ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                          ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))', border: '1.5px solid rgb(var(--navy))' }
                           : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
                       >
                         {s}
@@ -646,7 +646,7 @@ export function BoardDesk() {
                       onChange={(e) => setViolFine(e.target.value.replace(/[^0-9.]/g, ''))}
                       placeholder="Fine amount — e.g. 50"
                       className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                      style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                      style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                     />
                   )}
                   <div className="flex gap-2">
@@ -667,8 +667,8 @@ export function BoardDesk() {
                           setViolDraftOpen(false); setViolTitle(''); setViolDesc(''); setViolUnitId(''); setViolFine(''); setViolSeverity('courtesy');
                         }).catch(reportedByDataLayer);
                       }}
-                      className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
-                      style={{ background: violUnitId && violTitle.trim() ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))' }}
+                      className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-mist"
+                      style={{ background: violUnitId && violTitle.trim() ? 'rgb(var(--sunset))' : 'rgb(var(--skyrule))' }}
                     >
                       Issue notice
                     </button>
@@ -680,14 +680,14 @@ export function BoardDesk() {
             {/* Bookings across the community */}
             {boardBookings.length > 0 && (
               <>
-                <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+                <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
                   Bookings
                 </p>
                 <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
                   {boardBookings.map((b, i) => (
                     <div key={b.id} className="flex items-center gap-2 py-1.5" style={i < boardBookings.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.06)' } : undefined}>
                       <p className="m-0 flex-1 text-[12.5px] font-bold text-navy truncate">{b.amenity}</p>
-                      <p className="m-0 text-[11.5px] font-semibold text-stone">{b.dayLabel} · {b.slotLabel} · {b.memberName}</p>
+                      <p className="m-0 text-[11.5px] font-semibold text-slate">{b.dayLabel} · {b.slotLabel} · {b.memberName}</p>
                     </div>
                   ))}
                 </div>
@@ -695,7 +695,7 @@ export function BoardDesk() {
             )}
 
             {/* Meetings — schedule + publish minutes */}
-            <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+            <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
               Meetings
             </p>
             <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -703,10 +703,10 @@ export function BoardDesk() {
                 <div key={m.id} className="flex items-center gap-2 py-2" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}>
                   <div className="flex-1 min-w-0">
                     <p className="m-0 text-[12.5px] font-bold text-navy truncate">{m.title}</p>
-                    <p className="m-0 text-[11px] font-semibold text-stone">{[m.whenLabel, m.whereLabel].filter(Boolean).join(' · ')}</p>
+                    <p className="m-0 text-[11px] font-semibold text-slate">{[m.whenLabel, m.whereLabel].filter(Boolean).join(' · ')}</p>
                   </div>
                   {m.minutesUrl ? (
-                    <a href={m.minutesUrl} target="_blank" rel="noreferrer" className="text-[11.5px] font-extrabold no-underline flex-shrink-0" style={{ color: 'rgb(var(--terracotta))' }}>
+                    <a href={m.minutesUrl} target="_blank" rel="noreferrer" className="text-[11.5px] font-extrabold no-underline flex-shrink-0" style={{ color: 'rgb(var(--accent))' }}>
                       Minutes →
                     </a>
                   ) : (
@@ -747,7 +747,7 @@ export function BoardDesk() {
                     onChange={(e) => setMeetTitle(e.target.value)}
                     placeholder="Title — e.g. July board meeting"
                     className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   />
                   <div className="flex gap-2 mb-2">
                     <input
@@ -755,14 +755,14 @@ export function BoardDesk() {
                       onChange={(e) => setMeetWhen(e.target.value)}
                       placeholder="When — Tue Aug 4, 7 PM"
                       className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                      style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                      style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                     />
                     <input
                       value={meetWhere}
                       onChange={(e) => setMeetWhere(e.target.value)}
                       placeholder="Where"
                       className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                      style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                      style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                     />
                   </div>
                   <input
@@ -770,7 +770,7 @@ export function BoardDesk() {
                     onChange={(e) => setMeetAgenda(e.target.value)}
                     placeholder="Agenda items, comma-separated"
                     className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   />
                   <div className="flex gap-2">
                     <button
@@ -787,15 +787,15 @@ export function BoardDesk() {
                           .then(() => { setMeetDraftOpen(false); setMeetTitle(''); setMeetWhen(''); setMeetWhere(''); setMeetAgenda(''); })
                           .catch(reportedByDataLayer);
                       }}
-                      className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
-                      style={{ background: meetTitle.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                      className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-mist"
+                      style={{ background: meetTitle.trim() ? 'rgb(var(--navy))' : 'rgb(var(--skyrule))' }}
                     >
                       Schedule
                     </button>
                   </div>
                 </div>
               )}
-              <p className="mt-2.5 mb-0 text-[11px] font-semibold text-stone">
+              <p className="mt-2.5 mb-0 text-[11px] font-semibold text-slate">
                 Residents see meetings on the HOA tab; published minutes land in Documents.
               </p>
             </div>
@@ -803,14 +803,14 @@ export function BoardDesk() {
             {/* Recent board activity (audit trail) */}
             {auditLog.length > 0 && (
               <>
-                <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+                <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
                   Recent activity
                 </p>
                 <div className="bg-paper rounded-[18px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
                   {auditLog.slice(0, 8).map((a, i) => (
                     <p key={a.id} className="m-0 py-1.5 text-[12px] font-semibold text-navy" style={i < Math.min(auditLog.length, 8) - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.06)' } : undefined}>
                       <strong>{a.actorName}</strong> · {a.action}{a.detail ? ` — ${a.detail}` : ''}{' '}
-                      <span className="text-stone">· {a.time}</span>
+                      <span className="text-slate">· {a.time}</span>
                     </p>
                   ))}
                 </div>
@@ -819,27 +819,27 @@ export function BoardDesk() {
           </>)}
 
           {vote && (<>
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Vote monitor
           </p>
-          <div className="bg-skydeep rounded-[20px] p-[18px] mb-[22px] text-cream">
+          <div className="bg-skydeep rounded-[20px] p-[18px] mb-[22px] text-mist">
             <p className="m-0 mb-1 font-serif text-base">{demo ? `${vote.title} · closes Thu` : vote.title}</p>
             <div className="flex items-center justify-between my-2.5 mb-1.5">
-              <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
+              <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>
                 QUORUM
               </span>
-              <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
+              <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>
                 {quorum.count} of {quorumTotal} households
               </span>
             </div>
             <div className="mb-[13px]">
-              <ProgressBar pct={quorum.pct} height={8} track="rgb(var(--cream) / 0.15)" gradient />
+              <ProgressBar pct={quorum.pct} height={8} track="rgb(var(--mist) / 0.15)" gradient />
             </div>
             {!state.reminderSent && (
               <button
                 onClick={sendReminder}
-                className="w-full rounded-xl py-[11px] text-[13px] font-extrabold cursor-pointer bg-transparent text-cream"
-                style={{ border: '1.5px solid rgb(var(--cream) / 0.3)' }}
+                className="w-full rounded-xl py-[11px] text-[13px] font-extrabold cursor-pointer bg-transparent text-mist"
+                style={{ border: '1.5px solid rgb(var(--mist) / 0.3)' }}
               >
                 Nudge {nonVoters} households who haven&apos;t voted
               </button>
@@ -858,15 +858,15 @@ export function BoardDesk() {
       {state.boardTab === 'req' && !demo && (
         boardArcQueue.length === 0 ? (
           <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-            <div className="flex justify-center"><PhIcon name="ph-fill ph-tray" size={22} color="rgb(var(--claypale))" /></div>
+            <div className="flex justify-center"><PhIcon name="ph-fill ph-tray" size={22} color="rgb(var(--slatefaint))" /></div>
             <p className="m-0 mt-2 text-[13px] font-bold text-navy">No requests yet</p>
-            <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
+            <p className="m-0 mt-0.5 text-[12px] font-semibold text-slate">
               ARC requests land here as residents submit them.
             </p>
           </div>
         ) : (
           <div className="animate-fadeup">
-            <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+            <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
               ARC queue
             </p>
             <div className="bg-paper rounded-[18px] px-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -875,7 +875,7 @@ export function BoardDesk() {
                 const pill = r.status === 'approved'
                   ? { label: 'Approved', bg: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' }
                   : r.status === 'declined'
-                    ? { label: 'Declined', bg: 'rgb(var(--blush))', color: 'rgb(var(--terracotta))' }
+                    ? { label: 'Declined', bg: 'rgb(var(--accenttint))', color: 'rgb(var(--accent))' }
                     : r.status === 'info_requested'
                       ? { label: 'Info requested', bg: 'rgb(var(--goldpale))', color: 'rgb(var(--golddark))' }
                       : null;
@@ -895,13 +895,13 @@ export function BoardDesk() {
                       />
                       <div className="flex-1 min-w-0">
                         <p className="m-0 text-[13px] font-bold text-navy">{r.ref} · {r.title}</p>
-                        <p className="m-0 text-[11px] font-semibold text-stone">
+                        <p className="m-0 text-[11px] font-semibold text-slate">
                           {r.unitLabel}
                           {r.attachmentUrls.length > 0 && (
                             <>
                               {' · '}
                               {r.attachmentUrls.map((u, j) => (
-                                <a key={u} href={u} target="_blank" rel="noreferrer" className="font-extrabold no-underline" style={{ color: 'rgb(var(--terracotta))' }}>
+                                <a key={u} href={u} target="_blank" rel="noreferrer" className="font-extrabold no-underline" style={{ color: 'rgb(var(--accent))' }}>
                                   file {j + 1}{j < r.attachmentUrls.length - 1 ? ', ' : ''}
                                 </a>
                               ))}
@@ -916,7 +916,7 @@ export function BoardDesk() {
                       ) : (
                         <button
                           onClick={() => { setArcDecideId(deciding ? null : r.id); setArcNote(''); }}
-                          className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
+                          className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                         >
                           {deciding ? 'Cancel' : 'Decide'}
                         </button>
@@ -929,7 +929,7 @@ export function BoardDesk() {
                           onChange={(e) => setArcNote(e.target.value)}
                           placeholder="Note — conditions, reason, or what's missing (optional for approval)"
                           className="w-full rounded-[11px] px-3 py-2.5 text-[12.5px] font-bold text-navy outline-none mb-2"
-                          style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                          style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                         />
                         <div className="flex gap-1.5">
                           <button
@@ -942,7 +942,7 @@ export function BoardDesk() {
                           <button
                             onClick={() => { if (arcNote.trim()) { setArcDecideId(null); void repo.decideArc(r.id, 'declined', arcNote); } }}
                             className="flex-1 border-0 rounded-full py-2 text-[11.5px] font-extrabold cursor-pointer text-white"
-                            style={{ background: arcNote.trim() ? 'rgb(var(--terracotta))' : 'rgb(var(--sandpale))' }}
+                            style={{ background: arcNote.trim() ? 'rgb(var(--accent))' : 'rgb(var(--skyrule))' }}
                             title="A decline needs a reason"
                           >
                             Decline
@@ -967,7 +967,7 @@ export function BoardDesk() {
       )}
       {state.boardTab === 'req' && demo && (
         <div className="animate-fadeup">
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             ARC queue
           </p>
           <div className="bg-paper rounded-[18px] px-4 mb-5" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -976,7 +976,7 @@ export function BoardDesk() {
                 <PhIcon name="ph-fill ph-pencil-ruler" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="m-0 text-[13px] font-bold text-navy">#A-121 · {arcNewTitle} · #27</p>
-                  <p className="m-0 text-[11px] font-semibold text-stone">
+                  <p className="m-0 text-[11px] font-semibold text-slate">
                     Submitted today · pre-approved palette
                   </p>
                 </div>
@@ -1001,36 +1001,36 @@ export function BoardDesk() {
             <div className="flex items-center gap-[11px] py-[11px]" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
               <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#A-118 · Backyard pergola · #27</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--stone))' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-skyborder" style={{ color: 'rgb(var(--slate))' }}>
                 Jun 12
               </span>
             </div>
             <div className="flex items-center gap-[11px] py-[11px]">
               <PhIcon name="ph-fill ph-seal-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#A-115 · Fence stain, Cedar · #33</p>
-              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-sand" style={{ color: 'rgb(var(--stone))' }}>
+              <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold bg-skyborder" style={{ color: 'rgb(var(--slate))' }}>
                 May 30
               </span>
             </div>
           </div>
 
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Maintenance
           </p>
           <div className="bg-paper rounded-[18px] px-4 mb-5" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
             {state.reportSubmitted && (
               <div className="flex items-center gap-[11px] py-[11px]" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
-                <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--terracotta))" className="flex-shrink-0" />
+                <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--accent))" className="flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="m-0 text-[13px] font-bold text-navy">#M-89 · {reportTypeLabel} · #27</p>
-                  <p className="m-0 text-[11px] font-semibold text-stone">
+                  <p className="m-0 text-[11px] font-semibold text-slate">
                     Private report · today
                   </p>
                 </div>
                 {!state.m89Assigned && (
                   <button
                     onClick={assignM89}
-                    className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
+                    className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                   >
                     Assign
                   </button>
@@ -1046,14 +1046,14 @@ export function BoardDesk() {
               <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="m-0 text-[13px] font-bold text-navy">Pool gate latch · 2 reports</p>
-                <p className="m-0 text-[11px] font-semibold text-stone">
+                <p className="m-0 text-[11px] font-semibold text-slate">
                   Non-urgent
                 </p>
               </div>
               {!state.gateScheduled && (
                 <button
                   onClick={scheduleVendor}
-                  className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
+                  className="border-0 rounded-full px-3 py-[7px] text-[11.5px] font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                 >
                   Schedule
                 </button>
@@ -1074,14 +1074,14 @@ export function BoardDesk() {
               </div>
             )}
             <div className="flex items-center gap-[11px] py-[11px]">
-              <PhIcon name="ph-fill ph-check-circle" size={17} color="rgb(var(--stonelight))" className="flex-shrink-0" />
-              <p className="m-0 flex-1 text-[13px] font-bold text-stone">
+              <PhIcon name="ph-fill ph-check-circle" size={17} color="rgb(var(--slatelight))" className="flex-shrink-0" />
+              <p className="m-0 flex-1 text-[13px] font-bold text-slate">
                 #M-86 · Irrigation valve · closed Jun 24
               </p>
             </div>
           </div>
 
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Violations · courtesy-first
           </p>
           <div className="bg-paper rounded-[18px] p-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -1089,7 +1089,7 @@ export function BoardDesk() {
               <PhIcon name="ph-fill ph-trash" size={17} color="rgb(var(--gold))" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="m-0 text-[13px] font-bold text-navy">Trash bins visible from street · #14</p>
-                <p className="m-0 text-[11px] font-semibold text-stone">
+                <p className="m-0 text-[11px] font-semibold text-slate">
                   Courtesy notice sent Jun 27 · auto-closes if fixed by Jul 8
                 </p>
               </div>
@@ -1097,7 +1097,7 @@ export function BoardDesk() {
                 No fee
               </span>
             </div>
-            <p className="m-0 text-xs font-semibold text-stone">
+            <p className="m-0 text-xs font-semibold text-slate">
               <span className="font-bold text-sagedark">
                 2 self-cured this month
               </span>{' '}
@@ -1105,7 +1105,7 @@ export function BoardDesk() {
             </p>
           </div>
 
-          <p className="mt-5 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="mt-5 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Vendors
           </p>
           <div className="bg-paper rounded-[18px] px-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -1124,7 +1124,7 @@ export function BoardDesk() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="m-0 text-[13px] font-bold text-navy">{v.name}</p>
-                    <p className="m-0 text-[11px] font-semibold text-stone">
+                    <p className="m-0 text-[11px] font-semibold text-slate">
                       {v.sub} · last: {v.last}
                     </p>
                   </div>
@@ -1140,40 +1140,40 @@ export function BoardDesk() {
 
       {state.boardTab === 'money' && !demo && (
         <div className="bg-paper rounded-[18px] px-4 py-[18px] text-center animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <div className="flex justify-center"><PhIcon name="ph-fill ph-coins" size={22} color="rgb(var(--claypale))" /></div>
+          <div className="flex justify-center"><PhIcon name="ph-fill ph-coins" size={22} color="rgb(var(--slatefaint))" /></div>
           <p className="m-0 mt-2 text-[13px] font-bold text-navy">No financials yet</p>
-          <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone">
+          <p className="m-0 mt-0.5 text-[12px] font-semibold text-slate">
             Collections, budget tracking, and the aging report switch on once dues are issued.
           </p>
         </div>
       )}
       {state.boardTab === 'money' && demo && (
         <div className="animate-fadeup">
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             July collections
           </p>
           <div className="bg-paper rounded-[20px] p-[18px] mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
             <div className="flex items-baseline justify-between gap-2.5 mb-2.5">
               <p className="m-0 font-serif text-[19px] text-navy">96% collected</p>
-              <p className="m-0 text-xs font-bold text-stone">
+              <p className="m-0 text-xs font-bold text-slate">
                 $38.9K of $40.5K
               </p>
             </div>
             <div className="mb-3">
-              <ProgressBar pct={96} height={10} color="rgb(var(--sage))" track="rgb(var(--sand))" />
+              <ProgressBar pct={96} height={10} color="rgb(var(--sage))" track="rgb(var(--skyborder))" />
             </div>
-            <p className="m-0 text-[12.5px] font-semibold text-stone">
+            <p className="m-0 text-[12.5px] font-semibold text-slate">
               4 households late · courtesy reminders sent Jun 28 · no late fees yet
             </p>
           </div>
 
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Late — courtesy first
           </p>
           <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
             <div className="flex items-center gap-[11px] pb-2.5 mb-2.5" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">#9 · 30 days</p>
-              <span className="text-[12.5px] font-bold" style={{ color: 'rgb(var(--terracotta))' }}>
+              <span className="text-[12.5px] font-bold" style={{ color: 'rgb(var(--accent))' }}>
                 $570
               </span>
             </div>
@@ -1208,36 +1208,36 @@ export function BoardDesk() {
             )}
           </div>
 
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Budget vs. actual · 50% through the year
           </p>
           <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
             <div className="mb-3">
               <div className="flex justify-between mb-[5px]">
                 <span className="text-[12.5px] font-bold text-navy">Landscaping</span>
-                <span className="text-[11.5px] font-bold text-stone">
+                <span className="text-[11.5px] font-bold text-slate">
                   52% of $75.6K
                 </span>
               </div>
-              <ProgressBar pct={52} height={8} color="rgb(var(--sage))" track="rgb(var(--sand))" />
+              <ProgressBar pct={52} height={8} color="rgb(var(--sage))" track="rgb(var(--skyborder))" />
             </div>
             <div className="mb-3">
               <div className="flex justify-between mb-[5px]">
                 <span className="text-[12.5px] font-bold text-navy">Utilities</span>
-                <span className="text-[11.5px] font-bold text-stone">
+                <span className="text-[11.5px] font-bold text-slate">
                   48% of $46.7K
                 </span>
               </div>
-              <ProgressBar pct={48} height={8} color="rgb(var(--sage))" track="rgb(var(--sand))" />
+              <ProgressBar pct={48} height={8} color="rgb(var(--sage))" track="rgb(var(--skyborder))" />
             </div>
             <div className="mb-3">
               <div className="flex justify-between mb-[5px]">
                 <span className="text-[12.5px] font-bold text-navy">Insurance</span>
-                <span className="text-[11.5px] font-bold text-stone">
+                <span className="text-[11.5px] font-bold text-slate">
                   50% of $52.4K
                 </span>
               </div>
-              <ProgressBar pct={50} height={8} color="rgb(var(--sage))" track="rgb(var(--sand))" />
+              <ProgressBar pct={50} height={8} color="rgb(var(--sage))" track="rgb(var(--skyborder))" />
             </div>
             <div>
               <div className="flex justify-between mb-[5px]">
@@ -1246,33 +1246,33 @@ export function BoardDesk() {
                   61% of $31.2K · watch
                 </span>
               </div>
-              <ProgressBar pct={61} height={8} color="rgb(var(--gold))" track="rgb(var(--sand))" />
+              <ProgressBar pct={61} height={8} color="rgb(var(--gold))" track="rgb(var(--skyborder))" />
             </div>
           </div>
 
           {assessment && (
             <>
-              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
                 Special assessment · roof reserve
               </p>
               <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
                 <div className="flex items-baseline justify-between gap-2.5 mb-2.5">
                   <p className="m-0 font-serif text-xl text-navy">$42.7K of $61.2K</p>
-                  <p className="m-0 text-xs font-bold text-stone">
+                  <p className="m-0 text-xs font-bold text-slate">
                     70% pledged
                   </p>
                 </div>
                 <div className="mb-3">
-                  <ProgressBar pct={70} height={10} color="rgb(var(--terracotta))" track="rgb(var(--sand))" />
+                  <ProgressBar pct={70} height={10} color="rgb(var(--accent))" track="rgb(var(--skyborder))" />
                 </div>
-                <p className="m-0 text-[12.5px] font-semibold text-stone">
+                <p className="m-0 text-[12.5px] font-semibold text-slate">
                   96 paid in full · 22 on installments · 18 not started · due Aug 1
                 </p>
               </div>
             </>
           )}
 
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Aging report
           </p>
           <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -1280,11 +1280,11 @@ export function BoardDesk() {
               <div key={a.bucket} className="mb-[11px]">
                 <div className="flex justify-between items-baseline mb-[5px]">
                   <span className="text-[12.5px] font-bold text-navy">{a.bucket}</span>
-                  <span className="text-[11.5px] font-bold text-stone">
+                  <span className="text-[11.5px] font-bold text-slate">
                     {a.amt} · {a.n}
                   </span>
                 </div>
-                <ProgressBar pct={parseInt(a.w, 10)} height={7} color={a.c} track="rgb(var(--sand))" />
+                <ProgressBar pct={parseInt(a.w, 10)} height={7} color={a.c} track="rgb(var(--skyborder))" />
               </div>
             ))}
             <button
@@ -1297,7 +1297,7 @@ export function BoardDesk() {
             </button>
           </div>
 
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Approvals
           </p>
           <div className="bg-paper rounded-[20px] p-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -1307,14 +1307,14 @@ export function BoardDesk() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-px text-[13.5px] font-bold text-navy">AquaFix · $340.00</p>
-                <p className="m-0 text-[11.5px] font-semibold text-stone">
+                <p className="m-0 text-[11.5px] font-semibold text-slate">
                   Pool gate latch · needs 2 of 3 board signatures · 1 signed
                 </p>
               </div>
               {!state.invApproved && (
                 <button
                   onClick={approveInv}
-                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
+                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                 >
                   Sign
                 </button>
@@ -1333,7 +1333,7 @@ export function BoardDesk() {
 
       {state.boardTab === 'comms' && !demo && (
         <div className="animate-fadeup">
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Put it to a vote
           </p>
           <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -1358,18 +1358,18 @@ export function BoardDesk() {
               </div>
             ) : !state.voteDraftOpen ? (
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--blush))' }}>
-                  <PhIcon name="ph-fill ph-check-square" size={20} color="rgb(var(--terracotta))" />
+                <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--accenttint))' }}>
+                  <PhIcon name="ph-fill ph-check-square" size={20} color="rgb(var(--accent))" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="m-0 mb-px text-[13.5px] font-bold text-navy">Draft a community vote</p>
-                  <p className="m-0 text-[11.5px] font-semibold text-stone">
+                  <p className="m-0 text-[11.5px] font-semibold text-slate">
                     Yes/no or multiple choice — results tally live
                   </p>
                 </div>
                 <button
                   onClick={openVoteDraft}
-                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
+                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                 >
                   New vote
                 </button>
@@ -1382,7 +1382,7 @@ export function BoardDesk() {
                   onChange={(e) => set({ voteQ: e.target.value })}
                   placeholder="e.g. Should we add a second EV charger in Lot B?"
                   className="w-full rounded-[13px] px-[13px] py-[11px] text-[13.5px] font-semibold text-navy outline-none resize-none mb-3"
-                  style={{ minHeight: 58, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  style={{ minHeight: 58, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                 />
                 <div className="flex gap-2 mb-3">
                   {(['yesno', 'options'] as const).map((k) => (
@@ -1391,7 +1391,7 @@ export function BoardDesk() {
                       onClick={() => setVoteKind(k)}
                       className="flex-1 rounded-[11px] py-2 text-[12px] font-extrabold cursor-pointer"
                       style={voteKind === k
-                        ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                        ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))', border: '1.5px solid rgb(var(--navy))' }
                         : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
                     >
                       {k === 'yesno' ? 'Yes / No' : 'Multiple choice'}
@@ -1406,13 +1406,13 @@ export function BoardDesk() {
                         value={state.voteOptA}
                         onChange={(e) => set({ voteOptA: e.target.value })}
                         className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                       />
                       <input
                         value={state.voteOptB}
                         onChange={(e) => set({ voteOptB: e.target.value })}
                         className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                       />
                     </div>
                   </>
@@ -1426,15 +1426,15 @@ export function BoardDesk() {
                           onChange={(e) => setVoteOpts(voteOpts.map((o, j) => (j === i ? e.target.value : o)))}
                           placeholder={`Option ${i + 1}`}
                           className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                          style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                          style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                         />
                         {voteOpts.length > 2 && (
                           <button
                             onClick={() => setVoteOpts(voteOpts.filter((_, j) => j !== i))}
                             className="w-9 rounded-[11px] border-0 cursor-pointer flex items-center justify-center"
-                            style={{ background: 'rgb(var(--sandpale))' }}
+                            style={{ background: 'rgb(var(--skyrule))' }}
                           >
-                            <PhIcon name="ph-bold ph-x" size={12} color="rgb(var(--stone))" />
+                            <PhIcon name="ph-bold ph-x" size={12} color="rgb(var(--slate))" />
                           </button>
                         )}
                       </div>
@@ -1453,7 +1453,7 @@ export function BoardDesk() {
                       className="flex items-center gap-2 mb-3 bg-transparent border-0 p-0 cursor-pointer text-[12px] font-bold text-navy"
                     >
                       <span className="w-4 h-4 rounded-[5px] flex items-center justify-center" style={{ border: '1.5px solid rgb(var(--navy) / 0.3)', background: voteMulti ? 'rgb(var(--navy))' : 'transparent' }}>
-                        {voteMulti && <PhIcon name="ph-bold ph-check" size={10} color="rgb(var(--cream))" />}
+                        {voteMulti && <PhIcon name="ph-bold ph-check" size={10} color="rgb(var(--mist))" />}
                       </span>
                       Allow picking more than one
                     </button>
@@ -1467,7 +1467,7 @@ export function BoardDesk() {
                       onClick={() => setVoteDays(days)}
                       className="flex-1 rounded-[11px] py-2 text-[11.5px] font-extrabold cursor-pointer"
                       style={voteDays === days
-                        ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                        ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))', border: '1.5px solid rgb(var(--navy))' }
                         : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
                     >
                       {label}
@@ -1479,7 +1479,7 @@ export function BoardDesk() {
                     onClick={() => canPostVote && setVoteConfirm(true)}
                     disabled={!canPostVote}
                     className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                    style={{ background: canPostVote ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
+                    style={{ background: canPostVote ? 'rgb(var(--sunsetdeep))' : 'rgb(var(--skyrule))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--slatelight))' }}
                   >
                     Open the ballot
                   </button>
@@ -1521,7 +1521,7 @@ export function BoardDesk() {
           {/* Open ballots — live tallies + close */}
           {openVotes.length > 0 && (
             <>
-              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+              <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
                 Open ballots
               </p>
               <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -1530,7 +1530,7 @@ export function BoardDesk() {
                     <div className="flex items-center gap-2">
                       <div className="flex-1 min-w-0">
                         <p className="m-0 text-[13px] font-bold text-navy truncate">{v.title}</p>
-                        <p className="m-0 text-[11.5px] font-semibold text-stone">
+                        <p className="m-0 text-[11.5px] font-semibold text-slate">
                           {v.kind === 'options'
                             ? v.options.map((o) => `${o.label} ${o.tally}`).join(' · ')
                             : `${v.yesLabel} ${v.yesCount} · ${v.noLabel} ${v.noCount}`}
@@ -1552,7 +1552,7 @@ export function BoardDesk() {
           )}
 
           {/* Community event */}
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Events
           </p>
           <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -1571,7 +1571,7 @@ export function BoardDesk() {
                   onChange={(e) => setEvTitle(e.target.value)}
                   placeholder="Title — e.g. Summer BBQ at the clubhouse"
                   className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                 />
                 <div className="flex gap-2 mb-2">
                   <input
@@ -1579,14 +1579,14 @@ export function BoardDesk() {
                     onChange={(e) => setEvWhen(e.target.value)}
                     placeholder="When — Sat Aug 9 · 5 PM"
                     className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   />
                   <input
                     value={evWhere}
                     onChange={(e) => setEvWhere(e.target.value)}
                     placeholder="Where"
                     className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   />
                 </div>
                 <div className="flex gap-2">
@@ -1604,15 +1604,15 @@ export function BoardDesk() {
                         .then(() => { setEvDraftOpen(false); setEvTitle(''); setEvWhen(''); setEvWhere(''); })
                         .catch(reportedByDataLayer);
                     }}
-                    className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
-                    style={{ background: evTitle.trim() ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))' }}
+                    className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-mist"
+                    style={{ background: evTitle.trim() ? 'rgb(var(--sunset))' : 'rgb(var(--skyrule))' }}
                   >
                     Publish event
                   </button>
                 </div>
               </div>
             )}
-            <p className="mt-2.5 mb-0 text-[11px] font-semibold text-stone">
+            <p className="mt-2.5 mb-0 text-[11px] font-semibold text-slate">
               Shows on every resident&apos;s Today screen with one-tap RSVP.
             </p>
           </div>
@@ -1620,7 +1620,7 @@ export function BoardDesk() {
       )}
       {state.boardTab === 'comms' && demo && (
         <div className="animate-fadeup">
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Broadcast
           </p>
           <div className="bg-paper rounded-[20px] p-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -1631,11 +1631,11 @@ export function BoardDesk() {
                   onChange={(e) => set({ bcText: e.target.value })}
                   placeholder="Announce something to every household…"
                   className="w-full rounded-[13px] px-3.5 py-3 text-[13.5px] font-semibold text-navy outline-none resize-none"
-                  style={{ minHeight: 74, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  style={{ minHeight: 74, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                 />
                 <div className="flex items-center gap-2 my-2.5 mb-3">
-                  <PhIcon name="ph-fill ph-broadcast" size={14} color="rgb(var(--stone))" className="flex-shrink-0" />
-                  <p className="m-0 text-[11.5px] font-bold text-stone">
+                  <PhIcon name="ph-fill ph-broadcast" size={14} color="rgb(var(--slate))" className="flex-shrink-0" />
+                  <p className="m-0 text-[11.5px] font-bold text-slate">
                     Posts to the Commons + email digest — reaches all 136 households, including the 41% not on the app
                   </p>
                 </div>
@@ -1643,7 +1643,7 @@ export function BoardDesk() {
                   onClick={sendBroadcast}
                   disabled={!canBc}
                   className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold"
-                  style={{ background: canBc ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canBc ? 'rgb(var(--white))' : 'rgb(var(--stonelight))', cursor: canBc ? 'pointer' : 'default' }}
+                  style={{ background: canBc ? 'rgb(var(--sunsetdeep))' : 'rgb(var(--skyrule))', color: canBc ? 'rgb(var(--white))' : 'rgb(var(--slatelight))', cursor: canBc ? 'pointer' : 'default' }}
                 >
                   Send to 136 households
                 </button>
@@ -1659,7 +1659,7 @@ export function BoardDesk() {
             )}
           </div>
 
-          <p className="mt-[22px] mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="mt-[22px] mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Put it to a vote
           </p>
           <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
@@ -1673,7 +1673,7 @@ export function BoardDesk() {
                       onChange={(e) => set({ voteQ: e.target.value })}
                       placeholder="e.g. Should we add a second EV charger in Lot B?"
                       className="w-full rounded-[13px] px-[13px] py-[11px] text-[13.5px] font-semibold text-navy outline-none resize-none mb-3"
-                      style={{ minHeight: 58, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                      style={{ minHeight: 58, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                     />
                     <p className="m-0 mb-[7px] text-[11.5px] font-bold text-navy">Choices</p>
                     <div className="flex gap-2 mb-3">
@@ -1681,17 +1681,17 @@ export function BoardDesk() {
                         value={state.voteOptA}
                         onChange={(e) => set({ voteOptA: e.target.value })}
                         className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                       />
                       <input
                         value={state.voteOptB}
                         onChange={(e) => set({ voteOptB: e.target.value })}
                         className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                       />
                     </div>
-                    <div className="rounded-xl px-[13px] py-[11px] mb-3" style={{ background: 'rgb(var(--parchment))' }}>
-                      <p className="m-0 mb-[5px] text-[10.5px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
+                    <div className="rounded-xl px-[13px] py-[11px] mb-3" style={{ background: 'rgb(var(--mistpale))' }}>
+                      <p className="m-0 mb-[5px] text-[10.5px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--slate))' }}>
                         Residents will see
                       </p>
                       <p className="m-0 text-[13px] font-bold text-navy" style={{ lineHeight: 1.35 }}>
@@ -1699,8 +1699,8 @@ export function BoardDesk() {
                       </p>
                     </div>
                     <div className="flex items-center gap-2 mb-3">
-                      <PhIcon name="ph-fill ph-users-three" size={14} color="rgb(var(--stone))" className="flex-shrink-0" />
-                      <p className="m-0 text-[11.5px] font-bold text-stone">
+                      <PhIcon name="ph-fill ph-users-three" size={14} color="rgb(var(--slate))" className="flex-shrink-0" />
+                      <p className="m-0 text-[11.5px] font-bold text-slate">
                         Opens to all 136 households · 7-day window · quorum 50%+1 · one ballot each
                       </p>
                     </div>
@@ -1709,7 +1709,7 @@ export function BoardDesk() {
                         onClick={() => canPostVote && setVoteConfirm(true)}
                         disabled={!canPostVote}
                         className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                        style={{ background: canPostVote ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--stonelight))' }}
+                        style={{ background: canPostVote ? 'rgb(var(--sunsetdeep))' : 'rgb(var(--skyrule))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--slatelight))' }}
                       >
                         Open the ballot
                       </button>
@@ -1735,18 +1735,18 @@ export function BoardDesk() {
                 )}
                 {!state.voteDraftOpen && (
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--blush))' }}>
-                      <PhIcon name="ph-fill ph-check-square" size={20} color="rgb(var(--terracotta))" />
+                    <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--accenttint))' }}>
+                      <PhIcon name="ph-fill ph-check-square" size={20} color="rgb(var(--accent))" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="m-0 mb-px text-[13.5px] font-bold text-navy">Draft a community vote</p>
-                      <p className="m-0 text-[11.5px] font-semibold text-stone">
+                      <p className="m-0 text-[11.5px] font-semibold text-slate">
                         Ask a yes/no or A/B question — results tally live
                       </p>
                     </div>
                     <button
                       onClick={openVoteDraft}
-                      className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
+                      className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                     >
                       New vote
                     </button>
@@ -1769,13 +1769,13 @@ export function BoardDesk() {
             )}
           </div>
 
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Friday digest · drafted by AI
           </p>
           <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
             <div className="flex flex-col gap-2 mb-3">
               <div className="flex gap-2.5 items-start">
-                <PhIcon name="ph-fill ph-check-square" size={14} color="rgb(var(--terracotta))" className="mt-0.5 flex-shrink-0" />
+                <PhIcon name="ph-fill ph-check-square" size={14} color="rgb(var(--accent))" className="mt-0.5 flex-shrink-0" />
                 <p className="m-0 text-[12.5px] font-bold text-ink">
                   Pool furniture vote closes Thursday — 61 in so far
                 </p>
@@ -1794,8 +1794,8 @@ export function BoardDesk() {
               </div>
             </div>
             <div className="flex items-center gap-2 mb-3">
-              <PhIcon name="ph-fill ph-broadcast" size={13} color="rgb(var(--stone))" className="flex-shrink-0" />
-              <p className="m-0 text-[11.5px] font-bold text-stone">
+              <PhIcon name="ph-fill ph-broadcast" size={13} color="rgb(var(--slate))" className="flex-shrink-0" />
+              <p className="m-0 text-[11.5px] font-bold text-slate">
                 Reaches all 136 households: 80 app · 44 email · 12 print
               </p>
             </div>
@@ -1811,25 +1811,25 @@ export function BoardDesk() {
             </button>
           </div>
 
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Annual meeting prep · Jul 15
           </p>
           <div className="bg-paper rounded-[20px] p-4 mb-[22px]" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
             <div className="flex flex-col gap-[9px] mb-3">
               <div className="flex gap-2.5 items-center">
-                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--taupedim))' }} />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--slatedim))' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">2027 budget ratification</span>
               </div>
               <div className="flex gap-2.5 items-center">
-                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--taupedim))' }} />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--slatedim))' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">Board election — 2 seats, 3 candidates</span>
               </div>
               <div className="flex gap-2.5 items-center">
-                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--taupedim))' }} />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--slatedim))' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">Pool furniture vote — results</span>
               </div>
               <div className="flex gap-2.5 items-center">
-                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--taupedim))' }} />
+                <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--slatedim))' }} />
                 <span className="flex-1 text-[13px] font-bold text-navy">Open comment (2 min each)</span>
               </div>
             </div>
@@ -1848,24 +1848,24 @@ export function BoardDesk() {
             </button>
           </div>
 
-          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Minutes
           </p>
           <div className="bg-paper rounded-[20px] p-4" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--blush))' }}>
-                <PhIcon name="ph-fill ph-sparkle" size={19} color="rgb(var(--terracotta))" />
+              <div className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--accenttint))' }}>
+                <PhIcon name="ph-fill ph-sparkle" size={19} color="rgb(var(--accent))" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-px text-[13.5px] font-bold text-navy">June 18 minutes — drafted by AI</p>
-                <p className="m-0 text-[11.5px] font-semibold text-stone">
+                <p className="m-0 text-[11.5px] font-semibold text-slate">
                   From the meeting recording · 4 pp · needs your review
                 </p>
               </div>
               {!state.minutesPublished && (
                 <button
                   onClick={publishMinutes}
-                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
+                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                 >
                   Publish
                 </button>
@@ -1910,9 +1910,9 @@ function TriageCard({ item: t }: { item: TriageItem }) {
   };
 
   const urgencyPill = t.urgency === 'urgent'
-    ? { label: 'URGENT', bg: 'rgb(var(--blush))', color: 'rgb(var(--terracotta))' }
+    ? { label: 'URGENT', bg: 'rgb(var(--accenttint))', color: 'rgb(var(--accent))' }
     : t.urgency === 'low'
-      ? { label: 'LOW', bg: 'rgb(var(--sand))', color: 'rgb(var(--stone))' }
+      ? { label: 'LOW', bg: 'rgb(var(--skyborder))', color: 'rgb(var(--slate))' }
       : null;
 
   return (
@@ -1920,12 +1920,12 @@ function TriageCard({ item: t }: { item: TriageItem }) {
       <div className="flex items-center gap-3">
         <div
           className="w-10 h-10 rounded-[13px] flex items-center justify-center flex-shrink-0"
-          style={{ background: resolved ? 'rgb(var(--mint))' : 'rgb(var(--blush))' }}
+          style={{ background: resolved ? 'rgb(var(--mint))' : 'rgb(var(--accenttint))' }}
         >
           <PhIcon
             name={resolved ? 'ph-fill ph-check-circle' : 'ph-fill ph-siren'}
             size={20}
-            color={resolved ? 'rgb(var(--sage))' : 'rgb(var(--terracotta))'}
+            color={resolved ? 'rgb(var(--sage))' : 'rgb(var(--accent))'}
           />
         </div>
         <button onClick={toggle} className="flex-1 min-w-0 border-0 bg-transparent p-0 text-left cursor-pointer">
@@ -1937,14 +1937,14 @@ function TriageCard({ item: t }: { item: TriageItem }) {
             )}
             {t.title}
           </p>
-          <p className="m-0 text-xs font-semibold text-stone">
+          <p className="m-0 text-xs font-semibold text-slate">
             {t.sub}{t.location ? ` · ${t.location}` : ''}{t.vendor ? ` · ${t.vendor}` : ''}
           </p>
         </button>
         {t.status === 'open' && (
           <button
             onClick={() => void repo.setReportStatus(t.id, 'ticketed')}
-            className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-cream"
+            className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
           >
             Create ticket
           </button>
@@ -1983,11 +1983,11 @@ function TriageCard({ item: t }: { item: TriageItem }) {
                 onChange={(e) => setVendor(e.target.value)}
                 placeholder="Assign — vendor or person"
                 className="flex-1 rounded-[11px] px-3 py-2 text-[12.5px] font-bold text-navy outline-none min-w-0"
-                style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
               />
               <button
                 onClick={() => { if (vendor.trim()) void repo.assignReport(t.id, vendor); }}
-                className="border-0 rounded-[11px] px-3 text-[11.5px] font-extrabold cursor-pointer bg-skydeep text-cream flex-shrink-0"
+                className="border-0 rounded-[11px] px-3 text-[11.5px] font-extrabold cursor-pointer bg-skydeep text-mist flex-shrink-0"
               >
                 Assign
               </button>
@@ -1999,7 +1999,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Board-only notes"
               className="flex-1 rounded-[11px] px-3 py-2 text-[12.5px] font-bold text-navy outline-none min-w-0"
-              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
             />
             <button
               onClick={() => void repo.setReportNotes(t.id, notes)}
@@ -2012,7 +2012,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
           {thread.map((c) => (
             <p key={c.id} className="m-0 mb-1 text-[12px] font-semibold text-navy">
               <strong>{c.me ? 'You' : c.authorName}:</strong> {c.body}{' '}
-              <span className="text-stone" style={{ fontSize: 10.5 }}>· {c.time}</span>
+              <span className="text-slate" style={{ fontSize: 10.5 }}>· {c.time}</span>
             </p>
           ))}
           <div className="flex gap-2 mt-1.5">
@@ -2022,16 +2022,16 @@ function TriageCard({ item: t }: { item: TriageItem }) {
               onKeyDown={(e) => { if (e.key === 'Enter') sendReply(); }}
               placeholder="Message the reporter…"
               className="flex-1 rounded-full px-3 py-2 text-[12.5px] font-bold text-navy outline-none min-w-0"
-              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+              style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
             />
             <button
               type="button"
               aria-label="Send reply"
               onClick={sendReply}
               className="w-8 h-8 border-0 rounded-full cursor-pointer flex items-center justify-center flex-shrink-0"
-              style={{ background: reply.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+              style={{ background: reply.trim() ? 'rgb(var(--navy))' : 'rgb(var(--skyrule))' }}
             >
-              <PhIcon name="ph-fill ph-paper-plane-right" size={12} color="rgb(var(--cream))" />
+              <PhIcon name="ph-fill ph-paper-plane-right" size={12} color="rgb(var(--mist))" />
             </button>
           </div>
         </div>

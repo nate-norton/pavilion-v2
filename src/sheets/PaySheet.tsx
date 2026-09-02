@@ -37,18 +37,18 @@ export function PaySheet() {
       {notPaid && (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">{payTitle}</p>
-          <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-3.5 text-[12.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             #27 Alder Way · due Jul 3
           </p>
           {delinquent && (
             <div
               className="rounded-[13px] p-[11px_13px] flex gap-2.5 items-start mb-3"
-              style={{ background: 'rgb(var(--blush))', border: '1px solid rgb(var(--terracotta) / 0.25)' }}
+              style={{ background: 'rgb(var(--accenttint))', border: '1px solid rgb(var(--accent) / 0.25)' }}
             >
               <PhIcon
                 name="ph-fill ph-clock-countdown"
                 size={16}
-                color="rgb(var(--terracotta))"
+                color="rgb(var(--accent))"
                 className="mt-px flex-shrink-0"
               />
               <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: 'rgb(var(--brown))' }}>
@@ -64,11 +64,11 @@ export function PaySheet() {
           <div className="flex h-2.5 rounded-full overflow-hidden mb-2">
             <div style={{ width: '27%', background: 'rgb(var(--sage))' }} />
             <div style={{ width: '25%', background: 'rgb(var(--skydeep))' }} />
-            <div style={{ width: '19%', background: 'rgb(var(--ember))' }} />
+            <div style={{ width: '19%', background: 'rgb(var(--sunset))' }} />
             <div style={{ width: '17%', background: 'rgb(var(--gold))' }} />
-            <div style={{ width: '12%', background: 'rgb(var(--stonelight))' }} />
+            <div style={{ width: '12%', background: 'rgb(var(--slatelight))' }} />
           </div>
-          <p className="m-0 mb-4 text-[11.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-4 text-[11.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             Landscaping $78 · Reserves $71 · Insurance $54 · Utilities $48 · Mgmt $34
           </p>
           <button
@@ -82,7 +82,7 @@ export function PaySheet() {
               <p className="m-0 text-[13px] font-bold text-navy">
                 {state.payMethod === 'jcu' ? 'Juniper Credit Union ····4821' : state.payMethod === 'visa' ? 'Visa ····7923' : 'Apple Pay'}
               </p>
-              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                 {state.payMethod === 'jcu' ? 'No card fees — ACH is free' : state.payMethod === 'visa' ? '$2.85 processing fee' : 'No card fees'}
               </p>
             </div>
@@ -107,7 +107,7 @@ export function PaySheet() {
                   <PhIcon name={pm.icon} size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
                   <div className="flex-1">
                     <p className="m-0 text-[12.5px] font-bold text-navy">{pm.label}</p>
-                    <p className="m-0 text-[11px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>{pm.sub}</p>
+                    <p className="m-0 text-[11px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>{pm.sub}</p>
                   </div>
                   {state.payMethod === pm.key && (
                     <PhIcon name="ph-fill ph-check-circle" size={16} color="rgb(var(--sage))" />
@@ -128,7 +128,7 @@ export function PaySheet() {
             />
             <div className="flex-1">
               <p className="m-0 text-[13px] font-bold text-navy">Autopay on the 3rd</p>
-              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                 Never think about dues again
               </p>
             </div>
@@ -142,7 +142,7 @@ export function PaySheet() {
             {payBtnLabel}
           </button>
           {state.autopay && (
-            <p className="m-0 mt-2 text-[11.5px] font-semibold text-center" style={{ color: 'rgb(var(--stone))' }}>
+            <p className="m-0 mt-2 text-[11.5px] font-semibold text-center" style={{ color: 'rgb(var(--slate))' }}>
               Autopay charges this account on the 3rd of each month. Cancel any time in My Place.
             </p>
           )}
@@ -163,7 +163,7 @@ export function PaySheet() {
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-[19px] text-navy">
             Payment plan is set.
           </p>
-          <p className="m-0 mb-3.5 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-3.5 text-[13px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             3 × $190 · Jul 3, Aug 3, Sep 3 · autopay from Juniper CU ····4821
           </p>
           <div
@@ -177,7 +177,7 @@ export function PaySheet() {
           </div>
           <button
             onClick={closePay}
-            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
+            className="w-full border-none text-mist rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>
@@ -189,7 +189,7 @@ export function PaySheet() {
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-[19px] text-navy">
             Paid. Done in two taps.
           </p>
-          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-4 text-[13px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             $285.00 · Jul 1, 9:41 AM · Juniper CU ····4821
           </p>
           <div
@@ -203,7 +203,7 @@ export function PaySheet() {
           </div>
           <button
             onClick={closePay}
-            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
+            className="w-full border-none text-mist rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>

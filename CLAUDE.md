@@ -94,21 +94,45 @@ taken at its word.
 
 ## Design System
 
-Warm earth tones. `src/index.css` `:root` is the source of truth for every
-token; `DESIGN.md` explains the system and `PRODUCT.md` the commitments it
-serves (WCAG 2.2 AA, large type, no fabricated data). Phone frame 393x830.
+The Pavilion brand system: **sky primary, sunset accent, ink text on a mist
+ground**, Nunito 900 display over Nunito Sans. `src/index.css` `:root` is the
+source of truth for every token; `DESIGN.md` explains the system and
+`PRODUCT.md` the commitments it serves (WCAG 2.2 AA, large type, no fabricated
+data). Phone frame 393x830.
 
-Core: navy `#1A3352` · cream `#F5F0E6` · ember `#E06A3E` · terracotta
-`#C75A31` · sage `#2A9D5C` · gold `#D9A441`.
+Core: navy/ink `#1A3352` · mist `#EEF6FF` (the ground) · paper `#FFFFFF` ·
+sky `#4A90E2` · skydeep `#34679F` (chrome + primary CTAs) · accent `#1E66BA`
+(links, pills, active states) · sunset `#F97B4B` · sage `#2A9D5C` · gold
+`#F59E0B`.
+
+**Sky is the primary; sunset is a sparing accent.** Buttons, links and active
+states are sky. Sunset is reserved for what the brand sheet names — the AI
+gradient, the dues progress bar, and RSVP on light cards. It cannot back a
+button on sky chrome: sunset measures 2.21:1 against `--skydeep` and
+sunsetdeep 1.00:1, so a control there is a white pill with sky text.
+
+**Navy is text, not a surface.** `text-navy` is the heading colour; chrome
+(nav dock, hero cards, avatars) is `--skydeep`. Reintroducing `bg-navy` puts
+back the heavy dark chrome this system deliberately dropped.
 
 **The text-bearing accent rule.** Each accent has a decorative value and a
 darker text-bearing twin. Fills — status dots, progress, gradients, large
 display type — use the base. Anything carrying text, whether a CTA background
-under white or accent-colored copy on a light bed, uses the twin: ember →
-`--emberdeep` `#AC502D`, sage → `--sagedark` `#207847`, gold → `--golddark`
-`#8C6928`. Swapping a twin back for its base reintroduces the WCAG 1.4.3
-failures the audit found on every primary button. Check both directions
-before adding a pair.
+under white or accent-coloured copy on a light bed, uses the twin: sunset →
+`--sunsetdeep` `#B93706`, sky → `--skydeep` `#34679F`, sage → `--sagedark`
+`#1F7545`, gold → `--golddark` `#8F5C06`. The brand sheet's own pairs do not
+clear AA — sunset under white is 2.64:1 and sky under white 3.29:1 — so every
+text-bearing value here was solved against the cool surfaces rather than
+copied. Swapping a twin back for its base reintroduces the WCAG 1.4.3 failures
+the audit found on every primary button. Check both directions before adding a
+pair.
+
+**Token names are generated into Tailwind.** `tailwind.config.ts` derives its
+colour map from the `:root` block, so a token name and its utility class can
+never drift apart. `src/theme/tokens.test.ts` additionally asserts that every
+`rgb(var(--x))` resolves and that every brand-theme override names a real
+token — the three places TypeScript cannot connect, and where a stale name
+fails silently rather than loudly.
 
 Two sequential sage ramps in `:root` (`--sagemist` → `--sage`) are chart
 scales, not drift — collapsing them flattens the reserve-funding forecast.
