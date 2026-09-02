@@ -2,6 +2,9 @@ import { useEffect, useState, type ReactNode } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { PhIcon } from '../components/PhIcon';
 import { isLiveMode, getSupabaseClient } from '../data/repo/supabaseClient';
+import { AuthShell, AuthError, PrimaryButton, FIELD, FIELD_STYLE } from './shell';
+import { InvitedFlow, MIN_PASSWORD, COMMUNITY_KEY, stashInviteCode, readInviteCode, clearInviteCode, type InvitePeek } from './InvitedFlow';
+import { Arrival } from './Arrival';
 
 export { isLiveMode };
 
@@ -23,59 +26,6 @@ export function AuthGate({ children }: { children: ReactNode }) {
 /** The slice of the profile row the onboarding step needs. */
 type OnboardingProfile = { id: string; name: string; phone: string; onboarded_at: string | null };
 
-/** Supabase's own floor is 6; 8 is the cheapest real improvement we control. */
-const MIN_PASSWORD = 8;
-
-const SHELL_BG = 'radial-gradient(120% 90% at 50% 0%, rgb(var(--misttint)) 0%, rgb(var(--skywash)) 60%, rgb(var(--skyedge)) 100%)';
-const CARD_STYLE = { border: '1px solid rgb(var(--navy) / 0.08)', boxShadow: '0 18px 50px rgb(var(--scrim) / 0.12)' } as const;
-const FIELD = 'w-full rounded-xl px-4 py-3 text-[14px] font-semibold text-navy outline-none font-sans';
-const FIELD_STYLE = { border: '1px solid rgb(var(--navy) / 0.14)', background: 'rgb(var(--mistpale))' } as const;
-
-/** Centered card shell shared by every auth screen. */
-function AuthShell({ children, width = 360 }: { children: ReactNode; width?: number }) {
-  return (
-    <div className="min-h-dvh flex items-center justify-center p-6" style={{ background: SHELL_BG }}>
-      <div className="w-full bg-paper rounded-[24px] p-7" style={{ ...CARD_STYLE, maxWidth: width }}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function AuthError({ message }: { message: string | null }) {
-  if (!message) return null;
-  return (
-    <p role="alert" className="m-0 mb-3 text-[12.5px] font-bold" style={{ color: 'rgb(var(--accent))' }}>
-      {message}
-    </p>
-  );
-}
-
-function PrimaryButton({ label, busyLabel, busy, disabled, onClick }: {
-  label: string; busyLabel: string; busy: boolean; disabled: boolean; onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={busy || disabled}
-      className="w-full border-none rounded-xl py-3 text-[14px] font-extrabold cursor-pointer font-sans"
-      style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--white))', opacity: busy || disabled ? 0.6 : 1 }}
-    >
-      {busy ? busyLabel : label}
-    </button>
-  );
-}
-
-/** Stash an invite code from the URL (?invite=…) so it survives the
- * magic-link round trip; claimed after sign-in, cleared on success. */
-function stashInviteCode() {
-  try {
-    const code = new URLSearchParams(window.location.search).get('invite');
-    if (code) localStorage.setItem('pav-invite-code', code);
-  } catch { /* no-op */ }
-}
-
 function LiveAuthGate({ children }: { children: ReactNode }) {
   const supabase = getSupabaseClient();
   const [session, setSession] = useState<Session | null>(null);
@@ -89,8 +39,14 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
   // Set when the user arrives on a password-recovery link; Supabase signs them
   // in first, so without this they'd land in the app with no way to finish.
   const [recovering, setRecovering] = useState(false);
+  // An invite link in hand and no session → the invited door, not sign-in.
+  const [inviteCode, setInviteCode] = useState<string | null>(null);
+  // Set the moment a membership is claimed, so the first thing a new member
+  // sees is their community, not the app's default tab.
+  const [arrival, setArrival] = useState<Pick<InvitePeek, 'communityName' | 'role'> | null>(null);
+  const [prefillEmail, setPrefillEmail] = useState('');
 
-  useEffect(() => { stashInviteCode(); }, []);
+  useEffect(() => { stashInviteCode(); setInviteCode(readInviteCode()); }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => { setSession(data.session); setReady(true); });
@@ -121,14 +77,19 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
         // already belongs elsewhere — an account can hold several communities.
         // Forgetting the device's remembered pick lets the repository land
         // them in the community they just accepted into.
-        const code = localStorage.getItem('pav-invite-code');
+        const code = readInviteCode();
         if (code) {
+          const { data: peeked } = await supabase.rpc('peek_invite', { invite_code: code });
           const { data: codeClaimed } = await supabase.rpc('claim_invite_code', { invite_code: code });
           if (codeClaimed === true) {
-            localStorage.removeItem('pav-invite-code');
-            localStorage.removeItem('pav-community');
+            clearInviteCode();
+            try { localStorage.removeItem(COMMUNITY_KEY); } catch { /* no-op */ }
             void supabase.auth.refreshSession();
-            if (alive) setHasCommunity(true);
+            const row = (peeked ?? [])[0];
+            if (alive) {
+              if (row) setArrival({ communityName: row.community_name, role: row.role === 'board' ? 'board' : 'resident' });
+              setHasCommunity(true);
+            }
             return;
           }
         }
@@ -150,7 +111,17 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
   }, [session, supabase, resolveKey]);
 
   if (!ready) return null;
-  if (!session) return <LiveSignIn />;
+  if (!session && inviteCode) {
+    return (
+      <InvitedFlow
+        code={inviteCode}
+        onArrived={(peek) => { setArrival({ communityName: peek.communityName, role: peek.role }); setInviteCode(null); }}
+        onSignInInstead={(email) => { setPrefillEmail(email); setInviteCode(null); }}
+        onAbandon={() => setInviteCode(null)}
+      />
+    );
+  }
+  if (!session) return <LiveSignIn initialEmail={prefillEmail} />;
   if (recovering) return <SetNewPassword onDone={() => setRecovering(false)} />;
   if (profile && !profile.onboarded_at) {
     return (
@@ -163,6 +134,7 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
   }
   if (hasCommunity === null) return null;              // resolving membership
   if (!hasCommunity) return <NoCommunity email={session.user.email ?? ''} />;
+  if (arrival) return <Arrival communityName={arrival.communityName} role={arrival.role} onDone={() => setArrival(null)} />;
   return <>{children}</>;
 }
 
@@ -225,12 +197,12 @@ type SignInStage = 'form' | 'linkSent' | 'resetSent' | 'confirmSent';
  * roster never shows an email local-part. The magic link stays as a fallback
  * for anyone who'd rather not keep a password, and powers the reset flow.
  */
-function LiveSignIn() {
+function LiveSignIn({ initialEmail = '' }: { initialEmail?: string }) {
   const supabase = getSupabaseClient();
   const [mode, setMode] = useState<SignInMode>('signin');
   const [stage, setStage] = useState<SignInStage>('form');
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
