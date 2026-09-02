@@ -17,9 +17,14 @@ or the MCP tools, never from the app.
 | 0 · Found | Pavilion | `found_community()` — this doc |
 | 1 · Activate | Board | `BoardSetupCard` walks the first ten minutes |
 | 2 · Populate | Board | Board Desk → invites, one per household |
-| 3 · Join | Resident | Magic link → `claim_invite()` → lands in community |
+| 3 · Join | Resident | Sign up or sign-in link → `claim_invite()` → lands in community |
 
 Stage 0 happens once per community and never again.
+
+> Sign-in details below describe `staging` (the product, live mode). If you are
+> reading this from a feature branch, check `src/auth/AuthGate.tsx` on
+> `origin/staging` rather than your working copy — auth has changed there more
+> than once, and a stale branch will describe a screen that no longer ships.
 
 ## Running it
 
@@ -52,12 +57,32 @@ minting a second one.
 
 ## Handing off the invites
 
-Two ways in, both already built:
+Sign-in on `staging` is **email + password first**, with a passwordless option
+below an "or" divider. A founding board member has three ways in, and the one
+you point them at changes what their profile looks like afterwards.
 
-- **Email match** — the board member signs in with the invited address and
-  `claim_invite()` finds their row. Nothing to send but "go to app.pavilion.community".
-- **Link** — `invite_url` (`/?invite=CODE`) is claimed by whatever address they
-  sign in with. `AuthGate` stashes the code through the magic-link round trip.
+**Recommended — "Create an account"** (name, email, password, 8-char minimum).
+`signUp()` passes the typed name through as user metadata, and
+`handle_new_user()` reads `raw_user_meta_data->>'name'`, so the profile is
+created with their real name. Supabase then emails a confirmation they must
+click before the first sign-in.
+
+**Fastest — "Email me a sign-in link instead."** Enter the email, leave the
+password blank, tap the button below the divider. `signInWithOtp` runs with
+`shouldCreateUser: true`, so it both creates the account and signs them in with
+no password and no confirmation step.
+
+The catch: that path sends **no name metadata**, so `handle_new_user()` falls
+back to `split_part(email, '@', 1)`. A board member invited at
+`jane.doe@example.com` lands in the directory as "jane.doe" until she fixes it
+in her profile. Fine for your own testing, scruffy for a real board's first
+impression — prefer "Create an account" when the name will be seen.
+
+**Existing account** — email + password in the main form.
+
+All three end in the same place: `LiveAuthGate` runs `claim_invite()` on the
+first authenticated load, and `claim_invite_code()` after it if a `?invite=`
+code was stashed. The code survives the email round trip in `localStorage`.
 
 The link is per-invite, not per-community: each code admits exactly one person,
 then flips to `accepted`. Codes expire after 14 days; the board can renew a
