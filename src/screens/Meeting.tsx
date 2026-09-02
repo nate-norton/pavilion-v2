@@ -27,8 +27,8 @@ export function Meeting() {
   return (
     <div
       data-screen-label="Annual Meeting"
-      className="pav-scroll absolute inset-0 z-[77] overflow-y-auto animate-scpop"
-      style={{ background: 'rgb(var(--mist))', padding: '60px 18px 40px' }}
+      className="pav-scroll pav-fixed absolute inset-0 z-[77] overflow-y-auto animate-scpop"
+      style={{ background: 'rgb(var(--mist))', padding: 'calc(60px + var(--pav-chrome-top)) 18px calc(40px + var(--pav-safe-bottom))' }}
     >
       <BackButton onClick={() => set({ meetingOpen: false })} />
       <p className="m-0 mb-1.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.14em', color: 'rgb(var(--accent))' }}>

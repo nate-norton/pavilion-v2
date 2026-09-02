@@ -78,8 +78,8 @@ export function Documents() {
   return (
     <div
       data-screen-label="Documents"
-      className="pav-scroll absolute inset-0 z-[76] overflow-y-auto animate-scpop"
-      style={{ background: 'rgb(var(--mist))', padding: '60px 18px 40px' }}
+      className="pav-scroll pav-fixed absolute inset-0 z-[76] overflow-y-auto animate-scpop"
+      style={{ background: 'rgb(var(--mist))', padding: 'calc(60px + var(--pav-chrome-top)) 18px calc(40px + var(--pav-safe-bottom))' }}
     >
       {!state.docReader ? (
         <div>

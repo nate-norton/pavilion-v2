@@ -22,8 +22,8 @@ export function Portfolio() {
   return (
     <div
       data-testid="portfolio-screen"
-      className="absolute inset-0 z-[79] bg-mist overflow-y-auto pav-scroll animate-scpop"
-      style={{ padding: '60px 18px 40px' }}
+      className="pav-fixed absolute inset-0 z-[79] bg-mist overflow-y-auto pav-scroll animate-scpop"
+      style={{ padding: 'calc(60px + var(--pav-chrome-top)) 18px calc(40px + var(--pav-safe-bottom))' }}
     >
       <button
         onClick={closePortfolio}

@@ -391,6 +391,56 @@ aspiration here, not a rule the system currently keeps.
 inset. Every scrollable screen ends with at least 40px of padding so the last
 row is never trapped beneath it.
 
+### Frame mode and page mode
+
+The 393x830 frame is one of two layouts, not the layout. On a handset the app
+runs in **page mode**, and the difference is structural rather than cosmetic:
+in frame mode the frame is a fixed-height box with its own scroller inside it,
+while in page mode the frame is simply the page and **the document itself
+scrolls**.
+
+That is not a stylistic choice. Safari and Chrome collapse their toolbars only
+when the root document scroller moves, so an app that scrolls a nested
+container keeps the URL bar and bottom bar expanded forever — permanently
+spending ~15% of a phone screen it can never win back, and breaking
+tap-status-bar-to-top. Handing the document its scroll back is the only
+mechanism that exists; there is no meta tag or CSS unit for it. Anything that
+reintroduces a full-height scroll container above the document — an
+`h-dvh` shell, an `absolute inset-0 overflow-y-auto` screen root — takes the
+toolbar back with it.
+
+Page mode is selected by `(max-width: 500px), (pointer: coarse) and
+(max-height: 500px)`: width for portrait handsets, and the short coarse
+viewport for a phone turned to landscape, which is up to 932px wide but never
+500px tall. An iPad in landscape is 744px tall and stays in frame mode. The
+query is written twice — `src/index.css` for the CSS half, `PAGE_MODE_QUERY`
+in `src/lib/pageMode.ts` for the JS half — and the two must stay in step.
+
+The seam between the layouts is a small set of tokens in `:root`, each of them
+a no-op in frame mode so the presenter demo and the desktop render are
+untouched:
+
+- `--pav-chrome-top` corrects a screen's top padding. The 58-78px values in
+  the screens clear the status bar *drawn inside the frame*; on a handset the
+  browser's own chrome already occupies that band, so page mode hands ~40px
+  back and adds the device's real top inset instead.
+- `--pav-screen-bottom` is dock clearance (66 + 14 + 16, plus the home
+  indicator); `--pav-dock-offset` is the dock's own gap.
+- `--pav-safe-*` are the four `env(safe-area-inset-*)` values, named once so
+  screens never call `env()` directly.
+- `--pav-keyboard` is how far the software keyboard overlaps the viewport,
+  measured by `useKeyboardInset`. Sheets, the AI composer and the dock lift by
+  it; it is 0 whenever there is no keyboard.
+
+Two further rules that only page mode needs. **Fields are never under 16px on
+a handset** — iOS zooms the page on focus below that, which throws the dock
+and the right edge of every card off-screen; the fix is the field size, never
+`maximum-scale=1`, which fails WCAG 1.4.4. And **the frame clips its inline
+axis with `overflow-x: clip`**, because the tab-change slide translates a full
+screen 40px sideways and would otherwise give the page a transient horizontal
+scrollbar. `clip` specifically: `hidden` would make the block axis a scroll
+container again and undo the whole thing.
+
 ## Elevation & Depth
 
 The system is **flat with tonal layering**. Depth is communicated by stepping

@@ -5,10 +5,13 @@ import { ThemeProvider } from './theme/ThemeProvider';
 import { brandTokens } from './theme/themes';
 import { usePavStore } from './store/store';
 import { AuthGate, isLiveMode } from './auth/AuthGate';
+import { useKeyboardInset } from './lib/pageMode';
 
 export default function App() {
   const [showPanel, setShowPanel] = useState(false);
   const brandTheme = usePavStore((s) => s.brandTheme);
+
+  useKeyboardInset();
 
   useEffect(() => {
     if (isLiveMode) return; // presenter controls are demo-only
@@ -26,7 +29,7 @@ export default function App() {
     <AuthGate>
     <ThemeProvider
       tokens={brandTokens(brandTheme)}
-      className="min-h-dvh flex items-center justify-center p-6 max-[500px]:p-0 gap-6"
+      className="pav-shell min-h-dvh flex items-center justify-center p-6 gap-6"
       style={{ background: 'radial-gradient(120% 90% at 50% 0%, rgb(var(--misttint)) 0%, rgb(var(--skywash)) 60%, rgb(var(--skyedge)) 100%)' }}
     >
       <PhoneFrame />
@@ -36,7 +39,7 @@ export default function App() {
           type="button"
           onClick={() => setShowPanel(true)}
           aria-label="Open demo controls"
-          className="fixed bottom-4 right-4 w-10 h-10 rounded-full border-none cursor-pointer flex items-center justify-center max-[500px]:hidden"
+          className="pav-demo-btn fixed bottom-4 right-4 w-10 h-10 rounded-full border-none cursor-pointer flex items-center justify-center"
           style={{ background: 'rgb(var(--navy) / 0.08)', color: 'rgb(var(--slatelight))', fontSize: 18, transition: 'opacity 0.2s' }}
           onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
           onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.5'; }}

@@ -80,8 +80,8 @@ export function Reserve() {
   if (amen) {
     return (
       <div
-        className="absolute inset-0 overflow-y-auto pav-scroll"
-        style={{ padding: '64px 18px 150px' }}
+        className="pav-tabscroll absolute inset-0 overflow-y-auto pav-scroll"
+        style={{ padding: 'calc(64px + var(--pav-chrome-top)) 18px var(--pav-screen-bottom)' }}
       >
         <div className="animate-fadeup">
           <button
@@ -260,8 +260,8 @@ export function Reserve() {
 
   return (
     <div
-      className="absolute inset-0 overflow-y-auto pav-scroll animate-scpop"
-      style={{ padding: '64px 18px 150px' }}
+      className="pav-tabscroll absolute inset-0 overflow-y-auto pav-scroll animate-scpop"
+      style={{ padding: 'calc(64px + var(--pav-chrome-top)) 18px var(--pav-screen-bottom)' }}
     >
       <div>
         <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Reserve</h1>

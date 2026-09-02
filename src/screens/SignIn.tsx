@@ -13,8 +13,8 @@ export function SignIn() {
   return (
     <div
       data-screen-label="Sign in"
-      className="absolute inset-0 z-[97] bg-skydeep flex flex-col"
-      style={{ padding: '78px 26px 30px' }}
+      className="pav-fixed absolute inset-0 z-[97] bg-skydeep flex flex-col"
+      style={{ padding: 'calc(78px + var(--pav-chrome-top)) 26px calc(30px + var(--pav-safe-bottom))' }}
     >
       <div className="flex-1">
         <div

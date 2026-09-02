@@ -39,10 +39,10 @@ export function MapScreen() {
   return (
     <div
       data-screen-label="Map"
-      className="absolute inset-0 z-[76] flex flex-col animate-scpop"
+      className="pav-fixed absolute inset-0 z-[76] flex flex-col animate-scpop"
       style={{ background: 'rgb(var(--mist))' }}
     >
-      <div className="flex items-center justify-between gap-2.5" style={{ padding: '58px 18px 0' }}>
+      <div className="flex items-center justify-between gap-2.5" style={{ padding: 'calc(58px + var(--pav-chrome-top)) 18px 0' }}>
         <BackButton onClick={() => set({ mapOpen: false, selPin: null })} className="" />
         <span
           className="rounded-full text-[11px] font-bold text-navy"

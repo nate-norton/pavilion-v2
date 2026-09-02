@@ -74,7 +74,7 @@ export function Hoa() {
   const votesLoad = useLoadState('votes');
 
   return (
-    <div className="absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: '64px 18px 150px' }}>
+    <div className="pav-tabscroll absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: 'calc(64px + var(--pav-chrome-top)) 18px var(--pav-screen-bottom)' }}>
       <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">The HOA, in the open</h1>
       <p className="m-0 mb-[18px] text-[13.5px] font-semibold text-slatedeep">
         Every dollar, vote, and decision — visible to every household.

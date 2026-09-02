@@ -82,8 +82,8 @@ export function Events() {
   return (
     <div
       data-screen-label="Events"
-      className="pav-scroll absolute inset-0 z-[76] overflow-y-auto animate-scpop"
-      style={{ background: 'rgb(var(--mist))', padding: '60px 18px 40px' }}
+      className="pav-scroll pav-fixed absolute inset-0 z-[76] overflow-y-auto animate-scpop"
+      style={{ background: 'rgb(var(--mist))', padding: 'calc(60px + var(--pav-chrome-top)) 18px calc(40px + var(--pav-safe-bottom))' }}
     >
       <BackButton onClick={() => set({ eventsOpen: false })} />
       <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">July at the Ridge</h1>

@@ -167,6 +167,33 @@
   --color-accent: var(--accent);
   --color-danger: var(--red);
   --color-success: var(--sage);
+
+  /*
+   * Layout tokens (mobile web). These are the seam between the drawn phone
+   * frame and a real handset browser, and they exist so the two can disagree
+   * without either one growing a fork.
+   *
+   * In frame mode every value below is a no-op: --pav-chrome-top is 0, so a
+   * screen's `calc(64px + var(--pav-chrome-top))` is still exactly 64px, and
+   * --pav-screen-bottom is still exactly 150px. The presenter demo and the
+   * desktop render therefore do not move by a pixel. The page-mode media
+   * query at the foot of this file is the only place they change.
+   *
+   * --pav-chrome-top is the correction to a screen's top padding. Those
+   * 58-78px values clear the status bar *drawn inside the frame*; on a real
+   * phone the browser's own chrome already occupies that band, so page mode
+   * hands ~40px of it back and adds the device's true top inset instead.
+   */
+  --pav-safe-top: env(safe-area-inset-top, 0px);
+  --pav-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --pav-safe-left: env(safe-area-inset-left, 0px);
+  --pav-safe-right: env(safe-area-inset-right, 0px);
+  --pav-chrome-top: 0px;
+  --pav-screen-bottom: 150px;   /* dock clearance under a tab screen */
+  /* The dock's gap from the bottom edge: its own 14px, the home indicator,
+     and the software keyboard when one is up. */
+  --pav-dock-offset: calc(14px + var(--pav-safe-bottom) + var(--pav-keyboard));
+  --pav-keyboard: 0px;          /* software-keyboard overlap, set by useKeyboardInset */
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -320,4 +347,155 @@ div[class*="cursor-pointer"] {
   div[class*="cursor-pointer"]:active {
     transform: none;
   }
+}
+
+/* =========================================================================
+ * PAGE MODE — the app as a web page rather than as a drawn phone.
+ *
+ * Why this block exists at all: Safari and Chrome collapse their toolbars
+ * only in response to scrolling the *root document scroller*. Pavilion used
+ * to pin the frame to `h-dvh` and scroll a nested `absolute inset-0`
+ * container inside it, so the document was permanently one viewport tall and
+ * never scrolled — from the browser's point of view the app was a static
+ * poster. The toolbars therefore stayed expanded for the entire session,
+ * costing ~15% of an iPhone screen that could never be won back, and
+ * tap-status-bar-to-top did nothing. No meta tag or CSS unit fixes that;
+ * browsers deliberately expose no API for it. Handing the document back its
+ * scroll is the whole fix, and it is what this block does.
+ *
+ * Frame mode (the presenter demo, desktop, tablets) never enters here, so it
+ * renders exactly as before — the tokens above are no-ops outside this query.
+ *
+ * The query is width OR a short coarse-pointer viewport, so a phone turned
+ * to landscape (up to 932px wide, but never 500px tall) gets page mode too,
+ * while an iPad in landscape (744px+ tall) correctly keeps the frame.
+ * ========================================================================= */
+
+/* Frame-mode chrome that used to be an inline style on PhoneFrame; it lives
+   here now so page mode can drop it without an `!important`. */
+.pav-frame {
+  box-shadow: 0 40px 90px -30px rgb(var(--shadow) / 0.5), 0 0 0 1px rgb(var(--navy) / 0.05);
+}
+
+@media (max-width: 500px), (pointer: coarse) and (max-height: 500px) {
+  :root {
+    /*
+     * Hand back ~40px of the drawn status bar (the browser's own chrome
+     * already occupies that band) and add the device's true top inset.
+     * Screens read this as `calc(64px + var(--pav-chrome-top))`, so the
+     * correction applies once, here, instead of at 21 call sites.
+     */
+    --pav-chrome-top: calc(var(--pav-safe-top) - 40px);
+    /* 66px dock + 14px gap + 16px breathing room, plus the home indicator. */
+    --pav-screen-bottom: calc(96px + var(--pav-safe-bottom));
+  }
+
+  /* Overscroll shows mist (and matches <meta name="theme-color">) instead of
+     the shell gradient, and `contain` keeps a downward flick at the top of a
+     tab from triggering Chrome's pull-to-refresh on an app that never wants
+     a refresh gesture. */
+  html { background: rgb(var(--mist)); }
+  html, body { overscroll-behavior-y: contain; }
+
+  /* The shell stops centring a frame and simply becomes the page. */
+  html .pav-shell { display: block; padding: 0; min-height: 100svh; }
+  html .pav-demo-btn { display: none; }
+
+  /* The frame stops being a fixed-height box with its own scroller. It is
+     now just the page's content column, so the document grows with it — and
+     that is what lets the browser toolbar collapse. */
+  html .pav-frame {
+    position: static;
+    width: 100%;
+    height: auto;
+    min-height: 100svh;
+    max-height: none;
+    border-radius: 0;
+    /*
+     * `visible` on the block axis is the whole point — it is what lets the
+     * document, rather than a box inside it, own the scroll. The inline axis
+     * still has to be clipped, because the tab-change slide translates a full
+     * screen 40px sideways and the frame is no longer a clipping box: without
+     * this the page gains a transient horizontal scrollbar on every tab tap.
+     * It must be `clip` and not `hidden` — `hidden` would make the block axis
+     * a scroll container again and undo the fix.
+     */
+    overflow: visible;
+    overflow-x: clip;
+    box-shadow: none;
+    padding-left: var(--pav-safe-left);
+    padding-right: var(--pav-safe-right);
+  }
+  html .pav-tabslide { position: static; }
+  html .pav-screen { height: auto; }
+  html .pav-tabscroll { position: static; overflow: visible; }
+
+  /*
+   * Chrome and overlays are positioned against the viewport rather than the
+   * frame, because the frame now scrolls away with the page. Full-screen
+   * overlay screens keep their own inner scroller on purpose: they are modal
+   * layers, and a modal that scrolls the document behind it loses the
+   * reader's place on the tab underneath.
+   */
+  html .pav-dock,
+  html .pav-fixed { position: fixed; }
+
+  /* A sheet's own scroll must not chain into the page behind the scrim. */
+  html .pav-sheet { overscroll-behavior: contain; }
+}
+
+/* Landscape on a handset is the one case where the horizontal insets are
+   real (the notch sits on a long edge). Overlay screens set padding inline,
+   so the longhand has to be important to reach past it; it only ever widens
+   the gutter, never narrows it below the design's 18px. */
+@media (orientation: landscape) and (pointer: coarse) and (max-height: 500px) {
+  html .pav-fixed {
+    padding-left: max(18px, var(--pav-safe-left)) !important;
+    padding-right: max(18px, var(--pav-safe-right)) !important;
+  }
+  html .pav-dock {
+    left: calc(14px + var(--pav-safe-left));
+    right: calc(14px + var(--pav-safe-right));
+  }
+}
+
+/* Page-mode behaviours that belong to specific layers rather than to the
+   shell. Kept out of the block above so the reason for each is its own note. */
+@media (max-width: 500px), (pointer: coarse) and (max-height: 500px) {
+  /*
+   * A full-screen overlay keeps its own scroller, so a flick past its end
+   * must not chain into the document underneath and drag the tab out from
+   * behind it.
+   */
+  html .pav-fixed { overscroll-behavior: contain; }
+
+  /*
+   * A sheet's scrim is not a scroller, so a drag on it would scroll the
+   * nearest ancestor that is — the document — sliding the page behind a modal.
+   * The scrim's job is to absorb the touch and close on tap.
+   */
+  html .pav-scrim { touch-action: none; }
+
+  /*
+   * Overlay screens lay themselves out as a column with the composer last,
+   * so lifting the whole layer off the keyboard puts the composer directly
+   * above it. Sheets are excluded: their panel handles this itself, and
+   * doing both would double-count the inset.
+   */
+  html .pav-fixed:not(.pav-sheet-root) { bottom: var(--pav-keyboard); }
+}
+
+/*
+ * iOS Safari zooms the page whenever a focused field is under 16px, and every
+ * field in this app is 12-13.5px. The zoom pushes the nav dock and the right
+ * edge of every card off-screen, and the user has to pinch back out — the most
+ * likely "it looks cut off" report from a pilot. The alternative fix,
+ * `maximum-scale=1`, suppresses pinch-zoom for everyone and fails WCAG 1.4.4,
+ * which PRODUCT.md commits to. So fields get the platform's minimum instead;
+ * `!important` is here because the size arrives as a Tailwind utility on each
+ * of the 76 call sites, and this is a platform constraint rather than a style
+ * preference for any one of them to argue with.
+ */
+@media (max-width: 500px), (pointer: coarse) and (max-height: 500px) {
+  input, textarea, select { font-size: 16px !important; }
 }

@@ -171,11 +171,11 @@ export function Sheet({ open, onClose, children, maxHeight, label = 'Dialog' }: 
   const scrimOpacity = offscreen ? 0 : Math.min(1, Math.max(0, 1 - dy / 400));
 
   return (
-    <div className="absolute inset-0 z-[80]">
+    <div className="pav-fixed pav-sheet-root absolute inset-0 z-[80]">
       <div
         data-testid="sheet-scrim"
         onClick={onClose}
-        className="absolute inset-0"
+        className="pav-scrim absolute inset-0"
         style={{
           background: 'rgb(var(--scrim) / 0.4)',
           opacity: scrimOpacity,
@@ -187,13 +187,22 @@ export function Sheet({ open, onClose, children, maxHeight, label = 'Dialog' }: 
         role="dialog"
         aria-modal="true"
         aria-label={label}
-        className="absolute left-0 right-0 bottom-0 bg-mistpale rounded-t-[28px] px-5 pt-3.5 pb-6 overflow-y-auto"
+        className="pav-sheet absolute left-0 right-0 bottom-0 bg-mistpale rounded-t-[28px] px-5 pt-3.5 overflow-y-auto"
         style={{
           boxShadow: '0 -18px 50px rgb(var(--scrim) / 0.25)',
           maxHeight: maxHeight ?? '90%',
           transform,
           transition,
           willChange: 'transform',
+          /*
+           * The last row of a sheet used to land in the home-indicator strip
+           * on a notched phone: pb-6 was a flat 24px with no safe-area term.
+           * And `--pav-keyboard` lifts the panel above the software keyboard
+           * (0 when there isn't one), so a sheet with a field in it stays
+           * usable instead of being typed at from underneath.
+           */
+          paddingBottom: 'calc(24px + var(--pav-safe-bottom))',
+          bottom: 'var(--pav-keyboard)',
         }}
         onPointerDown={onPointerDown(false)}
         onPointerMove={onPointerMove}

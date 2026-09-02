@@ -59,8 +59,8 @@ export function NavDock() {
   return (
     <nav
       aria-label="Main"
-      className="absolute left-3.5 right-3.5 z-[70]"
-      style={{ bottom: 'calc(14px + env(safe-area-inset-bottom, 0px))' }}
+      className="pav-dock absolute left-3.5 right-3.5 z-[70]"
+      style={{ bottom: 'var(--pav-dock-offset)' }}
     >
       <div
         className="bg-skydeep rounded-[26px] h-[66px] grid items-center px-1.5"
