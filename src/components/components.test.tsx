@@ -72,3 +72,16 @@ it('Sheet dismisses when the handle is dragged down past the threshold, and spri
   fireEvent.pointerUp(handle, { pointerId: 2, clientY: 300 });
   expect(onClose).toHaveBeenCalledTimes(1);
 });
+
+it('Sheet follows an upward drag with resistance and eases back instead of dismissing', () => {
+  const onClose = vi.fn();
+  render(<Sheet open onClose={onClose}><p>Body</p></Sheet>);
+  const handle = screen.getByTestId('sheet-handle');
+  fireEvent.pointerDown(handle, { pointerId: 3, clientY: 300, button: 0, pointerType: 'touch' });
+  fireEvent.pointerMove(handle, { pointerId: 3, clientY: 200 });
+  const panel = screen.getByRole('dialog');
+  expect(panel.style.transform).toMatch(/translateY\(-/);
+  fireEvent.pointerUp(handle, { pointerId: 3, clientY: 200 });
+  expect(onClose).not.toHaveBeenCalled();
+  expect(panel.style.transform).toBe('translateY(0px)');
+});
