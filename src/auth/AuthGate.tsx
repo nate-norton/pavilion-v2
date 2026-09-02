@@ -116,7 +116,23 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
         const { count } = await supabase.from('memberships')
           .select('id', { count: 'exact', head: true })
           .eq('profile_id', profileRow.id).eq('status', 'active');
-        if ((count ?? 0) > 0) { if (alive) setHasCommunity(true); return; }
+        const already = (count ?? 0) > 0;
+        // A copied invite link (?invite=CODE) is claimed even for someone who
+        // already belongs elsewhere — an account can hold several communities.
+        // Forgetting the device's remembered pick lets the repository land
+        // them in the community they just accepted into.
+        const code = localStorage.getItem('pav-invite-code');
+        if (code) {
+          const { data: codeClaimed } = await supabase.rpc('claim_invite_code', { invite_code: code });
+          if (codeClaimed === true) {
+            localStorage.removeItem('pav-invite-code');
+            localStorage.removeItem('pav-community');
+            void supabase.auth.refreshSession();
+            if (alive) setHasCommunity(true);
+            return;
+          }
+        }
+        if (already) { if (alive) setHasCommunity(true); return; }
         // No membership yet — a pending invite for this email joins them now.
         const { data: claimed } = await supabase.rpc('claim_invite');
         if (claimed === true) {
@@ -124,17 +140,6 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
           void supabase.auth.refreshSession();
           if (alive) setHasCommunity(true);
           return;
-        }
-        // Or a copied invite link (?invite=CODE) works for any email.
-        const code = localStorage.getItem('pav-invite-code');
-        if (code) {
-          const { data: codeClaimed } = await supabase.rpc('claim_invite_code', { invite_code: code });
-          if (codeClaimed === true) {
-            localStorage.removeItem('pav-invite-code');
-            void supabase.auth.refreshSession();
-            if (alive) setHasCommunity(true);
-            return;
-          }
         }
         if (alive) setHasCommunity(false);
       } catch {

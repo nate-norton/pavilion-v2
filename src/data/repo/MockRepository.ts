@@ -3,7 +3,7 @@ import {
   PINS, MAP_LAYERS, PORTFOLIO, AGING, CIRC, NOTIFS, NOTIF_CATS, CHAT_SEED,
   DOCS, DOC_SECTIONS, SEARCH,
 } from '..';
-import type { AdminMember, ArcRequest, ArcState, AuditEntry, BoardArcItem, BoardBooking, BoardMessage, BoardTriage, BoardViolation, ClosedVote, CommunityEvent, Decision, DuesState, DuesStatement, FeedPost, Invite, KnownIssue, Meeting, MemberContext, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, TriageItem, UnitRef, ViolationNotice, VoteChoice, VotesState } from './Repository';
+import type { AdminMember, ArcRequest, ArcState, AuditEntry, BoardArcItem, BoardBooking, BoardMessage, BoardTriage, BoardViolation, ClosedVote, CommunityEvent, Decision, DuesState, DuesStatement, FeedPost, Invite, KnownIssue, Meeting, MemberContext, Membership, NewGroup, NewReservation, OpenVote, Repository, RepositorySnapshot, SnapshotReadable, SpecialAssessment, TriageItem, UnitRef, ViolationNotice, VoteChoice, VotesState } from './Repository';
 import type { GroupData } from '../types';
 import { mockDomain } from './mockDomainStore';
 import { usePavStore } from '../../store/store';
@@ -13,6 +13,9 @@ const DEMO_MEMBER: MemberContext = {
   name: 'Alex Rivera', initial: 'A', color: 'rgb(var(--navy))', role: 'board',
   communityName: 'Juniper Ridge', unitLabel: '#27 Alder Way',
 };
+const DEMO_MEMBERSHIPS: Membership[] = [
+  { communityId: 'juniper-ridge', communityName: DEMO_MEMBER.communityName, role: DEMO_MEMBER.role, unitLabel: DEMO_MEMBER.unitLabel },
+];
 
 /** Demo events + feed — always-on ambient content (stable refs). Empty in live. */
 const DEMO_EVENTS: CommunityEvent[] = [
@@ -73,6 +76,9 @@ export class MockRepository implements Repository, SnapshotReadable {
   retry = () => {};
 
   getMember = () => DEMO_MEMBER;
+  getMemberships = () => DEMO_MEMBERSHIPS;
+  getActiveCommunityId = () => DEMO_MEMBERSHIPS[0].communityId;
+  switchCommunity = async () => {};
 
   getDecisions = () => DEMO_DECISIONS;
 
