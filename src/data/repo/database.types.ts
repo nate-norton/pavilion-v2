@@ -84,6 +84,12 @@ export type Database = {
         }
         Relationships: []
       }
+      community_requests: {
+        Row: { community_name: string; created_at: string; email: string; homes: number | null; id: string; note: string; profile_id: string; requester_name: string; status: string }
+        Insert: { community_name: string; created_at?: string; email: string; homes?: number | null; id?: string; note?: string; profile_id: string; requester_name: string; status?: string }
+        Update: { community_name?: string; created_at?: string; email?: string; homes?: number | null; id?: string; note?: string; profile_id?: string; requester_name?: string; status?: string }
+        Relationships: []
+      }
       decisions: {
         Row: { community_id: string; created_at: string; date_label: string; id: string; passed: boolean; pill_label: string; sort_order: number; text: string }
         Insert: { community_id: string; created_at?: string; date_label: string; id?: string; passed?: boolean; pill_label?: string; sort_order?: number; text: string }
