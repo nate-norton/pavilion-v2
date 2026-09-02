@@ -6,7 +6,7 @@ const ACTIVE = 'rgb(var(--cream))';
 // 0.45 measured 3.55:1 against navy — below AA for these 10px labels.
 // 0.62 clears it at 5.34:1 while staying clearly quieter than the
 // active state's 11.28:1.
-const INACTIVE = 'rgb(var(--cream) / 0.62)';
+const INACTIVE = 'rgb(var(--cream) / 0.92)';
 
 const TABS: { key: string; icon: string; label: string }[] = [
   { key: 'today', icon: 'ph-fill ph-sun-horizon', label: 'Today' },
@@ -63,7 +63,7 @@ export function NavDock() {
       style={{ bottom: 'calc(14px + env(safe-area-inset-bottom, 0px))' }}
     >
       <div
-        className="bg-navy rounded-[26px] h-[66px] grid items-center px-1.5"
+        className="bg-skydeep rounded-[26px] h-[66px] grid items-center px-1.5"
         style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', boxShadow: '0 18px 40px -14px rgb(var(--navy) / 0.55)' }}
       >
         {TABS.map(renderTab)}

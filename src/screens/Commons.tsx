@@ -162,7 +162,7 @@ export function Commons() {
                       />
                       <button
                         onClick={() => addComment()}
-                        className="w-9 h-9 border-none rounded-full bg-navy flex items-center justify-center cursor-pointer flex-shrink-0"
+                        className="w-9 h-9 border-none rounded-full bg-skydeep flex items-center justify-center cursor-pointer flex-shrink-0"
                       >
                         <PhIcon name="ph-fill ph-paper-plane-right" size={14} color="rgb(var(--cream))" />
                       </button>
@@ -237,7 +237,7 @@ export function Commons() {
                     ) : (
                       <button
                         onClick={() => set({ rsvpMovie: !state.rsvpMovie })}
-                        className="border-none text-cream rounded-full px-3.5 py-2 text-[12.5px] font-extrabold cursor-pointer bg-navy"
+                        className="border-none text-white rounded-full px-3.5 py-2 text-[12.5px] font-extrabold cursor-pointer bg-emberdeep"
                       >
                         RSVP
                       </button>
@@ -366,7 +366,7 @@ export function Commons() {
                           type="button"
                           onClick={(e) => { e.stopPropagation(); repo.toggleGroupJoin(g.key); }}
                           className="border-none rounded-full px-3.5 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"
-                          style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }}
+                          style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
                         >
                           Join
                         </button>
@@ -400,12 +400,12 @@ export function Commons() {
         <div className="animate-fadeup">
           <button type="button"
             onClick={() => set({ msgsOpen: true })}
-            className="w-full border-none font-sans text-left bg-navy rounded-2xl px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
+            className="w-full border-none font-sans text-left bg-skydeep rounded-2xl px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5"
           >
             <PhIcon name="ph-fill ph-chats-circle" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
             <div className="flex-1">
               <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Messages</p>
-              <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+              <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
                 {repo.isDemo()
                   ? '3 unread from your neighbors'
                   : unreadTotal > 0
@@ -470,7 +470,7 @@ export function Commons() {
                     <button
                       onClick={() => set({ chatWith: d.key })}
                       className="border-none rounded-full px-3 py-2 text-xs font-extrabold cursor-pointer flex-shrink-0"
-                      style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }}
+                      style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
                     >
                       Send message
                     </button>
@@ -515,7 +515,7 @@ export function Commons() {
                     <button
                       onClick={() => set({ claimed: { ...state.claimed, [f.key]: true } })}
                       className="w-full border-none rounded-[10px] py-2 text-xs font-extrabold cursor-pointer"
-                      style={claimed ? { background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' } : { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }}
+                      style={claimed ? { background: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' } : { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
                     >
                       {claimed ? 'Claimed ✓' : 'Claim'}
                     </button>

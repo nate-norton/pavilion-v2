@@ -99,7 +99,7 @@ export function PaymentDetailSheet() {
           Payment method
         </p>
         <div className="flex items-center gap-2.5">
-          <PhIcon name="ph-fill ph-bank" size={16} color="rgb(var(--navy))" />
+          <PhIcon name="ph-fill ph-bank" size={16} color="rgb(var(--skydeep))" />
           <p className="m-0 text-[13.5px] font-bold text-navy">Juniper CU ····4821 · ACH</p>
         </div>
       </div>
@@ -117,7 +117,7 @@ export function PaymentDetailSheet() {
         <button
           onClick={() => set({ paySheetOpen: true, paymentDetailIdx: null })}
           className="w-full rounded-2xl py-3.5 border-none text-[14px] font-extrabold cursor-pointer font-sans mt-1"
-          style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }}
+          style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
         >
           Pay now
         </button>

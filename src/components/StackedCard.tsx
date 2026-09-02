@@ -25,8 +25,14 @@ const TINTS = {
   gold: { surface: 'rgb(var(--goldpale))', eyebrow: 'rgb(var(--golddark))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--golddark))' },
   sky: { surface: 'rgb(var(--skypale))', eyebrow: 'rgb(var(--skydeep))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--skydeep))' },
   paper: { surface: 'rgb(var(--paper))', eyebrow: 'rgb(var(--stone))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--claypale))' },
-  /** Dark brand hero — keeps the navy moment while still layering. */
-  navy: { surface: 'rgb(var(--navy))', eyebrow: 'rgb(var(--peach))', title: 'rgb(var(--cream))', body: 'rgb(var(--cream) / 0.7)', chevron: 'rgb(var(--peach))' },
+  /*
+   * Chrome hero — the dark-surface variant. --sky is the brand primary, so a
+   * hero card is sky rather than navy; navy stays available but is text-first
+   * in this system. White clears 5.82 on skydeep, cream 5.34, and the
+   * lightened peach eyebrow 4.52. (`sky` above is the *light* wash — distinct.)
+   */
+  skydeep: { surface: 'rgb(var(--skydeep))', eyebrow: 'rgb(var(--peach))', title: 'rgb(var(--cream))', body: 'rgb(var(--cream) / 0.98)', chevron: 'rgb(var(--peach))' },
+  navy: { surface: 'rgb(var(--navy))', eyebrow: 'rgb(var(--peach))', title: 'rgb(var(--cream))', body: 'rgb(var(--cream) / 0.9)', chevron: 'rgb(var(--peach))' },
 } as const;
 
 export type StackedTint = keyof typeof TINTS;

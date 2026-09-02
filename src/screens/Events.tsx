@@ -32,7 +32,7 @@ function RsvpButton({ going, onToggle }: { going: boolean; onToggle: () => void 
       type="button"
       onClick={onToggle}
       className="border-none text-white rounded-full text-xs font-extrabold cursor-pointer font-sans flex-shrink-0"
-      style={{ background: 'rgb(var(--sage))', padding: '8px 13px' }}
+      style={{ background: 'rgb(var(--sagedark))', padding: '8px 13px' }}
     >
       Going ✓
     </button>
@@ -40,7 +40,7 @@ function RsvpButton({ going, onToggle }: { going: boolean; onToggle: () => void 
     <button
       type="button"
       onClick={onToggle}
-      className="border-none bg-navy text-cream rounded-full text-xs font-extrabold cursor-pointer font-sans flex-shrink-0"
+      className="border-none bg-emberdeep text-white rounded-full text-xs font-extrabold cursor-pointer font-sans flex-shrink-0"
       style={{ padding: '8px 13px' }}
     >
       RSVP
