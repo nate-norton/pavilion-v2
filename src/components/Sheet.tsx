@@ -130,13 +130,15 @@ export function Sheet({ open, onClose, children, maxHeight, label = 'Dialog' }: 
   const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
     const d = drag.current;
     if (!d || d.id !== e.pointerId) return;
-    const delta = Math.max(0, e.clientY - d.startY);
+    const raw = e.clientY - d.startY;
     // A tap isn't a drag: nothing moves until the finger has clearly travelled.
     if (!d.active) {
-      if (delta < DRAG_SLOP) return;
+      if (Math.abs(raw) < DRAG_SLOP) return;
       d.active = true; setDragging(true); setSettling(false);
     }
-    setDy(delta);
+    // Upward gets rubber-band resistance: the sheet follows a little, so the
+    // finger never feels ignored, and eases back on release.
+    setDy(raw < 0 ? -Math.pow(-raw, 0.7) : raw);
   };
 
   const endDrag = (e: ReactPointerEvent<HTMLDivElement>) => {
@@ -166,7 +168,7 @@ export function Sheet({ open, onClose, children, maxHeight, label = 'Dialog' }: 
       : settling
         ? `transform 280ms ${SETTLE_EASE}`
         : `transform ${ENTER_MS}ms ${ENTER_EASE}`;
-  const scrimOpacity = offscreen ? 0 : Math.max(0, 1 - dy / 400);
+  const scrimOpacity = offscreen ? 0 : Math.min(1, Math.max(0, 1 - dy / 400));
 
   return (
     <div className="pav-fixed pav-sheet-root absolute inset-0 z-[80]">
