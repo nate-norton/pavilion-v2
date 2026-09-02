@@ -540,6 +540,7 @@ export type Database = {
     Functions: {
       claim_invite: { Args: Record<PropertyKey, never>; Returns: boolean }
       claim_invite_code: { Args: { invite_code: string }; Returns: boolean }
+      peek_invite: { Args: { invite_code: string }; Returns: { community_name: string; inviter_name: string; role: string; unit_label: string; email: string; state: string }[] }
     }
     Enums: {
       member_role: "resident" | "board"

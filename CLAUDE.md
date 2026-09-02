@@ -49,14 +49,21 @@ Rules when adding features:
    live in the non-API `private` schema (`is_member`, `is_board`, `owns_unit`,
    `current_profile_id`).
 
-   Three advisor warnings on `pavilion-dev` are known and expected — treat a
-   clean run as these three, not zero. `claim_invite` and `claim_invite_code`
-   are flagged as `SECURITY DEFINER` functions callable by signed-in users;
-   that is the point, since claiming an invite writes the very unit and
-   membership the caller has no rights to yet. Switching them to
-   `SECURITY INVOKER` breaks onboarding. The third is leaked-password
+   Four advisor warnings on `pavilion-dev` are known and expected — treat a
+   clean run as these four, not zero. `claim_invite`, `claim_invite_code`
+   and `peek_invite` are flagged as `SECURITY DEFINER` functions callable by
+   signed-in (or, for `peek_invite`, anonymous) users; that is the point,
+   since claiming an invite writes the very unit and membership the caller
+   has no rights to yet, and peeking one is what lets the front door say
+   "Mountain Vista invited you" before sign-in. Switching them to
+   `SECURITY INVOKER` breaks onboarding. The fourth is leaked-password
    protection, off until someone enables it in the dashboard (Auth →
    Passwords) — there is no API or MCP tool for it.
+5. Edge functions live in `supabase/functions/<name>/index.ts` and deploy via
+   the Supabase MCP `deploy_edge_function` tool. `accept_invite` is deployed
+   with `verify_jwt: false` on purpose: the app authenticates with an
+   `sb_publishable_` key (not a JWT), the caller has no session yet, and the
+   invite code is the credential the function body checks.
 
 Other landmarks:
 
