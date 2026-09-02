@@ -84,6 +84,12 @@ export type Database = {
         }
         Relationships: []
       }
+      community_requests: {
+        Row: { community_name: string; created_at: string; email: string; homes: number | null; id: string; note: string; profile_id: string; requester_name: string; status: string }
+        Insert: { community_name: string; created_at?: string; email: string; homes?: number | null; id?: string; note?: string; profile_id: string; requester_name: string; status?: string }
+        Update: { community_name?: string; created_at?: string; email?: string; homes?: number | null; id?: string; note?: string; profile_id?: string; requester_name?: string; status?: string }
+        Relationships: []
+      }
       decisions: {
         Row: { community_id: string; created_at: string; date_label: string; id: string; passed: boolean; pill_label: string; sort_order: number; text: string }
         Insert: { community_id: string; created_at?: string; date_label: string; id?: string; passed?: boolean; pill_label?: string; sort_order?: number; text: string }
@@ -540,6 +546,7 @@ export type Database = {
     Functions: {
       claim_invite: { Args: Record<PropertyKey, never>; Returns: boolean }
       claim_invite_code: { Args: { invite_code: string }; Returns: boolean }
+      peek_invite: { Args: { invite_code: string }; Returns: { community_name: string; inviter_name: string; role: string; unit_label: string; email: string; state: string }[] }
     }
     Enums: {
       member_role: "resident" | "board"

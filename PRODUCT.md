@@ -50,8 +50,9 @@ truthfully claim.
 
 - **Self-managed HOAs** — volunteer boards, no professional manager. Serving
   professional management companies is deliberately deferred to a later
-  additive phase; no portfolio or multi-community concept is being designed
-  for now.
+  additive phase; no portfolio concept is being designed for now. An
+  *account* may belong to more than one community (a founder who piloted
+  one, an owner in two), and the app shows one community at a time.
 - Residents use it on phones, in short sessions, often triggered by a real
   event (a notice, a due date, a neighbor's post).
 - Board work is episodic and low-volume — a handful of ARC requests,

@@ -30,6 +30,17 @@ export function useMember() {
   return useSyncExternalStore(repo.subscribe, () => repo.getMember());
 }
 
+/** Every community the member belongs to, and which one is showing. */
+export function useMemberships() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getMemberships());
+}
+
+export function useActiveCommunityId() {
+  const repo = useRepository();
+  return useSyncExternalStore(repo.subscribe, () => repo.getActiveCommunityId());
+}
+
 /**
  * The member's dues (Today card + MyPlace history). In the demo this is derived
  * from the store's scenario flags, so screens that call this must already

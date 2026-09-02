@@ -3,6 +3,7 @@ import { reportedByDataLayer } from '../lib/errorBus';
 import { BoardSetupCard } from '../components/BoardSetupCard';
 import { PhIcon } from '../components/PhIcon';
 import { ProgressBar } from '../components/ProgressBar';
+import { RosterInvite, inviteUrl } from '../components/RosterInvite';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { usePavStore } from '../store/store';
 import { useVendors, useAging, useVotes, useAssessment, useBoardTriage, useTriageItems, useBoardArcQueue, useInvites, useBoardChat, useBoardViolations, useUnits, useAdminMembers, useAuditLog, useBoardBookings, useMeetings, useRepository } from '../data/repo';
@@ -454,6 +455,7 @@ export function BoardDesk() {
                 >
                   {invBusy ? 'Inviting…' : 'Send invite'}
                 </button>
+                <RosterInvite />
                 {invites.length > 0 && (
                   <div className="mt-3 pt-2" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)' }}>
                     {invites.map((inv) => (
@@ -468,7 +470,7 @@ export function BoardDesk() {
                           <>
                             <button
                               onClick={() => {
-                                void navigator.clipboard?.writeText(`https://app.pavilion.community/?invite=${inv.code}`);
+                                void navigator.clipboard?.writeText(inviteUrl(inv.code));
                                 setCopiedInvite(inv.id);
                                 setTimeout(() => setCopiedInvite(null), 2000);
                               }}
@@ -503,7 +505,7 @@ export function BoardDesk() {
                   </div>
                 )}
                 <p className="mt-2.5 mb-0 text-[11px] font-semibold text-slate">
-                  They can sign in with this email, or use the copied invite link with any email.
+                  Send each neighbor their link — it opens a welcome with your community’s name and their address on it.
                 </p>
               </div>
 
