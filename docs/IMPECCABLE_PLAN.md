@@ -27,6 +27,15 @@ Standing rules for every stage:
 - The rehearsed demo at demo.pavilion.community is not redeployed until the
   final check-in. Code on `dev` does not reach it automatically.
 
+## Decisions from Check-in 1 (2026-09-02)
+
+- The eight live defects in `docs/IMPECCABLE_STAGE0.md` fold into the
+  stage that owns each file rather than a separate branch.
+- On Board Desk the "needs you" hero replaces the three KPI tiles.
+- Every stage takes on all priority issues, P0 through P2.
+- Stage 0 was docs only and is not merged to `dev` alone; Stage 1 stacks
+  on it and both merge at Check-in 2.
+
 ## Stage 0: Baseline (evidence only, no edits)
 
 Commands: `/impeccable critique` on Board Desk and Meeting first, then on
