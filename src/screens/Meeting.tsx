@@ -1,5 +1,8 @@
 import { BackButton } from '../components/BackButton';
+import { Card } from '../components/Card';
 import { PhIcon } from '../components/PhIcon';
+import { ProgressBar } from '../components/ProgressBar';
+import { StackedPanel } from '../components/StackedCard';
 import { usePavStore } from '../store/store';
 import { useVotes, useRepository } from '../data/repo';
 
@@ -31,89 +34,82 @@ export function Meeting() {
       style={{ background: 'rgb(var(--mist))', padding: 'calc(60px + var(--pav-chrome-top)) 18px calc(40px + var(--pav-safe-bottom))' }}
     >
       <BackButton onClick={() => set({ meetingOpen: false })} />
-      <p className="m-0 mb-1.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.14em', color: 'rgb(var(--accent))' }}>
-        Annual meeting · Tue Jul 15 · 7 PM
-      </p>
       <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Juniper Ridge, assembled</h1>
-      <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
+      <p className="m-0 mb-0.5 text-[13.5px] font-semibold text-slatedeep">Annual meeting · Tue Jul 15 · 7 PM</p>
+      <p className="m-0 mb-4 text-[12.5px] font-semibold text-slate leading-[1.45]">
         Clubhouse + Zoom · childcare at the clubhouse · minutes posted within 48h
       </p>
 
-      {/* Quorum pledged */}
-      <div className="bg-skydeep rounded-[18px] p-4 text-mist mb-3.5">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>
-            QUORUM PLEDGED
-          </span>
-          <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>
-            {quorum.count} of 136 households
-          </span>
-        </div>
-        <div className="rounded-full overflow-hidden mb-2.5" style={{ height: 8, background: 'rgb(var(--mist) / 0.15)' }}>
-          <div
-            className="h-full w-full rounded-full origin-left"
-            style={{ transform: `scaleX(${quorum.pct / 100})`, background: 'linear-gradient(90deg,rgb(var(--sunset)),rgb(var(--sunsetbright)))', transition: 'transform 0.6s ease' }}
-          />
-        </div>
-        <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
+      {/*
+        The one number the room is watching. Quorum is the hero: the count at
+        display size in peach on sky chrome, the denominator beneath it, and
+        the sunset sweep — the screen's single warm fill — as the bar.
+      */}
+      <StackedPanel tint="skydeep" className="mb-3.5">
+        <p className="m-0 mb-1 text-[12.5px] font-bold" style={{ color: 'rgb(var(--peach))' }}>
+          Quorum pledged
+        </p>
+        <p className="m-0 font-serif text-[36px] leading-[1.1] tabular-nums" style={{ color: 'rgb(var(--peach))' }}>
+          {quorum.count}
+        </p>
+        <p className="m-0 mb-3 text-[13.5px] font-semibold text-mist">of 136 households</p>
+        <ProgressBar pct={quorum.pct} height={8} track="rgb(var(--mist) / 0.15)" gradient />
+        <p className="m-0 mt-2.5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
           34 attending remotely · proxies count toward quorum
         </p>
-      </div>
+      </StackedPanel>
 
-      {/* Agenda */}
-      <div
-        style={{
-          background: 'rgb(var(--paper))',
-          border: '1px solid rgb(var(--navy) / 0.08)',
-          borderRadius: 18,
-          padding: 16,
-          marginBottom: 14,
-          
-        }}
-      >
-        <p className="m-0 mb-[11px] font-serif text-base text-navy">Agenda</p>
-        <div className="flex flex-col gap-[9px]">
+      {/* Agenda — read, not acted on: flat. */}
+      <Card className="mb-3.5">
+        <p className="m-0 mb-2.5 font-serif text-[17px] leading-[1.25] text-navy">Agenda</p>
+        <ol className="m-0 p-0 list-none flex flex-col gap-2">
           {AGENDA.map((item, i) => (
-            <div key={item} className="flex gap-2.5 items-baseline">
-              <span className="text-[11px] font-extrabold w-4" style={{ color: 'rgb(var(--accent))' }}>
+            <li key={item} className="flex gap-2.5 items-baseline">
+              <span className="text-[12.5px] font-bold w-4 flex-shrink-0 tabular-nums" style={{ color: 'rgb(var(--skydeep))' }}>
                 {i + 1}
               </span>
-              <span className="text-[13px] font-bold text-navy">{item}</span>
-            </div>
+              <span className="text-[13.5px] font-bold text-navy leading-[1.4]">{item}</span>
+            </li>
           ))}
-        </div>
-      </div>
+        </ol>
+      </Card>
 
-      {/* Raise hand */}
+      {/* Raise hand — asks for a decision: raised. */}
       {!state.handRaised ? (
-        <button
-          type="button"
-          onClick={() => set({ handRaised: true })}
-          className="w-full border-none text-white rounded-2xl text-sm font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3"
-          style={{ background: 'rgb(var(--skydeep))', padding: '15px 0' }}
-        >
-          <PhIcon name="ph-fill ph-hand-waving" size={16} />
-          Raise your hand for open comment
-        </button>
+        <Card elevation="raised" onClick={() => set({ handRaised: true })} className="mb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-skydeep">
+              <PhIcon name="ph-fill ph-hand-waving" size={18} color="rgb(var(--mist))" />
+            </div>
+            <p className="m-0 flex-1 text-[13.5px] font-bold text-navy leading-[1.35]">Raise your hand for open comment</p>
+            <PhIcon name="ph-bold ph-caret-right" size={16} color="rgb(var(--skydeep))" className="flex-shrink-0" />
+          </div>
+        </Card>
       ) : (
-        <div
-          className="flex items-center gap-[11px] mb-3 animate-fadeup"
-          style={{ background: 'rgb(var(--mint))', border: '1px solid rgb(var(--sage) / 0.25)', borderRadius: 16, padding: '14px 16px' }}
-        >
-          <PhIcon name="ph-fill ph-hand-waving" size={20} color="rgb(var(--sage))" className="flex-shrink-0" />
-          <p className="m-0 text-[13px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
-            You&apos;re #3 in the comment queue — we&apos;ll ping you when you&apos;re up.
-          </p>
-        </div>
+        <Card tint="mint" className="mb-3 animate-fadeup">
+          <div className="flex items-center gap-[11px]">
+            <PhIcon name="ph-fill ph-hand-waving" size={20} color="rgb(var(--sagedark))" className="flex-shrink-0" />
+            <p className="m-0 text-[13.5px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
+              You&apos;re #3 in the comment queue — we&apos;ll ping you when you&apos;re up.
+            </p>
+          </div>
+        </Card>
       )}
 
-      {/* Proxy */}
+      {/* Proxy — also a decision: raised. */}
       {!state.proxyPick ? (
-        <div style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '13px 15px' }}>
-          <button type="button" onClick={() => set({ proxyOpen: !state.proxyOpen })} className="w-full flex items-center gap-[11px] cursor-pointer border-none bg-transparent text-left font-sans">
-            <PhIcon name="ph-fill ph-user-switch" size={18} color="rgb(var(--skydeep))" className="flex-shrink-0" />
-            <p className="m-0 flex-1 text-[12.5px] font-bold text-navy">Can&apos;t make it? Assign your vote to a proxy</p>
-            <PhIcon name={state.proxyOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'} size={14} color="rgb(var(--slatelight))" />
+        <Card elevation="raised">
+          <button
+            type="button"
+            onClick={() => set({ proxyOpen: !state.proxyOpen })}
+            aria-expanded={state.proxyOpen}
+            className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans p-0 min-h-[44px]"
+          >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--skypale))' }}>
+              <PhIcon name="ph-fill ph-user-switch" size={18} color="rgb(var(--skydeep))" />
+            </div>
+            <p className="m-0 flex-1 text-[13.5px] font-bold text-navy leading-[1.35]">Can&apos;t make it? Assign your vote to a proxy</p>
+            <PhIcon name={state.proxyOpen ? 'ph-bold ph-caret-up' : 'ph-bold ph-caret-down'} size={16} color="rgb(var(--skydeep))" className="flex-shrink-0" />
           </button>
           {state.proxyOpen && (
             <div className="animate-fadeup">
@@ -123,37 +119,35 @@ export function Meeting() {
                     key={n}
                     type="button"
                     onClick={() => set({ proxyPick: n })}
-                    className="text-navy rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans"
+                    className="text-navy rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans min-h-[44px]"
                     style={{ border: '1px solid rgb(var(--navy) / 0.14)', background: 'rgb(var(--mistpale))', padding: '9px 14px' }}
                   >
                     {n}
                   </button>
                 ))}
               </div>
-              <p className="mt-[11px] mb-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
+              <p className="mt-3 mb-0 text-[12.5px] font-semibold text-slate leading-[1.45]">
                 Your proxy counts toward quorum and votes on your behalf. Revoke anytime before the meeting.
               </p>
             </div>
           )}
-        </div>
+        </Card>
       ) : (
-        <div
-          className="flex items-center gap-[11px] animate-fadeup"
-          style={{ background: 'rgb(var(--mint))', border: '1px solid rgb(var(--sage) / 0.25)', borderRadius: 16, padding: '14px 16px' }}
-        >
-          <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sage))" className="flex-shrink-0" />
-          <p className="m-0 flex-1 text-[13px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
-            {state.proxyPick} holds your proxy for Jul 15
-          </p>
-          <button
-            type="button"
-            onClick={() => set({ proxyPick: null, proxyOpen: false })}
-            className="border-none bg-transparent text-xs font-extrabold cursor-pointer font-sans p-1"
-            style={{ color: 'rgb(var(--slate))' }}
-          >
-            Revoke
-          </button>
-        </div>
+        <Card tint="mint" className="animate-fadeup">
+          <div className="flex items-center gap-[11px]">
+            <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sagedark))" className="flex-shrink-0" />
+            <p className="m-0 flex-1 text-[13.5px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
+              {state.proxyPick} holds your proxy for Jul 15
+            </p>
+            <button
+              type="button"
+              onClick={() => set({ proxyPick: null, proxyOpen: false })}
+              className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer font-sans px-2 min-h-[44px] text-slatedark"
+            >
+              Revoke
+            </button>
+          </div>
+        </Card>
       )}
     </div>
   );

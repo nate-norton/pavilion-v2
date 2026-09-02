@@ -1,6 +1,9 @@
 import type { CSSProperties } from 'react';
 import { BackButton } from '../components/BackButton';
+import { Card } from '../components/Card';
+import { Chip } from '../components/Chip';
 import { PhIcon } from '../components/PhIcon';
+import { Pill } from '../components/Pill';
 import { usePavStore } from '../store/store';
 import { useMapPins, useMapLayers, useMember } from '../data/repo';
 
@@ -44,39 +47,24 @@ export function MapScreen() {
     >
       <div className="flex items-center justify-between gap-2.5" style={{ padding: 'calc(58px + var(--pav-chrome-top)) 18px 0' }}>
         <BackButton onClick={() => set({ mapOpen: false, selPin: null })} className="" />
-        <span
-          className="rounded-full text-[11px] font-bold text-navy"
-          style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', padding: '5px 11px' }}
-        >
-          {pinCountLabel}
-        </span>
+        <Pill label={pinCountLabel} tone="neutral" size="md" />
       </div>
       <div style={{ padding: '10px 18px 0' }}>
         <h1 className="m-0 mb-[3px] font-serif font-normal text-[24px] text-navy">{member?.communityName || 'Juniper Ridge'}</h1>
-        <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
+        <p className="m-0 mb-3 text-[13.5px] font-semibold text-slatedeep">
           Tap a pin to see what&apos;s happening.
         </p>
-        <div className="flex gap-[7px]">
-          {MAP_LAYERS.map(([key, label, icon]) => {
-            const on = state.mapLayer === key;
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => set({ mapLayer: key, selPin: null })}
-                className="inline-flex items-center gap-[5px] rounded-full text-[11.5px] font-extrabold cursor-pointer font-sans"
-                style={{
-                  border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',
-                  background: on ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                  color: on ? 'rgb(var(--mist))' : 'rgb(var(--slatedark))',
-                  padding: '7px 12px',
-                }}
-              >
-                <PhIcon name={icon} size={13} />
-                {label}
-              </button>
-            );
-          })}
+        <div className="flex gap-[7px]" role="group" aria-label="Map layer">
+          {MAP_LAYERS.map(([key, label, icon]) => (
+            <Chip
+              key={key}
+              label={label}
+              size="md"
+              active={state.mapLayer === key}
+              onClick={() => set({ mapLayer: key, selPin: null })}
+              icon={<PhIcon name={icon} size={13} />}
+            />
+          ))}
         </div>
       </div>
 
@@ -101,7 +89,7 @@ export function MapScreen() {
           className="absolute flex items-center justify-center"
           style={{ left: '53%', top: '5%', width: '36%', height: '16%', background: 'rgb(var(--sagepale))', borderRadius: 18 }}
         >
-          <span className="text-[9.5px] font-bold" style={{ color: 'rgb(var(--sagedark))', letterSpacing: '0.1em' }}>
+          <span className="text-[12px] font-bold" style={{ color: 'rgb(var(--sagedark))', letterSpacing: '0.06em' }}>
             THE GREEN
           </span>
         </div>
@@ -115,7 +103,7 @@ export function MapScreen() {
         <div className="absolute flex gap-1.5" style={{ left: '50%', top: '44%' }}>
           <span style={HOUSE} />
           <span
-            className="flex items-center justify-center text-[10px] font-bold text-mist"
+            className="flex items-center justify-center text-[12px] font-bold text-mist tabular-nums"
             style={{ width: 26, height: 20, borderRadius: 5, background: 'rgb(var(--skydeep))' }}
           >
             27
@@ -123,13 +111,13 @@ export function MapScreen() {
           <span style={HOUSE} />
         </div>
         <div className="absolute" style={{ left: '50%', top: '44%', transform: 'translate(4px,24px)' }}>
-          <span className="text-[10px] font-bold text-navy">You</span>
+          <span className="text-[12px] font-bold text-navy">You</span>
         </div>
         <div className="absolute flex gap-1.5" style={{ left: '6%', top: '82%' }}>
           <span style={HOUSE} />
           <span
-            className="flex items-center justify-center text-[10px] font-bold text-white"
-            style={{ width: 26, height: 20, borderRadius: 5, background: 'rgb(var(--gold))' }}
+            className="flex items-center justify-center text-[12px] font-bold text-white tabular-nums"
+            style={{ width: 26, height: 20, borderRadius: 5, background: 'rgb(var(--golddark))' }}
           >
             42
           </span>
@@ -138,17 +126,10 @@ export function MapScreen() {
         </div>
 
         {/* Legend */}
-        <div
+        <Card
+          padding="none"
           className="absolute flex flex-col gap-1.5"
-          style={{
-            top: 10,
-            right: 10,
-            background: 'rgb(var(--paper) / 0.92)',
-            border: '1px solid rgb(var(--navy) / 0.08)',
-            borderRadius: 12,
-            padding: '9px 11px',
-            boxShadow: '0 4px 12px -6px rgb(var(--navy) / 0.2)',
-          }}
+          style={{ top: 10, right: 10, borderRadius: 12, background: 'rgb(var(--paper) / 0.94)', padding: '8px 11px' }}
         >
           {[
             ['rgb(var(--sky))', 'Amenities'],
@@ -156,13 +137,11 @@ export function MapScreen() {
             ['rgb(var(--gold))', 'Alerts'],
           ].map(([c, l]) => (
             <div key={l} className="flex items-center gap-1.5">
-              <span className="w-[9px] h-[9px] rounded-full" style={{ background: c }} />
-              <span className="text-[9.5px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
-                {l}
-              </span>
+              <span className="w-[9px] h-[9px] rounded-full flex-shrink-0" style={{ background: c }} />
+              <span className="text-[12px] font-bold text-slatedark">{l}</span>
             </div>
           ))}
-        </div>
+        </Card>
 
         {/* Pins */}
         {visiblePins.map((p) => (
@@ -170,6 +149,7 @@ export function MapScreen() {
             key={p.key}
             type="button"
             aria-label={p.title}
+            aria-pressed={state.selPin === p.key}
             onClick={() => set({ selPin: p.key })}
             className="absolute w-[34px] h-[34px] rounded-full flex items-center justify-center cursor-pointer"
             style={{
@@ -185,20 +165,13 @@ export function MapScreen() {
           </button>
         ))}
 
-        {/* Selected-pin card */}
+        {/* Selected-pin card — raised: it holds the one action on the map. */}
         {selPinObj && (
-          <div
-            className="absolute flex items-center gap-[11px] animate-fadeup"
-            style={{
-              left: 12,
-              right: 12,
-              bottom: 12,
-              background: 'rgb(var(--paper))',
-              border: '1px solid rgb(var(--navy) / 0.1)',
-              borderRadius: 16,
-              padding: '13px 14px',
-              boxShadow: '0 10px 30px -10px rgb(var(--navy) / 0.3)',
-            }}
+          <Card
+            elevation="raised"
+            padding="none"
+            className="absolute flex items-center gap-[11px] animate-fadeup px-3.5 py-3"
+            style={{ left: 12, right: 12, bottom: 12 }}
           >
             <div
               className="w-[38px] h-[38px] rounded-xl flex items-center justify-center flex-shrink-0"
@@ -207,15 +180,13 @@ export function MapScreen() {
               <PhIcon name={selPinObj.icon} size={18} color="rgb(var(--white))" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="m-0 mb-px text-[13px] font-bold text-navy leading-[1.25]">{selPinObj.title}</p>
-              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
-                {selPinObj.sub}
-              </p>
+              <p className="m-0 mb-px text-[13.5px] font-bold text-navy leading-[1.25]">{selPinObj.title}</p>
+              <p className="m-0 text-[12.5px] font-semibold text-slate">{selPinObj.sub}</p>
             </div>
             <button
               type="button"
               onClick={doPinAction}
-              className="border-none bg-skydeep text-mist rounded-full text-xs font-extrabold cursor-pointer font-sans flex-shrink-0"
+              className="border-none bg-skydeep text-mist rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans flex-shrink-0 min-h-[36px]"
               style={{ padding: '8px 14px' }}
             >
               {selPinObj.action}
@@ -224,12 +195,12 @@ export function MapScreen() {
               type="button"
               aria-label="Close pin"
               onClick={() => set({ selPin: null })}
-              className="border-none w-[26px] h-[26px] rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
+              className="border-none w-8 h-8 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
               style={{ background: 'rgb(var(--skyborder))' }}
             >
               <PhIcon name="ph-bold ph-x" size={11} color="rgb(var(--slatedark))" />
             </button>
-          </div>
+          </Card>
         )}
       </div>
     </div>

@@ -1,4 +1,7 @@
+import { BackButton } from '../components/BackButton';
+import { Card } from '../components/Card';
 import { PhIcon } from '../components/PhIcon';
+import { Pill } from '../components/Pill';
 import { ProgressBar } from '../components/ProgressBar';
 import { usePavStore } from '../store/store';
 import { usePortfolio } from '../data/repo';
@@ -25,77 +28,57 @@ export function Portfolio() {
       className="pav-fixed absolute inset-0 z-[79] bg-mist overflow-y-auto pav-scroll animate-scpop"
       style={{ padding: 'calc(60px + var(--pav-chrome-top)) 18px calc(40px + var(--pav-safe-bottom))' }}
     >
-      <button
-        onClick={closePortfolio}
-        className="border-0 bg-transparent flex items-center gap-[5px] text-[13px] font-extrabold cursor-pointer p-0 mb-3.5"
-        style={{ color: 'rgb(var(--slate))' }}
-      >
-        <PhIcon name="ph-bold ph-arrow-left" size={14} />
-        Back
-      </button>
+      <BackButton onClick={closePortfolio} />
       <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Portfolio</h1>
-      <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
+      <p className="m-0 mb-4 text-[13.5px] font-semibold text-slatedeep">
         Cedar Hill Management · 3 communities · {pfDoors} doors
       </p>
 
+      {/* Collection rate leads on chrome; the two counts sit beside it on paper. */}
       <div className="grid grid-cols-3 gap-[9px] mb-4">
         <div className="bg-skydeep rounded-[15px] p-[13px_10px] text-center text-mist">
-          <p className="m-0 mb-0.5 font-serif text-xl">{pfCollected}%</p>
-          <p className="m-0 text-[9.5px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)', letterSpacing: '0.05em' }}>
-            COLLECTED
-          </p>
+          <p className="m-0 mb-0.5 font-serif text-[24px] leading-[1.1] tabular-nums">{pfCollected}%</p>
+          <p className="m-0 text-[12px] font-semibold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>Collected</p>
         </div>
-        <div className="bg-paper rounded-[15px] p-[13px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <p className="m-0 mb-0.5 font-serif text-xl text-navy">{pfOpen}</p>
-          <p className="m-0 text-[9.5px] font-bold" style={{ color: 'rgb(var(--slate))', letterSpacing: '0.05em' }}>
-            OPEN ITEMS
-          </p>
-        </div>
-        <div className="bg-paper rounded-[15px] p-[13px_10px] text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <p className="m-0 mb-0.5 font-serif text-xl text-navy">{pfDoors}</p>
-          <p className="m-0 text-[9.5px] font-bold" style={{ color: 'rgb(var(--slate))', letterSpacing: '0.05em' }}>
-            DOORS
-          </p>
-        </div>
+        <Card padding="none" className="p-[13px_10px] text-center" style={{ borderRadius: 15 }}>
+          <p className="m-0 mb-0.5 font-serif text-[24px] leading-[1.1] text-navy tabular-nums">{pfOpen}</p>
+          <p className="m-0 text-[12px] font-semibold text-slate">Open items</p>
+        </Card>
+        <Card padding="none" className="p-[13px_10px] text-center" style={{ borderRadius: 15 }}>
+          <p className="m-0 mb-0.5 font-serif text-[24px] leading-[1.1] text-navy tabular-nums">{pfDoors}</p>
+          <p className="m-0 text-[12px] font-semibold text-slate">Doors</p>
+        </Card>
       </div>
 
       <div className="flex flex-col gap-2.5">
-        {PORTFOLIO.map((c, i) => {
-          const openLabel = c.open === 0 ? 'All clear' : c.open + ' open';
-          const openColor = c.open === 0 ? 'rgb(var(--sagedark))' : 'rgb(var(--golddark))';
-          return (
-            <button
-              type="button"
-              key={c.name}
-              onClick={() => set({ activeCommunity: i, portfolioOpen: false, boardMode: true })}
-              className="w-full border-none font-sans text-left bg-paper rounded-[18px] p-4 cursor-pointer"
-              style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
-            >
-              <div className="flex items-center gap-2.5 mb-[11px]">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-skyborder">
-                  <PhIcon name="ph-fill ph-buildings" size={19} color="rgb(var(--skydeep))" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="m-0 text-[14.5px] font-bold text-navy">{c.name}</p>
-                  <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
-                    {c.doors} doors · {c.dues}
-                  </p>
-                </div>
-                <span className="text-xs font-bold flex-shrink-0" style={{ color: openColor }}>
-                  {openLabel}
-                </span>
+        {PORTFOLIO.map((c, i) => (
+          <Card
+            key={c.name}
+            elevation="raised"
+            onClick={() => set({ activeCommunity: i, portfolioOpen: false, boardMode: true })}
+          >
+            <div className="flex items-center gap-2.5 mb-[11px]">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--skypale))' }}>
+                <PhIcon name="ph-fill ph-buildings" size={19} color="rgb(var(--skydeep))" />
               </div>
-              <div className="flex items-center gap-2.5">
-                <div className="flex-1">
-                  <ProgressBar pct={c.collected} height={8} color={c.tone} track="rgb(var(--skyborder))" />
-                </div>
-                <span className="text-[11.5px] font-bold flex-shrink-0 text-navy">{c.collected}% collected</span>
+              <div className="flex-1 min-w-0">
+                <p className="m-0 text-[14px] font-bold text-navy">{c.name}</p>
+                <p className="m-0 text-[12.5px] font-semibold text-slate">
+                  {c.doors} doors · {c.dues}
+                </p>
               </div>
-            </button>
-          );
-        })}
+              <Pill label={c.open === 0 ? 'All clear' : c.open + ' open'} tone={c.open === 0 ? 'success' : 'warning'} />
+            </div>
+            <div className="flex items-center gap-2.5">
+              <div className="flex-1">
+                <ProgressBar pct={c.collected} height={8} color={c.tone} track="rgb(var(--skyborder))" />
+              </div>
+              <span className="text-[12.5px] font-bold flex-shrink-0 text-navy tabular-nums">{c.collected}% collected</span>
+            </div>
+          </Card>
+        ))}
       </div>
-      <p className="mt-4 mb-0 text-center text-[11.5px] font-bold" style={{ color: 'rgb(var(--slatelight))' }}>
+      <p className="mt-4 mb-0 text-center text-[12.5px] font-semibold text-slate">
         Tap a community to open its board desk.
       </p>
     </div>
