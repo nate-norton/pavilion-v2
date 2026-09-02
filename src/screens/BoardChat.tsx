@@ -110,7 +110,7 @@ export function BoardChat() {
           onClick={() => (topic !== null ? set({ boardChatTopic: null }) : close())}
           className="border-0 bg-transparent p-0 cursor-pointer flex items-center"
         >
-          <PhIcon name="ph-bold ph-arrow-left" size={18} color="rgb(var(--navy))" />
+          <PhIcon name="ph-bold ph-arrow-left" size={18} color="rgb(var(--skydeep))" />
         </button>
         <div className="flex-1 min-w-0">
           <h1 className="m-0 font-serif font-normal text-[19px] text-navy truncate">{topic ?? 'Board chat'}</h1>
@@ -126,14 +126,14 @@ export function BoardChat() {
               title="Rename topic"
               className="w-8 h-8 rounded-full border-0 bg-paper cursor-pointer flex items-center justify-center"
             >
-              <PhIcon name="ph-fill ph-pencil-simple" size={14} color="rgb(var(--navy))" />
+              <PhIcon name="ph-fill ph-pencil-simple" size={14} color="rgb(var(--skydeep))" />
             </button>
             <button
               onClick={archive}
               title="Archive topic"
               className="w-8 h-8 rounded-full border-0 bg-paper cursor-pointer flex items-center justify-center"
             >
-              <PhIcon name="ph-fill ph-archive" size={14} color="rgb(var(--navy))" />
+              <PhIcon name="ph-fill ph-archive" size={14} color="rgb(var(--skydeep))" />
             </button>
           </>
         )}
@@ -144,7 +144,7 @@ export function BoardChat() {
             onClick={close}
             className="w-8 h-8 rounded-full border-0 bg-paper cursor-pointer flex items-center justify-center"
           >
-            <PhIcon name="ph-bold ph-x" size={14} color="rgb(var(--navy))" />
+            <PhIcon name="ph-bold ph-x" size={14} color="rgb(var(--skydeep))" />
           </button>
         )}
       </div>
@@ -154,7 +154,7 @@ export function BoardChat() {
           {input({ value: newName, onChange: setNewName, placeholder: 'New topic name', onEnter: rename, autoFocus: true })}
           <button
             onClick={rename}
-            className="border-0 rounded-full px-3.5 text-[12px] font-extrabold cursor-pointer bg-navy text-cream"
+            className="border-0 rounded-full px-3.5 text-[12px] font-extrabold cursor-pointer bg-skydeep text-cream"
           >
             Rename
           </button>
@@ -308,7 +308,7 @@ export function BoardChat() {
                 className="w-10 h-10 rounded-full cursor-pointer flex items-center justify-center flex-shrink-0 bg-paper border-0"
                 style={{ border: '1px solid rgb(var(--navy) / 0.12)' }}
               >
-                <PhIcon name="ph-fill ph-image-square" size={16} color="rgb(var(--navy))" />
+                <PhIcon name="ph-fill ph-image-square" size={16} color="rgb(var(--skydeep))" />
               </button>
               {input({ value: msg, onChange: setMsg, placeholder: `Message ${topic}…`, onEnter: () => send(msg, topic) })}
               <button

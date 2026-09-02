@@ -87,7 +87,7 @@ export function Onboarding() {
                 className="w-[46px] h-[46px] rounded-[14px] flex items-center justify-center flex-shrink-0"
                 style={{ background: 'rgb(var(--sand))' }}
               >
-                <PhIcon name="ph-fill ph-house-line" size={23} color="rgb(var(--navy))" />
+                <PhIcon name="ph-fill ph-house-line" size={23} color="rgb(var(--skydeep))" />
               </div>
               <div className="flex-1">
                 <p className="m-0 mb-0.5 text-[14px] font-bold" style={{ color: 'rgb(var(--navy))' }}>
@@ -193,7 +193,7 @@ export function Onboarding() {
                 className="flex items-center gap-[9px] pt-3.5"
                 style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)' }}
               >
-                <PhIcon name="ph-fill ph-bank" size={17} color="rgb(var(--navy))" />
+                <PhIcon name="ph-fill ph-bank" size={17} color="rgb(var(--skydeep))" />
                 <span className="text-[12.5px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
                   Juniper Credit Union ····4821
                 </span>
@@ -257,7 +257,7 @@ export function Onboarding() {
           type="button"
           onClick={next}
           className="flex-1 rounded-2xl text-[14px] font-extrabold cursor-pointer font-sans active:scale-[0.98]"
-          style={{ border: 'none', background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', padding: '16px 0' }}
+          style={{ border: 'none', background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', padding: '16px 0' }}
         >
           {nextLabel}
         </button>

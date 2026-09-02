@@ -58,7 +58,7 @@ export function Chat() {
           onClick={() => set({ chatWith: null, msgsOpen: true })}
           className="border-none bg-transparent cursor-pointer p-1 font-sans"
         >
-          <PhIcon name="ph-bold ph-arrow-left" size={17} color="rgb(var(--navy))" />
+          <PhIcon name="ph-bold ph-arrow-left" size={17} color="rgb(var(--skydeep))" />
         </button>
         <div
           className="w-[38px] h-[38px] rounded-full flex items-center justify-center text-white font-extrabold text-sm flex-shrink-0"
@@ -160,7 +160,7 @@ export function Chat() {
           type="button"
           aria-label="Send"
           onClick={sendChatMessage}
-          className="w-11 h-11 border-none rounded-full bg-navy flex items-center justify-center cursor-pointer flex-shrink-0"
+          className="w-11 h-11 border-none rounded-full bg-skydeep flex items-center justify-center cursor-pointer flex-shrink-0"
         >
           <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--cream))" />
         </button>

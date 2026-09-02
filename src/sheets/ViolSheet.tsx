@@ -89,7 +89,7 @@ export function ViolSheet() {
             </p>
             <button
               onClick={closeViol}
-              className="w-full border-none text-cream rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-navy"
+              className="w-full border-none text-cream rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-skydeep"
             >
               Done
             </button>
@@ -177,7 +177,7 @@ export function ViolSheet() {
           </p>
           <button
             onClick={closeViol}
-            className="w-full border-none text-cream rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-navy"
+            className="w-full border-none text-cream rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>

@@ -143,7 +143,7 @@ export function Today() {
             aria-label="Search"
             className="w-9 h-9 rounded-full border-none bg-transparent flex items-center justify-center cursor-pointer"
           >
-            <PhIcon name="ph-bold ph-magnifying-glass" size={17} color="rgb(var(--navy))" />
+            <PhIcon name="ph-bold ph-magnifying-glass" size={17} color="rgb(var(--skydeep))" />
           </button>
           <button
             onClick={() => set({ notifOpen: true })}
@@ -151,7 +151,7 @@ export function Today() {
             aria-label="Notifications"
             className="relative w-9 h-9 rounded-full border-none bg-transparent flex items-center justify-center cursor-pointer"
           >
-            <PhIcon name="ph ph-bell" size={18} color="rgb(var(--navy))" />
+            <PhIcon name="ph ph-bell" size={18} color="rgb(var(--skydeep))" />
             {hasNotifBadge && (
               <span
                 className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full"
@@ -163,7 +163,7 @@ export function Today() {
             onClick={() => set({ myPlaceOpen: true })}
             title="My Place"
             aria-label="My Place — profile and settings"
-            className="w-[34px] h-[34px] rounded-full border-none bg-navy flex items-center justify-center text-cream font-extrabold text-[13px] cursor-pointer ml-1.5"
+            className="w-[34px] h-[34px] rounded-full border-none bg-skydeep flex items-center justify-center text-cream font-extrabold text-[13px] cursor-pointer ml-1.5"
           >
             {member?.initial ?? 'A'}
           </button>
@@ -179,17 +179,17 @@ export function Today() {
         <button
           type="button"
           onClick={() => set({ boardMode: true })}
-          className="w-full border-none font-sans text-left bg-navy rounded-[16px] flex items-center gap-3 cursor-pointer mb-3.5"
+          className="w-full border-none font-sans text-left bg-skydeep rounded-[16px] flex items-center gap-3 cursor-pointer mb-3.5"
           style={{ padding: '13px 15px' }}
         >
           <PhIcon name="ph-fill ph-shield-star" size={19} color="rgb(var(--peach))" className="flex-shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[13.5px] font-bold text-cream">Board desk</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.62)' }}>
+            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.92)' }}>
               Requests, compliance, money, and the roster
             </p>
           </div>
-          <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--cream) / 0.62)" className="flex-shrink-0" />
+          <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--cream) / 0.92)" className="flex-shrink-0" />
         </button>
       )}
 
@@ -202,7 +202,7 @@ export function Today() {
       <div className="bg-paper rounded-[20px] flex flex-col" style={{ border: '1px solid rgb(var(--navy) / 0.1)', padding: '6px 18px' }}>
         {isManager && (
           <button type="button" onClick={() => set({ portfolioOpen: true, myPlaceOpen: false })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--navy))' }} />
+            <span className={DOT} style={{ background: 'rgb(var(--skydeep))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>Your portfolio</p>
               <p className={ROW_SUB}>3 communities · {pfDoors} doors · {pfOpen} open items</p>
@@ -337,21 +337,21 @@ export function Today() {
        */}
       <StackedCards overlap={22}>
         {showFeatured && (
-        <StackedPanel tint="navy" className="!pt-4 text-cream">
+        <StackedPanel tint="skydeep" className="!pt-4 text-cream">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
               {featuredEvent?.whenLabel}
             </p>
             <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.2]">{featuredEvent?.title}</p>
-            <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+            <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
               {tacoGoing} neighbors going
             </p>
           </div>
           {(demo ? rsvpFood : featuredEvent?.rsvpd) ? (
             <button
               onClick={() => (demo ? set({ rsvpFood: !state.rsvpFood }) : void repo.toggleEventRsvp(featuredEvent!.id))}
-              className="border-none text-white rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 flex items-center gap-1.5 bg-sage"
+              className="border-none bg-white text-sagedark rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 flex items-center gap-1.5"
             >
               <PhIcon name="ph-fill ph-check" size={14} />
               Going
@@ -359,7 +359,7 @@ export function Today() {
           ) : (
             <button
               onClick={() => (demo ? set({ rsvpFood: !state.rsvpFood }) : void repo.toggleEventRsvp(featuredEvent!.id))}
-              className="border-none text-white rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 bg-emberdeep"
+              className="border-none bg-white text-skydeep rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0"
             >
               I&apos;m in
             </button>

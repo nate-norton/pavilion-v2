@@ -61,12 +61,17 @@
   /*
    * --terracotta is the *themed* text-bearing accent: brand themes remap it
    * per community (src/theme/themes.ts) and accent copy, status pills and
-   * inline links resolve to it. Any theme override must clear 4.5:1 on its
-   * own blush and on --cream.
+   * inline links resolve to it.
+   *
+   * It is SKY, not sunset. The brand sheet makes sky the primary — "buttons,
+   * links, active states" — and reserves sunset for "accent/CTA only: RSVP,
+   * avatar rings, warm highlights". The reference app bears that out: sky
+   * fills appear ~130 times against 15 for sunset text. Clears 4.56 on every
+   * page surface, 4.73 on its own blush, 5.73 white-on-it.
    */
-  --terracotta: 185 55 6;
-  --blush: 255 243 238;      /* brand "sunset-tint" — accent bed */
-  --peach: 255 179 71;       /* sunset gradient endpoint; on navy 7.19:1 */
+  --terracotta: 30 102 186;
+  --blush: 220 235 251;      /* accent bed — sky pale, matching --terracotta */
+  --peach: 255 222 175;      /* eyebrow on chrome: 4.52 on sky, 9.96 on navy */
 
   /* Success. --sage is a fill; --sagedark carries text (on mint 4.53, white 5.69). */
   --sage: 42 157 92;

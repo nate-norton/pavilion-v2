@@ -81,7 +81,7 @@ export function Search() {
               style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '13px 14px' }}
             >
               <div className="w-9 h-9 rounded-[11px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
-                <PhIcon name={r.icon} size={17} color="rgb(var(--navy))" />
+                <PhIcon name={r.icon} size={17} color="rgb(var(--skydeep))" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-px text-[13px] font-bold text-navy leading-[1.3]">{r.title}</p>

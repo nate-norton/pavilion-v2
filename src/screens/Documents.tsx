@@ -125,7 +125,7 @@ export function Documents() {
                   style={{ padding: '14px 0 14px 14px' }}
                 >
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
-                    <PhIcon name={d.icon} size={19} color="rgb(var(--navy))" />
+                    <PhIcon name={d.icon} size={19} color="rgb(var(--skydeep))" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{d.title}</p>
@@ -174,7 +174,7 @@ export function Documents() {
                     onClick={() => setUpSection(s)}
                     className="rounded-full px-3 py-1.5 text-[11px] font-extrabold cursor-pointer"
                     style={upSection === s
-                      ? { background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                      ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
                       : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
                   >
                     {s}

@@ -119,7 +119,7 @@ export function AiSheet() {
                   <button
                     onClick={askTheBoard}
                     className="flex items-center gap-[7px] mt-2.5 w-full justify-center border-none rounded-[11px] py-2.5 cursor-pointer font-sans"
-                    style={{ background: 'rgb(var(--navy))' }}
+                    style={{ background: 'rgb(var(--skydeep))' }}
                   >
                     <PhIcon name="ph-fill ph-paper-plane-tilt" size={14} color="rgb(var(--peach))" />
                     <span className="text-[12.5px] font-extrabold" style={{ color: 'rgb(var(--cream))' }}>
@@ -161,7 +161,7 @@ export function AiSheet() {
             aria-label="Send question"
             onClick={send}
             className="w-11 h-11 border-none rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
-            style={{ background: 'rgb(var(--navy))' }}
+            style={{ background: 'rgb(var(--skydeep))' }}
           >
             <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--cream))" />
           </button>
