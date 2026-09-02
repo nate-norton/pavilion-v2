@@ -536,6 +536,9 @@ export interface Repository {
   // Invites (board-managed; live only — the demo has no join flow)
   getInvites(): Invite[];
   createInvite(input: { email: string; unitLabel: string; role: 'resident' | 'board' }): Promise<void>;
+  /** Board: invite a pasted roster at once. Emails that already hold a
+   * pending invite here are skipped, not duplicated. */
+  createInvites(inputs: { email: string; unitLabel: string; role: 'resident' | 'board' }[]): Promise<{ created: number; skipped: number }>;
   revokeInvite(id: string): Promise<void>;
   /** Board: push a pending invite's expiry out another 14 days. */
   renewInvite(id: string): Promise<void>;

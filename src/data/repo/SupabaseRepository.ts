@@ -684,6 +684,26 @@ export class SupabaseRepository implements Repository {
     await this.hydrateBoardChat(); this.notify();
   };
 
+  createInvites = async (inputs: { email: string; unitLabel: string; role: 'resident' | 'board' }[]) => {
+    if (!this.communityId || !this.profileId || inputs.length === 0) return { created: 0, skipped: 0 };
+    // The pending-email unique index is partial, which upsert can't target,
+    // so dedupe against what's already pending here before inserting.
+    const { data: existing } = await this.client.from('invites')
+      .select('email').eq('community_id', this.communityId).eq('status', 'pending');
+    const pending = new Set((existing ?? []).map((r) => r.email.toLowerCase()));
+    const rows = inputs
+      .map((i) => ({ email: i.email.trim().toLowerCase(), unit_label: i.unitLabel.trim(), role: i.role }))
+      .filter((r) => r.email && !pending.has(r.email))
+      .map((r) => ({ ...r, community_id: this.communityId!, invited_by: this.profileId! }));
+    if (rows.length > 0) {
+      const { error } = await this.client.from('invites').insert(rows);
+      if (this.failed('create the invitations', error, true)) return { created: 0, skipped: inputs.length };
+    }
+    await this.hydrateInvites();
+    await this.hydrateBoardChat(); this.notify();
+    return { created: rows.length, skipped: inputs.length - rows.length };
+  };
+
   revokeInvite = async (id: string) => {
     const { data, error } = await this.client.from('invites')
       .update({ status: 'revoked' }).eq('id', id).eq('status', 'pending').select('id');

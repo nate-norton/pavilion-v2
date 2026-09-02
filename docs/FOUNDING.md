@@ -16,15 +16,14 @@ or the MCP tools, never from the app.
 |---|---|---|
 | 0 · Found | Pavilion | `found_community()` — this doc |
 | 1 · Activate | Board | `BoardSetupCard` walks the first ten minutes |
-| 2 · Populate | Board | Board Desk → invites, one per household |
-| 3 · Join | Resident | Sign up or sign-in link → `claim_invite()` → lands in community |
+| 2 · Populate | Board | Board Desk → paste the roster, share the links |
+| 3 · Join | Resident | Open the link → Welcome → name + password → in |
 
 Stage 0 happens once per community and never again.
 
-> Sign-in details below describe `staging` (the product, live mode). If you are
-> reading this from a feature branch, check `src/auth/AuthGate.tsx` on
-> `origin/staging` rather than your working copy — auth has changed there more
-> than once, and a stale branch will describe a screen that no longer ships.
+> The screens below describe the `onboarding-ui` branch (merging to
+> `staging`). If what you see differs, check `src/auth/` on `origin/staging`
+> rather than a working copy — auth has changed there more than once.
 
 ## Running it
 
@@ -57,56 +56,47 @@ minting a second one.
 
 ## Handing off the invites
 
-Sign-in on `staging` is **email + password first**, with a passwordless option
-below an "or" divider. A founding board member has three ways in, and the one
-you point them at changes what their profile looks like afterwards.
+Each `invite_url` is the whole handoff. Send it however the board member
+already talks to you — text, email, a message. Nothing is emailed by Pavilion.
 
-**Recommended — "Create an account"** (name, email, password, 8-char minimum).
-`signUp()` passes the typed name through as user metadata, and
-`handle_new_user()` reads `raw_user_meta_data->>'name'`, so the profile is
-created with their real name. Supabase then emails a confirmation they must
-click before the first sign-in.
+What happens when they open it:
 
-**Fastest — "Email me a sign-in link instead."** Enter the email, leave the
-password blank, tap the button below the divider. `signInWithOtp` runs with
-`shouldCreateUser: true`, so it both creates the account and signs them in with
-no password and no confirmation step.
+1. **Welcome.** The link is read before sign-in (`peek_invite`), so the screen
+   says "You're invited · Mountain Vista", shows their role and unit, and names
+   the exact email the invitation is for. If that's not them, they're told to
+   ask for a new link rather than guessing.
+2. **Introduce yourself.** Name, a password (8+ characters, that's the only
+   rule), optional phone. The email is locked from the invite. Tapping
+   "Join Mountain Vista" calls the `accept_invite` edge function, which
+   creates the account **already confirmed** with the typed name, claims the
+   invite, and signs them in. No confirmation email, no second sign-in.
+3. **Arrival.** "You're in, Jane." with honest counts of what the community
+   holds so far. Board members are pointed at the Desk, where the setup card
+   is waiting.
 
-The catch: that path sends **no name metadata**, so `handle_new_user()` falls
-back to `split_part(email, '@', 1)`. A board member invited at
-`jane.doe@example.com` lands in the directory as "jane.doe" until she fixes it
-in her profile. Fine for your own testing, scruffy for a real board's first
-impression — prefer "Create an account" when the name will be seen.
+**Already have a Pavilion account** (a founder who piloted once, an owner in
+two HOAs)? The Welcome screen has "I already have a Pavilion account", which
+goes to sign-in with the email prefilled and the code kept. The gate claims it
+after sign-in and the new community becomes the active one. An account can
+belong to several communities; My Place shows a switcher when it does.
 
-**Existing account** — email + password in the main form.
+The link is per-invite, not per-community: each code admits exactly one
+person, then flips to `accepted`. Codes expire after 14 days; the board can
+renew a pending invite from Board Desk.
 
-All three end in the same place: `LiveAuthGate` runs `claim_invite()` on the
-first authenticated load, and `claim_invite_code()` after it if a `?invite=`
-code was stashed. The code survives the email round trip in `localStorage`.
+## When a founder signs in with no link
 
-The link is per-invite, not per-community: each code admits exactly one person,
-then flips to `accepted`. Codes expire after 14 days; the board can renew a
-pending invite from Board Desk.
-
-## The one real gotcha
-
-`claim_invite()` and `claim_invite_code()` both refuse anyone who already holds
-an **active membership anywhere**. A founder who tested Pavilion with the same
-address earlier cannot claim a new invite — the call returns `false` and they
-land on the `NoCommunity` screen with no explanation.
-
-`found_community()` reports this up front as `already_member` instead of
-leaving a dead pending row. To fix, either invite a different address or clear
-the old membership:
+Someone who signs in (or uses "Email me a sign-in link") without an
+invitation lands on "You're not in a community yet" with three real next
+steps: switch email, paste an invite link, or **request a community**. Requests
+land in `community_requests` (name, community, home count, note). Review them
+with:
 
 ```sql
--- Find what's holding the address
-select m.id, m.role, m.status, c.slug
-from public.memberships m
-join public.profiles p on p.id = m.profile_id
-join auth.users u on u.id = p.user_id
-join public.communities c on c.id = m.community_id
-where lower(u.email) = 'someone@example.com';
+select requester_name, email, community_name, homes, note, created_at
+from public.community_requests where status = 'pending' order by created_at;
 ```
 
-Deleting that membership row lets the invite claim normally.
+…then run `found_community()` for the ones you accept and set `status` to
+`founded`. The requester's invitation should go to the address on the request,
+since that's the account they already have.
