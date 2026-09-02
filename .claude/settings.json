@@ -12,5 +12,17 @@
       "mcp__f0c7064d-4639-44a6-9a18-ac270c236a17__list_tables",
       "mcp__f0c7064d-4639-44a6-9a18-ac270c236a17__list_migrations"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.sh"
+          }
+        ]
+      }
+    ]
   }
 }
