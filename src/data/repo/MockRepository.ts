@@ -120,6 +120,7 @@ export class MockRepository implements Repository, SnapshotReadable {
   markChatRead = () => {};   // demo unread badges are scripted
   deleteChatMessage = async () => {};
   createInvite = async () => {};
+  createInvites = async () => ({ created: 0, skipped: 0 });
   revokeInvite = async () => {};
   renewInvite = async () => {};
   getAdminMembers = () => EMPTY_ADMIN;

@@ -7,6 +7,7 @@ import { usePavStore, dataDefaults } from '../store/store';
 import { useArc, useDues, useMember, useMyReports, usePortfolio, useReservation, useGroups, useRepository, resetDemoData } from '../data/repo';
 import type { DuesStatus, ThreadComment } from '../data/repo';
 import { isLiveMode, signOutLive } from '../auth/AuthGate';
+import { useMemberships, useActiveCommunityId, useRepository } from '../data/repo';
 
 const CARD: CSSProperties = {
   background: 'rgb(var(--paper))',
@@ -45,6 +46,9 @@ function Row({ children, divider, onClick }: { children: ReactNode; divider?: bo
 /** My Place profile screen — ported from prototype lines 1551-1769. */
 export function MyPlace() {
   const state = usePavStore();
+  const memberships = useMemberships();
+  const activeCommunityId = useActiveCommunityId();
+  const repoForSwitch = useRepository();
   const { set } = state;
   const PORTFOLIO = usePortfolio();
   const reservation = useReservation();
@@ -736,6 +740,37 @@ export function MyPlace() {
                 </button>
               </div>
             )}
+          </div>
+        )}
+        {memberships.length > 1 && (
+          <div
+            className="flex flex-col gap-1.5"
+            style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
+          >
+            <div className="flex items-center gap-2.5">
+              <PhIcon name="ph-fill ph-house-line" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
+              <p className="m-0 flex-1 text-[13px] font-bold text-navy">Your communities</p>
+            </div>
+            <div className="ml-[29px] flex flex-col gap-1">
+              {memberships.map((m) => {
+                const active = m.communityId === activeCommunityId;
+                return (
+                  <button
+                    key={m.communityId}
+                    type="button"
+                    onClick={() => { if (!active) void repoForSwitch.switchCommunity(m.communityId); }}
+                    aria-pressed={active}
+                    className="w-full border-none font-sans bg-transparent text-left flex items-center gap-2 py-1 cursor-pointer"
+                  >
+                    <PhIcon name={active ? 'ph-fill ph-check-circle' : 'ph ph-circle'} size={16} color={active ? 'rgb(var(--sage))' : 'rgb(var(--slatelight))'} />
+                    <span className="text-[13px] font-semibold text-navy">
+                      {m.communityName}
+                      <span className="text-slatelight"> · {m.role === 'board' ? 'Board' : 'Resident'}{m.unitLabel ? ` · ${m.unitLabel}` : ''}</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
         <button type="button"
