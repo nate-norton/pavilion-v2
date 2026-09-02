@@ -36,6 +36,12 @@ Standing rules for every stage:
 - Stage 0 was docs only and is not merged to `dev` alone; Stage 1 stacks
   on it and both merge at Check-in 2.
 
+## Decisions from Check-ins 2 and 3 (2026-09-02)
+
+- Stage 1 primitives approved as shown in the design-system gallery.
+- Stage 2 board pass approved. Stages 0 to 2 merged to `dev` together.
+- Stage 3 cuts from `dev` as `impeccable/3-resident`.
+
 ## Stage 0: Baseline (evidence only, no edits)
 
 Commands: `/impeccable critique` on Board Desk and Meeting first, then on
