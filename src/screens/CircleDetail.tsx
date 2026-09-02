@@ -64,14 +64,14 @@ export function CircleDetail() {
         ))}
       </div>
 
-      <div className="bg-navy rounded-[18px] p-4 text-cream mb-3.5">
+      <div className="bg-skydeep rounded-[18px] p-4 text-cream mb-3.5">
         <div className="flex items-center justify-between gap-2.5">
           <div className="min-w-0">
             <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
               Next meetup · Sat, 9 AM
             </p>
             <p className="m-0 mb-[3px] font-serif text-base leading-[1.25]">Work party — plot row 3</p>
-            <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+            <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
               {gardenGoing} going · gloves provided
             </p>
           </div>
@@ -90,7 +90,7 @@ export function CircleDetail() {
               type="button"
               onClick={() => set({ rsvpGarden: true })}
               className="border-none text-white rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans flex-shrink-0"
-              style={{ background: 'rgb(var(--emberdeep))', padding: '9px 14px' }}
+              style={{ background: 'rgb(var(--skydeep))', padding: '9px 14px' }}
             >
               I&apos;m in
             </button>

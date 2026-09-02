@@ -93,7 +93,7 @@ export function Gallery() {
 
         <Section title="Avatars">
           <div className="flex items-end gap-4">
-            <Avatar initial="A" color="rgb(var(--navy))" size={26} />
+            <Avatar initial="A" color="rgb(var(--skydeep))" size={26} />
             <Avatar initial="M" color="rgb(var(--terracotta))" size={36} />
             <Avatar initial="R" color="rgb(var(--sage))" size={48} />
             <Avatar initial="D" color="rgb(var(--sky))" size={64} />
@@ -163,7 +163,7 @@ export function Gallery() {
         <Section title="Buttons">
           <div className="flex flex-wrap gap-3">
             <button className="border-none rounded-2xl px-5 py-3 text-[14px] font-extrabold text-white cursor-pointer" style={{ background: 'rgb(var(--ember))' }}>Primary CTA</button>
-            <button className="rounded-2xl px-5 py-3 text-[14px] font-extrabold cursor-pointer" style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))', border: 'none' }}>Navy</button>
+            <button className="rounded-2xl px-5 py-3 text-[14px] font-extrabold cursor-pointer" style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: 'none' }}>Navy</button>
             <button className="rounded-2xl px-5 py-3 text-[14px] font-extrabold cursor-pointer bg-transparent" style={{ border: '1.5px solid rgb(var(--sagedark) / 0.35)', color: 'rgb(var(--sagedark))' }}>Ghost</button>
           </div>
         </Section>

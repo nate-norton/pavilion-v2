@@ -175,7 +175,7 @@ export function BoardSetupCard() {
                     type="button"
                     onClick={s.go}
                     className="mt-2.5 border-none rounded-[11px] text-[12.5px] font-extrabold cursor-pointer font-sans text-white"
-                    style={{ background: 'rgb(var(--emberdeep))', padding: '9px 14px' }}
+                    style={{ background: 'rgb(var(--skydeep))', padding: '9px 14px' }}
                   >
                     {s.cta}
                   </button>

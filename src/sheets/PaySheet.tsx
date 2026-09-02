@@ -63,7 +63,7 @@ export function PaySheet() {
           </p>
           <div className="flex h-2.5 rounded-full overflow-hidden mb-2">
             <div style={{ width: '27%', background: 'rgb(var(--sage))' }} />
-            <div style={{ width: '25%', background: 'rgb(var(--navy))' }} />
+            <div style={{ width: '25%', background: 'rgb(var(--skydeep))' }} />
             <div style={{ width: '19%', background: 'rgb(var(--ember))' }} />
             <div style={{ width: '17%', background: 'rgb(var(--gold))' }} />
             <div style={{ width: '12%', background: 'rgb(var(--stonelight))' }} />
@@ -77,7 +77,7 @@ export function PaySheet() {
             style={{ border: '1px solid rgb(var(--navy) / 0.1)' }}
             onClick={() => set({ payMethodOpen: !state.payMethodOpen })}
           >
-            <PhIcon name="ph-fill ph-bank" size={20} color="rgb(var(--navy))" className="flex-shrink-0" />
+            <PhIcon name="ph-fill ph-bank" size={20} color="rgb(var(--skydeep))" className="flex-shrink-0" />
             <div className="flex-1">
               <p className="m-0 text-[13px] font-bold text-navy">
                 {state.payMethod === 'jcu' ? 'Juniper Credit Union ····4821' : state.payMethod === 'visa' ? 'Visa ····7923' : 'Apple Pay'}
@@ -104,7 +104,7 @@ export function PaySheet() {
                   className="w-full border-none font-sans text-left flex items-center gap-2.5 px-3.5 py-3 cursor-pointer bg-[rgb(var(--paper))]"
                   style={{ borderBottom: pm.key !== 'apple' ? '1px solid rgb(var(--navy) / 0.06)' : undefined }}
                 >
-                  <PhIcon name={pm.icon} size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
+                  <PhIcon name={pm.icon} size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
                   <div className="flex-1">
                     <p className="m-0 text-[12.5px] font-bold text-navy">{pm.label}</p>
                     <p className="m-0 text-[11px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>{pm.sub}</p>
@@ -123,7 +123,7 @@ export function PaySheet() {
             <PhIcon
               name="ph-fill ph-arrows-clockwise"
               size={20}
-              color="rgb(var(--navy))"
+              color="rgb(var(--skydeep))"
               className="flex-shrink-0"
             />
             <div className="flex-1">
@@ -137,7 +137,7 @@ export function PaySheet() {
           <button
             onClick={doPay}
             className="w-full border-none rounded-2xl py-4 text-[14px] font-extrabold cursor-pointer text-white"
-            style={{ background: 'rgb(var(--emberdeep))' }}
+            style={{ background: 'rgb(var(--skydeep))' }}
           >
             {payBtnLabel}
           </button>
@@ -177,7 +177,7 @@ export function PaySheet() {
           </div>
           <button
             onClick={closePay}
-            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-navy"
+            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>
@@ -196,14 +196,14 @@ export function PaySheet() {
             className="rounded-[14px] p-3 mb-4 flex items-center justify-center gap-2.5 bg-[rgb(var(--paper))]"
             style={{ border: '1px dashed rgb(var(--navy) / 0.2)' }}
           >
-            <PhIcon name="ph-fill ph-receipt" size={17} color="rgb(var(--navy))" />
+            <PhIcon name="ph-fill ph-receipt" size={17} color="rgb(var(--skydeep))" />
             <span className="text-[13px] font-bold text-navy">
               Receipt #P-2231 · saved to Documents
             </span>
           </div>
           <button
             onClick={closePay}
-            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-navy"
+            className="w-full border-none text-cream rounded-2xl py-[15px] text-[14.5px] font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>

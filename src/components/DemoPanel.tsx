@@ -124,7 +124,7 @@ export function DemoPanel() {
       <div className="flex flex-col gap-2">
         <button
           onClick={replayOnboarding}
-          className="w-full rounded-xl py-2.5 text-[13px] font-bold text-navy border-2 border-navy/15 hover:bg-navy/5 transition-colors"
+          className="w-full rounded-xl py-2.5 text-[13px] font-bold text-navy border-2 border-navy/15 hover:bg-skydeep/5 transition-colors"
         >
           Replay onboarding
         </button>

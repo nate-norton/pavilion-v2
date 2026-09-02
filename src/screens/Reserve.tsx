@@ -271,12 +271,12 @@ export function Reserve() {
         {repo.isDemo() && (
         <button type="button"
           onClick={() => set({ passOpen: true })}
-          className="w-full border-none font-sans text-left rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5 bg-navy"
+          className="w-full border-none font-sans text-left rounded-[18px] px-4 py-3.5 flex items-center gap-3 cursor-pointer mb-3.5 bg-skydeep"
 >
           <PhIcon name="ph-fill ph-qr-code" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
           <div className="flex-1">
             <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Expecting visitors?</p>
-            <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+            <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
               Issue a gate &amp; parking pass in two taps
             </p>
           </div>
@@ -342,7 +342,7 @@ export function Reserve() {
               style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
             >
               <div className="w-11 h-11 rounded-[14px] flex items-center justify-center flex-shrink-0 bg-sand">
-                <PhIcon name={a.icon} size={22} color="rgb(var(--navy))" />
+                <PhIcon name={a.icon} size={22} color="rgb(var(--skydeep))" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-0.5 text-[14px] font-bold text-navy">{a.name}</p>

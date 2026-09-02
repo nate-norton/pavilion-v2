@@ -13,7 +13,7 @@ export function SignIn() {
   return (
     <div
       data-screen-label="Sign in"
-      className="absolute inset-0 z-[97] bg-navy flex flex-col"
+      className="absolute inset-0 z-[97] bg-skydeep flex flex-col"
       style={{ padding: '78px 26px 30px' }}
     >
       <div className="flex-1">
@@ -26,7 +26,7 @@ export function SignIn() {
         <h1 className="m-0 mb-3 font-serif font-normal text-[36px] leading-[1.15] text-cream">
           The neighborhood, not the paperwork.
         </h1>
-        <p className="m-0 mb-[22px] text-[14.5px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+        <p className="m-0 mb-[22px] text-[14.5px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
           Pavilion is where Juniper Ridge lives — dues, votes, amenities, and the people next door.
         </p>
         <div
@@ -36,7 +36,7 @@ export function SignIn() {
           <PhIcon name="ph-fill ph-house-line" size={20} color="rgb(var(--peach))" className="flex-shrink-0" />
           <div>
             <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Juniper Ridge</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.6)' }}>
+            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
               136 homes · Est. 1994 · you were invited by your HOA
             </p>
           </div>
@@ -64,7 +64,7 @@ export function SignIn() {
           type="button"
           onClick={skip}
           className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer font-sans p-2"
-          style={{ color: 'rgb(var(--cream) / 0.55)' }}
+          style={{ color: 'rgb(var(--cream) / 0.9)' }}
         >
           Just look around
         </button>

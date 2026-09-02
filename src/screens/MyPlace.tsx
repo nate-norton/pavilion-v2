@@ -169,7 +169,7 @@ export function MyPlace() {
       <BackButton onClick={() => set({ myPlaceOpen: false })} className="mb-4" />
 
       <div className="flex items-center gap-3.5 mb-[18px]">
-        <div className="w-[58px] h-[58px] rounded-full bg-navy flex items-center justify-center text-cream font-extrabold text-[19px] flex-shrink-0">
+        <div className="w-[58px] h-[58px] rounded-full bg-skydeep flex items-center justify-center text-cream font-extrabold text-[19px] flex-shrink-0">
           {displayInitial}
         </div>
         <div>
@@ -214,7 +214,7 @@ export function MyPlace() {
       {(isLiveMode ? member?.role === 'board' : isOwner) && (
         <button type="button"
           onClick={() => set({ boardMode: true, myPlaceOpen: false })}
-          className="w-full border-none font-sans text-left bg-navy rounded-[18px] flex items-center gap-[13px] cursor-pointer mb-3"
+          className="w-full border-none font-sans text-left bg-skydeep rounded-[18px] flex items-center gap-[13px] cursor-pointer mb-3"
           style={{ padding: '15px 16px' }}
         >
           <div
@@ -233,7 +233,7 @@ export function MyPlace() {
                 BOARD
               </span>
             </div>
-            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
               Triage, collections, votes &amp; broadcasts
             </p>
           </div>
@@ -247,7 +247,7 @@ export function MyPlace() {
       {isManager && (
         <button type="button"
           onClick={() => set({ portfolioOpen: true, myPlaceOpen: false })}
-          className="w-full border-none font-sans text-left bg-navy rounded-[18px] flex items-center gap-[13px] cursor-pointer mb-3"
+          className="w-full border-none font-sans text-left bg-skydeep rounded-[18px] flex items-center gap-[13px] cursor-pointer mb-3"
           style={{ padding: '15px 16px' }}
         >
           <div
@@ -258,7 +258,7 @@ export function MyPlace() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[14.5px] font-bold text-cream">Portfolio</p>
-            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
               3 communities · {pfDoors} doors · {pfCollected}% collected
             </p>
           </div>
@@ -318,7 +318,7 @@ export function MyPlace() {
                   <button
                     type="button"
                     onClick={() => set({ tenantRegistered: true })}
-                    className="border-none bg-navy text-cream rounded-[11px] text-[12.5px] font-extrabold cursor-pointer font-sans"
+                    className="border-none bg-skydeep text-cream rounded-[11px] text-[12.5px] font-extrabold cursor-pointer font-sans"
                     style={{ padding: '9px 15px' }}
                   >
                     Register now
@@ -344,7 +344,7 @@ export function MyPlace() {
             className="flex items-center gap-2.5"
             style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
           >
-            <PhIcon name="ph-fill ph-arrows-clockwise" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
+            <PhIcon name="ph-fill ph-arrows-clockwise" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
             <div className="flex-1">
               <p className="m-0 text-[13px] font-bold text-navy">{mpApLabel}</p>
               <p className="m-0 text-[11.5px] font-semibold text-stone">
@@ -408,7 +408,7 @@ export function MyPlace() {
           className="flex items-center gap-[11px]"
           style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
         >
-          <div className="w-[34px] h-[34px] rounded-full bg-navy flex items-center justify-center text-cream font-extrabold text-[13px]">A</div>
+          <div className="w-[34px] h-[34px] rounded-full bg-skydeep flex items-center justify-center text-cream font-extrabold text-[13px]">A</div>
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
             You{' '}
             <span className="font-semibold text-stonelight">
@@ -694,7 +694,7 @@ export function MyPlace() {
               }}
               className="w-full border-none font-sans bg-transparent text-left flex items-center gap-2.5 cursor-pointer"
             >
-              <PhIcon name="ph-fill ph-user-circle" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
+              <PhIcon name="ph-fill ph-user-circle" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">
                 Profile <span className="font-semibold text-stonelight">· name, phone, privacy</span>
               </p>
@@ -743,7 +743,7 @@ export function MyPlace() {
           className="w-full border-none font-sans bg-transparent text-left flex items-center gap-2.5 cursor-pointer"
           style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
         >
-          <PhIcon name="ph-fill ph-bell" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
+          <PhIcon name="ph-fill ph-bell" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13px] font-bold text-navy">
             Notifications{' '}
             {!isLiveMode && (
@@ -758,7 +758,7 @@ export function MyPlace() {
           className="flex items-center gap-2.5"
           style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
         >
-          <PhIcon name="ph-fill ph-text-aa" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
+          <PhIcon name="ph-fill ph-text-aa" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13px] font-bold text-navy">Large type</p>
           <Toggle on={state.largeType} onToggle={() => set({ largeType: !state.largeType })} label="Large type" />
         </div>
@@ -770,7 +770,7 @@ export function MyPlace() {
             onClick={() => set({ langOpen: !state.langOpen })}
             className="w-full border-none font-sans bg-transparent text-left flex items-center gap-2.5 cursor-pointer"
           >
-            <PhIcon name="ph-fill ph-translate" size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
+            <PhIcon name="ph-fill ph-translate" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13px] font-bold text-navy">
               Language{' '}
               <span className="font-semibold text-stonelight">

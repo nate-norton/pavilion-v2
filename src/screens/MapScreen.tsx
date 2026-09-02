@@ -116,7 +116,7 @@ export function MapScreen() {
           <span style={HOUSE} />
           <span
             className="flex items-center justify-center text-[10px] font-bold text-cream"
-            style={{ width: 26, height: 20, borderRadius: 5, background: 'rgb(var(--navy))' }}
+            style={{ width: 26, height: 20, borderRadius: 5, background: 'rgb(var(--skydeep))' }}
           >
             27
           </span>
@@ -215,7 +215,7 @@ export function MapScreen() {
             <button
               type="button"
               onClick={doPinAction}
-              className="border-none bg-navy text-cream rounded-full text-xs font-extrabold cursor-pointer font-sans flex-shrink-0"
+              className="border-none bg-skydeep text-cream rounded-full text-xs font-extrabold cursor-pointer font-sans flex-shrink-0"
               style={{ padding: '8px 14px' }}
             >
               {selPinObj.action}

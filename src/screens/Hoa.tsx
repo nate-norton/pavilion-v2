@@ -210,7 +210,7 @@ export function Hoa() {
         </p>
         <div className="flex h-3.5 rounded-full overflow-hidden mb-3.5">
           <div style={{ width: '27%', background: 'rgb(var(--sage))' }} />
-          <div style={{ width: '25%', background: 'rgb(var(--navy))' }} />
+          <div style={{ width: '25%', background: 'rgb(var(--skydeep))' }} />
           <div style={{ width: '19%', background: 'rgb(var(--ember))' }} />
           <div style={{ width: '17%', background: 'rgb(var(--gold))' }} />
           <div style={{ width: '12%', background: 'rgb(var(--stonelight))' }} />
@@ -430,7 +430,7 @@ export function Hoa() {
           className="w-full border-none font-sans text-left bg-paper rounded-[18px] p-[15px] cursor-pointer"
           style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
         >
-          <PhIcon name="ph-fill ph-files" size={22} color="rgb(var(--navy))" />
+          <PhIcon name="ph-fill ph-files" size={22} color="rgb(var(--skydeep))" />
           <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold text-navy">Documents</p>
           <p className="m-0 text-[11.5px] font-semibold text-stone">
             CC&amp;Rs · Bylaws · Budget · Minutes
@@ -490,7 +490,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
   const optionTotal = vote.options.reduce((n, o) => n + o.tally, 0);
 
   return (
-    <StackedPanel tint="navy" className="text-cream">
+    <StackedPanel tint="skydeep" className="text-cream">
       <p
         className="m-0 mb-1.5 text-[11px] font-bold uppercase"
         style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}
@@ -498,14 +498,14 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
         {vote.closesLabel}
       </p>
       <p className="m-0 mb-1 font-serif text-[17px] leading-[1.3]">{vote.title}</p>
-      <p className="m-0 mb-3.5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+      <p className="m-0 mb-3.5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
         {vote.subtitle}
       </p>
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
           QUORUM
         </span>
-        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
           {vote.quorumCount} of {vote.quorumTotal} households
         </span>
       </div>
@@ -528,7 +528,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             disabled={!!casting}
             aria-busy={casting === 'yes'}
             className="flex-1 border-none rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-            style={{ background: 'rgb(var(--emberdeep))', color: 'rgb(var(--white))', opacity: casting && casting !== 'yes' ? 0.5 : 1 }}
+            style={{ background: 'rgb(var(--white))', color: 'rgb(var(--skydeep))', opacity: casting && casting !== 'yes' ? 0.5 : 1 }}
           >
             {casting === 'yes' ? 'Recording…' : vote.yesLabel}
           </button>
@@ -561,7 +561,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
                 }}
                 className="w-full rounded-[13px] py-3 px-3.5 text-left text-sm font-extrabold cursor-pointer"
                 style={picked
-                  ? { background: 'rgb(var(--emberdeep))', border: '1.5px solid rgb(var(--emberdeep))', color: 'rgb(var(--white))' }
+                  ? { background: 'rgb(var(--skydeep))', border: '1.5px solid rgb(var(--emberdeep))', color: 'rgb(var(--white))' }
                   : { background: 'transparent', border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))' }}
               >
                 {vote.multi && <span className="mr-2">{picked ? '☑' : '☐'}</span>}
@@ -595,7 +595,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
           </div>
           <div className="mt-3.5">
             <div className="flex items-center gap-2 mb-[7px]">
-              <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+              <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
                 YES
               </span>
               <div className="flex-1">
@@ -603,26 +603,26 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
               </div>
               <span
                 className="w-[62px] text-right text-[11px] font-bold"
-                style={{ color: 'rgb(var(--cream) / 0.85)' }}
+                style={{ color: 'rgb(var(--cream) / 0.95)' }}
               >
                 {vote.yesCount} · {vote.yesPct}%
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.8)' }}>
+              <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
                 NO
               </span>
               <div className="flex-1">
-                <ProgressBar pct={100 - vote.yesPct} height={9} track="rgb(var(--cream) / 0.12)" color="rgb(var(--cream) / 0.55)" />
+                <ProgressBar pct={100 - vote.yesPct} height={9} track="rgb(var(--cream) / 0.12)" color="rgb(var(--cream) / 0.9)" />
               </div>
               <span
                 className="w-[62px] text-right text-[11px] font-bold"
-                style={{ color: 'rgb(var(--cream) / 0.85)' }}
+                style={{ color: 'rgb(var(--cream) / 0.95)' }}
               >
                 {vote.noCount} · {100 - vote.yesPct}%
               </span>
             </div>
-            <p className="mt-[9px] mb-0 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.55)' }}>
+            <p className="mt-[9px] mb-0 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
               {demo
                 ? `Live tally · needs 50% of ${vote.quorumTotal} households by Thursday`
                 : `Live tally · one ballot per household · ${vote.quorumTotal} households`}
@@ -632,7 +632,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             <button
               onClick={() => setChanging(true)}
               className="mt-2.5 bg-transparent border-none p-0 text-[12px] font-extrabold cursor-pointer underline"
-              style={{ color: 'rgb(var(--cream) / 0.7)' }}
+              style={{ color: 'rgb(var(--cream) / 0.9)' }}
             >
               Change my vote
             </button>
@@ -657,13 +657,13 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             const mine = vote.myOptionIds.includes(o.id);
             return (
               <div key={o.id} className="flex items-center gap-2 mb-[7px]">
-                <span className="flex-1 text-[12px] font-bold truncate" style={{ color: 'rgb(var(--cream) / 0.85)' }}>
+                <span className="flex-1 text-[12px] font-bold truncate" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
                   {mine ? '✓ ' : ''}{o.label}
                 </span>
                 <div className="w-[110px]">
-                  <ProgressBar pct={pct} height={9} track="rgb(var(--cream) / 0.12)" gradient={mine} color={mine ? undefined : 'rgb(var(--cream) / 0.55)'} />
+                  <ProgressBar pct={pct} height={9} track="rgb(var(--cream) / 0.12)" gradient={mine} color={mine ? undefined : 'rgb(var(--cream) / 0.9)'} />
                 </div>
-                <span className="w-[52px] text-right text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.85)' }}>
+                <span className="w-[52px] text-right text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
                   {o.tally} · {pct}%
                 </span>
               </div>
@@ -672,7 +672,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
           <button
             onClick={() => { setChanging(true); setPicks(vote.myOptionIds); }}
             className="mt-2 bg-transparent border-none p-0 text-[12px] font-extrabold cursor-pointer underline"
-            style={{ color: 'rgb(var(--cream) / 0.7)' }}
+            style={{ color: 'rgb(var(--cream) / 0.9)' }}
           >
             Change my vote
           </button>

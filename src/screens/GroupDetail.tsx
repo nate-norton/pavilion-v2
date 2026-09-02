@@ -137,7 +137,7 @@ export function GroupDetail() {
               <button
                 onClick={() => toggleGroupJoin(group.key)}
                 className="border-none rounded-full px-5 py-2.5 text-sm font-extrabold cursor-pointer mt-1"
-                style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }}
+                style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
               >
                 Join group
               </button>
@@ -185,7 +185,7 @@ export function GroupDetail() {
                   type="button"
                   aria-label="Send"
                   onClick={sendGroupMessage}
-                  className="w-11 h-11 border-none rounded-full bg-navy flex items-center justify-center cursor-pointer flex-shrink-0"
+                  className="w-11 h-11 border-none rounded-full bg-skydeep flex items-center justify-center cursor-pointer flex-shrink-0"
                 >
                   <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--cream))" />
                 </button>
@@ -299,7 +299,7 @@ export function GroupDetail() {
                           {poll.myVote && (
                             <div
                               className="absolute inset-0 rounded-xl origin-left"
-                              style={{ background: 'rgb(var(--navy))', opacity: 0.06, transform: `scaleX(${pct / 100})`, transition: 'transform 0.4s ease' }}
+                              style={{ background: 'rgb(var(--skydeep))', opacity: 0.06, transform: `scaleX(${pct / 100})`, transition: 'transform 0.4s ease' }}
                             />
                           )}
                           <div className="relative flex items-center justify-between">
@@ -393,7 +393,7 @@ export function GroupDetail() {
             group.events.map((evt) => (
               <div
                 key={evt.id}
-                className="bg-navy rounded-[18px] p-4 text-cream mb-3"
+                className="bg-skydeep rounded-[18px] p-4 text-cream mb-3"
               >
                 <div className="flex items-center justify-between gap-2.5">
                   <div className="min-w-0">
@@ -401,7 +401,7 @@ export function GroupDetail() {
                       {evt.when}
                     </p>
                     <p className="m-0 mb-[3px] font-serif text-base leading-[1.25]">{evt.title}</p>
-                    <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.65)' }}>
+                    <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
                       {evt.where} · {evt.going} going
                     </p>
                   </div>
@@ -421,7 +421,7 @@ export function GroupDetail() {
                         type="button"
                         onClick={() => rsvpGroupEvent(group.key, evt.id)}
                         className="border-none text-white rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans flex-shrink-0"
-                        style={{ background: 'rgb(var(--emberdeep))', padding: '9px 14px' }}
+                        style={{ background: 'rgb(var(--skydeep))', padding: '9px 14px' }}
                       >
                         I&apos;m in
                       </button>
@@ -495,7 +495,7 @@ export function GroupDetail() {
           <button
             onClick={() => toggleGroupJoin(group.key)}
             className="flex-1 border-none rounded-full py-3 text-sm font-extrabold cursor-pointer"
-            style={{ background: 'rgb(var(--navy))', color: 'rgb(var(--cream))' }}
+            style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
           >
             Join {group.name}
           </button>

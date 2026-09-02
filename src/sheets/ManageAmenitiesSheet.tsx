@@ -66,7 +66,7 @@ export function ManageAmenitiesSheet() {
               className="flex items-center gap-2.5 py-2.5"
               style={i < amenities.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}
             >
-              <PhIcon name={a.icon} size={17} color="rgb(var(--navy))" className="flex-shrink-0" />
+              <PhIcon name={a.icon} size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="m-0 text-[13px] font-bold text-navy">{a.name}</p>
                 {a.sub && <p className="m-0 text-[11px] font-semibold text-stone">{a.sub}</p>}
