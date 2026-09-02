@@ -4,10 +4,9 @@ import { BackButton } from '../components/BackButton';
 import { PhIcon } from '../components/PhIcon';
 import { Toggle } from '../components/Toggle';
 import { usePavStore, dataDefaults } from '../store/store';
-import { useArc, useDues, useMember, useMyReports, usePortfolio, useReservation, useGroups, useRepository, resetDemoData } from '../data/repo';
+import { useArc, useDues, useMember, useMyReports, usePortfolio, useReservation, useGroups, useRepository, useMemberships, useActiveCommunityId, resetDemoData } from '../data/repo';
 import type { DuesStatus, ThreadComment } from '../data/repo';
 import { isLiveMode, signOutLive } from '../auth/AuthGate';
-import { useMemberships, useActiveCommunityId, useRepository } from '../data/repo';
 
 const CARD: CSSProperties = {
   background: 'rgb(var(--paper))',
