@@ -12,18 +12,35 @@ React 19 + TypeScript + Vite + Zustand + Tailwind SPA with a dual backend:
 
 ## Branches & deploys
 
-**`dev` is production.** Both Vercel projects build their Production
-deployment from `dev`; each project's mode comes from its own Vercel
-environment variables, not from a file in the repo:
+**`dev` is production.** Vercel project `pavilion-v2` (**the product**,
+`VITE_APP_MODE=live` against the `pavilion-dev` Supabase project →
+https://app.pavilion.community) builds its Production deployment from
+`dev` automatically. Its mode comes from the project's Vercel environment
+variables, not from a file in the repo. `vercel.json`'s `ignoreCommand`
+skips builds for every branch except `dev` and `staging`, so feature-branch
+pushes do not spend deployments (the Hobby plan caps them per day).
 
-- Vercel project `pavilion-v2` = **the product**, `VITE_APP_MODE=live`
-  against the `pavilion-dev` Supabase project → https://app.pavilion.community
-- Vercel project `pavilion-v2-demo` = **the presenter demo**, demo mode →
-  https://demo.pavilion.community
+**The demo deploys by hand.** Vercel project `pavilion-v2-demo` (**the
+presenter demo**, demo mode → https://demo.pavilion.community) is
+**disconnected from Git** on purpose — since 2026-09-02 — so a `dev` merge
+never silently changes a rehearsed demo. To release the demo, from a
+checkout of the commit you want (normally `dev`):
 
-A merge into `dev` therefore ships to both at once. Anything live-only must
-be gated (`repo.isDemo()` / `isLiveMode`) so the demo stays byte-for-byte as
-rehearsed, and anything demo-only must never render in live.
+```
+npm i -g vercel        # once
+vercel login           # once
+vercel --prod --scope nate-nortons-projects   # pick pavilion-v2-demo when asked
+```
+
+It builds on Vercel with the project's own env (demo mode). Agents without
+the CLI can use the Vercel MCP `deploy_to_vercel` tool with
+`name: "pavilion-v2-demo"`, `target: "production"` and the source tree —
+slow, since every file is sent inline, but it works. Either way, deploy the
+demo only when asked; "the demo is stale" is the intended resting state.
+
+Anything live-only must be gated (`repo.isDemo()` / `isLiveMode`) so the demo
+stays byte-for-byte as rehearsed, and anything demo-only must never render
+in live.
 
 `staging` produces preview deployments only. It carries `.env.production`
 (VITE_APP_MODE=live + Supabase creds) so a local `npm run build` from it is a
@@ -31,9 +48,10 @@ live build; that file exists **only on `staging`** — never merge `staging`
 into `dev`. Cut feature branches from `dev`, and if a change also needs to
 reach `staging`, cherry-pick it there rather than merging across.
 
-Every other branch (including `staging`) gets a preview URL; only `dev`
-reaches the custom domains. When checking whether something is live, look
-for a deployment with `target: production`, which will name `dev`.
+Only `dev` and `staging` build at all; only `dev` reaches
+app.pavilion.community. When checking whether the product is live, look for
+a deployment on project `pavilion-v2` with `target: production`, which will
+name `dev`. The demo's deployments carry no git ref, since they are uploads.
 
 The marketing site (separate repo, project `pavilion-website`) serves
 https://pavilion.community.
