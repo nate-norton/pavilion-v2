@@ -222,8 +222,12 @@
 :focus-visible {
   outline: 2px solid rgb(var(--sunsetdeep));
   outline-offset: 2px;
-  border-radius: 4px;
 }
+/*
+ * The ring follows the element's own shape. A global border-radius here
+ * squared every rounded-full pill, chip and dock button while focused,
+ * because border-radius styles the element, not the outline.
+ */
 /*
  * On chrome the ember ring is invisible — 1.00:1 against --skydeep — so it
  * inverts to cream (5.34:1). --skydeep is the chrome surface since navy
@@ -313,7 +317,7 @@ div[class*="cursor-pointer"] {
 /* Card hover lift */
 @media (hover: hover) {
   div[class*="cursor-pointer"]:hover {
-    box-shadow: 0 2px 8px rgba(26,51,82,0.08);
+    box-shadow: 0 2px 8px rgb(var(--shadow) / 0.08);
   }
 }
 
@@ -343,6 +347,13 @@ div[class*="cursor-pointer"] {
     animation-duration: 0.2s !important;
     transition-duration: 0.12s !important;
   }
+  /*
+   * Looping animations must keep their period. The clamp above would run
+   * the typing dots and every skeleton at five cycles a second, which is
+   * flicker, the opposite of what reduced motion asks for.
+   */
+  .animate-skeleton { animation-duration: 1.4s !important; }
+  [data-loop] { animation-duration: 1.1s !important; }
   button[class*="cursor-pointer"]:active,
   div[class*="cursor-pointer"]:active {
     transform: none;

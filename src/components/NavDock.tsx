@@ -46,10 +46,11 @@ export function NavDock() {
         key={t.key}
         type="button"
         onClick={() => set({ tab: t.key })}
+        aria-current={active ? 'page' : undefined}
         className="border-0 bg-transparent flex flex-col items-center gap-[3px] cursor-pointer py-1.5 font-sans"
       >
         <PhIcon name={t.icon} size={21} color={color} />
-        <span className="text-[10px] font-extrabold" style={{ color }}>
+        <span className="text-[11px] font-extrabold" style={{ color }}>
           {t.label}
         </span>
       </button>
@@ -81,7 +82,7 @@ export function NavDock() {
             >
               <PhIcon name={orb.icon} size={22} color="rgb(var(--navy))" />
             </div>
-            <span className="text-[10px] font-extrabold mt-[2px]" style={{ color: ACTIVE }}>
+            <span className="text-[11px] font-extrabold mt-[2px]" style={{ color: ACTIVE }}>
               {orb.label}
             </span>
           </button>

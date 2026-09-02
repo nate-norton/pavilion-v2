@@ -32,7 +32,8 @@ export function SegmentedControl({ options, value, onChange, variant = 'light' }
             key={opt.key}
             type="button"
             onClick={() => onChange(opt.key)}
-            className="border-0 rounded-[11px] py-2.5 text-xs font-extrabold font-sans cursor-pointer"
+            aria-pressed={active}
+            className="border-0 rounded-[11px] py-2.5 text-[12.5px] font-extrabold font-sans cursor-pointer"
             style={style}
           >
             {opt.label}

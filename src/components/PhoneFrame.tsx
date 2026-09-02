@@ -58,8 +58,15 @@ export function PhoneFrame() {
       className="pav-frame relative w-[393px] h-[830px] max-h-[calc(100svh-48px)] rounded-[44px] overflow-hidden bg-mist shrink-0"
     >
       <ErrorBoundary>
+        {/*
+          Large type applies here, to the screen layer *and* every overlay and
+          sheet; the dock and frame keep their geometry. It used to sit on
+          <main> alone, so Board Desk, My Place and every sheet ignored the
+          setting exactly where people type and pay.
+        */}
+        <div className="pav-zoom absolute inset-0">
         <div key={tab} className={`pav-tabslide absolute inset-0 ${slideClass}`}>
-          <main className="pav-screen pav-zoom w-full h-full relative">
+          <main className="pav-screen w-full h-full relative">
           {tab === 'today' ? (
             <Today />
           ) : tab === 'commons' ? (
@@ -74,6 +81,7 @@ export function PhoneFrame() {
           </main>
         </div>
         <Overlays />
+        </div>
         <NavDock />
         <AppToast />
         <ConfirmSheet />

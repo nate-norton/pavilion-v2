@@ -1343,7 +1343,7 @@ export function BoardDesk() {
               <div className="rounded-[13px] p-3.5 flex items-start gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0 mt-px" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedarkdark">
+                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedark">
                     Ballot is open — &quot;{voteQPreview}&quot;
                   </p>
                   <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagedark))' }}>
@@ -1654,7 +1654,7 @@ export function BoardDesk() {
             {state.broadcastSent && (
               <div className="rounded-[13px] p-3.5 flex items-center gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0" />
-                <span className="text-[13px] font-bold text-sagedarkdark">
+                <span className="text-[13px] font-bold text-sagedark">
                   Sent — live in the Commons, email digest goes out at 6 PM
                 </span>
               </div>
@@ -1760,7 +1760,7 @@ export function BoardDesk() {
               <div className="rounded-[13px] p-3.5 flex items-start gap-2.5 animate-fadeup" style={{ background: 'rgb(var(--mint))' }}>
                 <PhIcon name="ph-fill ph-check-circle" size={20} color="rgb(var(--sage))" className="flex-shrink-0 mt-px" />
                 <div>
-                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedarkdark">
+                  <p className="m-0 mb-0.5 text-[13px] font-bold text-sagedark">
                     Ballot is open — &quot;{voteQPreview}&quot;
                   </p>
                   <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--sagedark))' }}>

@@ -3,6 +3,9 @@ import type { ReactNode } from 'react';
 import { Avatar } from '../components/Avatar';
 import { Chip } from '../components/Chip';
 import { Pill } from '../components/Pill';
+import { Card } from '../components/Card';
+import { SectionHeading } from '../components/SectionHeading';
+import { Field } from '../components/Field';
 import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { StatusTimeline } from '../components/StatusTimeline';
@@ -327,6 +330,42 @@ export function DesignSystem() {
           </div>
         </Section>
 
+        <Section title="Surfaces" sub="Card owns elevation. Flat is for reading; raised is for deciding. Tints are the pale beds already in :root.">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Card>
+              <SectionHeading title="Flat card" meta="Lists, logs, archives" />
+              <p className="m-0 text-[13px] font-semibold text-ink">Paper with the 8% hairline. The reader scans it; nothing here asks for a tap.</p>
+            </Card>
+            <Card elevation="raised">
+              <SectionHeading title="Raised card" meta="Needs a decision" />
+              <p className="m-0 text-[13px] font-semibold text-ink">The ink shadow StackedCard already carried. Reserved, so elevation keeps its meaning.</p>
+            </Card>
+            <Card tint="skywash"><SectionHeading title="Skywash" meta="Ambient, community" /></Card>
+            <Card tint="mint"><SectionHeading title="Mint" meta="Done, approved" /></Card>
+            <Card tint="goldpale"><SectionHeading title="Goldpale" meta="Needs you" /></Card>
+            <Card tint="sunsetpale"><SectionHeading title="Sunsetpale" meta="Money, the warm moment" /></Card>
+          </div>
+        </Section>
+
+        <Section title="Section heading" sub="17px Nunito Black title with a meta line after it. Replaces the 11px caps eyebrow as a section title.">
+          <Card>
+            <SectionHeading title="Architectural requests" meta="2 open · decisions within 7 days" action={<Chip label="See all" size="sm" />} />
+            <SectionHeading level="subtitle" title="Around the neighborhood" meta="Saturday, taco cart at the pool" />
+          </Card>
+        </Section>
+
+        <Section title="Field" sub="A visible label, a hint, an error the control references. Placeholders are examples, not names.">
+          <Card>
+            <div className="flex flex-col gap-3">
+              <Field label="Email address" type="email" placeholder="you@example.com" />
+              <Field label="Unit" placeholder="#14 Alder Way" hint="As it appears on the roster." />
+              <Field label="Fine amount" inputMode="numeric" placeholder="0" error="Enter a whole-dollar amount." />
+              <Field as="textarea" label="Note to the resident" rows={3} placeholder="Optional" />
+              <Field as="select" label="Severity" defaultValue="courtesy"><option value="courtesy">Courtesy</option><option value="warning">Warning</option><option value="fine">Fine</option></Field>
+            </div>
+          </Card>
+        </Section>
+
         <Section title="Chips & Pills">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Spec name="Chip" use="Interactive filter — has selected state">
@@ -334,10 +373,13 @@ export function DesignSystem() {
               <Chip label="Events" />
               <Chip label="AI" icon={<PhIcon name="ph-fill ph-sparkle" size={12} color="rgb(var(--accent))" />} />
             </Spec>
-            <Spec name="Pill" use="Read-only status badge">
-              <Pill label="Paid" bg="rgb(var(--mint))" color="rgb(var(--sagedark))" />
-              <Pill label="Due Jul 3" bg="rgb(var(--goldpale))" color="rgb(var(--golddark))" />
-              <Pill label="Board" bg="rgb(var(--skypale))" color="rgb(var(--skydeep))" />
+            <Spec name="Pill" use="Read-only status badge — one tone vocabulary for every status in the app">
+              <Pill tone="success" label="Paid" />
+              <Pill tone="info" label="In review" />
+              <Pill tone="warning" label="Due Jul 3" />
+              <Pill tone="danger" label="Declined" />
+              <Pill tone="neutral" label="Closed" />
+              <span className="inline-block rounded-[10px] bg-skydeep p-1.5"><Pill tone="chrome" label="BOARD" /></span>
             </Spec>
           </div>
         </Section>

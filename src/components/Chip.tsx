@@ -20,6 +20,7 @@ export function Chip({ label, active, onClick, icon, size = 'sm' }: ChipProps) {
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active ?? false}
       className={
         `inline-flex items-center gap-1.5 rounded-full ${SIZE_CLASSES[size]} text-[12.5px] font-extrabold font-sans cursor-pointer ` +
         (active ? 'bg-skydeep text-mist border-0' : 'bg-paper text-slatedark border')

@@ -1,4 +1,5 @@
 import { PhIcon } from './PhIcon';
+import { Card } from './Card';
 import { usePavStore } from '../store/store';
 import { isLiveMode } from '../auth/AuthGate';
 import { useSetupSteps } from './setupSteps';
@@ -35,7 +36,7 @@ export function BoardSetupCard() {
   const open = (key: string) => set({ setupGuideStep: key });
 
   return (
-    <div className="bg-paper rounded-[20px] mb-3.5 overflow-hidden" style={{ border: '1px solid rgb(var(--navy) / 0.1)' }}>
+    <Card elevation="raised" padding="none" className="mb-3.5 overflow-hidden">
       <div style={{ padding: '16px 18px 0' }}>
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -110,6 +111,6 @@ export function BoardSetupCard() {
           </div>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

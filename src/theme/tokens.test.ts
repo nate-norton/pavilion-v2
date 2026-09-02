@@ -49,3 +49,24 @@ it('every rgb(var(--x)) in the app resolves to a defined token', () => {
   }
   expect([...missing].sort()).toEqual([]);
 });
+
+it('no utility class names a token that does not exist', () => {
+  /*
+   * `text-sagedarkdark` shipped on three success headlines in Board Desk:
+   * Tailwind never generated the class, so the text fell back to black and
+   * nothing failed. The rgb(var(--x)) check above cannot see class names.
+   * A class whose colour part *starts with* a real token but is not one
+   * (sagedark → sagedarkdark) is the drift this catches; ordinary Tailwind
+   * names (text-lg, bg-white, border-0) never start with a token name.
+   */
+  const stale = new Set<string>();
+  const tokens = [...defined];
+  for (const src of Object.values(SOURCES)) {
+    for (const m of src.matchAll(/\b(?:text|bg|border|from|to|via|ring|fill|stroke)-([a-z]+)\b/g)) {
+      const name = m[1];
+      if (defined.has(name)) continue;
+      if (tokens.some((t) => name.startsWith(t) && name !== t)) stale.add(m[0]);
+    }
+  }
+  expect([...stale].sort()).toEqual([]);
+});

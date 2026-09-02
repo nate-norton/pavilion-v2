@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { PhIcon } from './PhIcon';
+import { Card } from './Card';
 import { useRepository } from '../data/repo';
 import type { LoadState } from '../data/repo';
 
@@ -90,12 +91,9 @@ export function EmptyState({ icon, title, body, actionLabel, onAction, status = 
 
 function Shell({ children }: { children: ReactNode }) {
   return (
-    <div
-      className="bg-paper rounded-[18px] p-6 text-center"
-      style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
-    >
+    <Card padding="none" className="p-6 text-center">
       {children}
-    </div>
+    </Card>
   );
 }
 
