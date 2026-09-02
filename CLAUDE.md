@@ -53,6 +53,14 @@ app.pavilion.community. When checking whether the product is live, look for
 a deployment on project `pavilion-v2` with `target: production`, which will
 name `dev`. The demo's deployments carry no git ref, since they are uploads.
 
+Two things about that setup read backwards. Vercel's `ignoreCommand` inverts
+exit codes — exit **1** means *build*, exit **0** means *skip* — so the
+condition in `vercel.json` says the opposite of what it does, and is easy to
+invert while editing. And over the Hobby plan's daily cap Vercel **rejects**
+deployments rather than queueing them: a merge landed while the quota is
+exhausted never builds at all. After the reset, redeploy the branch tip from
+the dashboard rather than pushing an empty commit to nudge it.
+
 The marketing site (separate repo, project `pavilion-website`) serves
 https://pavilion.community.
 
