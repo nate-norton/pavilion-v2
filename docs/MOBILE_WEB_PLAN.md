@@ -1,5 +1,19 @@
 # Mobile web plan — making the browser the first-class target
 
+> **Status: implemented.** All six phases landed in one change. The three open
+> decisions in §4 were resolved as recommended: 16px fields accepted, page mode
+> extended past a pure width query to `(pointer: coarse) and (max-height:
+> 500px)` so landscape handsets get it, and one mobile layout shared with
+> standalone rather than two maintained. `DESIGN.md` (Layout → Frame mode and
+> page mode) is the living description; what follows is the review that
+> motivated it, kept as the record of why.
+>
+> One thing the plan did not foresee: once the frame stopped being a clipping
+> box, the tab-change slide's 40px translate gave the page a transient
+> horizontal scrollbar. The frame now clips its inline axis with
+> `overflow-x: clip` — `hidden` would have made the block axis a scroll
+> container again and undone the whole fix.
+
 Pavilion ships a PWA manifest, but the realistic assumption is that ~99% of
 residents will open it in Safari or Chrome from an invite link or an SMS
 notice and never install anything. Today the layout is built for the

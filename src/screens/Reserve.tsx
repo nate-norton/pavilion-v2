@@ -2,6 +2,7 @@ import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
 import { useAmenities, useMember, useReservationSlots, useReservationDays, useReservation, useLoadState, useRepository } from '../data/repo';
 import { usePavStore } from '../store/store';
+import { useScrollTopOnChange } from '../lib/pageMode';
 import { isLiveMode } from '../auth/AuthGate';
 
 /** "9:00 AM" style label for an hour+minute pair. */
@@ -28,6 +29,11 @@ export function Reserve() {
   const amenLoad = useLoadState('amenities');
 
   const amen = state.amenIdx != null ? AMENS[state.amenIdx] : null;
+
+  // Drilling into an amenity swaps the list for a detail without leaving the
+  // tab, so in page mode the document would otherwise open the detail at
+  // whatever depth the list was left scrolled to.
+  useScrollTopOnChange(state.amenIdx ?? 'list');
 
   // Live: the booking grid comes from the amenity's own configuration
   // (hours, slot length, booking window). Demo keeps its scripted grid.
