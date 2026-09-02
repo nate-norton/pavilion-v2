@@ -21,7 +21,7 @@ export function ExportSheet() {
       {exportPending && (
         <div>
           <p className="m-0 mb-0.5 font-serif text-[19px] text-navy">Export the ledger</p>
-          <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             July 2026 · dues, special assessments &amp; vendor payments
           </p>
           <button
@@ -34,27 +34,27 @@ export function ExportSheet() {
             </div>
             <div className="flex-1">
               <p className="m-0 mb-px text-sm font-bold text-navy">Sync to QuickBooks</p>
-              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                 Online · connected as treasurer@juniperridge.org
               </p>
             </div>
-            <PhIcon name="ph ph-caret-right" size={15} color="rgb(var(--stonelight))" />
+            <PhIcon name="ph ph-caret-right" size={15} color="rgb(var(--slatelight))" />
           </button>
           <button
             onClick={exportCSV}
             className="w-full rounded-[14px] p-[14px_16px] flex items-center gap-3 cursor-pointer text-left bg-[rgb(var(--paper))]"
             style={{ border: '1px solid rgb(var(--navy) / 0.12)' }}
           >
-            <div className="w-[38px] h-[38px] rounded-[11px] flex items-center justify-center flex-shrink-0 bg-sand">
-              <PhIcon name="ph-fill ph-file-csv" size={18} color="rgb(var(--bark))" />
+            <div className="w-[38px] h-[38px] rounded-[11px] flex items-center justify-center flex-shrink-0 bg-skyborder">
+              <PhIcon name="ph-fill ph-file-csv" size={18} color="rgb(var(--slatedark))" />
             </div>
             <div className="flex-1">
               <p className="m-0 mb-px text-sm font-bold text-navy">Download CSV</p>
-              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                 For Excel, Xero, or your accountant
               </p>
             </div>
-            <PhIcon name="ph ph-caret-right" size={15} color="rgb(var(--stonelight))" />
+            <PhIcon name="ph ph-caret-right" size={15} color="rgb(var(--slatelight))" />
           </button>
         </div>
       )}
@@ -62,12 +62,12 @@ export function ExportSheet() {
         <div className="text-center pt-2 pb-1 animate-fadeup">
           <PhIcon name="ph-fill ph-check-circle" size={48} color="rgb(var(--sage))" />
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-[19px] text-navy">{exportDoneLabel}</p>
-          <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             129 line items · reconciled through Jun 30
           </p>
           <button
             onClick={closeExport}
-            className="w-full border-none text-cream rounded-2xl py-[14px] text-sm font-extrabold cursor-pointer bg-skydeep"
+            className="w-full border-none text-mist rounded-2xl py-[14px] text-sm font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>

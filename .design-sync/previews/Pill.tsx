@@ -5,10 +5,10 @@ import { Pill } from 'pavilion-v2';
 export const Tones = () => (
   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
     <Pill label="Paid" bg="rgb(var(--mint))" color="rgb(var(--sagedark))" />
-    <Pill label="Overdue" bg="rgb(var(--blushdim))" color="rgb(var(--reddeep))" />
+    <Pill label="Overdue" bg="rgb(var(--sunsetdim))" color="rgb(var(--reddeep))" />
     <Pill label="Due Jul 3" bg="rgb(var(--goldpale))" color="rgb(var(--golddark))" />
     <Pill label="Board" bg="rgb(var(--skypale))" color="rgb(var(--skydeep))" />
-    <Pill label="Shoutout" bg="rgb(var(--blush))" color="rgb(var(--terracotta))" />
+    <Pill label="Shoutout" bg="rgb(var(--accenttint))" color="rgb(var(--accent))" />
   </div>
 );
 

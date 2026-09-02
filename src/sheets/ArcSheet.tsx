@@ -35,12 +35,12 @@ export function ArcSheet() {
       label="New architectural request"
       open={state.arcSheetOpen} onClose={closeArc} maxHeight="86%">
       <p className="m-0 mb-0.5 font-serif text-xl text-navy">New ARC request</p>
-      <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+      <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
         Most requests get a decision within 7 days.
       </p>
 
       <p
-        className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
+        className="m-0 mb-2 text-[11px] font-bold uppercase text-slate"
         style={{ letterSpacing: '0.12em' }}
       >
         Project type
@@ -58,7 +58,7 @@ export function ArcSheet() {
       </div>
 
       <p
-        className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
+        className="m-0 mb-2 text-[11px] font-bold uppercase text-slate"
         style={{ letterSpacing: '0.12em' }}
       >
         Describe the change
@@ -73,7 +73,7 @@ export function ArcSheet() {
       />
 
       <p
-        className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
+        className="m-0 mb-2 text-[11px] font-bold uppercase text-slate"
         style={{ letterSpacing: '0.12em' }}
       >
         Photos
@@ -97,11 +97,11 @@ export function ArcSheet() {
               height: 70,
               border: attachments.length ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
               borderRadius: 13,
-              background: attachments.length ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--creamdim)) 0 8px,rgb(var(--parchment)) 8px 16px)',
+              background: attachments.length ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--mistdim)) 0 8px,rgb(var(--mistpale)) 8px 16px)',
             }}
           >
-            <PhIcon name={attachments.length ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={attachments.length ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
-            <span className="font-mono text-[10px]" style={{ color: attachments.length ? 'rgb(var(--sagedark))' : 'rgb(var(--stone))' }}>
+            <PhIcon name={attachments.length ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={attachments.length ? 'rgb(var(--sage))' : 'rgb(var(--slate))'} />
+            <span className="font-mono text-[10px]" style={{ color: attachments.length ? 'rgb(var(--sagedark))' : 'rgb(var(--slate))' }}>
               {attachments.length ? `${attachments.length} file${attachments.length > 1 ? 's' : ''} added ✓ · tap for more` : 'photos, plans, paint chips (PDF ok)'}
             </span>
           </button>
@@ -117,11 +117,11 @@ export function ArcSheet() {
             height: 76,
             border: state.arcPhoto1 ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
             borderRadius: 13,
-            background: state.arcPhoto1 ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--creamdim)) 0 8px,rgb(var(--parchment)) 8px 16px)',
+            background: state.arcPhoto1 ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--mistdim)) 0 8px,rgb(var(--mistpale)) 8px 16px)',
           }}
         >
-          <PhIcon name={state.arcPhoto1 ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={19} color={state.arcPhoto1 ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
-          <span className="font-mono text-[10px]" style={{ color: state.arcPhoto1 ? 'rgb(var(--sagedark))' : 'rgb(var(--stone))' }}>
+          <PhIcon name={state.arcPhoto1 ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={19} color={state.arcPhoto1 ? 'rgb(var(--sage))' : 'rgb(var(--slate))'} />
+          <span className="font-mono text-[10px]" style={{ color: state.arcPhoto1 ? 'rgb(var(--sagedark))' : 'rgb(var(--slate))' }}>
             {state.arcPhoto1 ? 'added ✓' : 'current state'}
           </span>
         </button>
@@ -133,11 +133,11 @@ export function ArcSheet() {
             height: 76,
             border: state.arcPhoto2 ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
             borderRadius: 13,
-            background: state.arcPhoto2 ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--creamdim)) 0 8px,rgb(var(--parchment)) 8px 16px)',
+            background: state.arcPhoto2 ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--mistdim)) 0 8px,rgb(var(--mistpale)) 8px 16px)',
           }}
         >
-          <PhIcon name={state.arcPhoto2 ? 'ph-fill ph-check-circle' : 'ph ph-image-square'} size={19} color={state.arcPhoto2 ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
-          <span className="font-mono text-[10px]" style={{ color: state.arcPhoto2 ? 'rgb(var(--sagedark))' : 'rgb(var(--stone))' }}>
+          <PhIcon name={state.arcPhoto2 ? 'ph-fill ph-check-circle' : 'ph ph-image-square'} size={19} color={state.arcPhoto2 ? 'rgb(var(--sage))' : 'rgb(var(--slate))'} />
+          <span className="font-mono text-[10px]" style={{ color: state.arcPhoto2 ? 'rgb(var(--sagedark))' : 'rgb(var(--slate))' }}>
             {state.arcPhoto2 ? 'added ✓' : 'plan / inspiration'}
           </span>
         </button>
@@ -147,9 +147,9 @@ export function ArcSheet() {
       {demo && (
       <div
         className="rounded-[13px] p-[11px_13px] flex gap-2.5 items-start mb-4"
-        style={{ background: 'rgb(var(--blush))' }}
+        style={{ background: 'rgb(var(--accenttint))' }}
       >
-        <PhIcon name="ph-fill ph-sparkle" size={15} color="rgb(var(--terracotta))" className="mt-px flex-shrink-0" />
+        <PhIcon name="ph-fill ph-sparkle" size={15} color="rgb(var(--accent))" className="mt-px flex-shrink-0" />
         <p className="m-0 text-xs leading-[1.5] font-bold" style={{ color: 'rgb(var(--brown))' }}>
           AI: Sage &amp; Clay are pre-approved paint colors (CC&amp;Rs §4.2) — those requests are
           usually fast-tracked.
@@ -170,8 +170,8 @@ export function ArcSheet() {
         onClick={submit}
         className="w-full border-none rounded-2xl py-4 text-[14px] font-extrabold font-sans"
         style={{
-          background: canSubmit ? 'rgb(var(--skydeep))' : 'rgb(var(--sandpale))',
-          color: canSubmit ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
+          background: canSubmit ? 'rgb(var(--skydeep))' : 'rgb(var(--skyrule))',
+          color: canSubmit ? 'rgb(var(--white))' : 'rgb(var(--slatelight))',
           cursor: canSubmit ? 'pointer' : 'default',
         }}
       >

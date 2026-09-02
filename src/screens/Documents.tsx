@@ -79,13 +79,13 @@ export function Documents() {
     <div
       data-screen-label="Documents"
       className="pav-scroll absolute inset-0 z-[76] overflow-y-auto animate-scpop"
-      style={{ background: 'rgb(var(--cream))', padding: '60px 18px 40px' }}
+      style={{ background: 'rgb(var(--mist))', padding: '60px 18px 40px' }}
     >
       {!state.docReader ? (
         <div>
           <BackButton onClick={() => set({ docsOpen: false })} />
           <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Documents</h1>
-          <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+          <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
             {/* Only the demo has an assistant that has read anything. */}
             {DOCS.length > 0 && repo.isDemo()
               ? 'Every governing document, searchable. Your AI has read them all.'
@@ -124,12 +124,12 @@ export function Documents() {
                   className="flex-1 min-w-0 border-none bg-transparent font-sans text-left flex items-center gap-3 cursor-pointer"
                   style={{ padding: '14px 0 14px 14px' }}
                 >
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--skyborder))' }}>
                     <PhIcon name={d.icon} size={19} color="rgb(var(--skydeep))" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="m-0 mb-px text-[13.5px] font-bold text-navy">{d.title}</p>
-                    <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+                    <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                       {d.sub}
                     </p>
                   </div>
@@ -146,10 +146,10 @@ export function Documents() {
                     aria-label={`Remove ${d.title}`}
                     className="border-0 bg-transparent p-1.5 cursor-pointer flex-shrink-0 opacity-50"
                   >
-                    <PhIcon name="ph-fill ph-trash" size={14} color="rgb(var(--stone))" />
+                    <PhIcon name="ph-fill ph-trash" size={14} color="rgb(var(--slate))" />
                   </button>
                 ) : (
-                  <PhIcon name="ph ph-caret-right" size={14} color="rgb(var(--stonelight))" />
+                  <PhIcon name="ph ph-caret-right" size={14} color="rgb(var(--slatelight))" />
                 )}
               </div>
             ))}
@@ -165,7 +165,7 @@ export function Documents() {
                 placeholder="Name — e.g. CC&Rs (rev. 2026)"
                 maxLength={120}
                 className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
               />
               <div className="flex gap-1.5 flex-wrap mb-2.5">
                 {['Governing documents', 'Financials', 'Minutes', 'Forms', 'General'].map((s) => (
@@ -174,7 +174,7 @@ export function Documents() {
                     onClick={() => setUpSection(s)}
                     className="rounded-full px-3 py-1.5 text-[11px] font-extrabold cursor-pointer"
                     style={upSection === s
-                      ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                      ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))', border: '1.5px solid rgb(var(--navy))' }
                       : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
                   >
                     {s}
@@ -199,8 +199,8 @@ export function Documents() {
               <button
                 onClick={() => fileRef.current?.click()}
                 disabled={upBusy}
-                className="w-full border-0 rounded-[13px] py-3 text-[13px] font-extrabold cursor-pointer text-cream"
-                style={{ background: upBusy ? 'rgb(var(--sandpale))' : 'rgb(var(--navy))' }}
+                className="w-full border-0 rounded-[13px] py-3 text-[13px] font-extrabold cursor-pointer text-mist"
+                style={{ background: upBusy ? 'rgb(var(--skyrule))' : 'rgb(var(--navy))' }}
               >
                 {upBusy ? 'Uploading…' : 'Choose file & publish'}
               </button>
@@ -211,7 +211,7 @@ export function Documents() {
         <div className="animate-fadeup">
           <BackButton label="All documents" onClick={() => set({ docReader: false })} />
           <h1 className="m-0 mb-[3px] font-serif font-normal text-[24px] text-navy">CC&amp;Rs</h1>
-          <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+          <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
             Rev. March 2026 · 48 pages · applies to all 136 homes
           </p>
 
@@ -219,7 +219,7 @@ export function Documents() {
             className="flex items-center gap-[9px] rounded-full mb-[11px]"
             style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.12)', padding: '10px 14px' }}
           >
-            <PhIcon name="ph-bold ph-magnifying-glass" size={14} color="rgb(var(--stone))" className="flex-shrink-0" />
+            <PhIcon name="ph-bold ph-magnifying-glass" size={14} color="rgb(var(--slate))" className="flex-shrink-0" />
             <input
               value={state.docQ}
               onChange={(e) => set({ docQ: e.target.value })}
@@ -232,9 +232,9 @@ export function Documents() {
                 aria-label="Clear search"
                 onClick={() => set({ docQ: '' })}
                 className="border-none w-6 h-6 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
-                style={{ background: 'rgb(var(--sand))' }}
+                style={{ background: 'rgb(var(--skyborder))' }}
               >
-                <PhIcon name="ph-bold ph-x" size={10} color="rgb(var(--bark))" />
+                <PhIcon name="ph-bold ph-x" size={10} color="rgb(var(--slatedark))" />
               </button>
             )}
           </div>
@@ -244,9 +244,9 @@ export function Documents() {
               <span
                 key={s.tag}
                 className="inline-flex items-center gap-[5px] rounded-full text-[11.5px] font-bold"
-                style={{ background: 'rgb(var(--sand))', color: 'rgb(var(--bark))', padding: '6px 11px' }}
+                style={{ background: 'rgb(var(--skyborder))', color: 'rgb(var(--slatedark))', padding: '6px 11px' }}
               >
-                <span style={{ color: 'rgb(var(--terracotta))' }}>{s.tag}</span>
+                <span style={{ color: 'rgb(var(--accent))' }}>{s.tag}</span>
                 {s.name}
               </span>
             ))}
@@ -258,7 +258,7 @@ export function Documents() {
               type="button"
               onClick={askAiDocsSummary}
               className="w-full border-none text-white rounded-[14px] text-[13.5px] font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3.5"
-              style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))', padding: '13px 0' }}
+              style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))', padding: '13px 0' }}
             >
               <PhIcon name="ph-fill ph-sparkle" size={15} />
               Ask AI to summarize
@@ -268,7 +268,7 @@ export function Documents() {
           {showEx && (
             <div style={SECTION_CARD}>
               <div className="flex items-center justify-between gap-2.5 mb-[7px]">
-                <p className="m-0 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--terracotta))' }}>
+                <p className="m-0 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--accent))' }}>
                   §4 · Exteriors
                 </p>
                 <button
@@ -283,18 +283,18 @@ export function Documents() {
               </div>
               <p className="m-0 text-[13px] font-semibold" style={{ lineHeight: 1.65, color: 'rgb(var(--ink))' }}>
                 4.1 Structures visible from the street require ARC approval before work begins. 4.2{' '}
-                <span style={{ background: 'rgb(var(--blush))', borderRadius: 4, padding: '1px 4px' }}>
+                <span style={{ background: 'rgb(var(--accenttint))', borderRadius: 4, padding: '1px 4px' }}>
                   Approved exterior palette: Cedar, Slate Gray, White, Sage, and Clay.
                 </span>{' '}
                 4.3 Fences max 6 ft, rear yards only.
               </p>
               {state.diffOpen && (
                 <div className="animate-fadeup" style={{ marginTop: 11, borderTop: '1px dashed rgb(var(--navy) / 0.12)', paddingTop: 11 }}>
-                  <p className="m-0 mb-1.5 text-[10.5px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
+                  <p className="m-0 mb-1.5 text-[10.5px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--slate))' }}>
                     March 2026 revision · §4.2
                   </p>
                   <p className="m-0 mb-[5px] text-[12.5px] font-bold" style={{ lineHeight: 1.55 }}>
-                    <span style={{ background: 'rgb(var(--blushdim))', color: 'rgb(var(--reddeep))', textDecoration: 'line-through', borderRadius: 3, padding: '1px 3px' }}>
+                    <span style={{ background: 'rgb(var(--sunsetdim))', color: 'rgb(var(--reddeep))', textDecoration: 'line-through', borderRadius: 3, padding: '1px 3px' }}>
                       Cedar, Slate Gray, White
                     </span>
                   </p>
@@ -303,7 +303,7 @@ export function Documents() {
                       Cedar, Slate Gray, White, Sage, Clay
                     </span>
                   </p>
-                  <p className="m-0 text-[11px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+                  <p className="m-0 text-[11px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                     Sage &amp; Clay added by board vote (91–22) on Jun 18, 2026.
                   </p>
                 </div>
@@ -313,7 +313,7 @@ export function Documents() {
 
           {showLiv && (
             <div style={SECTION_CARD}>
-              <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--stone))' }}>
+              <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--slate))' }}>
                 §5 · Living
               </p>
               <p className="m-0 text-[13px] font-semibold" style={{ lineHeight: 1.65, color: 'rgb(var(--ink))' }}>
@@ -325,7 +325,7 @@ export function Documents() {
 
           {showLease && (
             <div style={SECTION_CARD}>
-              <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--stone))' }}>
+              <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--slate))' }}>
                 §7 · Leasing
               </p>
               <p className="m-0 text-[13px] font-semibold" style={{ lineHeight: 1.65, color: 'rgb(var(--ink))' }}>
@@ -337,7 +337,7 @@ export function Documents() {
 
           {showAssess && (
             <div style={{ ...SECTION_CARD, marginBottom: 0 }}>
-              <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--stone))' }}>
+              <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--slate))' }}>
                 §9 · Assessments
               </p>
               <p className="m-0 text-[13px] font-semibold" style={{ lineHeight: 1.65, color: 'rgb(var(--ink))' }}>
@@ -349,9 +349,9 @@ export function Documents() {
 
           {noMatch && (
             <div className="text-center" style={{ padding: '24px 16px' }}>
-              <PhIcon name="ph ph-file-magnifying-glass" size={32} color="rgb(var(--stonelight))" className="inline-block" />
+              <PhIcon name="ph ph-file-magnifying-glass" size={32} color="rgb(var(--slatelight))" className="inline-block" />
               <p className="mt-[9px] mb-0.5 text-sm font-bold text-navy">No section matches that</p>
-              <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+              <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                 Try &quot;palette&quot;, &quot;quiet&quot;, &quot;lease&quot; — or ask AI above.
               </p>
             </div>
@@ -376,12 +376,12 @@ function GenericDocReader() {
     <div className="animate-fadeup">
       <BackButton label="All documents" onClick={() => set({ docReader: false })} />
       <h1 className="m-0 mb-[3px] font-serif font-normal text-[24px] text-navy">{doc.title}</h1>
-      <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+      <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
         {doc.sub}
       </p>
       {content.sections.map((s) => (
         <div key={s.tag} style={SECTION_CARD}>
-          <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--terracotta))' }}>
+          <p className="m-0 mb-[7px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--accent))' }}>
             {s.tag} · {s.name}
           </p>
           <p className="m-0 text-[13px] font-semibold" style={{ lineHeight: 1.65, color: 'rgb(var(--ink))' }}>

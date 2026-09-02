@@ -32,7 +32,7 @@ export function Messages() {
     <div
       data-screen-label="Messages"
       className="pav-scroll absolute inset-0 z-[77] overflow-y-auto animate-scpop"
-      style={{ background: 'rgb(var(--cream))', padding: '60px 18px 40px' }}
+      style={{ background: 'rgb(var(--mist))', padding: '60px 18px 40px' }}
     >
       <BackButton onClick={() => set({ msgsOpen: false })} />
       <div className="flex items-center justify-between mb-1">
@@ -53,11 +53,11 @@ export function Messages() {
             onClick={() => set({ newMsgOpen: true })}
             className="w-9 h-9 rounded-full border-none flex items-center justify-center cursor-pointer bg-skydeep"
           >
-            <PhIcon name="ph-bold ph-pencil-simple-line" size={16} color="rgb(var(--cream))" />
+            <PhIcon name="ph-bold ph-pencil-simple-line" size={16} color="rgb(var(--mist))" />
           </button>
         </div>
       </div>
-      <p className="m-0 mb-3 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+      <p className="m-0 mb-3 text-[13px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
         Neighbor-to-neighbor. Private, and never in the feed.
       </p>
 
@@ -71,13 +71,13 @@ export function Messages() {
               className="border-none rounded-full px-3 py-[7px] text-[12px] font-extrabold cursor-pointer flex items-center gap-1.5"
               style={
                 msgTab === t.key
-                  ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }
+                  ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))' }
                   : { background: 'rgb(var(--navy) / 0.06)', color: 'rgb(var(--navy))' }
               }
             >
               {t.label}
               {badge > 0 && msgTab !== t.key && (
-                <span className="w-[7px] h-[7px] rounded-full" style={{ background: 'rgb(var(--ember))' }} />
+                <span className="w-[7px] h-[7px] rounded-full" style={{ background: 'rgb(var(--sunset))' }} />
               )}
             </button>
           );
@@ -86,7 +86,7 @@ export function Messages() {
 
       {state.newMsgOpen && (
         <div className="rounded-2xl mb-4 overflow-hidden animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.1)' }}>
-          <p className="m-0 px-3.5 pt-3 pb-2 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+          <p className="m-0 px-3.5 pt-3 pb-2 text-[11px] font-bold uppercase text-slate" style={{ letterSpacing: '0.12em' }}>
             Start a conversation
           </p>
           {Object.entries(CHAT_SEED).map(([k, p]) => (
@@ -103,7 +103,7 @@ export function Messages() {
               >
                 {p.initial}
               </div>
-              <p className="m-0 text-[13px] font-bold text-navy">{p.name} <span className="font-semibold text-stonelight">· {p.unit}</span></p>
+              <p className="m-0 text-[13px] font-bold text-navy">{p.name} <span className="font-semibold text-slatelight">· {p.unit}</span></p>
             </button>
           ))}
         </div>
@@ -135,20 +135,20 @@ export function Messages() {
                   <div className="flex items-baseline gap-2">
                     <p className="m-0 flex-1 text-sm font-bold text-navy min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
                       {p.name}{' '}
-                      <span className="font-semibold" style={{ color: 'rgb(var(--stonelight))' }}>
+                      <span className="font-semibold" style={{ color: 'rgb(var(--slatelight))' }}>
                         · {p.unit}
                       </span>
                     </p>
-                    <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--stonelight))' }}>
+                    <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--slatelight))' }}>
                       {lastTime}
                     </span>
                   </div>
-                  <p className="mt-0.5 mb-0 text-[12.5px] font-semibold overflow-hidden text-ellipsis whitespace-nowrap" style={{ color: 'rgb(var(--stone))' }}>
+                  <p className="mt-0.5 mb-0 text-[12.5px] font-semibold overflow-hidden text-ellipsis whitespace-nowrap" style={{ color: 'rgb(var(--slate))' }}>
                     {preview}
                   </p>
                 </div>
                 {p.unread > 0 && (
-                  <span data-testid="msg-unread" className="w-[9px] h-[9px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--ember))' }} />
+                  <span data-testid="msg-unread" className="w-[9px] h-[9px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--sunset))' }} />
                 )}
               </button>
             );
@@ -232,13 +232,13 @@ function GroupRow({ group, preview, time, onClick }: {
         <div className="flex items-baseline gap-2">
           <p className="m-0 flex-1 text-sm font-bold text-navy min-w-0 overflow-hidden text-ellipsis whitespace-nowrap flex items-center gap-1.5">
             {group.name}
-            {group.muted && <PhIcon name="ph-fill ph-bell-slash" size={11} color="rgb(var(--stonelight))" />}
+            {group.muted && <PhIcon name="ph-fill ph-bell-slash" size={11} color="rgb(var(--slatelight))" />}
           </p>
-          <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--stonelight))' }}>
+          <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--slatelight))' }}>
             {time}
           </span>
         </div>
-        <p className="mt-0.5 mb-0 text-[12.5px] font-semibold overflow-hidden text-ellipsis whitespace-nowrap" style={{ color: 'rgb(var(--stone))' }}>
+        <p className="mt-0.5 mb-0 text-[12.5px] font-semibold overflow-hidden text-ellipsis whitespace-nowrap" style={{ color: 'rgb(var(--slate))' }}>
           {preview}
         </p>
         {(openPolls > 0 || upcomingEvents > 0) && (
@@ -257,7 +257,7 @@ function GroupRow({ group, preview, time, onClick }: {
         )}
       </div>
       {!group.joined && (
-        <span className="text-[11px] font-bold rounded-full px-2.5 py-1 flex-shrink-0" style={{ background: 'rgb(var(--navy) / 0.06)', color: 'rgb(var(--stone))' }}>
+        <span className="text-[11px] font-bold rounded-full px-2.5 py-1 flex-shrink-0" style={{ background: 'rgb(var(--navy) / 0.06)', color: 'rgb(var(--slate))' }}>
           Join
         </span>
       )}
@@ -268,12 +268,12 @@ function GroupRow({ group, preview, time, onClick }: {
 function EmptyState({ icon, text, actionLabel, onAction }: { icon: string; text: string; actionLabel: string; onAction: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center py-10">
-      <PhIcon name={icon} size={36} color="rgb(var(--taupepale))" />
-      <p className="m-0 mt-2 text-[13px] font-semibold" style={{ color: 'rgb(var(--stonelight))' }}>{text}</p>
+      <PhIcon name={icon} size={36} color="rgb(var(--slatepale))" />
+      <p className="m-0 mt-2 text-[13px] font-semibold" style={{ color: 'rgb(var(--slatelight))' }}>{text}</p>
       <button
         onClick={onAction}
         className="mt-3 border-none rounded-full px-4 py-2.5 text-[12.5px] font-extrabold cursor-pointer"
-        style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
+        style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))' }}
       >
         {actionLabel}
       </button>

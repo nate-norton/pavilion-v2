@@ -40,7 +40,7 @@ export function MapScreen() {
     <div
       data-screen-label="Map"
       className="absolute inset-0 z-[76] flex flex-col animate-scpop"
-      style={{ background: 'rgb(var(--cream))' }}
+      style={{ background: 'rgb(var(--mist))' }}
     >
       <div className="flex items-center justify-between gap-2.5" style={{ padding: '58px 18px 0' }}>
         <BackButton onClick={() => set({ mapOpen: false, selPin: null })} className="" />
@@ -53,7 +53,7 @@ export function MapScreen() {
       </div>
       <div style={{ padding: '10px 18px 0' }}>
         <h1 className="m-0 mb-[3px] font-serif font-normal text-[24px] text-navy">{member?.communityName || 'Juniper Ridge'}</h1>
-        <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+        <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
           Tap a pin to see what&apos;s happening.
         </p>
         <div className="flex gap-[7px]">
@@ -68,7 +68,7 @@ export function MapScreen() {
                 style={{
                   border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',
                   background: on ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                  color: on ? 'rgb(var(--cream))' : 'rgb(var(--bark))',
+                  color: on ? 'rgb(var(--mist))' : 'rgb(var(--slatedark))',
                   padding: '7px 12px',
                 }}
               >
@@ -83,19 +83,19 @@ export function MapScreen() {
       {/* Stylized map */}
       <div
         className="flex-1 relative rounded-[22px] overflow-hidden"
-        style={{ margin: '12px 14px 16px', background: 'rgb(var(--sandtint))', border: '1px solid rgb(var(--navy) / 0.08)' }}
+        style={{ margin: '12px 14px 16px', background: 'rgb(var(--skywash))', border: '1px solid rgb(var(--navy) / 0.08)' }}
       >
         <div
           className="absolute left-0 right-0"
-          style={{ top: '30%', height: 22, background: 'rgb(var(--creamlight))', borderTop: '1px solid rgb(var(--navy) / 0.06)', borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}
+          style={{ top: '30%', height: 22, background: 'rgb(var(--mistlight))', borderTop: '1px solid rgb(var(--navy) / 0.06)', borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}
         />
         <div
           className="absolute left-0 right-0"
-          style={{ top: '64%', height: 22, background: 'rgb(var(--creamlight))', borderTop: '1px solid rgb(var(--navy) / 0.06)', borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}
+          style={{ top: '64%', height: 22, background: 'rgb(var(--mistlight))', borderTop: '1px solid rgb(var(--navy) / 0.06)', borderBottom: '1px solid rgb(var(--navy) / 0.06)' }}
         />
         <div
           className="absolute top-0 bottom-0"
-          style={{ left: '44%', width: 22, background: 'rgb(var(--creamlight))', borderLeft: '1px solid rgb(var(--navy) / 0.06)', borderRight: '1px solid rgb(var(--navy) / 0.06)' }}
+          style={{ left: '44%', width: 22, background: 'rgb(var(--mistlight))', borderLeft: '1px solid rgb(var(--navy) / 0.06)', borderRight: '1px solid rgb(var(--navy) / 0.06)' }}
         />
         <div
           className="absolute flex items-center justify-center"
@@ -115,7 +115,7 @@ export function MapScreen() {
         <div className="absolute flex gap-1.5" style={{ left: '50%', top: '44%' }}>
           <span style={HOUSE} />
           <span
-            className="flex items-center justify-center text-[10px] font-bold text-cream"
+            className="flex items-center justify-center text-[10px] font-bold text-mist"
             style={{ width: 26, height: 20, borderRadius: 5, background: 'rgb(var(--skydeep))' }}
           >
             27
@@ -152,12 +152,12 @@ export function MapScreen() {
         >
           {[
             ['rgb(var(--sky))', 'Amenities'],
-            ['rgb(var(--ember))', 'Events'],
+            ['rgb(var(--sunset))', 'Events'],
             ['rgb(var(--gold))', 'Alerts'],
           ].map(([c, l]) => (
             <div key={l} className="flex items-center gap-1.5">
               <span className="w-[9px] h-[9px] rounded-full" style={{ background: c }} />
-              <span className="text-[9.5px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
+              <span className="text-[9.5px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
                 {l}
               </span>
             </div>
@@ -208,14 +208,14 @@ export function MapScreen() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="m-0 mb-px text-[13px] font-bold text-navy leading-[1.25]">{selPinObj.title}</p>
-              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                 {selPinObj.sub}
               </p>
             </div>
             <button
               type="button"
               onClick={doPinAction}
-              className="border-none bg-skydeep text-cream rounded-full text-xs font-extrabold cursor-pointer font-sans flex-shrink-0"
+              className="border-none bg-skydeep text-mist rounded-full text-xs font-extrabold cursor-pointer font-sans flex-shrink-0"
               style={{ padding: '8px 14px' }}
             >
               {selPinObj.action}
@@ -225,9 +225,9 @@ export function MapScreen() {
               aria-label="Close pin"
               onClick={() => set({ selPin: null })}
               className="border-none w-[26px] h-[26px] rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
-              style={{ background: 'rgb(var(--sand))' }}
+              style={{ background: 'rgb(var(--skyborder))' }}
             >
-              <PhIcon name="ph-bold ph-x" size={11} color="rgb(var(--bark))" />
+              <PhIcon name="ph-bold ph-x" size={11} color="rgb(var(--slatedark))" />
             </button>
           </div>
         )}

@@ -15,8 +15,8 @@ import { ThemeProvider } from '../theme/ThemeProvider';
 import { BRAND_THEMES, brandTokens } from '../theme/themes';
 
 /** Token groups — kept in sync with the :root definitions in src/index.css. */
-const RAW = ['navy', 'cream', 'paper', 'sand', 'parchment', 'ember', 'terracotta', 'blush', 'peach', 'sage', 'mint', 'sagedark', 'gold', 'goldpale', 'golddark', 'sky', 'skydeep', 'skypale', 'ink', 'stone', 'stonelight', 'bark', 'taupe', 'red'];
-const EXTENDED = ['sandpale', 'sanddim', 'taupepale', 'taupedim', 'claypale', 'creamlight', 'creamdim', 'creamtint', 'sandtint', 'sanddeep', 'blushpale', 'blushdim', 'sagelight', 'sagebright', 'sagemid', 'sagepale', 'sagemist', 'sagesoft', 'sagecool', 'emberbright', 'brown', 'reddeep', 'skytint', 'skydark', 'violet'];
+const RAW = ['navy', 'mist', 'paper', 'skyborder', 'mistpale', 'sunset', 'accent', 'accenttint', 'peach', 'sage', 'mint', 'sagedark', 'gold', 'goldpale', 'golddark', 'sky', 'skydeep', 'skypale', 'ink', 'slate', 'slatelight', 'slatedark', 'slatedeep', 'red'];
+const EXTENDED = ['skyrule', 'skyline', 'slatepale', 'slatedim', 'slatefaint', 'mistlight', 'mistdim', 'misttint', 'skywash', 'skyedge', 'sunsetpale', 'sunsetdim', 'sagelight', 'sagebright', 'sagemid', 'sagepale', 'sagemist', 'sagesoft', 'sagecool', 'sunsetbright', 'brown', 'reddeep', 'skytint', 'skydark', 'violet'];
 const SEMANTIC = ['color-bg', 'color-surface', 'color-primary', 'color-text', 'color-muted', 'color-accent', 'color-danger', 'color-success'];
 
 function Swatch({ name }: { name: string }) {
@@ -26,7 +26,7 @@ function Swatch({ name }: { name: string }) {
         className="h-12 rounded-lg"
         style={{ background: `rgb(var(--${name}))`, border: '1px solid rgb(var(--navy) / 0.1)' }}
       />
-      <span className="text-[10.5px] font-bold text-bark font-mono">--{name}</span>
+      <span className="text-[10.5px] font-bold text-slatedark font-mono">--{name}</span>
     </div>
   );
 }
@@ -47,13 +47,13 @@ export function Gallery() {
   const [brand, setBrand] = useState('juniper');
 
   return (
-    <ThemeProvider tokens={brandTokens(brand)} className="min-h-dvh" style={{ background: 'rgb(var(--cream))' }}>
+    <ThemeProvider tokens={brandTokens(brand)} className="min-h-dvh" style={{ background: 'rgb(var(--mist))' }}>
       <div className="max-w-[880px] mx-auto px-6 py-10">
         <div className="flex items-baseline justify-between mb-1">
           <h1 className="m-0 font-serif text-[30px] text-navy">Pavilion — Kitchen Sink</h1>
-          <a href="/" className="text-[13px] font-bold text-terracotta no-underline">← Back to app</a>
+          <a href="/" className="text-[13px] font-bold text-accent no-underline">← Back to app</a>
         </div>
-        <p className="m-0 mb-8 text-[13.5px] text-taupe font-semibold">
+        <p className="m-0 mb-8 text-[13.5px] text-slatedeep font-semibold">
           Every design token and UI primitive in one place. Switch the community brand to see tokens recolor the whole page live.
         </p>
 
@@ -64,7 +64,7 @@ export function Gallery() {
               onClick={() => setBrand(t.key)}
               className="rounded-full px-3.5 py-2 text-[12px] font-bold cursor-pointer border-none"
               style={{
-                background: brand === t.key ? 'rgb(var(--terracotta))' : 'rgb(var(--navy) / 0.06)',
+                background: brand === t.key ? 'rgb(var(--accent))' : 'rgb(var(--navy) / 0.06)',
                 color: brand === t.key ? 'rgb(var(--paper))' : 'rgb(var(--navy))',
               }}
             >
@@ -94,7 +94,7 @@ export function Gallery() {
         <Section title="Avatars">
           <div className="flex items-end gap-4">
             <Avatar initial="A" color="rgb(var(--skydeep))" size={26} />
-            <Avatar initial="M" color="rgb(var(--terracotta))" size={36} />
+            <Avatar initial="M" color="rgb(var(--accent))" size={36} />
             <Avatar initial="R" color="rgb(var(--sage))" size={48} />
             <Avatar initial="D" color="rgb(var(--sky))" size={64} />
           </div>
@@ -104,7 +104,7 @@ export function Gallery() {
           <div className="flex flex-wrap gap-2">
             <Chip label="Inactive" />
             <Chip label="Active" active />
-            <Chip label="With icon" icon={<PhIcon name="ph-fill ph-sparkle" size={12} color="rgb(var(--terracotta))" />} />
+            <Chip label="With icon" icon={<PhIcon name="ph-fill ph-sparkle" size={12} color="rgb(var(--accent))" />} />
             <Chip label="Medium" size="md" active />
           </div>
         </Section>
@@ -113,7 +113,7 @@ export function Gallery() {
           <div className="flex flex-wrap gap-2">
             <Pill label="Paid" bg="rgb(var(--mint))" color="rgb(var(--sagedark))" />
             <Pill label="Due Jul 3" bg="rgb(var(--goldpale))" color="rgb(var(--golddark))" />
-            <Pill label="Shoutout" bg="rgb(var(--blush))" color="rgb(var(--terracotta))" />
+            <Pill label="Shoutout" bg="rgb(var(--accenttint))" color="rgb(var(--accent))" />
             <Pill label="Board" bg="rgb(var(--skypale))" color="rgb(var(--skydeep))" />
           </div>
         </Section>
@@ -162,8 +162,8 @@ export function Gallery() {
 
         <Section title="Buttons">
           <div className="flex flex-wrap gap-3">
-            <button className="border-none rounded-2xl px-5 py-3 text-[14px] font-extrabold text-white cursor-pointer" style={{ background: 'rgb(var(--ember))' }}>Primary CTA</button>
-            <button className="rounded-2xl px-5 py-3 text-[14px] font-extrabold cursor-pointer" style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: 'none' }}>Navy</button>
+            <button className="border-none rounded-2xl px-5 py-3 text-[14px] font-extrabold text-white cursor-pointer" style={{ background: 'rgb(var(--sunset))' }}>Primary CTA</button>
+            <button className="rounded-2xl px-5 py-3 text-[14px] font-extrabold cursor-pointer" style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))', border: 'none' }}>Navy</button>
             <button className="rounded-2xl px-5 py-3 text-[14px] font-extrabold cursor-pointer bg-transparent" style={{ border: '1.5px solid rgb(var(--sagedark) / 0.35)', color: 'rgb(var(--sagedark))' }}>Ghost</button>
           </div>
         </Section>

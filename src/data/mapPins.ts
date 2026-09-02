@@ -1,7 +1,7 @@
 import type { Pin, MapLayer } from './types';
 
 export const PINS: Pin[] = [
-  { key: 'taco', x: '58%', y: '14%', icon: 'ph-fill ph-storefront', color: 'rgb(var(--ember))', layer: 'events', title: 'Taco cart · 5–8 PM today', sub: 'Clubhouse forecourt · 12 going', action: 'Today', go: 'today' },
+  { key: 'taco', x: '58%', y: '14%', icon: 'ph-fill ph-storefront', color: 'rgb(var(--sunset))', layer: 'events', title: 'Taco cart · 5–8 PM today', sub: 'Clubhouse forecourt · 12 going', action: 'Today', go: 'today' },
   { key: 'pool', x: '19%', y: '44%', icon: 'ph-fill ph-swimming-pool', color: 'rgb(var(--sky))', layer: 'amenities', title: 'Pool & cabana', sub: '12 there now · 4 slots open', action: 'Book', go: 'reserve' },
   { key: 'tennis', x: '80%', y: '50%', icon: 'ph-fill ph-tennis-ball', color: 'rgb(var(--sage))', layer: 'amenities', title: 'Tennis courts', sub: 'Court 2 open right now', action: 'Book', go: 'reserve' },
   { key: 'garden', x: '68%', y: '84%', icon: 'ph-fill ph-plant', color: 'rgb(var(--sagelight))', layer: 'amenities', title: 'Community garden', sub: 'Free tomato starts · plot 4', action: 'Circle', go: 'commons' },

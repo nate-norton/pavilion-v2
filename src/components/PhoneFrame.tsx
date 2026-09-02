@@ -50,7 +50,7 @@ export function PhoneFrame() {
       data-testid="phone-frame"
       data-desk-board={deskBoard ? '' : undefined}
       data-large-type={largeType ? '' : undefined}
-      className="pav-frame relative w-[393px] h-[830px] max-h-[calc(100vh-48px)] rounded-[44px] overflow-hidden bg-cream shrink-0 max-[500px]:w-full max-[500px]:h-dvh max-[500px]:max-h-dvh max-[500px]:rounded-none"
+      className="pav-frame relative w-[393px] h-[830px] max-h-[calc(100vh-48px)] rounded-[44px] overflow-hidden bg-mist shrink-0 max-[500px]:w-full max-[500px]:h-dvh max-[500px]:max-h-dvh max-[500px]:rounded-none"
       style={{ boxShadow: '0 40px 90px -30px rgb(var(--shadow) / 0.5), 0 0 0 1px rgb(var(--navy) / 0.05)' }}
     >
       <ErrorBoundary>

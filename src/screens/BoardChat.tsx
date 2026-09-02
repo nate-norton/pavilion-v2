@@ -103,7 +103,7 @@ export function BoardChat() {
   );
 
   return (
-    <div className="absolute inset-0 z-[86] bg-cream flex flex-col animate-scpop">
+    <div className="absolute inset-0 z-[86] bg-mist flex flex-col animate-scpop">
       {/* Header */}
       <div className="flex items-center gap-2.5 flex-shrink-0" style={{ padding: '64px 18px 10px' }}>
         <button
@@ -115,8 +115,8 @@ export function BoardChat() {
         <div className="flex-1 min-w-0">
           <h1 className="m-0 font-serif font-normal text-[19px] text-navy truncate">{topic ?? 'Board chat'}</h1>
           <div className="flex items-center gap-1.5">
-            <PhIcon name="ph-fill ph-lock-simple" size={11} color="rgb(var(--stone))" className="flex-shrink-0" />
-            <p className="m-0 text-[11px] font-bold text-stone">Private to board members</p>
+            <PhIcon name="ph-fill ph-lock-simple" size={11} color="rgb(var(--slate))" className="flex-shrink-0" />
+            <p className="m-0 text-[11px] font-bold text-slate">Private to board members</p>
           </div>
         </div>
         {topic !== null && topic !== GENERAL && (
@@ -154,7 +154,7 @@ export function BoardChat() {
           {input({ value: newName, onChange: setNewName, placeholder: 'New topic name', onEnter: rename, autoFocus: true })}
           <button
             onClick={rename}
-            className="border-0 rounded-full px-3.5 text-[12px] font-extrabold cursor-pointer bg-skydeep text-cream"
+            className="border-0 rounded-full px-3.5 text-[12px] font-extrabold cursor-pointer bg-skydeep text-mist"
           >
             Rename
           </button>
@@ -180,16 +180,16 @@ export function BoardChat() {
                   <PhIcon
                     name={name === GENERAL ? 'ph-fill ph-push-pin' : 'ph-fill ph-hash'}
                     size={16}
-                    color={name === GENERAL ? 'rgb(var(--cream))' : 'rgb(var(--navy))'}
+                    color={name === GENERAL ? 'rgb(var(--mist))' : 'rgb(var(--navy))'}
                   />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="m-0 text-[14px] font-bold text-navy">{name}</p>
-                  <p className="m-0 text-[12px] font-semibold text-stone truncate">
+                  <p className="m-0 text-[12px] font-semibold text-slate truncate">
                     {last ? `${last.me ? 'You' : last.authorName}: ${last.text || '📷 Photo'}` : 'No messages yet'}
                   </p>
                 </div>
-                <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--stonelight))" className="flex-shrink-0" />
+                <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--slatelight))" className="flex-shrink-0" />
               </button>
             );
           })}
@@ -210,7 +210,7 @@ export function BoardChat() {
                 placeholder="Topic — e.g. Pool repairs"
                 autoFocus
                 className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
               />
               <input
                 value={msg}
@@ -218,7 +218,7 @@ export function BoardChat() {
                 onKeyDown={(e) => { if (e.key === 'Enter' && newName.trim()) send(msg, newName.trim()); }}
                 placeholder="First message…"
                 className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2.5"
-                style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
               />
               <div className="flex gap-2">
                 <button
@@ -230,8 +230,8 @@ export function BoardChat() {
                 </button>
                 <button
                   onClick={() => { if (newName.trim()) send(msg, newName.trim()); }}
-                  className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
-                  style={{ background: newName.trim() && msg.trim() && !busy ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                  className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-mist"
+                  style={{ background: newName.trim() && msg.trim() && !busy ? 'rgb(var(--navy))' : 'rgb(var(--skyrule))' }}
                 >
                   Start topic
                 </button>
@@ -244,7 +244,7 @@ export function BoardChat() {
         <>
           <div className="flex-1 overflow-y-auto pav-scroll" style={{ padding: '4px 18px 10px' }}>
             {messages.length === 0 && (
-              <p className="m-0 mt-6 text-center text-[12.5px] font-semibold text-stone">
+              <p className="m-0 mt-6 text-center text-[12.5px] font-semibold text-slate">
                 No messages in this topic yet — start it off.
               </p>
             )}
@@ -258,8 +258,8 @@ export function BoardChat() {
                     {m.authorInitial}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="m-0 text-[11px] font-bold text-stone">
-                      {m.me ? 'You' : m.authorName} <span className="font-semibold" style={{ color: 'rgb(var(--stonelight))' }}>· {m.time}</span>
+                    <p className="m-0 text-[11px] font-bold text-slate">
+                      {m.me ? 'You' : m.authorName} <span className="font-semibold" style={{ color: 'rgb(var(--slatelight))' }}>· {m.time}</span>
                     </p>
                     {m.text && <p className="m-0 text-[13.5px] leading-[1.45] font-semibold text-navy">{m.text}</p>}
                     {m.photoUrls.map((u) => (
@@ -277,7 +277,7 @@ export function BoardChat() {
                       title="Delete message"
                       className="border-0 bg-transparent p-1 cursor-pointer flex-shrink-0 opacity-40"
                     >
-                      <PhIcon name="ph-bold ph-x" size={11} color="rgb(var(--stone))" />
+                      <PhIcon name="ph-bold ph-x" size={11} color="rgb(var(--slate))" />
                     </button>
                   )}
                 </div>
@@ -287,7 +287,7 @@ export function BoardChat() {
           </div>
 
           {/* Composer */}
-          <div className="flex-shrink-0" style={{ padding: '10px 18px 40px', borderTop: '1px solid rgb(var(--navy) / 0.08)', background: 'rgb(var(--cream))' }}>
+          <div className="flex-shrink-0" style={{ padding: '10px 18px 40px', borderTop: '1px solid rgb(var(--navy) / 0.08)', background: 'rgb(var(--mist))' }}>
             {photos.length > 0 && (
               <p className="m-0 mb-1.5 text-[11.5px] font-bold" style={{ color: 'rgb(var(--sage))' }}>
                 {photos.length} photo{photos.length > 1 ? 's' : ''} attached ✓
@@ -315,9 +315,9 @@ export function BoardChat() {
                 onClick={() => send(msg, topic)}
                 aria-label="Send"
                 className="w-10 h-10 border-none rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
-                style={{ background: (msg.trim() || photos.length) && !busy ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                style={{ background: (msg.trim() || photos.length) && !busy ? 'rgb(var(--navy))' : 'rgb(var(--skyrule))' }}
               >
-                <PhIcon name="ph-fill ph-paper-plane-right" size={15} color="rgb(var(--cream))" />
+                <PhIcon name="ph-fill ph-paper-plane-right" size={15} color="rgb(var(--mist))" />
               </button>
             </div>
           </div>

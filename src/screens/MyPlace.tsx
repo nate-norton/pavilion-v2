@@ -99,12 +99,12 @@ export function MyPlace() {
   const statOneValue = isTenant ? 'Active' : isManager ? 'Manager' : duesLabel;
   const duesBg = duesStatus === 'paid' ? 'rgb(var(--mint))'
     : duesStatus === 'plan' ? 'rgb(var(--skypale))'
-      : duesStatus === 'due' || duesStatus === 'past_due' ? 'rgb(var(--blush))'
+      : duesStatus === 'due' || duesStatus === 'past_due' ? 'rgb(var(--accenttint))'
         : 'rgb(var(--paper))';
   const duesColor = duesStatus === 'paid' ? 'rgb(var(--sagedark))'
     : duesStatus === 'plan' ? 'rgb(var(--skydeep))'
-      : duesStatus === 'due' || duesStatus === 'past_due' ? 'rgb(var(--terracotta))'
-        : 'rgb(var(--stone))';
+      : duesStatus === 'due' || duesStatus === 'past_due' ? 'rgb(var(--accent))'
+        : 'rgb(var(--slate))';
   const myBookings = reservation.booked && reservation.summary ? '1 upcoming' : 'None yet';
   const myCirclesCount = Object.values(groups).filter((g) => !g.isGroupChat && g.joined).length;
 
@@ -128,11 +128,11 @@ export function MyPlace() {
   // Payments history rows come straight from the member's dues (empty in live).
   const duesPillBg: Record<DuesStatus, string> = {
     paid: 'rgb(var(--mint))', plan: 'rgb(var(--skypale))',
-    past_due: 'rgb(var(--blush))', due: 'rgb(var(--goldpale))',
+    past_due: 'rgb(var(--accenttint))', due: 'rgb(var(--goldpale))',
   };
   const duesPillColor: Record<DuesStatus, string> = {
     paid: 'rgb(var(--sagedark))', plan: 'rgb(var(--skydeep))',
-    past_due: 'rgb(var(--terracotta))', due: 'rgb(var(--golddark))',
+    past_due: 'rgb(var(--accent))', due: 'rgb(var(--golddark))',
   };
 
   const payRow = (label: string, pill: ReactNode, last?: boolean, idx?: number) => {
@@ -164,17 +164,17 @@ export function MyPlace() {
     <div
       data-screen-label="My Place"
       className="pav-scroll absolute inset-0 z-[76] overflow-y-auto animate-scpop"
-      style={{ background: 'rgb(var(--cream))', padding: '60px 18px 40px' }}
+      style={{ background: 'rgb(var(--mist))', padding: '60px 18px 40px' }}
     >
       <BackButton onClick={() => set({ myPlaceOpen: false })} className="mb-4" />
 
       <div className="flex items-center gap-3.5 mb-[18px]">
-        <div className="w-[58px] h-[58px] rounded-full bg-skydeep flex items-center justify-center text-cream font-extrabold text-[19px] flex-shrink-0">
+        <div className="w-[58px] h-[58px] rounded-full bg-skydeep flex items-center justify-center text-mist font-extrabold text-[19px] flex-shrink-0">
           {displayInitial}
         </div>
         <div>
           <h1 className="m-0 mb-0.5 font-serif font-normal text-2xl text-navy">{displayName}</h1>
-          <p className="m-0 text-[12.5px] font-bold text-stone">
+          <p className="m-0 text-[12.5px] font-bold text-slate">
             {roleLabel}
           </p>
         </div>
@@ -193,7 +193,7 @@ export function MyPlace() {
           className="w-full border-none font-sans bg-transparent rounded-[15px] text-center cursor-pointer"
           style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', padding: '12px 10px' }}
         >
-          <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--slate))' }}>
             Bookings
           </p>
           <p className="m-0 text-[12.5px] font-bold text-navy">{myBookings}</p>
@@ -203,7 +203,7 @@ export function MyPlace() {
           className="w-full border-none font-sans bg-transparent rounded-[15px] text-center cursor-pointer"
           style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', padding: '12px 10px' }}
         >
-          <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-[3px] text-[10px] font-bold uppercase" style={{ letterSpacing: '0.08em', color: 'rgb(var(--slate))' }}>
             Groups
           </p>
           <p className="m-0 text-[12.5px] font-bold text-navy">{myCirclesCount} joined</p>
@@ -219,13 +219,13 @@ export function MyPlace() {
         >
           <div
             className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0"
-            style={{ background: 'rgb(var(--cream) / 0.12)' }}
+            style={{ background: 'rgb(var(--mist) / 0.12)' }}
           >
             <PhIcon name="ph-fill ph-shield-star" size={22} color="rgb(var(--peach))" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <p className="m-0 text-[14.5px] font-bold text-cream">Board desk</p>
+              <p className="m-0 text-[14.5px] font-bold text-mist">Board desk</p>
               <span
                 className="rounded-full px-2 py-0.5 text-[9.5px] font-bold"
                 style={{ background: 'rgb(var(--peach) / 0.2)', color: 'rgb(var(--peach))', letterSpacing: '0.06em' }}
@@ -233,7 +233,7 @@ export function MyPlace() {
                 BOARD
               </span>
             </div>
-            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
               Triage, collections, votes &amp; broadcasts
             </p>
           </div>
@@ -252,13 +252,13 @@ export function MyPlace() {
         >
           <div
             className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0"
-            style={{ background: 'rgb(var(--cream) / 0.12)' }}
+            style={{ background: 'rgb(var(--mist) / 0.12)' }}
           >
             <PhIcon name="ph-fill ph-buildings" size={22} color="rgb(var(--peach))" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="m-0 text-[14.5px] font-bold text-cream">Portfolio</p>
-            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+            <p className="m-0 text-[14.5px] font-bold text-mist">Portfolio</p>
+            <p className="mt-px mb-0 text-xs font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
               3 communities · {pfDoors} doors · {pfCollected}% collected
             </p>
           </div>
@@ -282,23 +282,23 @@ export function MyPlace() {
               className="flex items-center gap-[11px]"
               style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
             >
-              <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
-                <PhIcon name="ph-fill ph-calendar-blank" size={16} color="rgb(var(--bark))" />
+              <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--skyborder))' }}>
+                <PhIcon name="ph-fill ph-calendar-blank" size={16} color="rgb(var(--slatedark))" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 text-[13px] font-bold text-navy">12-month term · renews Mar 1, 2027</p>
-                <p className="m-0 text-[11.5px] font-semibold text-stone">
+                <p className="m-0 text-[11.5px] font-semibold text-slate">
                   $2,400/mo · paid to owner, not the HOA
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-[11px]">
-              <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--sand))' }}>
-                <PhIcon name="ph-fill ph-user" size={16} color="rgb(var(--bark))" />
+              <div className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(var(--skyborder))' }}>
+                <PhIcon name="ph-fill ph-user" size={16} color="rgb(var(--slatedark))" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 text-[13px] font-bold text-navy">Owner: Dana Okafor · #27</p>
-                <p className="m-0 text-[11.5px] font-semibold text-stone">
+                <p className="m-0 text-[11.5px] font-semibold text-slate">
                   Handles ARC requests &amp; dues
                 </p>
               </div>
@@ -311,14 +311,14 @@ export function MyPlace() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-0.5 text-[13.5px] font-bold text-navy">Tenant registration</p>
-                <p className="m-0 mb-2.5 text-[11.5px] font-semibold text-stone">
+                <p className="m-0 mb-2.5 text-[11.5px] font-semibold text-slate">
                   CC&amp;Rs §7.4 asks tenants to register with the office within 14 days.
                 </p>
                 {!state.tenantRegistered ? (
                   <button
                     type="button"
                     onClick={() => set({ tenantRegistered: true })}
-                    className="border-none bg-skydeep text-cream rounded-[11px] text-[12.5px] font-extrabold cursor-pointer font-sans"
+                    className="border-none bg-skydeep text-mist rounded-[11px] text-[12.5px] font-extrabold cursor-pointer font-sans"
                     style={{ padding: '9px 15px' }}
                   >
                     Register now
@@ -347,7 +347,7 @@ export function MyPlace() {
             <PhIcon name="ph-fill ph-arrows-clockwise" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
             <div className="flex-1">
               <p className="m-0 text-[13px] font-bold text-navy">{mpApLabel}</p>
-              <p className="m-0 text-[11.5px] font-semibold text-stone">
+              <p className="m-0 text-[11.5px] font-semibold text-slate">
                 Juniper CU ····4821 · free ACH · change bank or date anytime
               </p>
             </div>
@@ -356,13 +356,13 @@ export function MyPlace() {
                 <button
                   onClick={() => { set({ apPaused: !state.apPaused }); setApConfirm(false); }}
                   className="border-none rounded-full px-2.5 py-1.5 text-[11px] font-extrabold cursor-pointer"
-                  style={{ background: state.apPaused ? 'rgb(var(--mint))' : 'rgb(var(--blush))', color: state.apPaused ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))' }}
+                  style={{ background: state.apPaused ? 'rgb(var(--mint))' : 'rgb(var(--accenttint))', color: state.apPaused ? 'rgb(var(--sagedark))' : 'rgb(var(--accent))' }}
                 >
                   {state.apPaused ? 'Resume' : 'Pause'}
                 </button>
                 <button
                   onClick={() => setApConfirm(false)}
-                  className="border-none bg-transparent text-[11px] font-extrabold cursor-pointer text-stone"
+                  className="border-none bg-transparent text-[11px] font-extrabold cursor-pointer text-slate"
                 >
                   Cancel
                 </button>
@@ -373,7 +373,7 @@ export function MyPlace() {
           </div>
           )}
           {dues.history.length === 0 ? (
-            <p className="m-0 py-2 text-[12.5px] font-semibold text-stone">No payments yet.</p>
+            <p className="m-0 py-2 text-[12.5px] font-semibold text-slate">No payments yet.</p>
           ) : (
             dues.history.map((d, i) =>
               payRow(
@@ -408,31 +408,31 @@ export function MyPlace() {
           className="flex items-center gap-[11px]"
           style={{ paddingBottom: 11, borderBottom: '1px solid rgb(var(--navy) / 0.06)', marginBottom: 11 }}
         >
-          <div className="w-[34px] h-[34px] rounded-full bg-skydeep flex items-center justify-center text-cream font-extrabold text-[13px]">A</div>
+          <div className="w-[34px] h-[34px] rounded-full bg-skydeep flex items-center justify-center text-mist font-extrabold text-[13px]">A</div>
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
             You{' '}
-            <span className="font-semibold text-stonelight">
+            <span className="font-semibold text-slatelight">
               · Owner
             </span>
           </p>
-          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: 'rgb(var(--sand))', color: 'rgb(var(--stone))' }}>
+          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: 'rgb(var(--skyborder))', color: 'rgb(var(--slate))' }}>
             Admin
           </span>
         </div>
         <div className="flex items-center gap-[11px]">
           <div
             className="w-[34px] h-[34px] rounded-full flex items-center justify-center text-white font-extrabold text-[13px]"
-            style={{ background: 'rgb(var(--terracotta))' }}
+            style={{ background: 'rgb(var(--accent))' }}
           >
             S
           </div>
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
             Sam R.{' '}
-            <span className="font-semibold text-stonelight">
+            <span className="font-semibold text-slatelight">
               · Partner
             </span>
           </p>
-          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: 'rgb(var(--sand))', color: 'rgb(var(--stone))' }}>
+          <span className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold" style={{ background: 'rgb(var(--skyborder))', color: 'rgb(var(--slate))' }}>
             Member
           </span>
         </div>
@@ -443,11 +443,11 @@ export function MyPlace() {
           >
             <div
               className="w-[34px] h-[34px] rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgb(var(--sand))', border: '1.5px dashed rgb(var(--navy) / 0.25)', color: 'rgb(var(--stone))' }}
+              style={{ background: 'rgb(var(--skyborder))', border: '1.5px dashed rgb(var(--navy) / 0.25)', color: 'rgb(var(--slate))' }}
             >
               <PhIcon name="ph-bold ph-envelope-simple" size={14} />
             </div>
-            <p className="m-0 flex-1 text-[13px] font-bold text-stone">
+            <p className="m-0 flex-1 text-[13px] font-bold text-slate">
               Invite sent — they&apos;ll join once they accept
             </p>
           </div>
@@ -459,7 +459,7 @@ export function MyPlace() {
       {!isLiveMode && (
       <div style={CARD}>
         <p className="m-0 mb-[3px] font-serif text-base text-navy">Vehicles &amp; pets</p>
-        <p className="m-0 mb-3 text-[11.5px] font-semibold text-stone">
+        <p className="m-0 mb-3 text-[11.5px] font-semibold text-slate">
           On file for guest passes, gate logs &amp; the pet registry.
         </p>
         <div
@@ -471,7 +471,7 @@ export function MyPlace() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[13px] font-bold text-navy">Subaru Outback · Slate</p>
-            <p className="m-0 text-[11.5px] font-semibold text-stone">
+            <p className="m-0 text-[11.5px] font-semibold text-slate">
               Plate 8XR-4471 · resident decal #204
             </p>
           </div>
@@ -485,7 +485,7 @@ export function MyPlace() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[13px] font-bold text-navy">Biscuit · Golden mix</p>
-            <p className="m-0 text-[11.5px] font-semibold text-stone">
+            <p className="m-0 text-[11.5px] font-semibold text-slate">
               Registered · licensed &amp; up to date
             </p>
           </div>
@@ -538,9 +538,9 @@ export function MyPlace() {
         <p className="m-0 mb-[11px] font-serif text-base text-navy">My requests</p>
         {!isLiveMode && state.reportSubmitted && (
           <Row divider>
-            <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--terracotta))" className="flex-shrink-0" />
+            <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--accent))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13px] font-bold text-navy">{reportTypeLabel} report · #M-89</p>
-            {statusPill('In triage', 'rgb(var(--blush))', 'rgb(var(--terracotta))')}
+            {statusPill('In triage', 'rgb(var(--accenttint))', 'rgb(var(--accent))')}
           </Row>
         )}
         {isLiveMode && myReports.map((r) => (
@@ -551,12 +551,12 @@ export function MyPlace() {
               setReportThread([]);
               if (next) void repo.listReportComments(r.id).then(setReportThread);
             }}>
-              <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--terracotta))" className="flex-shrink-0" />
+              <PhIcon name="ph-fill ph-wrench" size={17} color="rgb(var(--accent))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">{r.title}{r.ref ? ` · ${r.ref}` : ''}</p>
               {r.status === 'resolved'
                 ? statusPill('Resolved', 'rgb(var(--mint))', 'rgb(var(--sagedark))')
                 : r.status === 'open'
-                  ? statusPill('In triage', 'rgb(var(--blush))', 'rgb(var(--terracotta))')
+                  ? statusPill('In triage', 'rgb(var(--accenttint))', 'rgb(var(--accent))')
                   : r.status === 'in_progress'
                     ? statusPill(r.vendor ? `${r.vendor} · working` : 'In progress', 'rgb(var(--skypale))', 'rgb(var(--skydeep))')
                     : statusPill('Ticketed', 'rgb(var(--goldpale))', 'rgb(var(--golddark))')}
@@ -566,7 +566,7 @@ export function MyPlace() {
                 {reportThread.map((c) => (
                   <p key={c.id} className="m-0 mb-1 text-[12px] font-semibold text-navy">
                     <strong>{c.me ? 'You' : c.authorName}:</strong> {c.body}{' '}
-                    <span className="text-stone" style={{ fontSize: 10.5 }}>· {c.time}</span>
+                    <span className="text-slate" style={{ fontSize: 10.5 }}>· {c.time}</span>
                   </p>
                 ))}
                 <div className="flex gap-2 mt-1">
@@ -583,7 +583,7 @@ export function MyPlace() {
                     }}
                     placeholder="Message the board about this…"
                     className="flex-1 rounded-full px-3 py-2 text-[12px] font-bold text-navy outline-none min-w-0"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   />
                 </div>
               </div>
@@ -591,7 +591,7 @@ export function MyPlace() {
           </div>
         ))}
         {arc.requests.length === 0 && !hasReportRows ? (
-          <p className="m-0 text-[12.5px] font-semibold text-stone">No requests yet.</p>
+          <p className="m-0 text-[12.5px] font-semibold text-slate">No requests yet.</p>
         ) : (
           arc.requests.map((r, i) => (
             <div key={r.id}>
@@ -608,8 +608,8 @@ export function MyPlace() {
                 <p className="m-0 flex-1 text-[13px] font-bold text-navy">{r.title} · {r.ref}</p>
                 {statusPill(
                   r.statusLabel,
-                  r.approved ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
-                  r.approved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
+                  r.approved ? 'rgb(var(--mint))' : 'rgb(var(--accenttint))',
+                  r.approved ? 'rgb(var(--sagedark))' : 'rgb(var(--accent))',
                 )}
               </Row>
               {isLiveMode && openArcId === r.id && (
@@ -627,7 +627,7 @@ export function MyPlace() {
                   {(r.attachmentUrls ?? []).length > 0 && (
                     <p className="m-0 mb-1 text-[12px] font-semibold text-navy">
                       {r.attachmentUrls!.map((u, j) => (
-                        <a key={u} href={u} target="_blank" rel="noreferrer" className="font-extrabold mr-2" style={{ color: 'rgb(var(--terracotta))' }}>
+                        <a key={u} href={u} target="_blank" rel="noreferrer" className="font-extrabold mr-2" style={{ color: 'rgb(var(--accent))' }}>
                           Attachment {j + 1}
                         </a>
                       ))}
@@ -643,7 +643,7 @@ export function MyPlace() {
                     </button>
                   )}
                   {!r.conditions && !r.decisionNote && (r.attachmentUrls ?? []).length === 0 && r.status !== 'info_requested' && (
-                    <p className="m-0 text-[12px] font-semibold text-stone">No board notes on this request.</p>
+                    <p className="m-0 text-[12px] font-semibold text-slate">No board notes on this request.</p>
                   )}
                 </div>
               )}
@@ -672,7 +672,7 @@ export function MyPlace() {
             type="button"
             onClick={() => set({ myPlaceOpen: false, tab: 'commons', commonsView: 'circles' })}
             className="bg-transparent rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans"
-            style={{ border: '1.5px dashed rgb(var(--navy) / 0.2)', color: 'rgb(var(--stone))', padding: '7px 13px' }}
+            style={{ border: '1.5px dashed rgb(var(--navy) / 0.2)', color: 'rgb(var(--slate))', padding: '7px 13px' }}
           >
             + Browse
           </button>
@@ -696,9 +696,9 @@ export function MyPlace() {
             >
               <PhIcon name="ph-fill ph-user-circle" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
               <p className="m-0 flex-1 text-[13px] font-bold text-navy">
-                Profile <span className="font-semibold text-stonelight">· name, phone, privacy</span>
+                Profile <span className="font-semibold text-slatelight">· name, phone, privacy</span>
               </p>
-              <PhIcon name={profileEditOpen ? 'ph ph-caret-up' : 'ph ph-caret-right'} size={14} color="rgb(var(--stonelight))" />
+              <PhIcon name={profileEditOpen ? 'ph ph-caret-up' : 'ph ph-caret-right'} size={14} color="rgb(var(--slatelight))" />
             </button>
             {profileEditOpen && (
               <div className="mt-2.5 animate-fadeup">
@@ -707,14 +707,14 @@ export function MyPlace() {
                   onChange={(e) => setPfName(e.target.value)}
                   placeholder="Display name"
                   className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                 />
                 <input
                   value={pfPhone}
                   onChange={(e) => setPfPhone(e.target.value)}
                   placeholder="Phone (optional — neighbors never see it)"
                   className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                 />
                 <div className="flex items-center gap-2.5 mb-2.5">
                   <p className="m-0 flex-1 text-[12.5px] font-bold text-navy">Hide me from the directory</p>
@@ -729,8 +729,8 @@ export function MyPlace() {
                       .catch(reportedByDataLayer)
                       .finally(() => setPfBusy(false));
                   }}
-                  className="w-full border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
-                  style={{ background: pfName.trim() && !pfBusy ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                  className="w-full border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-mist"
+                  style={{ background: pfName.trim() && !pfBusy ? 'rgb(var(--navy))' : 'rgb(var(--skyrule))' }}
                 >
                   {pfBusy ? 'Saving…' : 'Save profile'}
                 </button>
@@ -747,12 +747,12 @@ export function MyPlace() {
           <p className="m-0 flex-1 text-[13px] font-bold text-navy">
             Notifications{' '}
             {!isLiveMode && (
-              <span className="font-semibold text-stonelight">
+              <span className="font-semibold text-slatelight">
                 · Digest + urgent only
               </span>
             )}
           </p>
-          <PhIcon name="ph ph-caret-right" size={14} color="rgb(var(--stonelight))" />
+          <PhIcon name="ph ph-caret-right" size={14} color="rgb(var(--slatelight))" />
         </button>
         <div
           className="flex items-center gap-2.5"
@@ -773,11 +773,11 @@ export function MyPlace() {
             <PhIcon name="ph-fill ph-translate" size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13px] font-bold text-navy">
               Language{' '}
-              <span className="font-semibold text-stonelight">
+              <span className="font-semibold text-slatelight">
                 · English
               </span>
             </p>
-            <PhIcon name={state.langOpen ? 'ph ph-caret-up' : 'ph ph-caret-right'} size={14} color="rgb(var(--stonelight))" />
+            <PhIcon name={state.langOpen ? 'ph ph-caret-up' : 'ph ph-caret-right'} size={14} color="rgb(var(--slatelight))" />
           </button>
           {state.langOpen && (
             <div className="mt-2.5 ml-[29px] flex flex-col gap-1.5 animate-fadeup">
@@ -786,7 +786,7 @@ export function MyPlace() {
                   <PhIcon
                     name={lang === 'English' ? 'ph-fill ph-check-circle' : 'ph ph-circle'}
                     size={16}
-                    color={lang === 'English' ? 'rgb(var(--sage))' : 'rgb(var(--stonelight))'}
+                    color={lang === 'English' ? 'rgb(var(--sage))' : 'rgb(var(--slatelight))'}
                   />
                   <span className="text-[13px] font-semibold text-navy">{lang}</span>
                 </div>
@@ -799,7 +799,7 @@ export function MyPlace() {
           localStorage.removeItem('pavilion-demo');
           resetDemoData();
           usePavStore.setState({ ...dataDefaults, loginOpen: true, epoch: usePavStore.getState().epoch + 1 });
-        }} className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer font-sans p-0" style={{ color: 'rgb(var(--terracotta))' }}>
+        }} className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer font-sans p-0" style={{ color: 'rgb(var(--accent))' }}>
           Sign out
         </button>
       </div>

@@ -27,7 +27,7 @@ export default function App() {
     <ThemeProvider
       tokens={brandTokens(brandTheme)}
       className="min-h-dvh flex items-center justify-center p-6 max-[500px]:p-0 gap-6"
-      style={{ background: 'radial-gradient(120% 90% at 50% 0%, rgb(var(--creamtint)) 0%, rgb(var(--sandtint)) 60%, rgb(var(--sanddeep)) 100%)' }}
+      style={{ background: 'radial-gradient(120% 90% at 50% 0%, rgb(var(--misttint)) 0%, rgb(var(--skywash)) 60%, rgb(var(--skyedge)) 100%)' }}
     >
       <PhoneFrame />
       {showPanel && !isLiveMode && <DemoPanel />}
@@ -37,7 +37,7 @@ export default function App() {
           onClick={() => setShowPanel(true)}
           aria-label="Open demo controls"
           className="fixed bottom-4 right-4 w-10 h-10 rounded-full border-none cursor-pointer flex items-center justify-center max-[500px]:hidden"
-          style={{ background: 'rgb(var(--navy) / 0.08)', color: 'rgb(var(--stonelight))', fontSize: 18, transition: 'opacity 0.2s' }}
+          style={{ background: 'rgb(var(--navy) / 0.08)', color: 'rgb(var(--slatelight))', fontSize: 18, transition: 'opacity 0.2s' }}
           onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
           onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.5'; }}
           ref={(el) => { if (el) el.style.opacity = '0.5'; }}

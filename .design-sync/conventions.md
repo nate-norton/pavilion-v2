@@ -36,10 +36,10 @@ shipped stylesheet is purged, so arbitrary utilities may be absent. The
 `--color-text`, `--color-muted`, `--color-accent`, `--color-danger`,
 `--color-success`.
 
-**Core ramp** (reach for by name): `--navy` `--cream` `--paper` `--sand`
-`--parchment` `--ember` `--terracotta` `--blush` `--peach` `--sage` `--mint`
+**Core ramp** (reach for by name): `--navy` `--mist` `--paper` `--skyborder`
+`--mistpale` `--sunset` `--accent` `--accenttint` `--peach` `--sage` `--mint`
 `--sagedark` `--gold` `--goldpale` `--golddark` `--sky` `--skydeep` `--skypale`
-`--ink` `--stone` `--stonelight` `--bark` `--taupe` `--red`. (A wider set of
+`--ink` `--slate` `--slatelight` `--slatedark` `--slatedeep` `--red`. (A wider set of
 extended one-off tokens exists in `styles.css` — read it before inventing.)
 
 **Type**: Young Serif for display/headings, Nunito Sans (weights 400/600/700/800)
@@ -58,7 +58,7 @@ const { Avatar, Pill, ProgressBar, PhIcon } = window.PavilionDS;
 <Avatar initial="A" color="rgb(var(--navy))" size={40} />
 <Pill label="Paid" bg="rgb(var(--mint))" color="rgb(var(--sagedark))" />
 <ProgressBar pct={64} color="rgb(var(--sage))" track="rgb(var(--sage) / 0.15)" />
-<PhIcon name="ph-fill ph-swimming-pool" size={24} color="rgb(var(--terracotta))" />
+<PhIcon name="ph-fill ph-swimming-pool" size={24} color="rgb(var(--accent))" />
 ```
 
 `PhIcon`'s `name` is a Phosphor class string: `ph-fill` / `ph-bold` / (regular)

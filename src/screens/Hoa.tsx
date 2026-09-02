@@ -13,9 +13,9 @@ import type { OpenVote } from '../data/repo';
 const DUES_LEGEND = [
   { label: 'Landscaping', amount: '$78', color: 'rgb(var(--sage))' },
   { label: 'Reserves', amount: '$71', color: 'rgb(var(--navy))' },
-  { label: 'Insurance', amount: '$54', color: 'rgb(var(--ember))' },
+  { label: 'Insurance', amount: '$54', color: 'rgb(var(--sunset))' },
   { label: 'Utilities', amount: '$48', color: 'rgb(var(--gold))' },
-  { label: 'Management', amount: '$34', color: 'rgb(var(--stonelight))' },
+  { label: 'Management', amount: '$34', color: 'rgb(var(--slatelight))' },
 ];
 
 const FORECAST_BARS = [
@@ -30,7 +30,7 @@ const FORECAST_BARS = [
 const ISSUE_TONES = {
   gold: { bg: 'rgb(var(--goldpale))', color: 'rgb(var(--golddark))' },
   mint: { bg: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))' },
-  sand: { bg: 'rgb(var(--sand))', color: 'rgb(var(--stone))' },
+  skyborder: { bg: 'rgb(var(--skyborder))', color: 'rgb(var(--slate))' },
 } as const;
 
 
@@ -76,7 +76,7 @@ export function Hoa() {
   return (
     <div className="absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: '64px 18px 150px' }}>
       <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">The HOA, in the open</h1>
-      <p className="m-0 mb-[18px] text-[13.5px] font-semibold text-taupe">
+      <p className="m-0 mb-[18px] text-[13.5px] font-semibold text-slatedeep">
         Every dollar, vote, and decision — visible to every household.
       </p>
 
@@ -99,11 +99,11 @@ export function Hoa() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-0.5 text-sm font-bold text-navy">Annual meeting · Tue, Jul 15</p>
-                <p className="m-0 text-xs font-semibold text-stone">
+                <p className="m-0 text-xs font-semibold text-slate">
                   7 PM · Clubhouse + Zoom · 2 board seats open
                 </p>
               </div>
-              <span className="text-[13px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--terracotta))' }}>
+              <span className="text-[13px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--accent))' }}>
                 Preview →
               </span>
             </button>
@@ -142,11 +142,11 @@ export function Hoa() {
         </div>
         <div className="flex-1 min-w-0">
           <p className="m-0 mb-0.5 text-sm font-bold text-navy">Annual meeting · Tue, Jul 15</p>
-          <p className="m-0 text-xs font-semibold text-stone">
+          <p className="m-0 text-xs font-semibold text-slate">
             7 PM · Clubhouse + Zoom · 2 board seats open
           </p>
         </div>
-        <span className="text-[13px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--terracotta))' }}>
+        <span className="text-[13px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--accent))' }}>
           Preview →
         </span>
       </button>
@@ -155,7 +155,7 @@ export function Hoa() {
       {/* Live meetings — board-scheduled, minutes downloadable */}
       {!demo && meetings.length > 0 && (
         <div className="bg-paper rounded-[18px] p-4 mb-3.5" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <p className="m-0 mb-2 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Meetings
           </p>
           {meetings.map((m, i) => (
@@ -163,18 +163,18 @@ export function Hoa() {
               <div className="flex items-center gap-2">
                 <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">{m.title}</p>
                 {m.minutesUrl ? (
-                  <a href={m.minutesUrl} target="_blank" rel="noreferrer" className="text-[12px] font-extrabold no-underline" style={{ color: 'rgb(var(--terracotta))' }}>
+                  <a href={m.minutesUrl} target="_blank" rel="noreferrer" className="text-[12px] font-extrabold no-underline" style={{ color: 'rgb(var(--accent))' }}>
                     Minutes →
                   </a>
                 ) : (
-                  <span className="text-[11px] font-bold text-stone">{m.status === 'past' ? 'Held' : 'Upcoming'}</span>
+                  <span className="text-[11px] font-bold text-slate">{m.status === 'past' ? 'Held' : 'Upcoming'}</span>
                 )}
               </div>
-              <p className="m-0 text-[12px] font-semibold text-stone">
+              <p className="m-0 text-[12px] font-semibold text-slate">
                 {[m.whenLabel, m.whereLabel].filter(Boolean).join(' · ')}
               </p>
               {m.agenda.length > 0 && m.status !== 'past' && (
-                <p className="m-0 mt-1 text-[12px] font-semibold text-stone">
+                <p className="m-0 mt-1 text-[12px] font-semibold text-slate">
                   Agenda: {m.agenda.join(' · ')}
                 </p>
               )}
@@ -186,13 +186,13 @@ export function Hoa() {
       {/* Past votes — the results archive */}
       {closed.length > 0 && (
         <div className="bg-paper rounded-[18px] p-4 mb-3.5" style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <p className="m-0 mb-2 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-2 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--slate))' }}>
             Past votes
           </p>
           {closed.map((c, i) => (
             <div key={c.id} className="py-2" style={i < closed.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}>
               <p className="m-0 text-[13px] font-bold text-navy">{c.title}</p>
-              <p className="m-0 text-[12px] font-semibold text-stone">{c.resultLabel} · {c.dateLabel}</p>
+              <p className="m-0 text-[12px] font-semibold text-slate">{c.resultLabel} · {c.dateLabel}</p>
             </div>
           ))}
         </div>
@@ -205,21 +205,21 @@ export function Hoa() {
         style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
       >
         <p className="m-0 mb-0.5 font-serif text-[17px] text-navy">Your $285, itemized</p>
-        <p className="m-0 mb-3.5 text-xs font-semibold text-stone">
+        <p className="m-0 mb-3.5 text-xs font-semibold text-slate">
           July 2026 · unchanged from June
         </p>
         <div className="flex h-3.5 rounded-full overflow-hidden mb-3.5">
           <div style={{ width: '27%', background: 'rgb(var(--sage))' }} />
           <div style={{ width: '25%', background: 'rgb(var(--skydeep))' }} />
-          <div style={{ width: '19%', background: 'rgb(var(--ember))' }} />
+          <div style={{ width: '19%', background: 'rgb(var(--sunset))' }} />
           <div style={{ width: '17%', background: 'rgb(var(--gold))' }} />
-          <div style={{ width: '12%', background: 'rgb(var(--stonelight))' }} />
+          <div style={{ width: '12%', background: 'rgb(var(--slatelight))' }} />
         </div>
         <div className="grid grid-cols-2 gap-x-4 gap-y-2">
           {DUES_LEGEND.map((item) => (
             <div key={item.label} className="flex items-center gap-[7px]">
               <span className="w-[9px] h-[9px] rounded-[3px] flex-shrink-0" style={{ background: item.color }} />
-              <span className="flex-1 text-[12.5px] font-bold text-bark">
+              <span className="flex-1 text-[12.5px] font-bold text-slatedark">
                 {item.label}
               </span>
               <span className="text-[12.5px] font-bold text-navy">{item.amount}</span>
@@ -232,12 +232,12 @@ export function Hoa() {
         >
           <div>
             <p className="m-0 mb-px text-[12.5px] font-bold text-navy">Reserve fund · 82% funded</p>
-            <p className="m-0 text-[11.5px] font-semibold text-stone">
+            <p className="m-0 text-[11.5px] font-semibold text-slate">
               $414K of $505K recommended · study Jan 2026
             </p>
           </div>
           <div className="w-24 flex-shrink-0">
-            <ProgressBar pct={82} height={8} color="rgb(var(--sage))" track="rgb(var(--sand))" />
+            <ProgressBar pct={82} height={8} color="rgb(var(--sage))" track="rgb(var(--skyborder))" />
           </div>
         </div>
         <div className="mt-3.5 pt-[13px]" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)' }}>
@@ -253,16 +253,16 @@ export function Hoa() {
               >
                 Healthy through 2032
               </span>
-              <PhIcon name={forecastOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'} size={13} color="rgb(var(--stonelight))" />
+              <PhIcon name={forecastOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'} size={13} color="rgb(var(--slatelight))" />
             </div>
           </button>
           {forecastOpen && (
             <div className="animate-fadeup mt-2.5">
               <div className="relative h-[78px]">
-                <div className="absolute left-0 right-0" style={{ top: 20, borderTop: '1.5px dashed rgb(var(--terracotta) / 0.45)' }} />
+                <div className="absolute left-0 right-0" style={{ top: 20, borderTop: '1.5px dashed rgb(var(--accent) / 0.45)' }} />
                 <span
                   className="absolute right-0 bg-paper px-[3px] text-[9.5px] font-bold"
-                  style={{ top: 6, color: 'rgb(var(--terracotta))' }}
+                  style={{ top: 6, color: 'rgb(var(--accent))' }}
                 >
                   70% healthy line
                 </span>
@@ -270,14 +270,14 @@ export function Hoa() {
                   {FORECAST_BARS.map((bar) => (
                     <div key={bar.year} className="flex-1 flex flex-col items-center gap-1 justify-end h-full">
                       <div className="w-full rounded-t-[5px]" style={{ height: bar.height, background: bar.color }} />
-                      <span className="text-[9.5px] font-bold text-stonelight">
+                      <span className="text-[9.5px] font-bold text-slatelight">
                         {bar.year}
                       </span>
                     </div>
                   ))}
                 </div>
               </div>
-              <p className="mt-[9px] mb-0 text-[11px] font-semibold text-stone">
+              <p className="mt-[9px] mb-0 text-[11px] font-semibold text-slate">
                 No special assessment projected. Reserves stay above the healthy line through 2032.
               </p>
             </div>
@@ -303,7 +303,7 @@ export function Hoa() {
         </div>
 
         {arc.requests.length === 0 ? (
-          <p className="m-0 py-1 text-[12.5px] font-semibold text-stone">
+          <p className="m-0 py-1 text-[12.5px] font-semibold text-slate">
             No requests yet. Start one with “+ New request”.
           </p>
         ) : (
@@ -312,15 +312,15 @@ export function Hoa() {
               type="button"
               key={r.id}
               onClick={() => set({ arcDetailId: r.id })}
-              className={`w-full border-none font-sans text-left bg-cream rounded-2xl px-3.5 py-[13px] cursor-pointer${i < arc.requests.length - 1 ? ' mb-2.5' : ''}`}
+              className={`w-full border-none font-sans text-left bg-mist rounded-2xl px-3.5 py-[13px] cursor-pointer${i < arc.requests.length - 1 ? ' mb-2.5' : ''}`}
             >
               <div className="flex items-center justify-between gap-2.5 mb-3">
                 <p className="m-0 text-[13.5px] font-bold text-navy">{r.title} · {r.ref}</p>
                 <span
                   className="rounded-full px-2.5 py-1 text-[11px] font-bold"
                   style={{
-                    background: r.approved ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
-                    color: r.approved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
+                    background: r.approved ? 'rgb(var(--mint))' : 'rgb(var(--accenttint))',
+                    color: r.approved ? 'rgb(var(--sagedark))' : 'rgb(var(--accent))',
                   }}
                 >
                   {r.statusLabel}
@@ -338,11 +338,11 @@ export function Hoa() {
         style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
       >
         <p className="m-0 mb-[3px] font-serif text-[17px] text-navy">Known issues</p>
-        <p className="m-0 mb-3 text-xs font-semibold text-stone">
+        <p className="m-0 mb-3 text-xs font-semibold text-slate">
           Live from the board&apos;s queue — no more &quot;did anyone report this?&quot;
         </p>
         {issues.length === 0 ? (
-          <p className="m-0 py-1 text-[12.5px] font-semibold text-stone">
+          <p className="m-0 py-1 text-[12.5px] font-semibold text-slate">
             Nothing reported right now — issues you or the board log appear here.
           </p>
         ) : (
@@ -355,7 +355,7 @@ export function Hoa() {
               style={i < issues.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}
             >
               <PhIcon name={issue.icon} size={16} color={issue.iconColor} className="flex-shrink-0" />
-              <span className={`flex-1 text-[13px] font-bold ${issue.resolved ? 'text-stone' : 'text-navy'}`}>
+              <span className={`flex-1 text-[13px] font-bold ${issue.resolved ? 'text-slate' : 'text-navy'}`}>
                 {issue.title}
               </span>
               <span
@@ -383,11 +383,11 @@ export function Hoa() {
         style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
       >
         <p className="m-0 mb-[3px] font-serif text-[17px] text-navy">Decisions log</p>
-        <p className="m-0 mb-3 text-xs font-semibold text-stone">
+        <p className="m-0 mb-3 text-xs font-semibold text-slate">
           Every board decision, searchable forever. No more relitigating 2019.
         </p>
         {decisions.length === 0 ? (
-          <p className="m-0 py-1 text-[12.5px] font-semibold text-stone">
+          <p className="m-0 py-1 text-[12.5px] font-semibold text-slate">
             No decisions logged yet. Board votes and rulings land here.
           </p>
         ) : (
@@ -400,15 +400,15 @@ export function Hoa() {
                 className={`flex items-center gap-[11px] py-2.5${demo ? ' cursor-pointer' : ''}`}
                 style={i < decisions.length - 1 ? { borderBottom: '1px solid rgb(var(--navy) / 0.07)' } : undefined}
               >
-                <span className="w-11 flex-shrink-0 text-[11px] font-bold text-stonelight">
+                <span className="w-11 flex-shrink-0 text-[11px] font-bold text-slatelight">
                   {d.dateLabel}
                 </span>
                 <span className="flex-1 text-[13px] font-bold text-navy">{d.text}</span>
                 <span
                   className="rounded-full px-[9px] py-[3px] text-[10.5px] font-bold flex-shrink-0"
                   style={{
-                    background: d.passed ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
-                    color: d.passed ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
+                    background: d.passed ? 'rgb(var(--mint))' : 'rgb(var(--accenttint))',
+                    color: d.passed ? 'rgb(var(--sagedark))' : 'rgb(var(--accent))',
                   }}
                 >
                   {d.pillLabel}
@@ -432,7 +432,7 @@ export function Hoa() {
         >
           <PhIcon name="ph-fill ph-files" size={22} color="rgb(var(--skydeep))" />
           <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold text-navy">Documents</p>
-          <p className="m-0 text-[11.5px] font-semibold text-stone">
+          <p className="m-0 text-[11.5px] font-semibold text-slate">
             CC&amp;Rs · Bylaws · Budget · Minutes
           </p>
         </button>
@@ -440,7 +440,7 @@ export function Hoa() {
           <button type="button"
             onClick={() => set({ aiOpen: true })}
             className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-[15px] cursor-pointer text-white"
-            style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}
+            style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}
           >
             <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--white))" />
             <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold">Ask AI</p>
@@ -490,7 +490,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
   const optionTotal = vote.options.reduce((n, o) => n + o.tally, 0);
 
   return (
-    <StackedPanel tint="skydeep" className="text-cream">
+    <StackedPanel tint="skydeep" className="text-mist">
       <p
         className="m-0 mb-1.5 text-[11px] font-bold uppercase"
         style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}
@@ -498,19 +498,19 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
         {vote.closesLabel}
       </p>
       <p className="m-0 mb-1 font-serif text-[17px] leading-[1.3]">{vote.title}</p>
-      <p className="m-0 mb-3.5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+      <p className="m-0 mb-3.5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
         {vote.subtitle}
       </p>
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
+        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>
           QUORUM
         </span>
-        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
+        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>
           {vote.quorumCount} of {vote.quorumTotal} households
         </span>
       </div>
       <div className="mb-1.5">
-        <ProgressBar pct={vote.quorumPct} height={8} track="rgb(var(--cream) / 0.15)" gradient />
+        <ProgressBar pct={vote.quorumPct} height={8} track="rgb(var(--mist) / 0.15)" gradient />
       </div>
       <div className="mb-3.5">
         <Hint label="What is quorum?" onDark>
@@ -537,7 +537,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             disabled={!!casting}
             aria-busy={casting === 'no'}
             className="flex-1 bg-transparent rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-            style={{ border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))', opacity: casting && casting !== 'no' ? 0.5 : 1 }}
+            style={{ border: '1.5px solid rgb(var(--mist) / 0.3)', color: 'rgb(var(--mist))', opacity: casting && casting !== 'no' ? 0.5 : 1 }}
           >
             {casting === 'no' ? 'Recording…' : vote.noLabel}
           </button>
@@ -561,8 +561,8 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
                 }}
                 className="w-full rounded-[13px] py-3 px-3.5 text-left text-sm font-extrabold cursor-pointer"
                 style={picked
-                  ? { background: 'rgb(var(--skydeep))', border: '1.5px solid rgb(var(--emberdeep))', color: 'rgb(var(--white))' }
-                  : { background: 'transparent', border: '1.5px solid rgb(var(--cream) / 0.3)', color: 'rgb(var(--cream))' }}
+                  ? { background: 'rgb(var(--skydeep))', border: '1.5px solid rgb(var(--sunsetdeep))', color: 'rgb(var(--white))' }
+                  : { background: 'transparent', border: '1.5px solid rgb(var(--mist) / 0.3)', color: 'rgb(var(--mist))' }}
               >
                 {vote.multi && <span className="mr-2">{picked ? '☑' : '☐'}</span>}
                 {o.label}
@@ -573,7 +573,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             <button
               onClick={() => castOptions(picks)}
               className="w-full border-none rounded-[13px] py-3 text-sm font-extrabold cursor-pointer"
-              style={{ background: picks.length ? 'rgb(var(--emberdeep))' : 'rgb(var(--cream) / 0.15)', color: 'rgb(var(--white))' }}
+              style={{ background: picks.length ? 'rgb(var(--sunsetdeep))' : 'rgb(var(--mist) / 0.15)', color: 'rgb(var(--white))' }}
             >
               Cast ballot{picks.length > 1 ? ` · ${picks.length} picks` : ''}
             </button>
@@ -589,40 +589,40 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}
           >
             <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sagebright))" className="flex-shrink-0" />
-            <p className="m-0 text-[13px] font-bold text-cream">
+            <p className="m-0 text-[13px] font-bold text-mist">
               You voted <strong>{votedLabel}</strong> · ballot receipt {vote.receipt} · secret ballot
             </p>
           </div>
           <div className="mt-3.5">
             <div className="flex items-center gap-2 mb-[7px]">
-              <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
+              <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>
                 YES
               </span>
               <div className="flex-1">
-                <ProgressBar pct={vote.yesPct} height={9} track="rgb(var(--cream) / 0.12)" gradient />
+                <ProgressBar pct={vote.yesPct} height={9} track="rgb(var(--mist) / 0.12)" gradient />
               </div>
               <span
                 className="w-[62px] text-right text-[11px] font-bold"
-                style={{ color: 'rgb(var(--cream) / 0.95)' }}
+                style={{ color: 'rgb(var(--mist) / 0.95)' }}
               >
                 {vote.yesCount} · {vote.yesPct}%
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
+              <span className="w-8 text-[11px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>
                 NO
               </span>
               <div className="flex-1">
-                <ProgressBar pct={100 - vote.yesPct} height={9} track="rgb(var(--cream) / 0.12)" color="rgb(var(--cream) / 0.9)" />
+                <ProgressBar pct={100 - vote.yesPct} height={9} track="rgb(var(--mist) / 0.12)" color="rgb(var(--mist) / 0.9)" />
               </div>
               <span
                 className="w-[62px] text-right text-[11px] font-bold"
-                style={{ color: 'rgb(var(--cream) / 0.95)' }}
+                style={{ color: 'rgb(var(--mist) / 0.95)' }}
               >
                 {vote.noCount} · {100 - vote.yesPct}%
               </span>
             </div>
-            <p className="mt-[9px] mb-0 text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
+            <p className="mt-[9px] mb-0 text-[11px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>
               {demo
                 ? `Live tally · needs 50% of ${vote.quorumTotal} households by Thursday`
                 : `Live tally · one ballot per household · ${vote.quorumTotal} households`}
@@ -632,7 +632,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             <button
               onClick={() => setChanging(true)}
               className="mt-2.5 bg-transparent border-none p-0 text-[12px] font-extrabold cursor-pointer underline"
-              style={{ color: 'rgb(var(--cream) / 0.9)' }}
+              style={{ color: 'rgb(var(--mist) / 0.9)' }}
             >
               Change my vote
             </button>
@@ -648,7 +648,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}
           >
             <PhIcon name="ph-fill ph-seal-check" size={20} color="rgb(var(--sagebright))" className="flex-shrink-0" />
-            <p className="m-0 text-[13px] font-bold text-cream">
+            <p className="m-0 text-[13px] font-bold text-mist">
               Ballot received · receipt {vote.receipt} · secret ballot
             </p>
           </div>
@@ -657,13 +657,13 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
             const mine = vote.myOptionIds.includes(o.id);
             return (
               <div key={o.id} className="flex items-center gap-2 mb-[7px]">
-                <span className="flex-1 text-[12px] font-bold truncate" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+                <span className="flex-1 text-[12px] font-bold truncate" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
                   {mine ? '✓ ' : ''}{o.label}
                 </span>
                 <div className="w-[110px]">
-                  <ProgressBar pct={pct} height={9} track="rgb(var(--cream) / 0.12)" gradient={mine} color={mine ? undefined : 'rgb(var(--cream) / 0.9)'} />
+                  <ProgressBar pct={pct} height={9} track="rgb(var(--mist) / 0.12)" gradient={mine} color={mine ? undefined : 'rgb(var(--mist) / 0.9)'} />
                 </div>
-                <span className="w-[52px] text-right text-[11px] font-bold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+                <span className="w-[52px] text-right text-[11px] font-bold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
                   {o.tally} · {pct}%
                 </span>
               </div>
@@ -672,7 +672,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
           <button
             onClick={() => { setChanging(true); setPicks(vote.myOptionIds); }}
             className="mt-2 bg-transparent border-none p-0 text-[12px] font-extrabold cursor-pointer underline"
-            style={{ color: 'rgb(var(--cream) / 0.9)' }}
+            style={{ color: 'rgb(var(--mist) / 0.9)' }}
           >
             Change my vote
           </button>
