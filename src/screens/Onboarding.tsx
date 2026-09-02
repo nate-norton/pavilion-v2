@@ -205,10 +205,9 @@ export function Onboarding() {
         {step === 4 && (
           <div className="animate-fadeup">
             <div
-              className="w-[62px] h-[62px] rounded-full flex items-center justify-center mb-4"
-              style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}
+              className="bg-ai w-[62px] h-[62px] rounded-full flex items-center justify-center mb-4"
             >
-              <PhIcon name="ph-fill ph-sparkle" size={28} color="rgb(var(--white))" />
+              <PhIcon name="ph-fill ph-sparkle" size={28} color="rgb(var(--navy))" />
             </div>
             <h1 className="m-0 mb-2.5 font-serif font-normal text-[24px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
               Meet your AI assistant.

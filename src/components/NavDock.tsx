@@ -76,13 +76,10 @@ export function NavDock() {
             style={{ transform: 'translateY(-10px)' }}
           >
             <div
-              className="w-[50px] h-[50px] rounded-full flex items-center justify-center"
-              style={{
-                border: '3px solid rgb(var(--mist))',
-                background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))',
-              }}
+              className="bg-ai w-[50px] h-[50px] rounded-full flex items-center justify-center"
+              style={{ border: '3px solid rgb(var(--mist))' }}
             >
-              <PhIcon name={orb.icon} size={22} color="rgb(var(--white))" />
+              <PhIcon name={orb.icon} size={22} color="rgb(var(--navy))" />
             </div>
             <span className="text-[10px] font-extrabold mt-[2px]" style={{ color: ACTIVE }}>
               {orb.label}

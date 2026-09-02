@@ -439,12 +439,11 @@ export function Hoa() {
         {demo && (
           <button type="button"
             onClick={() => set({ aiOpen: true })}
-            className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-[15px] cursor-pointer text-white"
-            style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}
+            className="bg-ai w-full border-none font-sans text-left rounded-[18px] p-[15px] cursor-pointer"
           >
-            <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--white))" />
+            <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--navy))" />
             <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold">Ask AI</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.92)' }}>
+            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--navy) / 0.85)' }}>
               &quot;Can I paint my fence black?&quot;
             </p>
           </button>

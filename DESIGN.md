@@ -13,7 +13,7 @@ colors:
   accenttint: "rgb(220 235 251)"
   sunset: "rgb(249 123 75)"
   sunsetdeep: "rgb(185 55 6)"
-  sunsetshade: "rgb(150 40 4)"
+  sunsetbright: "rgb(255 179 71)"
   peach: "rgb(255 222 175)"
   sage: "rgb(42 157 92)"
   sagedark: "rgb(31 117 69)"
@@ -212,11 +212,15 @@ same name.
   chrome this system deliberately dropped.
 
 ### Secondary — the warm accent
-- **Sunset** (rgb 249 123 75): the single warm glow, and a *fill* only —
-  gradients, the dues progress bar, large display type. White on it measures
-  2.64:1, so it may never carry text.
-- **Sunset Deep** (rgb 185 55 6): the same glow, text-safe. Every sunset-backed
-  control and every sunset-coloured word uses this (white on it 5.81:1).
+- **Sunset** (rgb 249 123 75): the single warm glow, and a *fill* — gradients,
+  the dues progress bar, large display type. White on it measures 2.64:1, so it
+  never carries white text. It does carry **navy** at 4.86:1, which is how the
+  AI mark and the waitlist CTA keep the real orange instead of the burnt one.
+- **Sunset Bright** (rgb 255 179 71): the amber far stop of the brand gradient,
+  `#F97B4B → #FFB347`. Navy on it is 7.19:1, white 1.78:1.
+- **Sunset Deep** (rgb 185 55 6): the same glow, text-safe *under white*. Used
+  for sunset-coloured words on a light bed and for the focus ring (white on it
+  5.81:1).
 - **Peach** (rgb 255 222 175): eyebrow text on chrome — 4.52:1 on skydeep and
   9.96:1 on navy, so it works on either dark surface.
 
@@ -481,8 +485,8 @@ smallest radius in the system is 5px, and that is a progress-bar cap.
 
 ### Navigation
 - **Style:** A floating `--skydeep` dock, 66px tall, 26px radius, spanning five
-  slots with the Ask AI button raised 10px above the rail in a sunset gradient
-  ring
+  slots with the Ask AI button raised 10px above the rail, filled with the
+  `.bg-ai` sunset→amber gradient behind a navy glyph and ringed in mist
 - **Typography:** 10px extrabold labels beneath 21px icons
 - **States:** Mist at full strength when active; mist at 0.9 alpha when not —
   the old 0.62 fails AA on the lighter sky chrome

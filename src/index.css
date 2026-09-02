@@ -52,13 +52,6 @@
   --sunset: 249 123 75;
   --sunsetdeep: 185 55 6;
   /*
-   * Darker end for the sunset gradient. The brand gradient runs sunset ->
-   * deeper sunset, but white on --sunset measures 2.64:1 and on --sunsetbright
-   * 2.00:1, so any gradient carrying white text or icons runs
-   * --sunsetdeep -> --sunsetshade instead (white 5.81 / 8.07).
-   */
-  --sunsetshade: 150 40 4;
-  /*
    * --accent is the *themed* text-bearing accent: brand themes remap it
    * per community (src/theme/themes.ts) and accent copy, status pills and
    * inline links resolve to it.
@@ -147,7 +140,13 @@
   /* Surfaces, not scale steps. */
   --sagepale: 219 240 228;
   --sagebright: 111 211 156;
-  --sunsetbright: 255 160 110;
+  /*
+   * The amber far stop of the brand's sunset gradient (#F97B4B -> #FFB347):
+   * the AI mark, the dues bar, the quorum bar. Nothing white sits on it --
+   * white measures 1.78:1 here -- so .bg-ai puts navy on top instead (4.86:1
+   * against the near stop, 7.19:1 against this one).
+   */
+  --sunsetbright: 255 179 71;
   --brown: 150 60 20;
   --reddeep: 205 18 18;
   --skytint: 212 232 248;
@@ -171,6 +170,19 @@
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+/*
+ * The AI mark. One brand gradient -- sunset -> amber, the pair the brand sheet
+ * names -- behind every assistant surface: the dock's orb, the sheet header,
+ * the "Ask AI" buttons, the auth and onboarding tiles. Its content is navy,
+ * not white: white on the amber stop is 1.78:1, while navy clears 4.86:1 on
+ * the darkest point of the ramp and 7.19:1 on the lightest, so glyphs and
+ * labels hold at every size across the whole sweep.
+ */
+.bg-ai {
+  background: linear-gradient(135deg, rgb(var(--sunset)), rgb(var(--sunsetbright)));
+  color: rgb(var(--navy));
+}
 
 /*
  * Focus (WCAG 2.4.7). Keyboard users get a visible ring everywhere; pointer
