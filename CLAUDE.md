@@ -12,15 +12,31 @@ React 19 + TypeScript + Vite + Zustand + Tailwind SPA with a dual backend:
 
 ## Branches & deploys
 
-- `staging` → Vercel project `pavilion-v2` = **the product**, live mode against
-  the `pavilion-dev` Supabase project → https://app.pavilion.community
-- `dev` → Vercel project `pavilion-v2-demo` = **the presenter demo** (demo
-  mode) → https://demo.pavilion.community
-- `.env.production` (VITE_APP_MODE=live + Supabase creds) exists **only on
-  `staging`** — never merge `staging` into `dev`, merge the feature branch
-  into each instead.
-- The marketing site (separate repo, project `pavilion-website`) serves
-  https://pavilion.community.
+**`dev` is production.** Both Vercel projects build their Production
+deployment from `dev`; each project's mode comes from its own Vercel
+environment variables, not from a file in the repo:
+
+- Vercel project `pavilion-v2` = **the product**, `VITE_APP_MODE=live`
+  against the `pavilion-dev` Supabase project → https://app.pavilion.community
+- Vercel project `pavilion-v2-demo` = **the presenter demo**, demo mode →
+  https://demo.pavilion.community
+
+A merge into `dev` therefore ships to both at once. Anything live-only must
+be gated (`repo.isDemo()` / `isLiveMode`) so the demo stays byte-for-byte as
+rehearsed, and anything demo-only must never render in live.
+
+`staging` produces preview deployments only. It carries `.env.production`
+(VITE_APP_MODE=live + Supabase creds) so a local `npm run build` from it is a
+live build; that file exists **only on `staging`** — never merge `staging`
+into `dev`. Cut feature branches from `dev`, and if a change also needs to
+reach `staging`, cherry-pick it there rather than merging across.
+
+Every other branch (including `staging`) gets a preview URL; only `dev`
+reaches the custom domains. When checking whether something is live, look
+for a deployment with `target: production`, which will name `dev`.
+
+The marketing site (separate repo, project `pavilion-website`) serves
+https://pavilion.community.
 
 ## Architecture — the Repository seam
 
