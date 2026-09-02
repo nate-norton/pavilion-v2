@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { reportedByDataLayer } from '../lib/errorBus';
+import { Field } from '../components/Field';
 import { PhIcon } from '../components/PhIcon';
 import { Sheet } from '../components/Sheet';
 import { Chip } from '../components/Chip';
@@ -13,10 +14,17 @@ const URGENCIES = [
   { key: 'urgent', label: 'Urgent' },
 ] as const;
 
+const GROUP_LABEL = 'm-0 mb-2 text-[12.5px] font-bold text-slatedark';
+
 /** Private report sheet — ported from prototype lines 2223-2266. */
 export function ReportSheet() {
-  const state = usePavStore();
-  const { set, submitReport } = state;
+  const reportOpen = usePavStore((s) => s.reportOpen);
+  const reportType = usePavStore((s) => s.reportType);
+  const reportDesc = usePavStore((s) => s.reportDesc);
+  const reportPhoto = usePavStore((s) => s.reportPhoto);
+  const reportSubmitted = usePavStore((s) => s.reportSubmitted);
+  const set = usePavStore((s) => s.set);
+  const submitReport = usePavStore((s) => s.submitReport);
   const repo = useRepository();
   const demo = repo.isDemo();
   const [urgency, setUrgency] = useState('normal');
@@ -32,78 +40,75 @@ export function ReportSheet() {
     set({ reportOpen: false, reportSubmitted: false, reportType: null });
     setUrgency('normal'); setLocation(''); setPhotos([]);
   };
-  const canReport = !!state.reportType && !busy;
+  const canReport = !!reportType && !busy;
+  // A failed write keeps the sheet open with everything typed still in place;
+  // the data layer has already shown the member what went wrong.
   const send = () => {
     if (!canReport) return;
     if (demo) { submitReport(); return; }
     setBusy(true);
-    void repo.createReport({ kind: state.reportType ?? 'Other', description: state.reportDesc, urgency, location, photos })
+    void repo.createReport({ kind: reportType ?? 'Other', description: reportDesc, urgency, location, photos })
       .then(() => { set({ reportSubmitted: true, reportDesc: '' }); setPhotos([]); setLocation(''); setUrgency('normal'); })
       .catch(reportedByDataLayer)
       .finally(() => setBusy(false));
   };
 
+  const hasPhoto = demo ? reportPhoto : photos.length > 0;
+
   return (
     <Sheet
-      label="Report an issue to the board"
-      open={state.reportOpen} onClose={closeReport} maxHeight="86%">
-      {!state.reportSubmitted ? (
+      label="Report a problem to the board"
+      open={reportOpen} onClose={closeReport} maxHeight="86%">
+      {!reportSubmitted ? (
         <div>
-          <p className="m-0 mb-0.5 font-serif text-xl text-navy">Report a problem</p>
-          <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
+          <h2 className="m-0 mb-0.5 font-serif font-normal text-xl text-navy">Report a problem</h2>
+          <p className="m-0 mb-4 text-[12.5px] font-bold text-slate">
             Goes only to the board &amp; manager — never the public feed.
           </p>
 
-          <p
-            className="m-0 mb-2 text-[11px] font-bold uppercase text-slate"
-            style={{ letterSpacing: '0.12em' }}
-          >
-            Category
-          </p>
-          <div className="flex gap-1.5 flex-wrap mb-4">
-            {REPORT_CHIPS.map((label) => (
-              <Chip
-                key={label}
-                label={label}
-                active={state.reportType === label}
-                onClick={() => set({ reportType: label })}
-                size="md"
-              />
-            ))}
+          <div role="group" aria-labelledby="report-category" className="mb-4">
+            <p id="report-category" className={GROUP_LABEL}>Category</p>
+            <div className="flex gap-1.5 flex-wrap">
+              {REPORT_CHIPS.map((label) => (
+                <Chip
+                  key={label}
+                  label={label}
+                  active={reportType === label}
+                  onClick={() => set({ reportType: label })}
+                  size="md"
+                />
+              ))}
+            </div>
           </div>
 
-          <p
-            className="m-0 mb-2 text-[11px] font-bold uppercase text-slate"
-            style={{ letterSpacing: '0.12em' }}
-          >
-            What&apos;s going on?
-          </p>
-          <textarea
-            value={state.reportDesc}
+          <Field
+            as="textarea"
+            label="What's going on?"
+            value={reportDesc}
             onChange={(e) => set({ reportDesc: e.target.value })}
             placeholder="e.g. Sprinkler head broken on the Green, spraying the sidewalk"
             maxLength={2000}
-            className="w-full bg-[rgb(var(--paper))] rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans resize-none mb-3.5"
-            style={{ minHeight: 70, border: '1px solid rgb(var(--navy) / 0.12)' }}
+            rows={3}
+            className="mb-3.5"
           />
 
           {!demo && (
             <>
-              <p className="m-0 mb-2 text-[11px] font-bold uppercase text-slate" style={{ letterSpacing: '0.12em' }}>
-                How urgent?
-              </p>
-              <div className="flex gap-1.5 mb-3.5">
-                {URGENCIES.map((u) => (
-                  <Chip key={u.key} label={u.label} active={urgency === u.key} onClick={() => setUrgency(u.key)} size="md" />
-                ))}
+              <div role="group" aria-labelledby="report-urgency" className="mb-3.5">
+                <p id="report-urgency" className={GROUP_LABEL}>How urgent?</p>
+                <div className="flex gap-1.5">
+                  {URGENCIES.map((u) => (
+                    <Chip key={u.key} label={u.label} active={urgency === u.key} onClick={() => setUrgency(u.key)} size="md" />
+                  ))}
+                </div>
               </div>
-              <input
+              <Field
+                label="Where"
+                hint="Optional — e.g. the Green, by the mailboxes"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="Where? — e.g. the Green, by the mailboxes (optional)"
                 maxLength={120}
-                className="w-full bg-[rgb(var(--paper))] rounded-[13px] px-3.5 py-3 text-[13px] font-bold text-navy outline-none mb-3.5"
-                style={{ border: '1px solid rgb(var(--navy) / 0.12)' }}
+                className="mb-3.5"
               />
             </>
           )}
@@ -115,89 +120,74 @@ export function ReportSheet() {
             accept="image/*"
             multiple
             className="hidden"
+            aria-hidden="true"
+            tabIndex={-1}
             onChange={(e) => setPhotos([...photos, ...Array.from(e.target.files ?? [])].slice(0, 4))}
           />
           <button
             type="button"
             onClick={() => (demo ? set({ reportPhoto: true }) : fileRef.current?.click())}
-            className="w-full flex items-center justify-center gap-2 mb-4 cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 mb-4 cursor-pointer font-sans"
             style={{
               height: 70,
-              border: (demo ? state.reportPhoto : photos.length > 0) ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
+              border: hasPhoto ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
               borderRadius: 13,
-              background: (demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--mistdim)) 0 8px,rgb(var(--mistpale)) 8px 16px)',
+              background: hasPhoto ? 'rgb(var(--mint))' : 'rgb(var(--mistpale))',
             }}
           >
-            <PhIcon name={(demo ? state.reportPhoto : photos.length > 0) ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={(demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--sage))' : 'rgb(var(--slate))'} />
-            <span className="font-mono text-[10px]" style={{ color: (demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--sagedark))' : 'rgb(var(--slate))' }}>
+            <PhIcon name={hasPhoto ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={hasPhoto ? 'rgb(var(--sagedark))' : 'rgb(var(--slate))'} />
+            <span className="text-[12.5px] font-bold" style={{ color: hasPhoto ? 'rgb(var(--sagedark))' : 'rgb(var(--slatedark))' }}>
               {demo
-                ? (state.reportPhoto ? 'photo added ✓' : 'add a photo (optional)')
-                : (photos.length > 0 ? `${photos.length} photo${photos.length > 1 ? 's' : ''} added ✓ · tap for more` : 'add a photo (optional)')}
+                ? (reportPhoto ? 'Photo added ✓' : 'Add a photo (optional)')
+                : (photos.length > 0 ? `${photos.length} photo${photos.length > 1 ? 's' : ''} added ✓ · tap to add more` : 'Add a photo (optional)')}
             </span>
           </button>
 
           <button
+            type="button"
             onClick={send}
+            aria-disabled={!canReport}
             className="w-full border-none rounded-2xl py-[15px] text-[14.5px] font-extrabold font-sans"
             style={{
-              background: canReport ? 'rgb(var(--sunset))' : 'rgb(var(--skyrule))',
-              color: canReport ? 'rgb(var(--white))' : 'rgb(var(--slatelight))',
+              background: canReport ? 'rgb(var(--skydeep))' : 'rgb(var(--skyrule))',
+              color: canReport ? 'rgb(var(--white))' : 'rgb(var(--slatedark))',
               cursor: canReport ? 'pointer' : 'default',
             }}
           >
-            {canReport ? 'Send privately to the board' : 'Pick a category'}
+            {busy ? 'Sending…' : canReport ? 'Send privately to the board' : 'Pick a category to send'}
           </button>
         </div>
       ) : (
         <div className="text-center pt-1.5 pb-1 animate-fadeup">
           <PhIcon name="ph-fill ph-shield-check" size={48} color="rgb(var(--sage))" />
-          <p className="m-0 mt-2.5 mb-[3px] font-serif text-xl text-navy">Sent — privately.</p>
-          <p className="m-0 mb-3.5 text-[13px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
-            {demo ? 'Ticket #M-89 · ' : ''}{state.reportType} · the board sees it, the feed never does
+          <h2 className="m-0 mt-2.5 mb-[3px] font-serif font-normal text-xl text-navy">Sent — privately.</h2>
+          <p className="m-0 mb-3.5 text-[13px] font-bold text-slate">
+            {demo ? 'Ticket #M-89 · ' : ''}{reportType} · the board sees it, the feed never does
           </p>
-          <div className="flex items-center justify-center gap-0 mb-4">
-            <div className="flex flex-col items-center gap-1" style={{ width: 80 }}>
-              <span
-                className="w-5 h-5 rounded-full flex items-center justify-center"
-                style={{ background: 'rgb(var(--sage))' }}
-              >
-                <PhIcon name="ph-bold ph-check" size={10} color="rgb(var(--white))" />
-              </span>
-              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
-                Submitted
-              </span>
-            </div>
-            <div className="h-0.5" style={{ background: 'rgb(var(--skyline))', width: 36, marginBottom: 16 }} />
-            <div className="flex flex-col items-center gap-1" style={{ width: 80 }}>
-              <span
-                className="w-5 h-5 rounded-full flex items-center justify-center"
-                style={{ background: 'rgb(var(--gold))' }}
-              >
-                <PhIcon name="ph-bold ph-hourglass" size={10} color="rgb(var(--white))" />
-              </span>
-              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
-                Triage
-              </span>
-            </div>
-            <div className="h-0.5" style={{ background: 'rgb(var(--skyline))', width: 36, marginBottom: 16 }} />
-            <div className="flex flex-col items-center gap-1" style={{ width: 80 }}>
-              <span
-                className="w-5 h-5 rounded-full flex items-center justify-center"
-                style={{ background: 'rgb(var(--skyline))' }}
-              >
-                <PhIcon name="ph-bold ph-dots-three" size={10} color="rgb(var(--white))" />
-              </span>
-              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
-                Fixed
-              </span>
-            </div>
-          </div>
-          <p className="m-0 mb-3.5 text-xs font-bold" style={{ color: 'rgb(var(--slate))' }}>
+          <ol className="list-none m-0 p-0 flex items-center justify-center gap-0 mb-4" aria-label="Progress">
+            {[
+              { label: 'Submitted', icon: 'ph-bold ph-check', bg: 'rgb(var(--sagedark))', done: true },
+              { label: 'Triage', icon: 'ph-bold ph-hourglass', bg: 'rgb(var(--golddark))', done: false },
+              { label: 'Fixed', icon: 'ph-bold ph-dots-three', bg: 'rgb(var(--skyline))', done: false },
+            ].map((step, i) => (
+              <li key={step.label} className="flex items-center">
+                {i > 0 && <span className="h-0.5" style={{ background: 'rgb(var(--skyline))', width: 36, marginBottom: 18 }} aria-hidden="true" />}
+                <span className="flex flex-col items-center gap-1" style={{ width: 80 }} aria-current={step.done ? 'step' : undefined}>
+                  <span className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: step.bg }}>
+                    <PhIcon name={step.icon} size={10} color="rgb(var(--white))" />
+                  </span>
+                  <span className="text-[12px] font-bold text-slatedark">{step.label}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p className="m-0 mb-3.5 text-[12.5px] font-bold text-slate">
             Track it anytime in My Place → My requests
           </p>
           <button
+            type="button"
             onClick={closeReport}
-            className="w-full border-none text-mist rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-skydeep"
+            className="w-full border-none text-mist rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-skydeep font-sans"
           >
             Done
           </button>

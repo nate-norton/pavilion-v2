@@ -1,8 +1,15 @@
 import { Sheet } from '../components/Sheet';
+import { Pill } from '../components/Pill';
 import { ProgressBar } from '../components/ProgressBar';
 import { PhIcon } from '../components/PhIcon';
+import { SectionHeading } from '../components/SectionHeading';
 import { usePavStore } from '../store/store';
 
+/*
+ * Scripted decision detail. Decision rows are only tappable in the demo
+ * (Hoa.tsx's RowShell), so this sheet never opens over live data; it stays a
+ * presenter surface until the decisions domain carries a detail record.
+ */
 const DECISIONS = [
   {
     date: 'June 18, 2026',
@@ -46,62 +53,53 @@ export function DecisionDetailSheet() {
   const pct = Math.round((d.yes / total) * 100);
 
   return (
-    <Sheet open onClose={() => set({ decisionDetailIdx: null })}>
-      <p className="m-0 font-serif text-[19px] text-navy mb-1">{d.text}</p>
-      <p className="m-0 text-[12.5px] font-bold mb-4" style={{ color: 'rgb(var(--slate))' }}>
-        {d.date}
+    <Sheet label="Decision detail" open onClose={() => set({ decisionDetailIdx: null })}>
+      <h2 className="m-0 font-serif font-normal text-[19px] leading-[1.25] text-navy mb-1">{d.text}</h2>
+      <p className="m-0 text-[12.5px] font-semibold mb-4" style={{ color: 'rgb(var(--slate))' }}>
+        Decided {d.date}
       </p>
 
       <div className="flex items-center justify-between gap-2.5 mb-2">
-        <span
-          className="rounded-full px-2.5 py-1 text-[11px] font-bold"
-          style={{
-            background: d.passed ? 'rgb(var(--mint))' : 'rgb(var(--accenttint))',
-            color: d.passed ? 'rgb(var(--sagedark))' : 'rgb(var(--accent))',
-          }}
-        >
-          {d.passed ? 'Passed' : 'Declined'}
-        </span>
-        <span className="text-[13px] font-bold text-navy">
+        <Pill label={d.passed ? 'Passed' : 'Declined'} tone={d.passed ? 'success' : 'neutral'} size="md" />
+        <span className="font-serif text-[19px] text-navy">
           {d.yes}–{d.no}
         </span>
       </div>
 
+      {/*
+        The "no" share reads in slate, not the accent: the accent is for
+        links and active controls, and a result bar is neither.
+      */}
       <div className="mb-5">
-        <ProgressBar pct={pct} color={d.passed ? 'rgb(var(--sage))' : 'rgb(var(--accent))'} />
+        <ProgressBar pct={pct} color={d.passed ? 'rgb(var(--sage))' : 'rgb(var(--slatelight))'} track="rgb(var(--skyborder))" />
         <div className="flex justify-between mt-1.5">
-          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
+          <span className="text-[12px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
             Yes {pct}%
           </span>
-          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--accent))' }}>
+          <span className="text-[12px] font-bold text-slatedark">
             No {100 - pct}%
           </span>
         </div>
       </div>
 
-      <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--slatelight))' }}>
-          Summary
-        </p>
-        <p className="m-0 text-[13.5px] font-semibold text-navy leading-relaxed">{d.detail}</p>
-      </div>
+      <SectionHeading title="Summary" className="mb-1.5" />
+      <p className="m-0 mb-4 text-[13.5px] font-semibold text-navy leading-relaxed">{d.detail}</p>
 
-      <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--slatelight))' }}>
-          Board members present
-        </p>
+      <SectionHeading title="Board members present" meta={`${d.board.length} of ${d.board.length}`} className="mb-1" />
+      <ul className="m-0 mb-4 p-0 list-none">
         {d.board.map((name) => (
-          <div key={name} className="flex items-center gap-2 py-1">
+          <li key={name} className="flex items-center gap-2 py-1.5">
             <PhIcon name="ph-fill ph-check-circle" size={14} color="rgb(var(--sage))" />
-            <span className="text-[13px] font-bold text-navy">{name}</span>
-          </div>
+            <span className="text-[13.5px] font-bold text-navy">{name}</span>
+          </li>
         ))}
-      </div>
+      </ul>
 
       <button
+        type="button"
         onClick={() => set({ docsOpen: true, docReader: false, decisionDetailIdx: null })}
-        className="w-full rounded-2xl py-3 border-none text-[13.5px] font-extrabold cursor-pointer font-sans bg-transparent"
-        style={{ border: '1.5px solid rgb(var(--navy) / 0.15)', color: 'rgb(var(--navy))' }}
+        className="w-full rounded-2xl py-3 text-[13.5px] font-extrabold cursor-pointer font-sans bg-transparent"
+        style={{ border: '1.5px solid rgb(var(--navy) / 0.15)', color: 'rgb(var(--navy))', minHeight: 44 }}
       >
         View full meeting minutes
       </button>

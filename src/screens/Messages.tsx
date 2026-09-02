@@ -1,20 +1,32 @@
 import { useState } from 'react';
+import { Avatar } from '../components/Avatar';
 import { BackButton } from '../components/BackButton';
+import { Card } from '../components/Card';
+import { Chip } from '../components/Chip';
+import { EmptyState } from '../components/EmptyState';
 import { PhIcon } from '../components/PhIcon';
+import { Pill } from '../components/Pill';
+import { SectionHeading } from '../components/SectionHeading';
 import { usePavStore } from '../store/store';
 import { useChatSeed, useChats, useGroups } from '../data/repo';
 
 type MsgTab = 'direct' | 'group-chats' | 'groups';
 
+/** Group colours are `rgb(var(--x))` tokens; a pale bed of the same hue is the alpha form. */
+const tintOf = (color: string) => color.replace(/\)\s*$/, ' / 0.12)');
+
 export function Messages() {
-  const state = usePavStore();
-  const { set } = state;
+  const msgsOpen = usePavStore((s) => s.msgsOpen);
+  const chatWith = usePavStore((s) => s.chatWith);
+  const activeGroup = usePavStore((s) => s.activeGroup);
+  const newMsgOpen = usePavStore((s) => s.newMsgOpen);
+  const set = usePavStore((s) => s.set);
   const CHAT_SEED = useChatSeed();
   const chats = useChats();
   const groups = useGroups();
   const [msgTab, setMsgTab] = useState<MsgTab>('direct');
 
-  if (!state.msgsOpen || state.chatWith || state.activeGroup) return null;
+  if (!msgsOpen || chatWith || activeGroup) return null;
 
   const tabs: { key: MsgTab; label: string }[] = [
     { key: 'direct', label: 'Direct' },
@@ -24,6 +36,7 @@ export function Messages() {
 
   const groupChats = Object.values(groups).filter((g) => g.isGroupChat);
   const communityGroups = Object.values(groups).filter((g) => !g.isGroupChat);
+  const people = Object.entries(CHAT_SEED);
 
   const gcUnread = groupChats.reduce((n, g) => n + (g.joined && g.messages.length > 0 ? 1 : 0), 0);
   const grUnread = communityGroups.filter((g) => g.joined).length;
@@ -37,120 +50,118 @@ export function Messages() {
       <BackButton onClick={() => set({ msgsOpen: false })} />
       <div className="flex items-center justify-between mb-1">
         <h1 className="m-0 font-serif font-normal text-[24px] text-navy">Messages</h1>
-        <div className="flex gap-2">
+        <div className="flex">
           {msgTab !== 'direct' && (
             <button
               type="button"
+              aria-label="Create a group"
               onClick={() => set({ createGroupOpen: true })}
-              className="w-9 h-9 rounded-full border-none flex items-center justify-center cursor-pointer"
-              style={{ background: 'rgb(var(--navy) / 0.06)' }}
+              className="w-11 h-11 border-none bg-transparent flex items-center justify-center cursor-pointer"
             >
-              <PhIcon name="ph-bold ph-plus" size={16} color="rgb(var(--skydeep))" />
+              <span className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'rgb(var(--navy) / 0.06)' }}>
+                <PhIcon name="ph-bold ph-plus" size={16} color="rgb(var(--skydeep))" />
+              </span>
             </button>
           )}
           <button
             type="button"
-            onClick={() => set({ newMsgOpen: true })}
-            className="w-9 h-9 rounded-full border-none flex items-center justify-center cursor-pointer bg-skydeep"
+            aria-label="New message"
+            aria-expanded={newMsgOpen}
+            onClick={() => set({ newMsgOpen: !newMsgOpen })}
+            className="w-11 h-11 -mr-1 border-none bg-transparent flex items-center justify-center cursor-pointer"
           >
-            <PhIcon name="ph-bold ph-pencil-simple-line" size={16} color="rgb(var(--mist))" />
+            <span className="w-9 h-9 rounded-full flex items-center justify-center bg-skydeep">
+              <PhIcon name="ph-bold ph-pencil-simple-line" size={16} color="rgb(var(--mist))" />
+            </span>
           </button>
         </div>
       </div>
-      <p className="m-0 mb-3 text-[13px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
+      <p className="m-0 mb-3 text-[13px] font-semibold text-slatedeep">
         Neighbor-to-neighbor. Private, and never in the feed.
       </p>
 
-      <div className="flex gap-1.5 mb-4">
+      <div className="flex gap-1.5 mb-4 flex-wrap" role="group" aria-label="Show">
         {tabs.map((t) => {
           const badge = t.key === 'group-chats' ? gcUnread : t.key === 'groups' ? grUnread : 0;
           return (
-            <button
+            <Chip
               key={t.key}
+              label={badge > 0 && msgTab !== t.key ? `${t.label} · ${badge}` : t.label}
+              active={msgTab === t.key}
               onClick={() => setMsgTab(t.key)}
-              className="border-none rounded-full px-3 py-[7px] text-[12px] font-extrabold cursor-pointer flex items-center gap-1.5"
-              style={
-                msgTab === t.key
-                  ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))' }
-                  : { background: 'rgb(var(--navy) / 0.06)', color: 'rgb(var(--navy))' }
-              }
-            >
-              {t.label}
-              {badge > 0 && msgTab !== t.key && (
-                <span className="w-[7px] h-[7px] rounded-full" style={{ background: 'rgb(var(--sunset))' }} />
-              )}
-            </button>
+              size="md"
+            />
           );
         })}
       </div>
 
-      {state.newMsgOpen && (
-        <div className="rounded-2xl mb-4 overflow-hidden animate-fadeup" style={{ border: '1px solid rgb(var(--navy) / 0.1)' }}>
-          <p className="m-0 px-3.5 pt-3 pb-2 text-[11px] font-bold uppercase text-slate" style={{ letterSpacing: '0.12em' }}>
-            Start a conversation
-          </p>
-          {Object.entries(CHAT_SEED).map(([k, p]) => (
+      {newMsgOpen && (
+        <Card padding="none" className="mb-4 overflow-hidden animate-fadeup">
+          <p className="m-0 px-3.5 pt-3 pb-2 text-[13.5px] font-bold text-navy">Start a conversation</p>
+          {people.length === 0 && (
+            <p className="m-0 px-3.5 pb-3 text-[12.5px] font-semibold text-slate">
+              Neighbors appear here as they join and opt in to the directory.
+            </p>
+          )}
+          {people.map(([k, p]) => (
             <button
               type="button"
               key={k}
               onClick={() => set({ chatWith: k, msgsOpen: false, newMsgOpen: false })}
-              className="w-full border-none font-sans text-left flex items-center gap-2.5 px-3.5 py-2.5 cursor-pointer bg-[rgb(var(--paper))]"
+              className="w-full border-none font-sans text-left flex items-center gap-2.5 px-3.5 py-2.5 min-h-[44px] cursor-pointer bg-paper"
               style={{ borderTop: '1px solid rgb(var(--navy) / 0.06)' }}
             >
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center text-white font-extrabold text-xs flex-shrink-0"
-                style={{ background: p.color }}
-              >
-                {p.initial}
-              </div>
-              <p className="m-0 text-[13px] font-bold text-navy">{p.name} <span className="font-semibold text-slatelight">· {p.unit}</span></p>
+              <Avatar initial={p.initial} color={p.color} size={32} />
+              <p className="m-0 text-[13px] font-bold text-navy">{p.name} <span className="font-semibold text-slate">· {p.unit}</span></p>
             </button>
           ))}
-        </div>
+        </Card>
       )}
 
       {/* Direct messages */}
       {msgTab === 'direct' && (
         <div className="flex flex-col gap-[9px]">
-          {Object.entries(CHAT_SEED).map(([k, p]) => {
+          {people.length === 0 && (
+            <EmptyState
+              icon="ph-fill ph-chats-circle"
+              title="No conversations yet"
+              body="Message a neighbor from the People tab in the Commons, or start one here once neighbors have joined."
+            />
+          )}
+          {people.map(([k, p]) => {
             const mine = chats[k] || [];
             const last = mine.length ? mine[mine.length - 1] : { text: p.seed, me: false };
             const preview = (last.me ? 'You: ' : '') + last.text;
             const lastTime = mine.length ? mine[mine.length - 1].time || 'now' : p.time;
             return (
-              <button
-                type="button"
+              <Card
                 key={k}
+                padding="none"
                 onClick={() => set({ chatWith: k, msgsOpen: false })}
-                className="w-full border-none font-sans text-left flex items-center gap-3 cursor-pointer"
-                style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '13px 14px' }}
+                className="px-3.5 py-3 min-h-[44px]"
+                style={{ borderRadius: 16 }}
               >
-                <div
-                  className="w-11 h-11 rounded-full flex items-center justify-center text-white font-extrabold text-base flex-shrink-0"
-                  style={{ background: p.color }}
-                >
-                  {p.initial}
-                </div>
+                <div className="flex items-center gap-3">
+                <Avatar initial={p.initial} color={p.color} size={44} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2">
-                    <p className="m-0 flex-1 text-sm font-bold text-navy min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <p className="m-0 flex-1 text-[13.5px] font-bold text-navy min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
                       {p.name}{' '}
-                      <span className="font-semibold" style={{ color: 'rgb(var(--slatelight))' }}>
-                        · {p.unit}
-                      </span>
+                      <span className="font-semibold text-slate">· {p.unit}</span>
                     </p>
-                    <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--slatelight))' }}>
-                      {lastTime}
-                    </span>
+                    <span className="text-[12px] font-bold flex-shrink-0 text-slate">{lastTime}</span>
                   </div>
-                  <p className="mt-0.5 mb-0 text-[12.5px] font-semibold overflow-hidden text-ellipsis whitespace-nowrap" style={{ color: 'rgb(var(--slate))' }}>
+                  <p className={`mt-0.5 mb-0 text-[12.5px] overflow-hidden text-ellipsis whitespace-nowrap ${p.unread > 0 ? 'font-bold text-navy' : 'font-semibold text-slate'}`}>
                     {preview}
                   </p>
                 </div>
                 {p.unread > 0 && (
-                  <span data-testid="msg-unread" className="w-[9px] h-[9px] rounded-full flex-shrink-0" style={{ background: 'rgb(var(--sunset))' }} />
+                  <span data-testid="msg-unread" className="flex-shrink-0">
+                    <Pill label={p.unread > 1 ? `${p.unread} new` : 'New'} tone="info" size="md" />
+                  </span>
                 )}
-              </button>
+                </div>
+              </Card>
             );
           })}
         </div>
@@ -160,7 +171,13 @@ export function Messages() {
       {msgTab === 'group-chats' && (
         <div className="flex flex-col gap-[9px]">
           {groupChats.length === 0 ? (
-            <EmptyState icon="ph ph-chat-circle-dots" text="No group chats yet" actionLabel="Create one" onAction={() => set({ createGroupOpen: true })} />
+            <EmptyState
+              icon="ph-fill ph-chats-circle"
+              title="No group chats yet"
+              body="A group chat is a private thread for a few neighbors — a street, a carpool, a project."
+              actionLabel="Create a group chat"
+              onAction={() => set({ createGroupOpen: true })}
+            />
           ) : (
             groupChats.map((gc) => {
               const lastMsg = gc.messages[gc.messages.length - 1];
@@ -184,22 +201,31 @@ export function Messages() {
       {msgTab === 'groups' && (
         <div className="flex flex-col gap-[9px]">
           {communityGroups.length === 0 ? (
-            <EmptyState icon="ph ph-users-three" text="No groups yet" actionLabel="Start one" onAction={() => set({ createGroupOpen: true })} />
+            <EmptyState
+              icon="ph-fill ph-users-three"
+              title="No groups yet"
+              body="Groups are open to the whole community — anyone can find and join them."
+              actionLabel="Start a group"
+              onAction={() => set({ createGroupOpen: true })}
+            />
           ) : (
-            communityGroups.map((g) => {
-              const lastMsg = g.messages[g.messages.length - 1];
-              const preview = lastMsg ? lastMsg.text : g.description;
-              const lastTime = lastMsg?.time || '';
-              return (
-                <GroupRow
-                  key={g.key}
-                  group={g}
-                  preview={preview}
-                  time={lastTime}
-                  onClick={() => set({ activeGroup: g.key })}
-                />
-              );
-            })
+            <>
+              <SectionHeading title="Community groups" meta={`${communityGroups.filter((g) => g.joined).length} of ${communityGroups.length} joined`} className="mb-0.5" />
+              {communityGroups.map((g) => {
+                const lastMsg = g.messages[g.messages.length - 1];
+                const preview = lastMsg ? lastMsg.text : g.description;
+                const lastTime = lastMsg?.time || '';
+                return (
+                  <GroupRow
+                    key={g.key}
+                    group={g}
+                    preview={preview}
+                    time={lastTime}
+                    onClick={() => set({ activeGroup: g.key })}
+                  />
+                );
+              })}
+            </>
           )}
         </div>
       )}
@@ -217,66 +243,35 @@ function GroupRow({ group, preview, time, onClick }: {
   const upcomingEvents = group.events.filter((e) => !e.rsvped).length;
 
   return (
-    <button type="button"
-      onClick={onClick}
-      className="w-full border-none font-sans bg-transparent text-left flex items-center gap-3 cursor-pointer"
-      style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: '13px 14px' }}
-    >
+    <Card padding="none" onClick={onClick} className="px-3.5 py-3 min-h-[44px]" style={{ borderRadius: 16 }}>
+      <div className="flex items-center gap-3">
       <div
         className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
-        style={{ background: group.color + '18' }}
+        style={{ background: tintOf(group.color) }}
       >
         <PhIcon name={group.icon} size={20} color={group.color} />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2">
-          <p className="m-0 flex-1 text-sm font-bold text-navy min-w-0 overflow-hidden text-ellipsis whitespace-nowrap flex items-center gap-1.5">
+          <p className="m-0 flex-1 text-[13.5px] font-bold text-navy min-w-0 overflow-hidden text-ellipsis whitespace-nowrap flex items-center gap-1.5">
             {group.name}
-            {group.muted && <PhIcon name="ph-fill ph-bell-slash" size={11} color="rgb(var(--slatelight))" />}
+            {group.muted && <PhIcon name="ph-fill ph-bell-slash" size={11} color="rgb(var(--slate))" />}
+            {group.muted && <span className="sr-only">(muted)</span>}
           </p>
-          <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--slatelight))' }}>
-            {time}
-          </span>
+          <span className="text-[12px] font-bold flex-shrink-0 text-slate">{time}</span>
         </div>
-        <p className="mt-0.5 mb-0 text-[12.5px] font-semibold overflow-hidden text-ellipsis whitespace-nowrap" style={{ color: 'rgb(var(--slate))' }}>
+        <p className="mt-0.5 mb-0 text-[12.5px] font-semibold overflow-hidden text-ellipsis whitespace-nowrap text-slate">
           {preview}
         </p>
         {(openPolls > 0 || upcomingEvents > 0) && (
-          <div className="flex gap-2 mt-1">
-            {openPolls > 0 && (
-              <span className="text-[10.5px] font-bold rounded-full px-2 py-0.5" style={{ background: 'rgb(var(--goldpale))', color: 'rgb(var(--golddark))' }}>
-                {openPolls} poll{openPolls > 1 ? 's' : ''}
-              </span>
-            )}
-            {upcomingEvents > 0 && (
-              <span className="text-[10.5px] font-bold rounded-full px-2 py-0.5" style={{ background: 'rgb(var(--skypale))', color: 'rgb(var(--skydeep))' }}>
-                {upcomingEvents} event{upcomingEvents > 1 ? 's' : ''}
-              </span>
-            )}
+          <div className="flex gap-1.5 mt-1.5">
+            {openPolls > 0 && <Pill label={`${openPolls} poll${openPolls > 1 ? 's' : ''} to answer`} tone="warning" size="md" />}
+            {upcomingEvents > 0 && <Pill label={`${upcomingEvents} event${upcomingEvents > 1 ? 's' : ''}`} tone="info" size="md" />}
           </div>
         )}
       </div>
-      {!group.joined && (
-        <span className="text-[11px] font-bold rounded-full px-2.5 py-1 flex-shrink-0" style={{ background: 'rgb(var(--navy) / 0.06)', color: 'rgb(var(--slate))' }}>
-          Join
-        </span>
-      )}
-    </button>
-  );
-}
-
-function EmptyState({ icon, text, actionLabel, onAction }: { icon: string; text: string; actionLabel: string; onAction: () => void }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-10">
-      <PhIcon name={icon} size={36} color="rgb(var(--slatepale))" />
-      <p className="m-0 mt-2 text-[13px] font-semibold" style={{ color: 'rgb(var(--slatelight))' }}>{text}</p>
-      <button
-        onClick={onAction}
-        className="mt-3 border-none rounded-full px-4 py-2.5 text-[12.5px] font-extrabold cursor-pointer"
-        style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))' }}
-      >
-        {actionLabel}
-      </button>
-    </div>
+      {!group.joined && <Pill label="Not joined" tone="neutral" size="md" />}
+      </div>
+    </Card>
   );
 }

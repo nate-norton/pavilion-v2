@@ -1,11 +1,24 @@
-import { useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { reportedByDataLayer } from '../lib/errorBus';
+import { Field } from '../components/Field';
 import { PhIcon } from '../components/PhIcon';
 import { Hint } from '../components/Hint';
 import { Sheet } from '../components/Sheet';
 import { Chip } from '../components/Chip';
 import { usePavStore } from '../store/store';
 import { useArcTypes, useRepository } from '../data/repo';
+
+/** The label above a non-input control, matching Field's own label. */
+const LABEL = 'block mb-1.5 text-[12.5px] font-bold text-slatedark';
+
+const TILE_EMPTY = {
+  border: '1.5px dashed rgb(var(--navy) / 0.2)',
+  background: 'repeating-linear-gradient(-45deg,rgb(var(--mistdim)) 0 8px,rgb(var(--mistpale)) 8px 16px)',
+} as const;
+const TILE_FILLED = {
+  border: '1.5px solid rgb(var(--sage) / 0.4)',
+  background: 'rgb(var(--mint))',
+} as const;
 
 /** ARC request sheet — ported from prototype lines 1358-1397. */
 export function ArcSheet() {
@@ -16,6 +29,8 @@ export function ArcSheet() {
   const [attachments, setAttachments] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const typeLabelId = useId();
+  const photosLabelId = useId();
 
   const closeArc = () => set({ arcSheetOpen: false });
   const canSubmit = !!state.arcType && !busy;
@@ -29,23 +44,24 @@ export function ArcSheet() {
       .finally(() => setBusy(false));
   };
   const demo = repo.isDemo();
+  const fileCount = attachments.length;
 
   return (
     <Sheet
       label="New architectural request"
       open={state.arcSheetOpen} onClose={closeArc} maxHeight="86%">
       <p className="m-0 mb-0.5 font-serif text-xl text-navy">New ARC request</p>
-      <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
-        Most requests get a decision within 7 days.
+      {/*
+        The demo's "7 days" is a scripted promise about Juniper Ridge. Live
+        has no turnaround data to back a number, so it says what the app can
+        actually guarantee: that every step shows up here.
+      */}
+      <p className="m-0 mb-4 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
+        {demo ? 'Most requests get a decision within 7 days.' : 'Your board reviews it and you see every step here.'}
       </p>
 
-      <p
-        className="m-0 mb-2 text-[11px] font-bold uppercase text-slate"
-        style={{ letterSpacing: '0.12em' }}
-      >
-        Project type
-      </p>
-      <div className="flex gap-1.5 flex-wrap mb-4">
+      <span id={typeLabelId} className={LABEL}>Project type</span>
+      <div className="flex gap-1.5 flex-wrap mb-4" role="group" aria-labelledby={typeLabelId}>
         {ARC_TYPES.map((label) => (
           <Chip
             key={label}
@@ -57,27 +73,18 @@ export function ArcSheet() {
         ))}
       </div>
 
-      <p
-        className="m-0 mb-2 text-[11px] font-bold uppercase text-slate"
-        style={{ letterSpacing: '0.12em' }}
-      >
-        Describe the change
-      </p>
-      <textarea
+      <Field
+        as="textarea"
+        label="Describe the change"
         value={state.arcDesc}
         onChange={(e) => set({ arcDesc: e.target.value })}
         placeholder="e.g. Repaint front door in Sage, per the approved palette"
         maxLength={2000}
-        className="w-full bg-[rgb(var(--paper))] rounded-[13px] px-3.5 py-3 text-[13.5px] font-bold text-navy outline-none font-sans resize-none mb-4"
-        style={{ minHeight: 72, border: '1px solid rgb(var(--navy) / 0.12)' }}
+        rows={3}
+        className="mb-4"
       />
 
-      <p
-        className="m-0 mb-2 text-[11px] font-bold uppercase text-slate"
-        style={{ letterSpacing: '0.12em' }}
-      >
-        Photos
-      </p>
+      <span id={photosLabelId} className={LABEL}>Photos</span>
       {/* Live: real files (plans, photos, paint chips). Demo: scripted toggles. */}
       {!demo && (
         <>
@@ -91,54 +98,44 @@ export function ArcSheet() {
           />
           <button
             type="button"
+            aria-labelledby={photosLabelId}
+            aria-describedby={`${photosLabelId}-hint`}
             onClick={() => fileRef.current?.click()}
-            className="w-full flex items-center justify-center gap-2 mb-4 cursor-pointer"
-            style={{
-              height: 70,
-              border: attachments.length ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
-              borderRadius: 13,
-              background: attachments.length ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--mistdim)) 0 8px,rgb(var(--mistpale)) 8px 16px)',
-            }}
+            className="w-full flex items-center justify-center gap-2 cursor-pointer font-sans"
+            style={{ minHeight: 70, borderRadius: 13, ...(fileCount ? TILE_FILLED : TILE_EMPTY) }}
           >
-            <PhIcon name={attachments.length ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={attachments.length ? 'rgb(var(--sage))' : 'rgb(var(--slate))'} />
-            <span className="font-mono text-[10px]" style={{ color: attachments.length ? 'rgb(var(--sagedark))' : 'rgb(var(--slate))' }}>
-              {attachments.length ? `${attachments.length} file${attachments.length > 1 ? 's' : ''} added ✓ · tap for more` : 'photos, plans, paint chips (PDF ok)'}
+            <PhIcon name={fileCount ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={fileCount ? 'rgb(var(--sagedark))' : 'rgb(var(--slatedark))'} />
+            <span className="text-[12.5px] font-bold" style={{ color: fileCount ? 'rgb(var(--sagedark))' : 'rgb(var(--slatedark))' }}>
+              {fileCount ? `${fileCount} file${fileCount > 1 ? 's' : ''} added · tap to add more` : 'Add photos or plans'}
             </span>
           </button>
+          <p id={`${photosLabelId}-hint`} className="m-0 mt-1.5 mb-4 text-[12px] font-semibold text-slate leading-[1.4]">
+            Photos, plans or paint chips · PDF is fine · up to 6
+          </p>
         </>
       )}
       {demo && (
-      <div className="grid grid-cols-2 gap-2.5 mb-4">
+      <div className="grid grid-cols-2 gap-2.5 mb-4" role="group" aria-labelledby={photosLabelId}>
         <button
           type="button"
           onClick={() => set({ arcPhoto1: true })}
-          className="flex flex-col items-center justify-center gap-1 cursor-pointer"
-          style={{
-            height: 76,
-            border: state.arcPhoto1 ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
-            borderRadius: 13,
-            background: state.arcPhoto1 ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--mistdim)) 0 8px,rgb(var(--mistpale)) 8px 16px)',
-          }}
+          className="flex flex-col items-center justify-center gap-1 cursor-pointer font-sans"
+          style={{ height: 76, borderRadius: 13, ...(state.arcPhoto1 ? TILE_FILLED : TILE_EMPTY) }}
         >
-          <PhIcon name={state.arcPhoto1 ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={19} color={state.arcPhoto1 ? 'rgb(var(--sage))' : 'rgb(var(--slate))'} />
-          <span className="font-mono text-[10px]" style={{ color: state.arcPhoto1 ? 'rgb(var(--sagedark))' : 'rgb(var(--slate))' }}>
-            {state.arcPhoto1 ? 'added ✓' : 'current state'}
+          <PhIcon name={state.arcPhoto1 ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={19} color={state.arcPhoto1 ? 'rgb(var(--sagedark))' : 'rgb(var(--slatedark))'} />
+          <span className="text-[12.5px] font-bold" style={{ color: state.arcPhoto1 ? 'rgb(var(--sagedark))' : 'rgb(var(--slatedark))' }}>
+            {state.arcPhoto1 ? 'Added' : 'Current state'}
           </span>
         </button>
         <button
           type="button"
           onClick={() => set({ arcPhoto2: true })}
-          className="flex flex-col items-center justify-center gap-1 cursor-pointer"
-          style={{
-            height: 76,
-            border: state.arcPhoto2 ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
-            borderRadius: 13,
-            background: state.arcPhoto2 ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--mistdim)) 0 8px,rgb(var(--mistpale)) 8px 16px)',
-          }}
+          className="flex flex-col items-center justify-center gap-1 cursor-pointer font-sans"
+          style={{ height: 76, borderRadius: 13, ...(state.arcPhoto2 ? TILE_FILLED : TILE_EMPTY) }}
         >
-          <PhIcon name={state.arcPhoto2 ? 'ph-fill ph-check-circle' : 'ph ph-image-square'} size={19} color={state.arcPhoto2 ? 'rgb(var(--sage))' : 'rgb(var(--slate))'} />
-          <span className="font-mono text-[10px]" style={{ color: state.arcPhoto2 ? 'rgb(var(--sagedark))' : 'rgb(var(--slate))' }}>
-            {state.arcPhoto2 ? 'added ✓' : 'plan / inspiration'}
+          <PhIcon name={state.arcPhoto2 ? 'ph-fill ph-check-circle' : 'ph ph-image-square'} size={19} color={state.arcPhoto2 ? 'rgb(var(--sagedark))' : 'rgb(var(--slatedark))'} />
+          <span className="text-[12.5px] font-bold" style={{ color: state.arcPhoto2 ? 'rgb(var(--sagedark))' : 'rgb(var(--slatedark))' }}>
+            {state.arcPhoto2 ? 'Added' : 'Plan / inspiration'}
           </span>
         </button>
       </div>
@@ -167,15 +164,19 @@ export function ArcSheet() {
       </div>
 
       <button
+        type="button"
         onClick={submit}
+        disabled={!canSubmit}
+        aria-busy={busy}
         className="w-full border-none rounded-2xl py-4 text-[14px] font-extrabold font-sans"
         style={{
           background: canSubmit ? 'rgb(var(--skydeep))' : 'rgb(var(--skyrule))',
-          color: canSubmit ? 'rgb(var(--white))' : 'rgb(var(--slatelight))',
+          color: canSubmit ? 'rgb(var(--white))' : 'rgb(var(--slatedark))',
           cursor: canSubmit ? 'pointer' : 'default',
+          minHeight: 44,
         }}
       >
-        {canSubmit ? 'Submit to the board' : 'Pick a project type'}
+        {busy ? 'Sending…' : canSubmit ? 'Submit to the board' : 'Pick a project type'}
       </button>
     </Sheet>
   );

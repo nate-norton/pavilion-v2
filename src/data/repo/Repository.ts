@@ -171,7 +171,7 @@ export interface OpenVote {
   noCount: number;
   yesPct: number;
   myVote: VoteChoice | null;
-  receipt: string;         // '#R-0482'
+  receipt: string;         // '#R-0482' — this member's own ballot receipt; '' when the ballot row has none yet
   yesLabel: string;        // 'Yes, replace it'
   noLabel: string;         // 'No, wait a year'
   kind: 'yesno' | 'options';

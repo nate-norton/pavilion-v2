@@ -1,5 +1,7 @@
 import { useRef, useState } from 'react';
 import { reportedByDataLayer } from '../lib/errorBus';
+import { Chip } from '../components/Chip';
+import { Field } from '../components/Field';
 import { Sheet } from '../components/Sheet';
 import { PhIcon } from '../components/PhIcon';
 import { Confetti } from '../components/Confetti';
@@ -12,6 +14,8 @@ const KINDS = [
   { key: 'borrow', label: 'Help & Borrow' },
   { key: 'sale', label: 'For Sale & Free' },
 ];
+
+const MAX = 2000;
 
 export function ComposeSheet() {
   const composeOpen = usePavStore((s) => s.composeOpen);
@@ -34,8 +38,11 @@ export function ComposeSheet() {
     setPosted(false);
   };
 
+  const canPost = text.trim().length > 0 && !busy;
+  // A failed post keeps the sheet open with the draft intact; the data layer
+  // has already told the member what went wrong.
   const post = () => {
-    if (!text.trim() || busy) return;
+    if (!canPost) return;
     if (demo) {
       setPosted(true);
       setTimeout(close, 1600);
@@ -49,79 +56,70 @@ export function ComposeSheet() {
       .finally(() => setBusy(false));
   };
 
+  const photoBtn = 'w-11 h-11 border-none bg-transparent flex items-center justify-center cursor-pointer -ml-1';
+  const disc = 'w-9 h-9 rounded-full bg-mist flex items-center justify-center';
+
   return (
     <Sheet label="Share something with neighbors" open onClose={close}>
       {posted ? (
-        <div className="text-center py-6 animate-fadeup">
+        <div className="text-center py-6 animate-fadeup" role="status">
           <Confetti />
           <PhIcon name="ph-fill ph-check-circle" size={40} color="rgb(var(--sage))" />
-          <p className="m-0 mt-3 font-serif text-[19px] text-navy">Posted!</p>
-          <p className="m-0 mt-1 text-[13px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
+          <h2 className="m-0 mt-3 font-serif font-normal text-[19px] text-navy">Posted!</h2>
+          <p className="m-0 mt-1 text-[13px] font-bold text-slate">
             Your neighbors will see this in the feed.
           </p>
         </div>
       ) : (
         <>
-          <p className="m-0 mb-3 font-serif text-[19px] text-navy">Share with your neighbors</p>
+          <h2 className="m-0 mb-3 font-serif font-normal text-[19px] text-navy">Share with your neighbors</h2>
           {!demo && (
-            <div className="flex gap-1.5 flex-wrap mb-2.5">
+            <div role="group" aria-label="Kind of post" className="flex gap-1.5 flex-wrap mb-3">
               {KINDS.map((k) => (
-                <button
-                  key={k.key}
-                  onClick={() => setKind(k.key)}
-                  className="rounded-full px-3 py-1.5 text-[11.5px] font-extrabold cursor-pointer"
-                  style={kind === k.key
-                    ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))', border: '1.5px solid rgb(var(--navy))' }
-                    : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
-                >
-                  {k.label}
-                </button>
+                <Chip key={k.key} label={k.label} active={kind === k.key} onClick={() => setKind(k.key)} size="md" />
               ))}
             </div>
           )}
-          <textarea
+          <Field
+            as="textarea"
+            label="Your post"
+            hideLabel
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="What's on your mind?"
-            maxLength={2000}
-            className="w-full rounded-2xl border-none bg-mist px-4 py-3 text-[14px] font-semibold text-navy resize-none font-sans"
-            style={{ minHeight: 100, outline: 'none' }}
+            maxLength={MAX}
+            rows={4}
+            autoFocus
+            style={{ minHeight: 100, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))', borderRadius: 16, padding: '12px 16px', fontSize: 14 }}
           />
           {/* A cap that silently stops accepting keystrokes reads as a broken
               field. Show the ceiling only once it is close enough to matter. */}
-          {text.length > 1700 && (
+          {text.length > MAX - 300 && (
             <p
-              className="m-0 mt-1.5 text-right text-[11.5px] font-bold"
-              style={{ color: text.length >= 2000 ? 'rgb(var(--accent))' : 'rgb(var(--slate))' }}
+              className="m-0 mt-1.5 text-right text-[12px] font-bold"
+              style={{ color: text.length >= MAX ? 'rgb(var(--sunsetdeep))' : 'rgb(var(--slate))' }}
+              aria-live="polite"
             >
-              {text.length >= 2000
-                ? 'Character limit reached (2,000)'
-                : `${(2000 - text.length).toLocaleString()} characters left`}
+              {text.length >= MAX
+                ? `That's the limit (${MAX.toLocaleString()} characters) — trim a little to post`
+                : `${(MAX - text.length).toLocaleString()} characters left`}
             </p>
           )}
-          <div className="flex items-center justify-between mt-3">
-            <div className="flex gap-2 items-center">
+          <div className="flex items-center justify-between mt-3 gap-2">
+            <div className="flex gap-1 items-center min-w-0">
               {demo ? (
                 composePhoto ? (
-                  <span className="text-[11.5px] font-bold text-sage flex items-center gap-1">
-                    <PhIcon name="ph-fill ph-check-circle" size={14} color="rgb(var(--sage))" />
+                  <span className="text-[12.5px] font-bold text-sagedark flex items-center gap-1">
+                    <PhIcon name="ph-fill ph-check-circle" size={14} color="rgb(var(--sagedark))" />
                     Photo attached
                   </span>
                 ) : (
                   <>
-                    <button
-                      type="button"
-                      onClick={() => set({ composePhoto: true })}
-                      className="w-9 h-9 rounded-full bg-mist flex items-center justify-center border-none cursor-pointer"
-                    >
-                      <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--slate))" />
+                    <button type="button" aria-label="Take a photo" onClick={() => set({ composePhoto: true })} className={photoBtn}>
+                      <span className={disc}><PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--slate))" /></span>
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => set({ composePhoto: true })}
-                      className="w-9 h-9 rounded-full bg-mist flex items-center justify-center border-none cursor-pointer"
-                    >
-                      <PhIcon name="ph-fill ph-image-square" size={18} color="rgb(var(--slate))" />
+                    <button type="button" aria-label="Add a photo from your library" onClick={() => set({ composePhoto: true })} className={photoBtn}>
+                      <span className={disc}><PhIcon name="ph-fill ph-image-square" size={18} color="rgb(var(--slate))" /></span>
                     </button>
                   </>
                 )
@@ -133,34 +131,36 @@ export function ComposeSheet() {
                     accept="image/*"
                     multiple
                     className="hidden"
+                    aria-hidden="true"
+                    tabIndex={-1}
                     onChange={(e) => setPhotos([...photos, ...Array.from(e.target.files ?? [])].slice(0, 4))}
                   />
-                  <button
-                    type="button"
-                    onClick={() => fileRef.current?.click()}
-                    className="w-9 h-9 rounded-full bg-mist flex items-center justify-center border-none cursor-pointer"
-                  >
-                    <PhIcon name="ph-fill ph-image-square" size={18} color={photos.length ? 'rgb(var(--sage))' : 'rgb(var(--slate))'} />
+                  <button type="button" aria-label={photos.length ? 'Add another photo' : 'Add a photo'} onClick={() => fileRef.current?.click()} className={photoBtn}>
+                    <span className={disc}>
+                      <PhIcon name="ph-fill ph-image-square" size={18} color={photos.length ? 'rgb(var(--sagedark))' : 'rgb(var(--slate))'} />
+                    </span>
                   </button>
                   {photos.length > 0 && (
-                    <span className="text-[11.5px] font-bold text-sage flex items-center gap-1">
-                      <PhIcon name="ph-fill ph-check-circle" size={14} color="rgb(var(--sage))" />
-                      {photos.length} photo{photos.length > 1 ? 's' : ''}
+                    <span className="text-[12.5px] font-bold text-sagedark flex items-center gap-1">
+                      <PhIcon name="ph-fill ph-check-circle" size={14} color="rgb(var(--sagedark))" />
+                      {photos.length} photo{photos.length > 1 ? 's' : ''}{photos.length >= 4 ? ' (max)' : ''}
                     </span>
                   )}
                 </>
               )}
             </div>
             <button
+              type="button"
               onClick={post}
-              disabled={!text.trim() || busy}
-              className="rounded-2xl px-5 py-2.5 border-none text-[14px] font-extrabold cursor-pointer font-sans"
+              disabled={!canPost}
+              className="rounded-full px-5 border-none text-[13.5px] font-extrabold cursor-pointer font-sans min-h-[44px] flex-shrink-0"
               style={{
-                background: text.trim() && !busy ? 'rgb(var(--navy))' : 'rgb(var(--navy) / 0.1)',
-                color: text.trim() && !busy ? 'rgb(var(--mist))' : 'rgb(var(--slatelight))',
+                background: canPost ? 'rgb(var(--skydeep))' : 'rgb(var(--skyrule))',
+                color: canPost ? 'rgb(var(--mist))' : 'rgb(var(--slatedark))',
+                cursor: canPost ? 'pointer' : 'default',
               }}
             >
-              {busy ? 'Posting…' : 'Post'}
+              {busy ? 'Posting…' : 'Post to the Commons'}
             </button>
           </div>
         </>

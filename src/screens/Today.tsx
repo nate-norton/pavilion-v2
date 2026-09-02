@@ -1,19 +1,42 @@
 import { BoardSetupCard } from '../components/BoardSetupCard';
+import { Card } from '../components/Card';
 import { PhIcon } from '../components/PhIcon';
+import { Pill } from '../components/Pill';
+import { SectionHeading } from '../components/SectionHeading';
 import { StackedCards, StackedPanel } from '../components/StackedCard';
 import { useArc, useAssessment, useDues, useEvents, useMember, useNotifications, usePortfolio, useReservation, useRepository, useViolation, useVotes } from '../data/repo';
+import { DUES_TONE } from '../lib/dues';
+import { useEventRsvp } from '../lib/useEventRsvp';
 import { usePavStore } from '../store/store';
+import { getDelinquent } from '../store/selectors';
 import { isLiveMode } from '../auth/AuthGate';
 
 // Rows are real buttons so they take keyboard focus and fire on Enter/Space.
 // The resets (w-full/border-none/bg-transparent/text-left/font-sans) keep the
 // button visually identical to the div it replaced.
 const ROW = 'w-full flex items-center gap-[13px] cursor-pointer border-none bg-transparent text-left font-sans';
-const ROW_PAD = { padding: '14px 0' } as const;
-const DOT = 'w-2 h-2 rounded-full flex-shrink-0';
+const ROW_PAD = { padding: '12px 0' } as const;
 const ROW_TITLE = 'm-0 text-sm font-bold text-navy leading-[1.3]';
 const ROW_SUB = 'm-0 mt-px text-xs text-slate font-semibold';
 const CARET = <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--slatefaint))" className="flex-shrink-0" />;
+
+/*
+ * Icon disc — the tinted bed + twin-colour glyph Notifications already uses.
+ * Replaces the 8px status dots, which carried a row's meaning by colour
+ * alone (and gave the ARC approval the faintest one).
+ */
+const DISC = {
+  sky: { bed: 'rgb(var(--skypale))', ink: 'rgb(var(--skydeep))' },
+  mint: { bed: 'rgb(var(--mint))', ink: 'rgb(var(--sagedark))' },
+  gold: { bed: 'rgb(var(--goldpale))', ink: 'rgb(var(--golddark))' },
+} as const;
+function Disc({ icon, tone }: { icon: string; tone: keyof typeof DISC }) {
+  return (
+    <span className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: DISC[tone].bed }} aria-hidden="true">
+      <PhIcon name={icon} size={17} color={DISC[tone].ink} />
+    </span>
+  );
+}
 
 /** Today screen — ported from prototype v10 lines 82-260. */
 export function Today() {
@@ -27,6 +50,7 @@ export function Today() {
   const demo = repo.isDemo();
   const firstName = member?.name.split(' ')[0] ?? '';
   const dues = useDues();
+  const delinquent = usePavStore(getDelinquent);
   const { open: vote } = useVotes();
   const violation = useViolation();
   const assessment = useAssessment();
@@ -37,6 +61,8 @@ export function Today() {
   // Drives the stack: with a hero the list tucks under it, without one it
   // stands alone and drops the extra top padding.
   const showFeatured = hasNeighborhood && !!featuredEvent;
+  // Live RSVPs are optimistic with rollback; the demo flips its scripted flag.
+  const rsvp = useEventRsvp(demo ? null : featuredEvent);
 
   const isOwner = state.role === 'owner';
   const isTenant = state.role === 'tenant';
@@ -50,6 +76,29 @@ export function Today() {
   const saCardShow = !!assessment && !assessment.paid;
   const violPendingCard = !!violation && !violation.fixed;
   const violFixedCard = !!violation && violation.fixed;
+
+  /*
+   * The ask is the ask. The first money item — an unpaid special assessment
+   * if there is one, otherwise the current dues statement — leaves the row
+   * list and takes the screen's one warm surface, with the amount at 24px
+   * and a real button. Anything after it stays a row. Live gates on the
+   * repo's own `dues.current` / assessment, so a fresh community never sees
+   * an empty warm card.
+   */
+  const heroAssessment = saCardShow ? assessment : null;
+  const heroDues = !heroAssessment && showPayCardRole ? dues.current : null;
+  const duesStaysRow = !!heroAssessment && showPayCardRole;
+  // 'Roof-reserve assessment · $450' → name + amount, when the title carries
+  // one. Read off the real string, never invented.
+  const saParts = heroAssessment?.title.match(/^(.*?)\s·\s(\$[\d,.]+)$/);
+  const saName = saParts?.[1] ?? heroAssessment?.title ?? '';
+  const saAmount = saParts?.[2] ?? null;
+  // The delinquent script owes two months; the statement row carries one.
+  const heroAmount = heroDues ? (demo && delinquent ? '$570' : heroDues.amountLabel) : null;
+  const openMoney = () => {
+    if (heroAssessment) return demo ? set({ saSheetOpen: true }) : set({ myPlaceOpen: true });
+    return demo ? set({ paySheetOpen: true }) : set({ myPlaceOpen: true });
+  };
 
   // "Needs you" counter — data-driven off the repo domains (empty for a fresh
   // member). Dues + ARC are owner tasks; the open vote is owner/manager.
@@ -84,7 +133,9 @@ export function Today() {
   const rsvpFood = state.rsvpFood;
   // Live counts include this member's RSVP in `going` (trigger-maintained);
   // the demo adds the scripted flag on top.
-  const tacoGoing = (featuredEvent?.going ?? 0) + (demo && rsvpFood ? 1 : 0);
+  const tacoGoing = demo ? (featuredEvent?.going ?? 0) + (rsvpFood ? 1 : 0) : rsvp.count;
+  const tacoRsvpd = demo ? rsvpFood : rsvp.going;
+  const toggleRsvp = () => (demo ? set({ rsvpFood: !state.rsvpFood }) : rsvp.toggle());
 
   const hasBooking = reservation.booked && !!reservation.summary;
 
@@ -94,6 +145,10 @@ export function Today() {
 
   const pfDoors = PORTFOLIO.reduce((a, c) => a + c.doors, 0);
   const pfOpen = PORTFOLIO.reduce((a, c) => a + c.open, 0);
+
+  const dateLabel = demo
+    ? 'Tuesday, July 1'
+    : new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
   return (
     <div
@@ -105,29 +160,24 @@ export function Today() {
           <PhIcon name="ph-fill ph-warning" size={17} className="mt-px flex-shrink-0" />
           <div className="flex-1">
             <p className="m-0 mb-px text-[13px] font-bold">Water shutoff — Alder Way</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.85)' }}>
+            <p className="m-0 text-[12px] font-semibold" style={{ color: 'rgb(var(--white) / 0.85)' }}>
               Today 1–4 PM · hydrant repair · bottled water at the clubhouse
             </p>
           </div>
           <button
             onClick={() => set({ alertDismissed: true })}
-            className="border-none bg-transparent cursor-pointer p-0.5 flex-shrink-0"
+            aria-label="Dismiss alert"
+            className="border-none bg-transparent cursor-pointer w-11 h-11 -my-2 -mr-2 flex items-center justify-center flex-shrink-0"
           >
-            <PhIcon name="ph-bold ph-x" size={13} color="rgb(var(--white) / 0.7)" />
+            <PhIcon name="ph-bold ph-x" size={14} color="rgb(var(--white) / 0.85)" />
           </button>
         </div>
       )}
 
-      <p className="m-0 mb-1.5 text-[11px] font-bold uppercase text-slatelight" style={{ letterSpacing: '0.14em' }}>
-        {(() => {
-          const dateLabel = demo
-            ? 'Tuesday, July 1'
-            : new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-          return member?.communityName ? `${dateLabel} · ${member.communityName}` : dateLabel;
-        })()}
-      </p>
-      <div className="flex items-start justify-between gap-3 mb-1.5">
-        <h1 className="m-0 font-serif font-normal text-[36px] text-navy leading-[1.1]" style={{ letterSpacing: '-0.01em' }}>
+      <div className="flex items-start justify-between gap-3 mb-1">
+        {/* 28px, one step under the display tier, so the money line below
+            can lead the screen instead of the greeting. */}
+        <h1 className="m-0 font-serif font-normal text-[28px] text-navy leading-[1.15]" style={{ letterSpacing: '-0.01em' }}>
           {(() => {
             // The demo is scripted to Tuesday, July 1 in the morning; live
             // greets by actual time of day.
@@ -136,26 +186,26 @@ export function Today() {
             return firstName ? `${word}, ${firstName}.` : `${word}.`;
           })()}
         </h1>
-        <div className="flex items-center gap-0.5 flex-shrink-0 mt-0.5">
+        <div className="flex items-center gap-0.5 flex-shrink-0 -mt-1">
           <button
             onClick={() => set({ searchOpen: true, searchQ: '' })}
             title="Search"
             aria-label="Search"
-            className="w-9 h-9 rounded-full border-none bg-transparent flex items-center justify-center cursor-pointer"
+            className="w-11 h-11 rounded-full border-none bg-transparent flex items-center justify-center cursor-pointer"
           >
             <PhIcon name="ph-bold ph-magnifying-glass" size={17} color="rgb(var(--skydeep))" />
           </button>
           <button
             onClick={() => set({ notifOpen: true })}
             title="Notifications"
-            aria-label="Notifications"
-            className="relative w-9 h-9 rounded-full border-none bg-transparent flex items-center justify-center cursor-pointer"
+            aria-label={hasNotifBadge ? `Notifications — ${notifBadge} unread` : 'Notifications'}
+            className="relative w-11 h-11 rounded-full border-none bg-transparent flex items-center justify-center cursor-pointer"
           >
             <PhIcon name="ph ph-bell" size={18} color="rgb(var(--skydeep))" />
             {hasNotifBadge && (
               <span
-                className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full"
-                style={{ background: 'rgb(var(--accent))', border: '2px solid rgb(var(--mist))' }}
+                className="absolute top-2 right-2 w-2 h-2 rounded-full"
+                style={{ background: 'rgb(var(--sunset))', border: '2px solid rgb(var(--mist))' }}
               />
             )}
           </button>
@@ -163,29 +213,62 @@ export function Today() {
             onClick={() => set({ myPlaceOpen: true })}
             title="My Place"
             aria-label="My Place — profile and settings"
-            className="w-[34px] h-[34px] rounded-full border-none bg-skydeep flex items-center justify-center text-mist font-extrabold text-[13px] cursor-pointer ml-1.5"
+            className="w-11 h-11 rounded-full border-none bg-transparent flex items-center justify-center cursor-pointer"
           >
-            {member?.initial ?? 'A'}
+            <span className="w-[34px] h-[34px] rounded-full bg-skydeep flex items-center justify-center text-mist font-extrabold text-[13px]">
+              {member?.initial ?? ''}
+            </span>
           </button>
         </div>
       </div>
-      <p className="m-0 mb-5 text-sm text-slatedeep font-semibold">{attnSummary}</p>
+      <p className="m-0 mb-4 text-[13px] font-semibold text-slate">
+        {member?.communityName ? `${dateLabel} · ${member.communityName}` : dateLabel}
+      </p>
+
+      {/* The money hero: the screen's one warm surface. */}
+      {(heroAssessment || heroDues) && (
+        <StackedPanel tint="sunset" className="mb-3.5 animate-fadeup">
+          <p className="m-0 font-serif text-[17px] leading-[1.25] text-navy">
+            {heroAssessment ? saName : payCardTitle}
+          </p>
+          <div className="flex items-center gap-2.5 mt-1.5 flex-wrap">
+            {(heroDues || saAmount) && (
+              <p className="m-0 font-serif text-[24px] leading-[1.15] text-navy" style={{ letterSpacing: '-0.02em' }}>
+                {heroAssessment ? saAmount : heroAmount}
+              </p>
+            )}
+            {heroDues && <Pill label={heroDues.statusLabel} tone={DUES_TONE[heroDues.status]} size="md" />}
+            {heroAssessment && <Pill label="One-time" tone="info" size="md" />}
+          </div>
+          <p className="m-0 mt-1.5 text-[13px] font-semibold text-ink leading-[1.45]">
+            {heroAssessment ? heroAssessment.sub : payCardSub}
+          </p>
+          <button
+            type="button"
+            onClick={openMoney}
+            className="mt-3.5 w-full border-none rounded-xl min-h-[44px] px-4 text-[14px] font-extrabold cursor-pointer font-sans text-white"
+            style={{ background: 'rgb(var(--skydeep))' }}
+          >
+            {heroAssessment ? (demo ? 'Review & pay' : 'See the details') : demo ? payCardBtn : 'See your statement'}
+          </button>
+        </StackedPanel>
+      )}
 
       {/* Board desk door. It already existed inside My Place, three taps deep
           behind a 34px avatar — which meant a first-time board member had no
-          way to learn their tools exist. Navy, not ember: it is a standing
+          way to learn their tools exist. Chrome, not warm: it is a standing
           door, not the one action of the day (The Porch Light Rule). */}
       {isBoardMember && (
         <button
           type="button"
           onClick={() => set({ boardMode: true })}
-          className="w-full border-none font-sans text-left bg-skydeep rounded-[16px] flex items-center gap-3 cursor-pointer mb-3.5"
+          className="w-full border-none font-sans text-left bg-skydeep rounded-[16px] flex items-center gap-3 cursor-pointer mb-3.5 min-h-[44px]"
           style={{ padding: '13px 15px' }}
         >
           <PhIcon name="ph-fill ph-shield-star" size={19} color="rgb(var(--peach))" className="flex-shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[13.5px] font-bold text-mist">Board desk</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--mist) / 0.92)' }}>
+            <p className="m-0 text-[12px] font-semibold" style={{ color: 'rgb(var(--mist) / 0.92)' }}>
               Requests, compliance, money, and the roster
             </p>
           </div>
@@ -198,11 +281,13 @@ export function Today() {
           anyone can actually do. Renders itself null once setup is done. */}
       <BoardSetupCard />
 
-      {/* Needs you: one card, one list */}
-      <div className="bg-paper rounded-[20px] flex flex-col" style={{ border: '1px solid rgb(var(--navy) / 0.1)', padding: '6px 18px' }}>
+      {/* Needs you: raised, because it asks for a decision. One card, one list. */}
+      <Card elevation="raised" padding="none" className="px-[18px] pt-4 pb-1.5 animate-fadeup" style={{ animationDelay: '40ms' }}>
+        <SectionHeading title="Needs you" meta={attnSummary} className="mb-0.5" />
+
         {isManager && (
           <button type="button" onClick={() => set({ portfolioOpen: true, myPlaceOpen: false })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--skydeep))' }} />
+            <Disc icon="ph-fill ph-buildings" tone="sky" />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>Your portfolio</p>
               <p className={ROW_SUB}>3 communities · {pfDoors} doors · {pfOpen} open items</p>
@@ -213,7 +298,7 @@ export function Today() {
 
         {isTenant && (
           <button type="button" onClick={() => set({ myPlaceOpen: true })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--slatefaint))' }} />
+            <Disc icon="ph-fill ph-house-line" tone="sky" />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>Your lease &amp; amenities</p>
               <p className={ROW_SUB}>Rent goes to your landlord — Pavilion handles the rest</p>
@@ -222,20 +307,9 @@ export function Today() {
           </button>
         )}
 
-        {saCardShow && (
-          <button type="button" onClick={() => set({ saSheetOpen: true })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--accent))' }} />
-            <div className="flex-1 min-w-0">
-              <p className={ROW_TITLE}>{assessment?.title}</p>
-              <p className={ROW_SUB}>{assessment?.sub}</p>
-            </div>
-            {CARET}
-          </button>
-        )}
-
         {showVoteCardRole && (
           <button type="button" onClick={() => set({ tab: 'hoa' })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--accent))' }} />
+            <Disc icon="ph-fill ph-check-square" tone="sky" />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{vote?.title ?? 'Open vote'}</p>
               <p className={ROW_SUB}>{voteCloses ? voteCloses + ' · ' : ''}quorum at {quorumPct}%</p>
@@ -244,22 +318,23 @@ export function Today() {
           </button>
         )}
 
-        {showPayCardRole && (
-          <button type="button" onClick={() => (demo ? set({ paySheetOpen: true }) : set({ tab: 'hoa' }))} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--accent))' }} />
+        {/* Dues keep a row only when an assessment took the hero. Live goes
+            to My Place, where the real statement lives; the HOA tab's dues
+            card is demo-only. */}
+        {duesStaysRow && (
+          <button type="button" onClick={() => (demo ? set({ paySheetOpen: true }) : set({ myPlaceOpen: true }))} className={ROW} style={ROW_PAD}>
+            <Disc icon="ph-fill ph-receipt" tone="gold" />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{payCardTitle}</p>
               <p className={ROW_SUB}>{payCardSub}</p>
             </div>
-            <span className="rounded-full px-[10px] py-[5px] text-[12px] font-extrabold flex-shrink-0" style={{ background: 'rgb(var(--accenttint))', color: 'rgb(var(--accent))' }}>
-              {payCardBtn}
-            </span>
+            <Pill label={demo ? payCardBtn : 'View'} tone="info" size="md" />
           </button>
         )}
 
         {violPendingCard && (
           <button type="button" onClick={() => set({ violSheetOpen: true })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--gold))' }} />
+            <Disc icon="ph-fill ph-warning" tone="gold" />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{violation?.title}</p>
               <p className={ROW_SUB}>{violation?.sub}</p>
@@ -270,7 +345,7 @@ export function Today() {
 
         {violFixedCard && (
           <div className="flex items-center gap-[13px] animate-fadeup" style={ROW_PAD}>
-            <PhIcon name="ph-fill ph-check-circle" size={17} color="rgb(var(--sage))" className="flex-shrink-0 -ml-1" />
+            <Disc icon="ph-fill ph-check-circle" tone="mint" />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>Notice marked fixed — thank you</p>
               <p className={ROW_SUB}>Closes after the board&apos;s next walk-through</p>
@@ -280,7 +355,7 @@ export function Today() {
 
         {showArcCardRole && (
           <button type="button" onClick={() => set({ arcSeen: true, tab: 'hoa' })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--slatefaint))' }} />
+            <Disc icon="ph-fill ph-seal-check" tone="mint" />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{arc.unseenApproval?.title}</p>
               <p className={ROW_SUB}>{arc.unseenApproval?.sub}</p>
@@ -290,14 +365,14 @@ export function Today() {
         )}
 
         {showAllClear && (
-          <div className="flex items-center gap-[13px] animate-fadeup" style={{ padding: '16px 0' }}>
-            <PhIcon name="ph-fill ph-check-circle" size={18} color="rgb(var(--sage))" className="flex-shrink-0 -ml-1" />
+          <div className="flex items-center gap-[13px] animate-fadeup" style={{ padding: '12px 0 14px' }}>
+            <Disc icon="ph-fill ph-check-circle" tone="mint" />
             <p className="m-0 text-[13.5px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
               All caught up — nothing needs you today.
             </p>
           </div>
         )}
-      </div>
+      </Card>
 
       {/* AI nudge: one quiet line (scripted — demo only) */}
       {demo && showNudge && hasNeighborhood && (
@@ -309,7 +384,8 @@ export function Today() {
           </p>
           <button
             onClick={() => set({ nudgeDismissed: true })}
-            className="border-none bg-transparent cursor-pointer flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full"
+            aria-label="Dismiss"
+            className="border-none bg-transparent cursor-pointer flex-shrink-0 w-11 h-11 -my-3 -mr-2 flex items-center justify-center rounded-full"
           >
             <PhIcon name="ph-bold ph-x" size={12} color="rgb(var(--slatefaint))" />
           </button>
@@ -318,17 +394,20 @@ export function Today() {
 
       {/* Around the neighborhood — ambient content; hidden for an empty community */}
       {hasNeighborhood && (
-      <div className="flex items-baseline justify-between gap-2.5" style={{ margin: '28px 0 12px' }}>
-        <h2 className="m-0 font-serif font-normal text-[19px] text-navy">Around the neighborhood</h2>
-        <button
-          onClick={() => set({ eventsOpen: true })}
-          className="border-none bg-transparent text-[12.5px] font-bold cursor-pointer px-1 py-1.5 text-slate"
-          style={{ minHeight: 24 }}
-        >
-          Calendar
-        </button>
-      </div>
-      )}
+      <div className="animate-fadeup" style={{ animationDelay: '80ms' }}>
+      <SectionHeading
+        level="subtitle"
+        title="Around the neighborhood"
+        className="mt-7 mb-3"
+        action={
+          <button
+            onClick={() => set({ eventsOpen: true })}
+            className="border-none bg-transparent text-[13px] font-bold cursor-pointer px-2 min-h-[44px] -my-2.5 -mr-2 text-skydeep font-sans"
+          >
+            Calendar
+          </button>
+        }
+      />
 
       {/*
        * Featured event hero with the ambient list tucked under it. The hero is
@@ -340,26 +419,30 @@ export function Today() {
         <StackedPanel tint="skydeep" className="!pt-4 text-mist">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
+            <p className="m-0 mb-[3px] text-[12.5px] font-bold" style={{ color: 'rgb(var(--peach))' }}>
               {featuredEvent?.whenLabel}
             </p>
-            <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.2]">{featuredEvent?.title}</p>
+            <p className="m-0 mb-[3px] font-serif text-[19px] leading-[1.2]">{featuredEvent?.title}</p>
             <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
               {tacoGoing} neighbors going
             </p>
           </div>
-          {(demo ? rsvpFood : featuredEvent?.rsvpd) ? (
+          {tacoRsvpd ? (
             <button
-              onClick={() => (demo ? set({ rsvpFood: !state.rsvpFood }) : void repo.toggleEventRsvp(featuredEvent!.id))}
-              className="border-none bg-white text-sagedark rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 flex items-center gap-1.5"
+              onClick={toggleRsvp}
+              aria-pressed="true"
+              aria-busy={rsvp.busy || undefined}
+              className="border-none bg-white text-sagedark rounded-full px-4 min-h-[44px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 flex items-center gap-1.5 font-sans"
             >
               <PhIcon name="ph-fill ph-check" size={14} />
               Going
             </button>
           ) : (
             <button
-              onClick={() => (demo ? set({ rsvpFood: !state.rsvpFood }) : void repo.toggleEventRsvp(featuredEvent!.id))}
-              className="border-none bg-white text-skydeep rounded-full px-[15px] py-[9px] text-[13px] font-extrabold cursor-pointer flex-shrink-0"
+              onClick={toggleRsvp}
+              aria-pressed="false"
+              aria-busy={rsvp.busy || undefined}
+              className="border-none bg-white text-skydeep rounded-full px-4 min-h-[44px] text-[13px] font-extrabold cursor-pointer flex-shrink-0 font-sans"
             >
               I&apos;m in
             </button>
@@ -368,52 +451,55 @@ export function Today() {
         </StackedPanel>
         )}
 
-        {/* Quiet neighborhood list — always on: booking + map are real surfaces */}
-        <StackedPanel flush className={`px-[18px] pb-1.5 ${showFeatured ? 'pt-[22px]' : 'pt-1.5'}`}>
+        {/* Quiet neighborhood list — flat, always on: booking + map are real surfaces */}
+        <Card padding="none" className={`px-[18px] pb-1 ${showFeatured ? 'pt-[24px]' : 'pt-1'}`}>
         {hasBooking ? (
-          <button type="button" onClick={() => set({ tab: 'reserve' })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
-            <PhIcon name="ph-fill ph-calendar-check" size={17} color="rgb(var(--sage))" className="flex-shrink-0" />
+          <button type="button" onClick={() => set({ tab: 'reserve' })} className={ROW} style={ROW_PAD}>
+            <Disc icon="ph-fill ph-calendar-check" tone="mint" />
             <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">Reserved: {reservation.summary}</p>
+            {CARET}
           </button>
         ) : (
-          <button type="button" onClick={() => set({ tab: 'reserve' })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
-            <PhIcon name="ph ph-swimming-pool" size={17} color="rgb(var(--slate))" className="flex-shrink-0" />
+          <button type="button" onClick={() => set({ tab: 'reserve' })} className={ROW} style={ROW_PAD}>
+            <Disc icon="ph-fill ph-swimming-pool" tone="sky" />
             <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
               {demo ? 'Pool cabana open today · 4 slots left' : 'Reserve an amenity'}
             </p>
-            <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--slatefaint))" className="flex-shrink-0" />
+            {CARET}
           </button>
         )}
 
-        <button type="button" onClick={() => set({ mapOpen: true })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
-          <PhIcon name="ph ph-map-trifold" size={17} color="rgb(var(--slate))" className="flex-shrink-0" />
+        <button type="button" onClick={() => set({ mapOpen: true })} className={ROW} style={ROW_PAD}>
+          <Disc icon="ph-fill ph-map-trifold" tone="sky" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
             {demo ? 'Neighborhood map · 5 pins today' : 'Neighborhood map'}
           </p>
-          <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--slatefaint))" className="flex-shrink-0" />
+          {CARET}
         </button>
 
-        <button type="button" onClick={() => set({ reportOpen: true })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
-          <PhIcon name="ph ph-shield-check" size={17} color="rgb(var(--slate))" className="flex-shrink-0" />
+        <button type="button" onClick={() => set({ reportOpen: true })} className={ROW} style={ROW_PAD}>
+          <Disc icon="ph-fill ph-shield-check" tone="gold" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">See a problem? Report it privately</p>
-          <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--slatefaint))" className="flex-shrink-0" />
+          {CARET}
         </button>
 
         {demo && (
-        <div className="flex items-center gap-3" style={ROW_PAD}>
-          <PhIcon name="ph ph-hand-waving" size={17} color="rgb(var(--slate))" className="flex-shrink-0" />
+        <div className="flex items-center gap-[13px]" style={ROW_PAD}>
+          <Disc icon="ph-fill ph-hand-waving" tone="mint" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">The Okafors moved into #42</p>
           <button
             onClick={() => set({ chatWith: 'okafor' })}
-            className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer flex-shrink-0"
-            style={{ color: 'rgb(var(--accent))', padding: '4px 6px', minHeight: 24 }}
+            className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer flex-shrink-0 font-sans px-2 min-h-[44px] -my-2"
+            style={{ color: 'rgb(var(--accent))' }}
           >
             Say hi
           </button>
         </div>
         )}
-        </StackedPanel>
+        </Card>
       </StackedCards>
+      </div>
+      )}
     </div>
   );
 }

@@ -960,12 +960,19 @@ export class SupabaseRepository implements Repository {
         .eq('community_id', this.communityId).eq('status', 'closed')
         .order('created_at', { ascending: false }).limit(12),
     ]);
-    const myBallots: Record<string, { choice: string; option_ids: string[] }> = {};
+    const myBallots: Record<string, { choice: string; option_ids: string[]; receipt: string }> = {};
     const allIds = [...(openRows ?? []), ...(closedRows ?? [])].map((v) => v.id);
     if (this.profileId && allIds.length) {
+      // `*` rather than a column list on purpose: `receipt` arrives with
+      // migration 20260902000028, and naming a column the database does not
+      // have yet would fail the whole query and make every member look
+      // unvoted. Until it lands the field is simply absent and the card says
+      // "Ballot recorded" with no number.
       const { data: ballots } = await this.client.from('vote_ballots')
-        .select('vote_id, choice, option_ids').eq('profile_id', this.profileId).in('vote_id', allIds);
-      for (const b of ballots ?? []) myBallots[b.vote_id] = { choice: b.choice, option_ids: b.option_ids };
+        .select('*').eq('profile_id', this.profileId).in('vote_id', allIds);
+      for (const b of ballots ?? []) {
+        myBallots[b.vote_id] = { choice: b.choice, option_ids: b.option_ids, receipt: (b as { receipt?: string | null }).receipt ?? '' };
+      }
     }
     const openAll = (openRows ?? []).map((vote) => {
       const total = vote.yes_count + vote.no_count;
@@ -987,7 +994,9 @@ export class SupabaseRepository implements Repository {
         noCount: vote.no_count,
         yesPct: total ? Math.round((vote.yes_count / total) * 100) : 0,
         myVote: (mine?.choice === 'yes' || mine?.choice === 'no') ? (mine.choice as VoteChoice) : null,
-        receipt: vote.receipt,
+        // The member's own ballot row mints the receipt; the vote row's
+        // `receipt` was one number shared by the whole community.
+        receipt: mine?.receipt ?? '',
         yesLabel: vote.yes_label,
         noLabel: vote.no_label,
         kind: (vote.kind === 'options' ? 'options' : 'yesno') as 'yesno' | 'options',
@@ -998,6 +1007,7 @@ export class SupabaseRepository implements Repository {
     });
     const closed: ClosedVote[] = (closedRows ?? []).map((vote) => {
       const options = ((vote as unknown as { vote_options: { id: string; label: string; tally: number }[] }).vote_options ?? []);
+      const closedAt = (vote as { closed_at?: string | null }).closed_at ?? null;
       const resultLabel = vote.kind === 'options'
         ? options.slice().sort((a, b) => b.tally - a.tally).slice(0, 2).map((o) => `${o.label}: ${o.tally}`).join(' · ')
         : `${vote.yes_label} ${vote.yes_count} · ${vote.no_label} ${vote.no_count}`;
@@ -1005,7 +1015,13 @@ export class SupabaseRepository implements Repository {
         id: vote.id,
         title: vote.title,
         resultLabel,
-        dateLabel: `Closed ${new Date(vote.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`,
+        // `closed_at` is stamped by a trigger when the status flips (same
+        // migration as the receipt). A row closed before that exists has no
+        // close time, and "Closed <created_at>" was the day it *opened* — so
+        // say the thing we know instead of the thing we don't.
+        dateLabel: closedAt
+          ? `Closed ${new Date(closedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+          : `Opened ${new Date(vote.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`,
       };
     });
     this.mark('votes', openErr, closedErr);
@@ -1014,15 +1030,18 @@ export class SupabaseRepository implements Repository {
 
   castVote = async (voteId: string, choice: VoteChoice) => {
     if (!this.profileId) return;
+    // The receipt is minted by the row default, never sent from here; the
+    // re-hydrate below reads the caller's own ballot back (RLS scopes
+    // vote_ballots to its owner) and the card shows that number.
     const { error } = await this.client.from('vote_ballots')
       .insert({ vote_id: voteId, profile_id: this.profileId, choice });
     if (error && `${error.message}`.includes('duplicate')) {
       // Already voted — change the ballot instead (tally trigger moves counts).
       const { error: upd } = await this.client.from('vote_ballots')
         .update({ choice }).eq('vote_id', voteId).eq('profile_id', this.profileId);
-      this.failed('change your ballot', upd);
+      this.failed('change your ballot', upd, true);
     } else {
-      this.failed('record your ballot', error);
+      this.failed('record your ballot', error, true);
     }
     await this.hydrateVotes(); this.notify();
   };
@@ -1034,9 +1053,9 @@ export class SupabaseRepository implements Repository {
     if (error && `${error.message}`.includes('duplicate')) {
       const { error: upd } = await this.client.from('vote_ballots')
         .update({ option_ids: optionIds }).eq('vote_id', voteId).eq('profile_id', this.profileId);
-      this.failed('change your ballot', upd);
+      this.failed('change your ballot', upd, true);
     } else {
-      this.failed('record your ballot', error);
+      this.failed('record your ballot', error, true);
     }
     await this.hydrateVotes(); this.notify();
   };

@@ -461,9 +461,9 @@ export type Database = {
         ]
       }
       vote_ballots: {
-        Row: { choice: string; created_at: string; id: string; option_ids: string[]; profile_id: string; vote_id: string }
-        Insert: { choice?: string; created_at?: string; id?: string; option_ids?: string[]; profile_id: string; vote_id: string }
-        Update: { choice?: string; created_at?: string; id?: string; option_ids?: string[]; profile_id?: string; vote_id?: string }
+        Row: { choice: string; created_at: string; id: string; option_ids: string[]; profile_id: string; receipt: string; vote_id: string }
+        Insert: { choice?: string; created_at?: string; id?: string; option_ids?: string[]; profile_id: string; receipt?: string; vote_id: string }
+        Update: { choice?: string; created_at?: string; id?: string; option_ids?: string[]; profile_id?: string; receipt?: string; vote_id?: string }
         Relationships: [
           { foreignKeyName: "vote_ballots_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
           { foreignKeyName: "vote_ballots_vote_id_fkey"; columns: ["vote_id"]; isOneToOne: false; referencedRelation: "votes"; referencedColumns: ["id"] },
@@ -479,6 +479,7 @@ export type Database = {
       }
       votes: {
         Row: {
+          closed_at: string | null
           closes_at: string | null
           kind: string
           multi: boolean
@@ -498,6 +499,7 @@ export type Database = {
           yes_label: string
         }
         Insert: {
+          closed_at?: string | null
           closes_at?: string | null
           kind?: string
           multi?: boolean
@@ -517,6 +519,7 @@ export type Database = {
           yes_label?: string
         }
         Update: {
+          closed_at?: string | null
           closes_at?: string | null
           kind?: string
           multi?: boolean

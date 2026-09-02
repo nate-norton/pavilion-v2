@@ -30,8 +30,8 @@ it('guest pass requires name and plate, then issues', () => {
     </>
   );
   fireEvent.click(screen.getByText(/expecting visitors/i));
-  fireEvent.change(screen.getByPlaceholderText(/guest name/i), { target: { value: 'Jordan' } });
-  fireEvent.change(screen.getByPlaceholderText(/license plate/i), { target: { value: '7ABC123' } });
+  fireEvent.change(screen.getByLabelText(/guest name/i), { target: { value: 'Jordan' } });
+  fireEvent.change(screen.getByLabelText(/license plate/i), { target: { value: '7ABC123' } });
   fireEvent.click(screen.getByRole('button', { name: /issue pass/i }));
   expect(screen.getByText(/pass jr-0142/i)).toBeInTheDocument();
 });
