@@ -53,7 +53,7 @@ export function AiSheet() {
         >
           <div
             className="w-[38px] h-[38px] rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}
+            style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}
           >
             <PhIcon name="ph-fill ph-sparkle" size={18} color="rgb(var(--white))" />
           </div>

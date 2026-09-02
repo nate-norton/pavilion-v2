@@ -12,8 +12,13 @@ import { PhIcon } from './PhIcon';
  *
  * Collapsed by default so it costs an experienced user nothing.
  */
-export function Hint({ label, children }: { label: string; children: React.ReactNode }) {
+/**
+ * `onDark` is for the navy vote card: the trigger's default --stone reads at
+ * 1.9:1 there, so the label and icon flip to cream.
+ */
+export function Hint({ label, children, onDark }: { label: string; children: React.ReactNode; onDark?: boolean }) {
   const [open, setOpen] = useState(false);
+  const triggerColor = onDark ? 'rgb(var(--cream))' : 'rgb(var(--stone))';
   return (
     <div className="mt-1.5">
       <button
@@ -23,8 +28,8 @@ export function Hint({ label, children }: { label: string; children: React.React
         className="inline-flex items-center gap-1 border-none bg-transparent px-0 py-1.5 cursor-pointer font-sans"
         style={{ minHeight: 24 }}
       >
-        <PhIcon name="ph-fill ph-info" size={12} color="rgb(var(--stone))" />
-        <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>{label}</span>
+        <PhIcon name="ph-fill ph-info" size={12} color={triggerColor} />
+        <span className="text-[11.5px] font-bold" style={{ color: triggerColor }}>{label}</span>
       </button>
       {open && (
         <p
