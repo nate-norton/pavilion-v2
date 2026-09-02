@@ -1,9 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import type { Session } from '@supabase/supabase-js';
-import { PhIcon } from '../components/PhIcon';
 import { isLiveMode, getSupabaseClient } from '../data/repo/supabaseClient';
-import { AuthShell, AuthError, PrimaryButton, FIELD, FIELD_STYLE } from './shell';
-import { InvitedFlow, MIN_PASSWORD, COMMUNITY_KEY, stashInviteCode, readInviteCode, clearInviteCode, type InvitePeek } from './InvitedFlow';
+import { AuthShell, AuthError, PrimaryButton, GhostButton, TextButton, IconBadge, Eyebrow, FIELD, FIELD_STYLE } from './shell';
+import { InvitedFlow, MIN_PASSWORD, COMMUNITY_KEY, INVITE_KEY, stashInviteCode, readInviteCode, clearInviteCode, type InvitePeek } from './InvitedFlow';
 import { Arrival } from './Arrival';
 
 export { isLiveMode };
@@ -133,53 +132,146 @@ function LiveAuthGate({ children }: { children: ReactNode }) {
     );
   }
   if (hasCommunity === null) return null;              // resolving membership
-  if (!hasCommunity) return <NoCommunity email={session.user.email ?? ''} />;
+  if (!hasCommunity) return <NoCommunity email={session.user.email ?? ''} onRetry={() => { setHasCommunity(null); setResolveKey((k) => k + 1); }} />;
   if (arrival) return <Arrival communityName={arrival.communityName} role={arrival.role} onDone={() => setArrival(null)} />;
   return <>{children}</>;
 }
 
-/** A signed-in user who isn't a member of any community yet. */
-function NoCommunity({ email }: { email: string }) {
+/**
+ * A signed-in person who isn't in any community. The likely reasons, in
+ * order: the board invited a different address; they have a link they
+ * haven't opened on this device; they're a founder with no community yet.
+ * Each gets a real next step instead of a paragraph.
+ */
+function NoCommunity({ email, onRetry }: { email: string; onRetry: () => void }) {
+  const [panel, setPanel] = useState<'menu' | 'code' | 'request'>('menu');
+  if (panel === 'code') return <PasteInviteCode onBack={() => setPanel('menu')} onClaim={onRetry} />;
+  if (panel === 'request') return <RequestCommunity email={email} onBack={() => setPanel('menu')} />;
   return (
-    <div
-      className="min-h-dvh flex items-center justify-center p-6"
-      style={{ background: 'radial-gradient(120% 90% at 50% 0%, rgb(var(--misttint)) 0%, rgb(var(--skywash)) 60%, rgb(var(--skyedge)) 100%)' }}
-    >
-      <div className="w-full max-w-[380px] bg-paper rounded-[24px] p-7 text-center" style={{ border: '1px solid rgb(var(--navy) / 0.08)', boxShadow: '0 18px 50px rgb(var(--scrim) / 0.12)' }}>
-        <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto" style={{ background: 'rgb(var(--navy) / 0.06)' }}>
-          <PhIcon name="ph-fill ph-house-line" size={26} color="rgb(var(--skydeep))" />
-        </div>
-        <h1 className="m-0 mb-2 font-serif text-[23px] text-navy">You’re signed in</h1>
-        <p className="m-0 mb-4 text-[13.5px] font-semibold leading-[1.55]" style={{ color: 'rgb(var(--slatedeep))' }}>
-          <span className="text-navy">{email}</span> isn’t part of a community yet. Pavilion is
-          invite-based — your HOA board adds you to your community.
-        </p>
-        <div className="rounded-2xl px-4 py-3.5 mb-4 text-left" style={{ background: 'rgb(var(--mistpale))', border: '1px solid rgb(var(--navy) / 0.08)' }}>
-          <p className="m-0 mb-1 text-[11px] font-bold uppercase text-slate" style={{ letterSpacing: '0.1em' }}>What’s next</p>
-          <p className="m-0 text-[13px] font-semibold text-slatedark leading-[1.5]">
-            Ask your board to invite this email. Once you’re added, you’ll land right in your community.
-          </p>
-        </div>
-
-        {/*
-          The most likely reason someone lands here is a mismatch, not a
-          missing invite: the board invited a different address than the one
-          they just signed in with. Naming that turns a dead end into a
-          one-tap retry — and it costs nothing to offer.
-        */}
-        <p className="m-0 mb-3 text-[11.5px] font-semibold text-slate leading-[1.45]">
-          Invited under a different address? Sign in with that one instead.
-        </p>
-        <button
-          type="button"
-          onClick={() => void signOutLive()}
-          className="w-full bg-transparent rounded-xl py-3 text-[13px] font-bold cursor-pointer font-sans"
-          style={{ border: '1px solid rgb(var(--navy) / 0.14)', color: 'rgb(var(--navy))' }}
-        >
-          Sign out and try another email
-        </button>
+    <AuthShell width={380}>
+      <IconBadge icon="ph-fill ph-house-line" />
+      <Eyebrow>Signed in</Eyebrow>
+      <h1 className="m-0 mb-2 font-serif text-[24px] text-navy">You’re not in a community yet</h1>
+      <p className="m-0 mb-4 text-[13.5px] font-semibold leading-[1.55]" style={{ color: 'rgb(var(--slatedeep))' }}>
+        <span className="text-navy">{email}</span> has no invitation. Pavilion is invite-only — your HOA board adds you.
+      </p>
+      <div className="rounded-2xl mb-4 overflow-hidden" style={{ border: '1px solid rgb(var(--navy) / 0.1)' }}>
+        <NextStep title="Invited under another email?" action="Switch" onClick={() => void signOutLive()} />
+        <NextStep title="Have an invite link?" action="Open it" onClick={() => setPanel('code')} />
+        <NextStep title="Starting a new HOA on Pavilion?" action="Request" onClick={() => setPanel('request')} />
       </div>
-    </div>
+      <GhostButton label="Sign out" onClick={() => void signOutLive()} />
+    </AuthShell>
+  );
+}
+
+function NextStep({ title, action, onClick }: { title: string; action: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full flex items-center justify-between gap-3 bg-paper border-none px-4 py-3.5 text-left cursor-pointer font-sans active:scale-[0.99]"
+      style={{ borderTop: '1px solid rgb(var(--navy) / 0.08)', background: 'rgb(var(--mistpale))' }}
+    >
+      <span className="text-[13px] font-bold text-navy">{title}</span>
+      <span className="text-[11px] font-extrabold uppercase rounded-full px-2.5 py-1 flex-shrink-0" style={{ letterSpacing: '0.08em', background: 'rgb(var(--goldpale))', color: 'rgb(var(--golddark))' }}>
+        {action}
+      </span>
+    </button>
+  );
+}
+
+/** Paste a link or its code; the gate claims it on retry. */
+function PasteInviteCode({ onBack, onClaim }: { onBack: () => void; onClaim: () => void }) {
+  const [raw, setRaw] = useState('');
+  const code = (() => {
+    try { return new URL(raw.trim()).searchParams.get('invite') ?? ''; } catch { return raw.trim(); }
+  })();
+  const go = () => {
+    if (!code) return;
+    try { localStorage.setItem(INVITE_KEY, code); } catch { /* no-op */ }
+    onClaim();
+  };
+  return (
+    <AuthShell width={380}>
+      <IconBadge icon="ph-fill ph-envelope-simple" />
+      <h1 className="m-0 mb-2 font-serif text-[24px] text-navy">Open your invitation</h1>
+      <p className="m-0 mb-4 text-[13.5px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
+        Paste the link your board sent, or just the code at the end of it.
+      </p>
+      <input
+        type="text"
+        autoFocus
+        value={raw}
+        onChange={(e) => setRaw(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Enter') go(); }}
+        placeholder="https://app.pavilion.community/?invite=…"
+        aria-label="Invite link or code"
+        className={`${FIELD} mb-3`}
+        style={FIELD_STYLE}
+      />
+      <PrimaryButton label="Join my community" disabled={!code} onClick={go} />
+      <div className="flex justify-center mt-2"><TextButton label="Back" onClick={onBack} /></div>
+    </AuthShell>
+  );
+}
+
+/** A founder asks for a community; someone reviews it and runs found_community(). */
+function RequestCommunity({ email, onBack }: { email: string; onBack: () => void }) {
+  const supabase = getSupabaseClient();
+  const [name, setName] = useState('');
+  const [community, setCommunity] = useState('');
+  const [homes, setHomes] = useState('');
+  const [note, setNote] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [sent, setSent] = useState(false);
+  const canSubmit = !!name.trim() && !!community.trim();
+
+  const submit = async () => {
+    if (!canSubmit || busy) return;
+    setBusy(true); setError(null);
+    const { data: { user } } = await supabase.auth.getUser();
+    const { data: profile } = await supabase.from('profiles').select('id').eq('user_id', user?.id ?? '').maybeSingle();
+    if (!profile) { setError('We couldn’t find your profile. Try signing out and back in.'); setBusy(false); return; }
+    const homesNum = parseInt(homes, 10);
+    const { error: insErr } = await supabase.from('community_requests').insert({
+      profile_id: profile.id, email, requester_name: name.trim(), community_name: community.trim(),
+      homes: Number.isFinite(homesNum) ? homesNum : null, note: note.trim(),
+    });
+    setBusy(false);
+    if (insErr) setError(insErr.message); else setSent(true);
+  };
+
+  if (sent) {
+    return (
+      <AuthShell width={380}>
+        <IconBadge icon="ph-fill ph-check-circle" />
+        <h1 className="m-0 mb-2 font-serif text-[24px] text-navy">We got it</h1>
+        <p className="m-0 mb-5 text-[13.5px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
+          Someone from Pavilion will reach out to <span className="text-navy">{email}</span> to set up {community.trim()}.
+          When it’s ready, your invitation will land in the same inbox.
+        </p>
+        <GhostButton label="Back" onClick={onBack} />
+      </AuthShell>
+    );
+  }
+
+  return (
+    <AuthShell width={380}>
+      <Eyebrow>New community</Eyebrow>
+      <h1 className="m-0 mb-2 font-serif text-[24px] text-navy">Bring your HOA to Pavilion</h1>
+      <p className="m-0 mb-4 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
+        Tell us a little and we’ll set it up with you. You’ll be its first board member.
+      </p>
+      <input type="text" autoComplete="name" autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" aria-label="Your name" className={`${FIELD} mb-2.5`} style={FIELD_STYLE} />
+      <input type="text" value={community} onChange={(e) => setCommunity(e.target.value)} placeholder="Community name" aria-label="Community name" className={`${FIELD} mb-2.5`} style={FIELD_STYLE} />
+      <input type="number" inputMode="numeric" min={1} value={homes} onChange={(e) => setHomes(e.target.value)} placeholder="How many homes? (optional)" aria-label="How many homes, optional" className={`${FIELD} mb-2.5`} style={FIELD_STYLE} />
+      <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Anything we should know? (optional)" aria-label="Anything we should know, optional" rows={3} className={`${FIELD} mb-3 resize-none`} style={FIELD_STYLE} />
+      <AuthError message={error} />
+      <PrimaryButton label="Send request" busyLabel="Sending…" busy={busy} disabled={!canSubmit} onClick={() => void submit()} />
+      <div className="flex justify-center mt-2"><TextButton label="Back" onClick={onBack} /></div>
+    </AuthShell>
   );
 }
 
@@ -188,55 +280,36 @@ export async function signOutLive() {
   if (isLiveMode) await getSupabaseClient().auth.signOut();
 }
 
-type SignInMode = 'signin' | 'signup';
-type SignInStage = 'form' | 'linkSent' | 'resetSent' | 'confirmSent';
+type SignInStage = 'form' | 'linkSent' | 'resetSent';
 
 /**
- * Password is the primary path in both directions: members sign in with one,
- * and creating an account collects a real name up front so the community
- * roster never shows an email local-part. The magic link stays as a fallback
- * for anyone who'd rather not keep a password, and powers the reset flow.
+ * The returning door. Accounts are only ever created through an invitation
+ * (see InvitedFlow), so there is no sign-up toggle here — just email and
+ * password, a reset, and the emailed link as the quiet fallback for anyone
+ * who never set a password.
  */
 function LiveSignIn({ initialEmail = '' }: { initialEmail?: string }) {
   const supabase = getSupabaseClient();
-  const [mode, setMode] = useState<SignInMode>('signin');
   const [stage, setStage] = useState<SignInStage>('form');
-  const [name, setName] = useState('');
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
+  const [showPw, setShowPw] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const cleanEmail = email.trim().toLowerCase();
-  const isSignup = mode === 'signup';
-  const canSubmit = !!cleanEmail && password.length >= MIN_PASSWORD && (!isSignup || !!name.trim());
+  const canSubmit = !!cleanEmail && password.length >= MIN_PASSWORD;
 
   const run = async (fn: () => Promise<{ error: { message: string } | null }>, done?: () => void) => {
     setBusy(true); setError(null);
     const { error } = await fn();
     setBusy(false);
-    if (error) setError(error.message); else done?.();
+    if (error) setError(friendlyAuthError(error.message)); else done?.();
   };
 
   const submit = () => {
     if (!canSubmit) return;
-    if (isSignup) {
-      // handle_new_user() reads raw_user_meta_data->>'name', so passing it here
-      // means the profile is created correctly instead of guessed from email.
-      void run(
-        () => supabase.auth.signUp({
-          email: cleanEmail,
-          password,
-          options: { data: { name: name.trim() }, emailRedirectTo: window.location.origin },
-        }).then(({ data, error }) => {
-          // Confirmations on → a user with no session; they must click the email.
-          if (!error && !data.session) setStage('confirmSent');
-          return { error };
-        }),
-      );
-    } else {
-      void run(() => supabase.auth.signInWithPassword({ email: cleanEmail, password }));
-    }
+    void run(() => supabase.auth.signInWithPassword({ email: cleanEmail, password }));
   };
 
   const sendLink = () => {
@@ -264,56 +337,29 @@ function LiveSignIn({ initialEmail = '' }: { initialEmail?: string }) {
     const copy = {
       linkSent: `We sent a sign-in link to ${cleanEmail}. Open it on this device and you’ll be signed in.`,
       resetSent: `We sent a password reset link to ${cleanEmail}. Open it and you can choose a new password.`,
-      confirmSent: `Almost there — confirm ${cleanEmail} using the link we just sent, then sign in with your password.`,
     }[stage];
     return (
       <AuthShell>
-        <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}>
-          <PhIcon name="ph-fill ph-envelope-simple" size={24} color="rgb(var(--white))" />
-        </div>
+        <IconBadge icon="ph-fill ph-envelope-simple" />
         <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Check your email</h1>
         <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>{copy}</p>
-        <button
-          type="button"
-          onClick={() => { setStage('form'); setError(null); }}
-          className="w-full bg-transparent rounded-xl py-3 text-[13px] font-bold cursor-pointer font-sans"
-          style={{ border: '1px solid rgb(var(--navy) / 0.14)', color: 'rgb(var(--navy))' }}
-        >
-          Back to sign in
-        </button>
+        <GhostButton label="Back to sign in" onClick={() => { setStage('form'); setError(null); }} />
       </AuthShell>
     );
   }
 
   return (
     <AuthShell>
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}>
-        <PhIcon name="ph-fill ph-house-line" size={24} color="rgb(var(--white))" />
-      </div>
-      <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">
-        {isSignup ? 'Create your account' : 'Welcome to Pavilion'}
-      </h1>
+      <IconBadge icon="ph-fill ph-house-line" />
+      <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Welcome back</h1>
       <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
-        {isSignup
-          ? 'Your board invites you by email — use the address they invited, and we’ll put you in your community.'
-          : 'Sign in with your email and password.'}
+        Sign in to your community.
       </p>
 
-      {isSignup && (
-        <input
-          type="text"
-          autoComplete="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Full name"
-          aria-label="Full name"
-          className={`${FIELD} mb-2.5`}
-          style={FIELD_STYLE}
-        />
-      )}
       <input
         type="email"
         autoComplete="email"
+        autoFocus={!initialEmail}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="you@email.com"
@@ -321,75 +367,63 @@ function LiveSignIn({ initialEmail = '' }: { initialEmail?: string }) {
         className={`${FIELD} mb-2.5`}
         style={FIELD_STYLE}
       />
-      <input
-        type="password"
-        autoComplete={isSignup ? 'new-password' : 'current-password'}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        onKeyDown={(e) => { if (e.key === 'Enter') submit(); }}
-        placeholder="Password"
-        aria-label="Password"
-        className={`${FIELD} ${isSignup ? 'mb-2' : 'mb-3'}`}
-        style={FIELD_STYLE}
-      />
-      {isSignup && (
-        <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
-          At least {MIN_PASSWORD} characters.
-        </p>
-      )}
-
-      <AuthError message={error} />
-      <PrimaryButton
-        label={isSignup ? 'Create account' : 'Sign in'}
-        busyLabel={isSignup ? 'Creating…' : 'Signing in…'}
-        busy={busy}
-        disabled={!canSubmit}
-        onClick={submit}
-      />
-
-      <div className="flex items-center justify-between gap-2 mt-3">
+      <div className="relative mb-2">
+        <input
+          type={showPw ? 'text' : 'password'}
+          autoComplete="current-password"
+          autoFocus={!!initialEmail}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') submit(); }}
+          placeholder="Password"
+          aria-label="Password"
+          className={`${FIELD} pr-16`}
+          style={FIELD_STYLE}
+        />
         <button
           type="button"
-          onClick={() => { setMode(isSignup ? 'signin' : 'signup'); setError(null); }}
-          className="bg-transparent border-none p-1 text-[12.5px] font-extrabold cursor-pointer font-sans"
-          style={{ color: 'rgb(var(--navy))' }}
+          onClick={() => setShowPw((v) => !v)}
+          aria-pressed={showPw}
+          className="absolute right-2 top-1/2 -translate-y-1/2 bg-transparent border-none px-2 py-1 text-[12px] font-extrabold cursor-pointer font-sans"
+          style={{ color: 'rgb(var(--accent))' }}
         >
-          {isSignup ? 'I already have an account' : 'Create an account'}
+          {showPw ? 'Hide' : 'Show'}
         </button>
-        {!isSignup && (
-          <button
-            type="button"
-            onClick={sendReset}
-            className="bg-transparent border-none p-1 text-[12.5px] font-bold cursor-pointer font-sans"
-            style={{ color: 'rgb(var(--slate))' }}
-          >
-            Forgot password?
-          </button>
-        )}
       </div>
+      <div className="flex justify-end mb-3">
+        <TextButton label="Forgot password?" onClick={sendReset} />
+      </div>
+
+      <AuthError message={error} />
+      <PrimaryButton label="Sign in" busyLabel="Signing in…" busy={busy} disabled={!canSubmit} onClick={submit} />
 
       <div className="flex items-center gap-2.5 my-3">
         <span className="flex-1 h-px" style={{ background: 'rgb(var(--navy) / 0.1)' }} />
         <span className="text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--slatelight))' }}>or</span>
         <span className="flex-1 h-px" style={{ background: 'rgb(var(--navy) / 0.1)' }} />
       </div>
-      <button
-        type="button"
-        onClick={sendLink}
-        disabled={busy}
-        className="w-full bg-transparent rounded-xl py-3 text-[13px] font-bold cursor-pointer font-sans"
-        style={{ border: '1px solid rgb(var(--navy) / 0.14)', color: 'rgb(var(--navy))', opacity: busy ? 0.6 : 1 }}
-      >
-        Email me a sign-in link instead
-      </button>
+      <GhostButton label="Email me a sign-in link instead" onClick={sendLink} disabled={busy} />
+      <p className="m-0 mt-4 text-[11.5px] font-semibold leading-[1.45] text-center" style={{ color: 'rgb(var(--slate))' }}>
+        New here? Open the invitation link your board sent — that’s how you join.
+      </p>
     </AuthShell>
   );
+}
+
+/** Supabase's messages are for developers; these are for the person. */
+function friendlyAuthError(message: string): string {
+  const m = message.toLowerCase();
+  if (m.includes('invalid login credentials')) return 'That email and password don’t match. Check both, or reset your password.';
+  if (m.includes('email not confirmed')) return 'Confirm your email first — check your inbox for the link we sent.';
+  if (m.includes('rate limit') || m.includes('too many')) return 'Too many tries. Wait a minute and try again.';
+  return message;
 }
 
 /** Lands here from a password-reset email — Supabase has already signed them in. */
 function SetNewPassword({ onDone }: { onDone: () => void }) {
   const supabase = getSupabaseClient();
   const [password, setPassword] = useState('');
+  const [showPw, setShowPw] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -402,35 +436,33 @@ function SetNewPassword({ onDone }: { onDone: () => void }) {
 
   return (
     <AuthShell>
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}>
-        <PhIcon name="ph-fill ph-lock-simple" size={24} color="rgb(var(--white))" />
-      </div>
+      <IconBadge icon="ph-fill ph-lock-simple" />
       <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Choose a new password</h1>
       <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
         You’re signed in from the reset link. Pick a password and you’re set.
       </p>
-      <input
-        type="password"
-        autoComplete="new-password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        onKeyDown={(e) => { if (e.key === 'Enter' && password.length >= MIN_PASSWORD) void save(); }}
-        placeholder="New password"
-        aria-label="New password"
-        className={`${FIELD} mb-2`}
-        style={FIELD_STYLE}
-      />
+      <div className="relative mb-2">
+        <input
+          type={showPw ? 'text' : 'password'}
+          autoComplete="new-password"
+          autoFocus
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter' && password.length >= MIN_PASSWORD) void save(); }}
+          placeholder="New password"
+          aria-label="New password"
+          className={`${FIELD} pr-16`}
+          style={FIELD_STYLE}
+        />
+        <button type="button" onClick={() => setShowPw((v) => !v)} aria-pressed={showPw} className="absolute right-2 top-1/2 -translate-y-1/2 bg-transparent border-none px-2 py-1 text-[12px] font-extrabold cursor-pointer font-sans" style={{ color: 'rgb(var(--accent))' }}>
+          {showPw ? 'Hide' : 'Show'}
+        </button>
+      </div>
       <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
-        At least {MIN_PASSWORD} characters.
+        At least {MIN_PASSWORD} characters. That’s the only rule.
       </p>
       <AuthError message={error} />
-      <PrimaryButton
-        label="Save password"
-        busyLabel="Saving…"
-        busy={busy}
-        disabled={password.length < MIN_PASSWORD}
-        onClick={() => void save()}
-      />
+      <PrimaryButton label="Save password" busyLabel="Saving…" busy={busy} disabled={password.length < MIN_PASSWORD} onClick={() => void save()} />
     </AuthShell>
   );
 }
@@ -468,9 +500,7 @@ function LiveOnboarding({ profile, email, onDone }: {
 
   return (
     <AuthShell width={380}>
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}>
-        <PhIcon name="ph-fill ph-hand-waving" size={24} color="rgb(var(--white))" />
-      </div>
+      <IconBadge icon="ph-fill ph-hand-waving" />
       <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Introduce yourself</h1>
       <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
         This is the name your neighbors see on votes, posts, and the directory. You can change it later in My Place.

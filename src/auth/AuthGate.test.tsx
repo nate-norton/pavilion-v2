@@ -112,17 +112,11 @@ it('will not submit a password under the minimum length', async () => {
   expect(state.signInWithPassword).not.toHaveBeenCalled();
 });
 
-it('signup passes the name through so the profile is not named after the email', async () => {
+it('has no sign-up toggle: accounts are only created through an invitation', async () => {
   render(app);
-  fireEvent.click(await screen.findByRole('button', { name: /create an account/i }));
-  fireEvent.change(screen.getByLabelText('Full name'), { target: { value: 'Ada Lovelace' } });
-  fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'ada@example.com' } });
-  fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'hunter2hunter2' } });
-  fireEvent.click(screen.getByRole('button', { name: /create account/i }));
-  await waitFor(() => expect(state.signUp).toHaveBeenCalledWith(expect.objectContaining({
-    email: 'ada@example.com',
-    options: expect.objectContaining({ data: { name: 'Ada Lovelace' } }),
-  })));
+  await screen.findByText('Welcome back');
+  expect(screen.queryByRole('button', { name: /create an account/i })).toBeNull();
+  expect(screen.getByText(/Open the invitation link your board sent/)).toBeInTheDocument();
 });
 
 it('asks a never-onboarded member for a real name before letting them in', async () => {
@@ -158,7 +152,7 @@ it('an onboarded member with no invite gets the no-community screen', async () =
   state.profile = { id: 'p1', name: 'Ada Lovelace', phone: '', onboarded_at: '2026-08-04T00:00:00Z' };
   state.membershipCount = 0;
   render(app);
-  expect(await screen.findByText(/isn’t part of a community yet/i)).toBeInTheDocument();
+  expect(await screen.findByText(/has no invitation/i)).toBeInTheDocument();
 });
 
 it('claims a copied invite link even when the member already belongs elsewhere', async () => {
@@ -222,7 +216,7 @@ it('someone who already has an account is sent to sign in with the email prefill
   state.peek = pendingInvite;
   render(app);
   fireEvent.click(await screen.findByText('I already have a Pavilion account'));
-  expect(await screen.findByText('Welcome to Pavilion')).toBeInTheDocument();
+  expect(await screen.findByText('Welcome back')).toBeInTheDocument();
   expect(screen.getByPlaceholderText('you@email.com')).toHaveValue('cade@example.com');
   // the code stays stashed so the gate claims it after sign-in
   expect(localStorage.getItem('pav-invite-code')).toBe('abc123');

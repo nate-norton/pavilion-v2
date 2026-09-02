@@ -49,14 +49,15 @@ Rules when adding features:
    live in the non-API `private` schema (`is_member`, `is_board`, `owns_unit`,
    `current_profile_id`).
 
-   Four advisor warnings on `pavilion-dev` are known and expected — treat a
-   clean run as these four, not zero. `claim_invite`, `claim_invite_code`
+   Five advisor warnings on `pavilion-dev` are known and expected — treat a
+   clean run as these five, not zero. `claim_invite`, `claim_invite_code`
    and `peek_invite` are flagged as `SECURITY DEFINER` functions callable by
-   signed-in (or, for `peek_invite`, anonymous) users; that is the point,
+   signed-in users, and `peek_invite` a second time for anonymous callers
+   (two lints, one function); that is the point,
    since claiming an invite writes the very unit and membership the caller
    has no rights to yet, and peeking one is what lets the front door say
    "Mountain Vista invited you" before sign-in. Switching them to
-   `SECURITY INVOKER` breaks onboarding. The fourth is leaked-password
+   `SECURITY INVOKER` breaks onboarding. The fifth is leaked-password
    protection, off until someone enables it in the dashboard (Auth →
    Passwords) — there is no API or MCP tool for it.
 5. Edge functions live in `supabase/functions/<name>/index.ts` and deploy via
