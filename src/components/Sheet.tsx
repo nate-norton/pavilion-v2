@@ -12,11 +12,19 @@ export interface SheetProps {
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-/** Exit animation length; matches `sheetdown` in tailwind.config.ts. */
+/** Open/close travel time. Open decelerates with no overshoot — the sheet
+ * arrives and stops; close is a touch quicker. */
+const ENTER_MS = 300;
 const EXIT_MS = 240;
+const ENTER_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+const EXIT_EASE = 'cubic-bezier(0.4, 0, 1, 1)';
+/** Spring-back after a short drag: a small overshoot so it feels like it caught. */
+const SETTLE_EASE = 'cubic-bezier(0.32, 1.2, 0.5, 1)';
 /** Drag past this many px, or flick faster than this, and the sheet goes. */
 const DISMISS_PX = 110;
 const DISMISS_VELOCITY = 0.55; // px per ms
+/** Movement below this is a tap, not a drag. */
+const DRAG_SLOP = 6;
 
 const reducedMotion = () =>
   typeof window === 'undefined' || typeof window.matchMedia !== 'function'
@@ -30,8 +38,10 @@ const reducedMotion = () =>
  * tech announces it as a layer rather than more page, and a focus trap so Tab
  * cannot walk out the back.
  *
- * Motion: it slides up on open and — new — slides back down on close instead
- * of vanishing, and the grab handle is real. Dragging from the handle (or
+ * Motion: one transition-driven transform carries open, close, drag and
+ * spring-back, so nothing can cancel or restart mid-flight. Open decelerates
+ * and stops — no overshoot — and close slides back down instead of
+ * vanishing. The grab handle is real. Dragging from the handle (or
  * anywhere on a sheet whose content doesn't scroll) follows the finger; let
  * go past a threshold or with a flick and it dismisses from where it is,
  * otherwise it springs back. Drags from scrollable content stay scrolls, so
@@ -41,20 +51,30 @@ const reducedMotion = () =>
 export function Sheet({ open, onClose, children, maxHeight, label = 'Dialog' }: SheetProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const restoreTo = useRef<HTMLElement | null>(null);
-  // Stay mounted through the exit animation.
-  const [closing, setClosing] = useState(false);
+  // Position is one transition-driven transform: off-screen → 0 on open,
+  // 0 → off-screen on close, and `dy` in between while a finger has it.
+  // No keyframes, so nothing can cancel or restart mid-flight.
+  const [phase, setPhase] = useState<'closed' | 'opening' | 'open' | 'closing'>(open ? 'opening' : 'closed');
   const [mounted, setMounted] = useState(open);
-  // Drag state lives in refs (per-frame) with one piece of state for styling.
-  const drag = useRef<{ id: number; startY: number; startT: number; lastY: number; lastT: number } | null>(null);
+  const drag = useRef<{ id: number; startY: number; startT: number; active: boolean } | null>(null);
   const [dy, setDy] = useState(0);
+  const [dragging, setDragging] = useState(false);
   const [settling, setSettling] = useState(false);
 
   useEffect(() => {
-    if (open) { setMounted(true); setClosing(false); setDy(0); return; }
+    if (open) {
+      setMounted(true); setDy(0); setSettling(false);
+      if (reducedMotion()) { setPhase('open'); return; }
+      setPhase('opening');
+      // Two frames so the off-screen position paints before the transition starts.
+      let r2 = 0;
+      const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(() => setPhase('open')); });
+      return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
+    }
     if (!mounted) return;
-    if (reducedMotion()) { setMounted(false); return; }
-    setClosing(true);
-    const t = setTimeout(() => { setMounted(false); setClosing(false); setDy(0); }, EXIT_MS);
+    if (reducedMotion()) { setMounted(false); setPhase('closed'); return; }
+    setPhase('closing');
+    const t = setTimeout(() => { setMounted(false); setPhase('closed'); setDy(0); }, EXIT_MS);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
@@ -89,22 +109,21 @@ export function Sheet({ open, onClose, children, maxHeight, label = 'Dialog' }: 
     };
   }, [open, onClose]);
 
-  /** Whether a drag may begin here: always from the handle; from the body
-   * only when the content isn't scrollable (so lists keep their scroll). */
+  /** Whether a drag may begin here: always from the handle strip; from the
+   * body only when the content isn't scrollable (so lists keep their scroll). */
   const canDragFrom = useCallback((target: EventTarget | null, fromHandle: boolean) => {
     const panel = panelRef.current;
     if (!panel) return false;
     if (fromHandle) return true;
     if (panel.scrollHeight > panel.clientHeight + 1) return false;
-    // Don't hijack a drag that started on a control.
     return !(target instanceof HTMLElement && target.closest('input, textarea, select, button, a, [role="slider"]'));
   }, []);
 
   const onPointerDown = (fromHandle: boolean) => (e: ReactPointerEvent<HTMLDivElement>) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (drag.current || phase !== 'open') return;
     if (!canDragFrom(e.target, fromHandle)) return;
-    drag.current = { id: e.pointerId, startY: e.clientY, startT: performance.now(), lastY: e.clientY, lastT: performance.now() };
-    setSettling(false);
+    drag.current = { id: e.pointerId, startY: e.clientY, startT: performance.now(), active: false };
     (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
   };
 
@@ -112,7 +131,11 @@ export function Sheet({ open, onClose, children, maxHeight, label = 'Dialog' }: 
     const d = drag.current;
     if (!d || d.id !== e.pointerId) return;
     const delta = Math.max(0, e.clientY - d.startY);
-    d.lastY = e.clientY; d.lastT = performance.now();
+    // A tap isn't a drag: nothing moves until the finger has clearly travelled.
+    if (!d.active) {
+      if (delta < DRAG_SLOP) return;
+      d.active = true; setDragging(true); setSettling(false);
+    }
     setDy(delta);
   };
 
@@ -120,46 +143,56 @@ export function Sheet({ open, onClose, children, maxHeight, label = 'Dialog' }: 
     const d = drag.current;
     if (!d || d.id !== e.pointerId) return;
     drag.current = null;
+    if (!d.active) return;                       // it was a tap
+    setDragging(false);
     const delta = Math.max(0, e.clientY - d.startY);
-    const dt = Math.max(1, performance.now() - d.startT);
-    const velocity = delta / dt;
+    const velocity = delta / Math.max(1, performance.now() - d.startT);
     if (delta > DISMISS_PX || (delta > 40 && velocity > DISMISS_VELOCITY)) {
-      onClose();                 // parent flips `open`; the exit continues from `dy`
+      onClose();                                 // parent flips `open`; exit continues from here
     } else {
-      setSettling(true);         // spring back
+      setSettling(true);                         // spring back to 0
       setDy(0);
     }
   };
 
   if (!mounted) return null;
 
-  const dragging = drag.current !== null;
-  const panelStyle: React.CSSProperties = {
-    boxShadow: '0 -18px 50px rgb(var(--scrim) / 0.25)',
-    maxHeight: maxHeight ?? '90%',
-    // While dragging, follow the finger with no easing; on release, spring
-    // back; on dismiss, hand the current offset to the exit keyframe.
-    transform: closing ? undefined : `translateY(${dy}px)`,
-    transition: dragging ? 'none' : settling ? 'transform 0.28s cubic-bezier(0.32,1.2,0.5,1)' : undefined,
-    ['--sheet-from' as string]: `${dy}px`,
-  };
-  const scrimOpacity = closing ? undefined : Math.max(0, 1 - dy / 400);
+  const offscreen = phase === 'opening' || phase === 'closing';
+  const transform = offscreen ? 'translateY(100%)' : `translateY(${dy}px)`;
+  const transition = dragging
+    ? 'none'
+    : phase === 'closing'
+      ? `transform ${EXIT_MS}ms ${EXIT_EASE}`
+      : settling
+        ? `transform 280ms ${SETTLE_EASE}`
+        : `transform ${ENTER_MS}ms ${ENTER_EASE}`;
+  const scrimOpacity = offscreen ? 0 : Math.max(0, 1 - dy / 400);
 
   return (
     <div className="absolute inset-0 z-[80]">
       <div
         data-testid="sheet-scrim"
         onClick={onClose}
-        className={`absolute inset-0 ${closing ? 'animate-scrimfadeout' : 'animate-scrimfade'}`}
-        style={{ background: 'rgb(var(--scrim) / 0.4)', opacity: scrimOpacity, transition: dragging ? 'none' : 'opacity 0.2s ease' }}
+        className="absolute inset-0"
+        style={{
+          background: 'rgb(var(--scrim) / 0.4)',
+          opacity: scrimOpacity,
+          transition: dragging ? 'none' : `opacity ${phase === 'closing' ? EXIT_MS : ENTER_MS}ms ease`,
+        }}
       />
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label={label}
-        className={`absolute left-0 right-0 bottom-0 bg-mistpale rounded-t-[28px] px-5 pt-3.5 pb-6 overflow-y-auto ${closing ? 'animate-sheetdown' : dy === 0 && !settling ? 'animate-sheetup' : ''}`}
-        style={panelStyle}
+        className="absolute left-0 right-0 bottom-0 bg-mistpale rounded-t-[28px] px-5 pt-3.5 pb-6 overflow-y-auto"
+        style={{
+          boxShadow: '0 -18px 50px rgb(var(--scrim) / 0.25)',
+          maxHeight: maxHeight ?? '90%',
+          transform,
+          transition,
+          willChange: 'transform',
+        }}
         onPointerDown={onPointerDown(false)}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
