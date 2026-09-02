@@ -337,7 +337,7 @@ export function Today() {
        */}
       <StackedCards overlap={22}>
         {showFeatured && (
-        <StackedPanel tint="navy" className="!pt-4">
+        <StackedPanel tint="navy" className="!pt-4 text-cream">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
