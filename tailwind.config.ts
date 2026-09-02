@@ -40,7 +40,10 @@ export default {
         success: 'rgb(var(--color-success) / <alpha-value>)',
       },
       fontFamily: {
-        serif: ["'Young Serif'", 'serif'],
+        // Display/headlines. The `serif` key is historical — ~96 call sites
+        // use `font-serif` — but the brand display face is Nunito Black.
+        serif: ["'Nunito'", 'system-ui', 'sans-serif'],
+        display: ["'Nunito'", 'system-ui', 'sans-serif'],
         sans: ["'Nunito Sans'", 'system-ui', 'sans-serif'],
       },
       animation: {

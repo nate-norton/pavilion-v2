@@ -79,7 +79,7 @@ export function NavDock() {
               className="w-[50px] h-[50px] rounded-full flex items-center justify-center"
               style={{
                 border: '3px solid rgb(var(--cream))',
-                background: 'linear-gradient(150deg,rgb(var(--emberbright)),rgb(var(--terracotta)))',
+                background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))',
               }}
             >
               <PhIcon name={orb.icon} size={22} color="rgb(var(--white))" />

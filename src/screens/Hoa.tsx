@@ -440,11 +440,11 @@ export function Hoa() {
           <button type="button"
             onClick={() => set({ aiOpen: true })}
             className="w-full border-none font-sans bg-transparent text-left rounded-[18px] p-[15px] cursor-pointer text-white"
-            style={{ background: 'linear-gradient(150deg,rgb(var(--ember)),rgb(var(--terracotta)))' }}
+            style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}
           >
             <PhIcon name="ph-fill ph-sparkle" size={22} color="rgb(var(--white))" />
             <p className="mt-[9px] mb-0.5 text-[13.5px] font-bold">Ask AI</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.85)' }}>
+            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--white) / 0.92)' }}>
               &quot;Can I paint my fence black?&quot;
             </p>
           </button>
@@ -513,7 +513,7 @@ function VoteCard({ vote, demo }: { vote: OpenVote; demo: boolean }) {
         <ProgressBar pct={vote.quorumPct} height={8} track="rgb(var(--cream) / 0.15)" gradient />
       </div>
       <div className="mb-3.5">
-        <Hint label="What is quorum?">
+        <Hint label="What is quorum?" onDark>
           Enough households have to vote for the result to count at all. Until
           the bar fills, the outcome is not binding no matter how one-sided the
           tally looks — which is why a vote you agree with still needs yours.
