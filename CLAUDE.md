@@ -115,9 +115,19 @@ sky `#4A90E2` · skydeep `#34679F` (chrome + primary CTAs) · accent `#1E66BA`
 
 **Sky is the primary; sunset is a sparing accent.** Buttons, links and active
 states are sky. Sunset is reserved for what the brand sheet names — the AI
-gradient, the dues progress bar, and RSVP on light cards. It cannot back a
-button on sky chrome: sunset measures 2.21:1 against `--skydeep` and
-sunsetdeep 1.00:1, so a control there is a white pill with sky text.
+gradient, the dues progress bar, RSVP on light cards, and the waitlist CTA on
+the marketing site. It cannot back a button on sky chrome: sunset measures
+2.21:1 against `--skydeep` and sunsetdeep 1.00:1, so a warm control there is a
+`--peach` pill (4.55:1) rather than a sunset one.
+
+**The AI gradient is `.bg-ai`, and its content is navy.** One class in
+`index.css` fills every assistant surface — the dock orb, the sheet header, the
+"Ask AI" buttons, the auth and onboarding tiles — with the brand's own pair,
+`#F97B4B → #FFB347`. Nothing white sits on it (white on the amber stop is
+1.78:1); navy clears 4.86:1 on the darkest point of the sweep and 7.19:1 on the
+lightest. Running the gradient on `--sunsetdeep → --sunsetshade` to make white
+work is what turned the AI button burnt brick — that is the wrong fix, and the
+right one is the navy foreground.
 
 **Navy is text, not a surface.** `text-navy` is the heading colour; chrome
 (nav dock, hero cards, avatars) is `--skydeep`. Reintroducing `bg-navy` puts

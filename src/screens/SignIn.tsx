@@ -18,10 +18,9 @@ export function SignIn() {
     >
       <div className="flex-1">
         <div
-          className="w-16 h-16 rounded-[20px] flex items-center justify-center mb-[22px]"
-          style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}
+          className="bg-ai w-16 h-16 rounded-[20px] flex items-center justify-center mb-[22px]"
         >
-          <span className="font-serif text-[36px] text-white">P</span>
+          <span className="font-serif text-[36px] text-navy">P</span>
         </div>
         <h1 className="m-0 mb-3 font-serif font-normal text-[36px] leading-[1.15] text-mist">
           The neighborhood, not the paperwork.
