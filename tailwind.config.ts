@@ -48,6 +48,8 @@ export default {
         sheetup: 'sheetUp 0.32s cubic-bezier(0.32,1.2,0.5,1) both',
         heartpop: 'heartPop 0.35s cubic-bezier(0.32,1.2,0.5,1)',
         scrimfade: 'scrimFadeIn 0.25s ease both',
+        sheetdown: 'sheetDown 0.24s cubic-bezier(0.4,0,1,1) both',
+        scrimfadeout: 'scrimFadeOut 0.22s ease both',
         slideleft: 'slideLeft 0.3s cubic-bezier(0.22,1,0.36,1) both',
         slideright: 'slideRight 0.3s cubic-bezier(0.22,1,0.36,1) both',
         msgbubble: 'msgBubble 0.28s cubic-bezier(0.22,1,0.36,1) both',
