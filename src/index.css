@@ -177,15 +177,20 @@
  * users never see it. Declared once at the global layer so it survives the
  * `outline-none` utilities scattered through the screens — those kill the
  * default ring, and :focus-visible here restores an intentional one.
- * The ring is emberdeep against a cream offset so it reads on both the
- * paper surfaces and the navy dock.
+ * The ring is emberdeep against a cream offset so it reads on the light
+ * surfaces; chrome inverts it below.
  */
 :focus-visible {
   outline: 2px solid rgb(var(--emberdeep));
   outline-offset: 2px;
   border-radius: 4px;
 }
-/* On navy surfaces the ember ring loses contrast — invert to cream there. */
+/*
+ * On chrome the ember ring is invisible — 1.00:1 against --skydeep — so it
+ * inverts to cream (5.34:1). --skydeep is the chrome surface since navy
+ * became text-only; .bg-navy stays listed for any remaining dark surface.
+ */
+.bg-skydeep :focus-visible,
 .bg-navy :focus-visible,
 [data-on-navy] :focus-visible {
   outline-color: rgb(var(--cream));
