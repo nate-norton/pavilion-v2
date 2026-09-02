@@ -52,10 +52,9 @@ export function AiSheet() {
           style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}
         >
           <div
-            className="w-[38px] h-[38px] rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}
+            className="bg-ai w-[38px] h-[38px] rounded-full flex items-center justify-center flex-shrink-0"
           >
-            <PhIcon name="ph-fill ph-sparkle" size={18} color="rgb(var(--white))" />
+            <PhIcon name="ph-fill ph-sparkle" size={18} color="rgb(var(--navy))" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[14px] font-bold text-navy">AI</p>

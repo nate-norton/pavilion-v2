@@ -257,8 +257,8 @@ export function Documents() {
             <button
               type="button"
               onClick={askAiDocsSummary}
-              className="w-full border-none text-white rounded-[14px] text-[13.5px] font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3.5"
-              style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))', padding: '13px 0' }}
+              className="bg-ai w-full border-none rounded-[14px] text-[13.5px] font-extrabold cursor-pointer font-sans flex items-center justify-center gap-2 mb-3.5"
+              style={{ padding: '13px 0' }}
             >
               <PhIcon name="ph-fill ph-sparkle" size={15} />
               Ask AI to summarize
