@@ -14,10 +14,10 @@ export const inviteUrl = (code: string) => `${APP_URL}/?invite=${code}`;
  * where the device has one, otherwise every link copied at once — since
  * Pavilion sends no email of its own yet.
  */
-export function RosterInvite() {
+export function RosterInvite({ initiallyOpen = false }: { initiallyOpen?: boolean } = {}) {
   const repo = useRepository();
   const invites = useInvites();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(initiallyOpen);
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<{ created: number; skipped: number } | null>(null);
@@ -51,8 +51,8 @@ export function RosterInvite() {
   }
 
   return (
-    <div className="mt-3 pt-3" style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)' }}>
-      <p className="m-0 mb-1 text-[13.5px] font-bold text-navy">Bring your neighbors in</p>
+    <div className={initiallyOpen ? '' : 'mt-3 pt-3'} style={initiallyOpen ? undefined : { borderTop: '1px solid rgb(var(--navy) / 0.07)' }}>
+      {!initiallyOpen && <p className="m-0 mb-1 text-[13.5px] font-bold text-navy">Bring your neighbors in</p>}
       <p className="m-0 mb-2.5 text-[11.5px] font-semibold text-slate leading-[1.45]">
         Paste from your spreadsheet. One home per line: address, email. Add “board” to a line for a board member.
       </p>
@@ -91,14 +91,16 @@ export function RosterInvite() {
         >
           {busy ? 'Creating…' : `Create ${parsed.ready.length || ''} ${parsed.ready.length === 1 ? 'invitation' : 'invitations'}`.replace('  ', ' ')}
         </button>
-        <button
-          type="button"
-          onClick={() => { setOpen(false); setText(''); setResult(null); }}
-          className="bg-transparent rounded-[11px] px-3 py-2.5 text-[12px] font-extrabold cursor-pointer font-sans text-slate"
-          style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
-        >
-          Close
-        </button>
+        {!initiallyOpen && (
+          <button
+            type="button"
+            onClick={() => { setOpen(false); setText(''); setResult(null); }}
+            className="bg-transparent rounded-[11px] px-3 py-2.5 text-[12px] font-extrabold cursor-pointer font-sans text-slate"
+            style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
+          >
+            Close
+          </button>
+        )}
       </div>
       {pending.length > 0 && <ShareAll pending={pending} />}
     </div>
