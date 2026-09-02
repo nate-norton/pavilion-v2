@@ -1,48 +1,57 @@
 ---
 name: Pavilion
-description: Warm, plainspoken community software for self-managed HOAs
+description: Clear, plainspoken community software for self-managed HOAs
 colors:
-  porch-shade: "rgb(26 51 82)"
-  porch-light-ember: "rgb(224 106 62)"
-  porch-light-ember-deep: "rgb(172 80 45)"
-  terracotta: "rgb(168 74 38)"
-  blush: "rgb(251 237 228)"
-  cream: "rgb(245 240 230)"
-  paper: "rgb(255 254 250)"
-  parchment: "rgb(249 245 236)"
-  sand: "rgb(237 230 214)"
+  navy: "rgb(26 51 82)"
+  mist: "rgb(238 246 255)"
+  paper: "rgb(255 255 255)"
+  mistpale: "rgb(244 249 255)"
+  skyborder: "rgb(212 232 248)"
+  sky: "rgb(74 144 226)"
+  skydeep: "rgb(52 103 162)"
+  accent: "rgb(30 102 186)"
+  accenttint: "rgb(220 235 251)"
+  sunset: "rgb(249 123 75)"
+  sunsetdeep: "rgb(185 55 6)"
+  sunsetshade: "rgb(150 40 4)"
+  peach: "rgb(255 222 175)"
   sage: "rgb(42 157 92)"
-  sagedark: "rgb(32 120 71)"
-  mint: "rgb(233 246 238)"
-  gold: "rgb(217 164 65)"
-  golddark: "rgb(130 97 36)"
-  goldpale: "rgb(251 243 224)"
-  red: "rgb(199 64 46)"
+  sagedark: "rgb(31 117 69)"
+  mint: "rgb(232 248 239)"
+  gold: "rgb(245 158 11)"
+  golddark: "rgb(143 92 6)"
+  goldpale: "rgb(255 246 229)"
+  red: "rgb(239 68 68)"
+  reddeep: "rgb(205 18 18)"
   ink: "rgb(62 76 99)"
-  stone: "rgb(107 101 89)"
-  stonelight: "rgb(115 109 97)"
-  bark: "rgb(91 85 74)"
-  taupe: "rgb(99 93 82)"
+  slate: "rgb(70 95 115)"
+  slatelight: "rgb(78 106 128)"
+  slatedeep: "rgb(62 85 102)"
+  slatedark: "rgb(53 72 87)"
 typography:
   display:
-    fontFamily: "Young Serif, serif"
+    fontFamily: "Nunito, system-ui, sans-serif"
     fontSize: "36px"
-    fontWeight: 400
+    fontWeight: 900
+    letterSpacing: "-0.03em"
     lineHeight: 1.1
   headline:
-    fontFamily: "Young Serif, serif"
+    fontFamily: "Nunito, system-ui, sans-serif"
     fontSize: "24px"
-    fontWeight: 400
+    fontWeight: 900
+    letterSpacing: "-0.03em"
     lineHeight: 1.2
-  title:
-    fontFamily: "Young Serif, serif"
-    fontSize: "17px"
-    fontWeight: 400
-    lineHeight: 1.3
   subtitle:
-    fontFamily: "Young Serif, serif"
+    fontFamily: "Nunito, system-ui, sans-serif"
     fontSize: "19px"
-    fontWeight: 400
+    fontWeight: 900
+    letterSpacing: "-0.03em"
+    lineHeight: 1.3
+  title:
+    fontFamily: "Nunito, system-ui, sans-serif"
+    fontSize: "17px"
+    fontWeight: 900
+    letterSpacing: "-0.03em"
     lineHeight: 1.3
   body-lg:
     fontFamily: "Nunito Sans, system-ui, sans-serif"
@@ -97,6 +106,7 @@ rounded:
   md: "13px"
   lg: "18px"
   xl: "20px"
+  stack: "26px"
   sheet: "28px"
   dock: "26px"
 spacing:
@@ -107,179 +117,214 @@ spacing:
   xl: "24px"
 components:
   button-primary:
-    backgroundColor: "{colors.porch-light-ember-deep}"
+    backgroundColor: "{colors.skydeep}"
     textColor: "{colors.paper}"
     rounded: "{rounded.md}"
     padding: "14px 18px"
     typography: "{typography.body}"
+  button-on-chrome:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.skydeep}"
+    rounded: "{rounded.chip}"
+    padding: "9px 15px"
+    typography: "{typography.body-sm}"
   button-secondary:
     backgroundColor: "{colors.paper}"
-    textColor: "{colors.porch-shade}"
+    textColor: "{colors.navy}"
     rounded: "{rounded.md}"
     padding: "14px 18px"
     typography: "{typography.body}"
   chip:
     backgroundColor: "{colors.paper}"
-    textColor: "{colors.bark}"
+    textColor: "{colors.slatedark}"
     rounded: "{rounded.chip}"
     padding: "6px 14px"
   chip-active:
-    backgroundColor: "{colors.porch-shade}"
-    textColor: "{colors.cream}"
+    backgroundColor: "{colors.skydeep}"
+    textColor: "{colors.mist}"
     rounded: "{rounded.chip}"
     padding: "6px 14px"
   card:
     backgroundColor: "{colors.paper}"
-    textColor: "{colors.porch-shade}"
+    textColor: "{colors.navy}"
     rounded: "{rounded.lg}"
     padding: "14px"
   card-feature:
-    backgroundColor: "{colors.porch-shade}"
-    textColor: "{colors.cream}"
+    backgroundColor: "{colors.skydeep}"
+    textColor: "{colors.mist}"
     rounded: "{rounded.xl}"
     padding: "18px"
   input:
-    backgroundColor: "{colors.parchment}"
-    textColor: "{colors.porch-shade}"
+    backgroundColor: "{colors.mistpale}"
+    textColor: "{colors.navy}"
     rounded: "{rounded.md}"
     padding: "12px 16px"
 ---
-
 # Design System: Pavilion
 
 ## Overview
 
-**Creative North Star: "The Front Porch"**
+**Creative North Star: "The Front Porch, in daylight"**
 
 Pavilion is the software equivalent of a neighbor leaning on your porch rail to
 tell you what happened at the meeting. It is soft, friendly, and playful where
-most HOA software is a filing cabinet with a login screen. The palette is drawn
-from the physical materials of a well-kept neighborhood — paper, sand, clay,
-and the warm glow of a porch light after dark — and the interface behaves like
-those materials: surfaces you can press, corners with no sharp edges, and
-motion that has weight.
+most HOA software is a filing cabinet with a login screen.
+
+The materials changed in the sky/sunset pass and the metaphor moved with them.
+The palette used to be drawn from clay and lamplight — every neutral warmed
+with yellow. It is now drawn from **open sky and morning light**: a pale mist
+ground, white cards laid on it, ink for everything you read, and sunset kept
+back as the one warm glow. The porch is the same porch; it is nine in the
+morning rather than nine at night. Interface behaviour is unchanged — surfaces
+you can press, corners with no sharp edges, motion with weight.
 
 The density is deliberately unhurried. Cards breathe, targets are large, and
 nothing is packed to the edges, because a resident meets this app for ninety
-seconds at a time and should never feel behind. Warmth does the work that
-chrome does elsewhere: there is no cold gray, no hairline-thin gridwork, and no
-enterprise density. Every neutral in the system carries a little yellow in it.
+seconds at a time and should never feel behind.
 
 The one place the playfulness holds its tongue is money, ballots, and
-compliance. Those surfaces keep the same warm materials but drop the flourish —
-no confetti on a fine, no bounce on a ballot. The Front Porch is where you hear
+compliance. Those surfaces keep the same materials but drop the flourish — no
+confetti on a fine, no bounce on a ballot. The Front Porch is where you hear
 the news, not where the news gets softened.
 
 **Key Characteristics:**
-- Paper-and-clay palette; every neutral is warm, never gray
-- A single chunky editorial serif for voice, a rounded sans for everything else
+- Sky-and-light palette; neutrals are cool slate, never warm and never grey
+- One display face at Black weight for voice, a rounded sans for everything else
 - Flat surfaces layered by tone, not by shadow
 - Generously rounded, physically pressable components
-- Accent color is rare by design, so it always means something
+- The warm accent is rare by design, so it always means something
 
 ## Colors
 
-A palette lifted from porch materials: paper and sand for surfaces, clay for
-action, and a deep dusk blue for everything you read.
+Sky primary, sunset accent, ink text on a mist ground. Values live in
+`src/index.css` `:root` and are transcribed here; `tailwind.config.ts`
+generates its colour map from that block, so every token is a class of the
+same name.
 
 ### Primary
-- **Porch Shade** (rgb 26 51 82): The workhorse. All body text, the nav dock,
-  the feature-card background, active chips and segments, and every avatar.
-  A deep dusk blue that reads warm against cream rather than corporate.
+- **Sky family.** `--accent` (rgb 30 102 186) is the brand's working blue —
+  links, pills, active states, and the accent copy that per-community theming
+  remaps. `--skydeep` (rgb 52 103 162) is the chrome and the primary button:
+  the nav dock, hero cards, avatars. `--sky` (rgb 74 144 226) is the bright
+  decorative fill and **may never carry text** — white on it is 3.29:1.
+- **Navy / ink** (rgb 26 51 82): headings and dark type. **Navy is a text
+  colour, not a surface.** Reintroducing `bg-navy` puts back the heavy dark
+  chrome this system deliberately dropped.
 
-### Secondary
-- **Porch Light Ember** (rgb 224 106 62): The single warm glow — but a *fill*
-  only: status dots, quorum progress, gradients, large display type. White on
-  it measures 3.33:1, so it may never carry text.
-- **Porch Light Ember Deep** (rgb 172 80 45): The same glow, text-safe. Every
-  primary CTA and every ember-coloured word uses this (white on it 5.33:1,
-  it on blush 4.65:1). Reaching for plain ember on a button reintroduces a
-  WCAG 1.4.3 failure.
-- **Blush** (rgb 251 237 228): The ember's whisper — pill backgrounds behind
-  ember text, courtesy-notice panels, anything that needs the accent's warmth
-  without its volume.
+### Secondary — the warm accent
+- **Sunset** (rgb 249 123 75): the single warm glow, and a *fill* only —
+  gradients, the dues progress bar, large display type. White on it measures
+  2.64:1, so it may never carry text.
+- **Sunset Deep** (rgb 185 55 6): the same glow, text-safe. Every sunset-backed
+  control and every sunset-coloured word uses this (white on it 5.81:1).
+- **Peach** (rgb 255 222 175): eyebrow text on chrome — 4.52:1 on skydeep and
+  9.96:1 on navy, so it works on either dark surface.
 
 ### Tertiary
-- **Sage** (rgb 42 157 92) with **Mint** (rgb 233 246 238): Confirmation and
+- **Sage** (rgb 42 157 92) with **Mint** (rgb 232 248 239): confirmation and
   good standing — paid, approved, resolved, open slots, healthy reserves.
-- **Gold** (rgb 217 164 65) with **Goldpale** (rgb 251 243 224): Attention
+- **Gold** (rgb 245 158 11) with **Goldpale** (rgb 255 246 229): attention
   without alarm — pending states, courtesy notices, "needs a look."
-- **Red** (rgb 199 64 46): Genuine failure only. Not for urgency, not for
-  overdue; ember carries urgency.
+- **Red** (rgb 239 68 68) / **Reddeep** (rgb 205 18 18): genuine failure only.
+  Not for urgency, not for overdue; sunset carries urgency.
 
 ### Neutral
-- **Cream** (rgb 245 240 230): The page itself. Every screen sits on it.
-- **Paper** (rgb 255 254 250): Cards and raised surfaces — the sheet of paper
-  laid on the table.
-- **Parchment** (rgb 249 245 236): Bottom sheets, input fields, and inset
-  panels — a half-step warmer than paper, used when something is recessed
-  rather than raised.
-- **Sand** (rgb 237 230 214): Segmented-control tracks and quiet dividers.
-- **Bark** (rgb 91 85 74) / **Taupe** (rgb 99 93 82): Secondary body text.
-- **Stone** (rgb 107 101 89) / **Stonelight** (rgb 115 109 97): Labels,
-  captions, inactive nav, and metadata.
-- **Ink** (rgb 62 76 99): Long-form reading text where full Porch Shade would
-  be too heavy.
+- **Mist** (rgb 238 246 255): the page itself. Every screen sits on it.
+- **Paper** (rgb 255 255 255): cards and raised surfaces.
+- **Mistpale** (rgb 244 249 255): input fields and inset panels — used when
+  something is recessed rather than raised.
+- **Skyborder** (rgb 212 232 248): segmented-control tracks and quiet dividers.
+- **Ink** (rgb 62 76 99): long-form reading text where full navy is too heavy.
+- **The slate ramp** — `slatelight` (rgb 78 106 128) → `slate` (70 95 115) →
+  `slatedeep` (62 85 102) → `slatedark` (53 72 87): labels, captions, inactive
+  nav, metadata, secondary body. The ramp is compressed on purpose: the brand
+  sheet's own slate `#6B8BA4` measures 3.29:1 on mist and fails, so the
+  lightest step is anchored at the AA floor and the rest step down from there.
 
 ### Sequential scales
 
-Two groups of near-identical hues are **not** palette drift, and a consolidation
-pass should leave them alone — collapsing any step flattens a chart:
+Two groups of near-identical hues are **not** palette drift, and a
+consolidation pass should leave them alone — collapsing any step flattens a
+chart:
 
 - **Reserve-funding forecast** (six steps, lightest year to darkest):
   Sagemist '26 → Sagesoft '27 → Sagecool '28 → Sagelight '29 → Sagemid '30 →
-  Sage '31. Grouped and commented as a block in `src/index.css`.
-- **Delinquency aging** (five steps, current to severe): Sage → Gold → Peach →
-  Terracotta → Reddeep. Note it deliberately climbs the severity ladder rather
-  than fading one hue, because the buckets mean escalating trouble, not more
-  of the same thing.
+  Sage '31. Grouped and commented as a block in `src/index.css`. Kept green
+  rather than recoloured to sky: green is the success hue here too, and the
+  chart's meaning is "healthy through 2032".
+- **Delinquency aging** (five steps, current to severe): Sage → Gold → Sunset →
+  Sunset Deep → Reddeep. It deliberately climbs the severity ladder by hue
+  rather than fading one colour, because the buckets mean escalating trouble.
+  The palette swap briefly broke this — `peach` became a pale warm that
+  *lightened* mid-ladder and `accent` became sky, putting a blue bucket between
+  two reds. If a bucket colour ever stops escalating, that is the bug.
 
 ### Named Rules
 
-**The Porch Light Rule.** The ember accent appears on at most one primary
-action per view. It is the light you walk toward; two lights and you don't know
-which porch is yours. Everything else uses paper, sand, or Porch Shade.
+**The Porch Light Rule.** The *warm* accent appears on at most one primary
+moment per view — the AI mark, a progress fill, an RSVP. It is the light you
+walk toward; two lights and you don't know which porch is yours. Sky is the
+opposite: it is the working colour and appears wherever something is tappable.
 
-**The Text-Bearing Accent Rule.** Ember is a fill; Ember Deep carries text.
-Any colour that sits under white, or is itself set as type, must clear 4.5:1 on
-every bed it lands on — which is why sage, gold and sky each have a dark
-variant and the bright ones never appear as words.
+**The Text-Bearing Accent Rule.** Each accent has a decorative value and a
+darker text-bearing twin. Fills use the base; anything that sits under white,
+or is itself set as type, uses the twin:
 
-**Terracotta is text-bearing, and the rule's blind spot was that it never said
-so.** The rule above named ember, sage, gold and sky, so terracotta was left
-unguarded — and it is the token that per-community theming remaps, which makes
-it the one accent set as type on the most surfaces (~40, including the
-"Review & pay" pill on Today). At `199 90 49` it measured 3.75:1 on cream and
-3.72:1 on blush: the exact WCAG 1.4.3 failure the audit had already fixed on
-every primary button, re-entered through the side door. It is now `168 74 38`
-(cream 5.03, blush 4.99, paper 5.67, parchment 5.26, sand 4.60, white on it
-5.72). **A brand theme that overrides `terracotta` must clear the same floor
-against cream and against its own blush** — Meadow Park's `34 128 73` did not
-(4.44) and was darkened to `30 112 64`.
+| Fill | Twin |
+|---|---|
+| `sunset` | `sunsetdeep` |
+| `sky` | `accent` (copy, CTAs) or `skydeep` (chrome) |
+| `sage` | `sagedark` |
+| `gold` | `golddark` |
 
-The same audit found Gold Dark clearing goldpale (4.56) but failing cream at
-4.44 — and cream is the page every screen sits on, so gold metadata was below
-AA anywhere it sat outside a goldpale pill. It is now `130 97 36`. **Check a
-text-bearing colour against cream, not only against its own tinted pill.**
+**Every value here was solved against these surfaces, not copied from a brand
+sheet.** The sheet's own pairs fail: sunset under white is 2.64:1, sky under
+white 3.29:1, slate on mist 3.29:1. Two further corrections the sheet needed —
+its `skypale` was the same value as the page ground, which makes a sky pill
+invisible, and its `skydeep` clears 4.88:1 on white but only 4.48:1 on mist,
+where ~20 call sites set it as type. **Check a text-bearing colour against the
+mist page, not only against its own tinted pill.**
 
-**The No Gray Rule.** There is no neutral gray in this system. Every neutral is
-warmed with yellow — cream, sand, parchment, stone, taupe, bark. A `#888` gray
-anywhere is a bug, not a choice.
+**A brand theme that overrides `accent` must clear the same floor** against
+mist and against its own `accenttint`. `src/theme/tokens.test.ts` asserts that
+every theme override names a real token, but it cannot check contrast — that
+part is still on you.
 
-**The Severity Ladder Rule.** Sage means done, gold means look at this, ember
+**The Chrome Contrast Rule.** A control sitting *on* chrome cannot be sunset:
+`sunset` has 2.21:1 luminance separation from `skydeep` and `sunsetdeep` has
+1.00:1, so the button disappears into the card. Use a white pill with
+`text-skydeep` (5.82:1 for both the boundary and the label). Secondary text on
+chrome needs at least 0.9 alpha — the 0.55–0.8 that worked on navy does not
+clear AA on the lighter sky.
+
+**The No Grey Rule.** There is still no neutral grey in this system, but the
+correction runs the other way now: every neutral is cooled toward blue — mist,
+mistpale, skyborder, and the slate ramp. A `#888` grey is a bug, and so is a
+warm beige left over from the old palette.
+
+**The Severity Ladder Rule.** Sage means done, gold means look at this, sunset
 means act now, red means something broke. Never substitute one for another to
 raise emotional volume.
 
 ## Typography
 
-**Display Font:** Young Serif (with `serif` fallback), self-hosted, weight 400 only
+**Display Font:** Nunito, weight **900 (Black)** with `-0.03em` tracking
 **Body Font:** Nunito Sans (with `system-ui`, `sans-serif`), weights 400/600/700/800
 
-**Character:** A chunky, slab-ish editorial serif carrying every human moment —
-greetings, section titles, dollar amounts — against a rounded humanist sans
-doing all the work. The serif is the neighbor's voice; the sans is the
-information. The pairing is what keeps the app from reading like a utility
-bill.
+Both load from Google Fonts, linked in `index.html`. They were declared in
+`tailwind.config.ts` for a long time without ever being fetched, so the app
+rendered in system serif and system-ui until the sky/sunset pass linked them.
+
+**`font-serif` is a historical key name.** The display face used to be Young
+Serif; it is now Nunito Black. The Tailwind key was left alone because renaming
+it would touch every heading in the app for no user-visible gain, and the
+doubled selector `.font-serif.font-serif` in `src/index.css` applies the weight
+and tracking. **Do not "fix" it back to a serif.**
+
+**Character:** One family doing both jobs at opposite ends of its weight range —
+Black for every human moment (greetings, section titles, dollar amounts),
+regular-to-extrabold for the information underneath. The tight tracking on
+display is what keeps the Black weight from reading as shouting.
 
 ### Hierarchy
 
@@ -302,7 +347,7 @@ first or not at all.
 - **Body** (700, 13.5/13px, 1.5): The default. Note the weight: body copy runs
   bold because it sits small on a warm background and needs the density.
 - **Secondary body** (600–700, 11.5/12/12.5px, 1.5): Sub-lines, metadata, and
-  card descriptions in stone or taupe.
+  card descriptions in slate or slatedeep.
 - **Label** (700–800, 10/10.5/11px, 0.12em, uppercase): Section eyebrows,
   status pills, nav labels. The wide tracking is the system's signature.
 
@@ -313,10 +358,10 @@ it comes back as a documented `headline-lg` step, not as a literal.
 
 ### Named Rules
 
-**The One Serif Rule.** Young Serif ships at weight 400 only. Never apply
-`font-bold` or heavier to serif text — the browser will synthesize a faux bold
-and the whole system looks counterfeit. If a serif heading needs more presence,
-increase its size.
+**The One Display Weight Rule.** Display type is Nunito 900 and nothing else.
+Do not set a heading to 700 to make it "quieter" — drop it a size step instead.
+The inverse of the old rule, which forbade bold on a 400-only serif: the
+constraint is still one weight, the weight is just now the heaviest one.
 
 **The Bold Floor Rule.** Sans text at or below 13px is never lighter than 600.
 Warm backgrounds eat thin type.
@@ -345,7 +390,7 @@ row is never trapped beneath it.
 ## Elevation & Depth
 
 The system is **flat with tonal layering**. Depth is communicated by stepping
-through the warm neutral ramp — cream page, paper card, parchment inset — and
+through the cool neutral ramp — mist page, paper card, mistpale inset — and
 by hairline borders at `rgb(26 51 82 / 0.06–0.14)`, not by shadow. Most
 surfaces in the app cast nothing at all.
 
@@ -368,8 +413,10 @@ hover affordance.
 pointer, it casts no shadow. Card hierarchy is expressed in tone and border,
 never in elevation.
 
-**The Tinted Shadow Rule.** Shadows are never neutral black. They carry Porch
-Shade or the warm scrim (`rgb 26 30 20`), so shade stays inside the palette.
+**The Tinted Shadow Rule.** Shadows are never neutral black. They carry
+`--shadow` (rgb 26 51 82, ink) or the scrim (`--scrim`, rgb 12 20 35), so shade
+stays inside the palette. Both cooled with the palette; a warm-brown shadow left
+over from the old system is a bug.
 
 ## Shapes
 
@@ -379,7 +426,7 @@ for standard cards and inputs, 18–20px for major cards and panels, 26px for th
 nav dock, and 28px on the top corners of bottom sheets. Chips, avatars, status
 dots, and toggles are fully round.
 
-Borders are hairlines at low-alpha Porch Shade (`0.06` for dividers, `0.12–0.14`
+Borders are hairlines at low-alpha navy (`0.06` for dividers, `0.12–0.14`
 for interactive outlines) — present enough to define an edge, never enough to
 draw a grid. There are no square corners anywhere in the system, and no heavy
 strokes.
@@ -391,12 +438,15 @@ smallest radius in the system is 5px, and that is a progress-bar cap.
 
 ### Buttons
 - **Shape:** Generously rounded (13px), or fully round for icon buttons
-- **Primary:** Porch Light Ember background, paper text, ~14px vertical padding,
+- **Primary:** `--skydeep` background, paper text, ~14px vertical padding,
   extrabold 13–14px sans. Full-width in sheets.
-- **Secondary:** Paper background, Porch Shade text, hairline border at 12–14%
-  Porch Shade.
-- **Dark:** Porch Shade background with cream text, used for affirmative actions
-  inside ember-heavy contexts (e.g. "Pass this to the board").
+- **On chrome:** a **white pill with `text-skydeep`**, used for any control
+  sitting on a sky hero — the Today RSVP, the HOA ballot. A sunset fill there
+  has 1.00–2.21:1 separation from the card and vanishes; see The Chrome
+  Contrast Rule.
+- **Secondary:** Paper background, navy text, hairline border at 12–14% navy.
+- **Warm:** `--sunsetdeep` background with white text, reserved for the places
+  the brand sheet names — RSVP on a light card, the AI mark.
 - **Press / Hover:** Every pressable surface scales to 0.97 on `:active` over
   120ms; hover-capable devices add the hover-lift shadow. This press feedback is
   global and applies to cards and rows, not just buttons.
@@ -405,34 +455,37 @@ smallest radius in the system is 5px, and that is a progress-bar cap.
 
 ### Chips
 - **Style:** Fully round pills, 14px horizontal padding, extrabold 12.5px
-- **Inactive:** Paper background, bark text, hairline Porch Shade border
-- **Active:** Porch Shade background, cream text, no border
+- **Inactive:** Paper background, slatedark text, hairline navy border
+- **Active:** `--skydeep` background, mist text, no border
 
 ### Cards / Containers
 - **Corner Style:** 18px for major cards, 13px for inner rows, 20px for feature
   cards
-- **Background:** Paper on the cream page; Porch Shade for feature cards that
-  must dominate (the open vote, the amenity pass banner)
+- **Background:** Paper on the mist page; `--skydeep` for feature cards that
+  must dominate (the open vote, the taco-cart hero, the amenity pass banner)
 - **Shadow Strategy:** None at rest — see Elevation
-- **Border:** Hairline at 6–8% Porch Shade, or none when tone alone separates
+- **Border:** Hairline at 6–8% navy, or none when tone alone separates
 - **Internal Padding:** 14–18px
 
 ### Inputs / Fields
-- **Style:** Parchment fill, hairline border at 14% Porch Shade, 13px radius,
-  12×16px padding, semibold Porch Shade text
-- **Placeholder:** Stone
-- **Focus:** A global `:focus-visible` ring (2px Porch Light Ember Deep, 2px
-  offset) applies everywhere and inverts to cream on Porch Shade surfaces. It
+- **Style:** Mistpale fill, hairline border at 14% navy, 13px radius,
+  12×16px padding, semibold navy text
+- **Placeholder:** Slate
+- **Focus:** A global `:focus-visible` ring (2px `--sunsetdeep`, 2px offset)
+  applies everywhere and inverts to mist on chrome. Warm against a cool ground
+  so it reads as a ring rather than as more sky; on `--skydeep` the sunset ring
+  is 1.00:1 and invisible, which is why the inversion selector must list every
+  chrome class. It
   is declared at the global layer specifically so it survives the `outline-none`
   utilities scattered through the screens
 
 ### Navigation
-- **Style:** A floating Porch Shade dock, 66px tall, 26px radius, spanning five
-  slots with the Ask AI button raised 10px above the rail in an ember gradient
+- **Style:** A floating `--skydeep` dock, 66px tall, 26px radius, spanning five
+  slots with the Ask AI button raised 10px above the rail in a sunset gradient
   ring
 - **Typography:** 10px extrabold labels beneath 21px icons
-- **States:** Cream at full strength when active; cream at reduced strength when
-  not
+- **States:** Mist at full strength when active; mist at 0.9 alpha when not —
+  the old 0.62 fails AA on the lighter sky chrome
 - **Motion:** Tab changes slide horizontally in the direction of travel (300ms,
   `cubic-bezier(0.22,1,0.36,1)`)
 
@@ -445,36 +498,41 @@ height. Enters on a slight overshoot curve (320ms
 Escape.
 
 ### Status Dot
-A 7px round dot in ember, gold, or sage that prefixes an actionable row. The
+A 7px round dot in sunset, gold, or sage that prefixes an actionable row. The
 system's smallest and most-repeated signal: it carries severity before any text
 is read.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** warm every neutral. Reach for cream, sand, parchment, stone, taupe, and
-  bark — never a neutral gray.
-- **Do** keep the ember accent to one primary action per view (The Porch Light
-  Rule).
-- **Do** set human moments and dollar amounts in Young Serif at weight 400, and
-  raise size rather than weight when they need presence.
+- **Do** cool every neutral. Reach for mist, mistpale, skyborder, and the slate
+  ramp — never a neutral grey, and never a warm beige left over from the old
+  palette.
+- **Do** keep the *warm* accent to one moment per view (The Porch Light Rule).
+  Sky is the working colour and may appear wherever something is tappable.
+- **Do** set human moments and dollar amounts in Nunito 900, and drop a size
+  step rather than a weight when they need to be quieter.
+- **Do** use a white pill with `text-skydeep` for any button sitting on chrome.
 - **Do** run sans body copy at 600–800; at 13px on warm paper, lighter weights
   disappear.
 - **Do** express hierarchy with tone and hairline borders. Save shadow for the
   dock, the sheet, and hover.
 - **Do** give every tappable surface the 0.97 press response — it is the system's
   most recognizable physical trait.
-- **Do** keep the severity ladder honest: sage done, gold look, ember act, red
+- **Do** keep the severity ladder honest: sage done, gold look, sunset act, red
   broken.
 - **Do** honor `prefers-reduced-motion`; the global override is already wired and
   new animation must not bypass it.
 
 ### Don't:
-- **Don't** apply bold weights to Young Serif. Only 400 is loaded and the
-  synthesized bold looks counterfeit.
+- **Don't** lighten display type below 900, and don't rename `font-serif` back
+  to a serif — it is Nunito Black under a historical key.
+- **Don't** put navy behind anything. Navy is text; chrome is `--skydeep`.
+- **Don't** put a sunset fill on sky chrome — it has 1.00-2.21:1 separation and
+  disappears into the card.
 - **Don't** introduce a 0px radius. Nothing in this system has a sharp corner.
 - **Don't** use neutral black shadows, or add shadows to cards at rest.
-- **Don't** use red for urgency or overdue states — that is ember's job. Red
+- **Don't** use red for urgency or overdue states — that is sunset's job. Red
   means something is broken.
 - **Don't** let playfulness reach money, ballots, or compliance. Same materials,
   no flourish: no confetti on a fine, no bounce on a ballot.
