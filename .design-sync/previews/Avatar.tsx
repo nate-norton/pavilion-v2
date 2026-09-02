@@ -5,7 +5,7 @@ import { Avatar } from 'pavilion-v2';
 export const Sizes = () => (
   <div style={{ display: 'flex', gap: 12, alignItems: 'flex-end' }}>
     <Avatar initial="A" color="rgb(var(--navy))" size={26} />
-    <Avatar initial="M" color="rgb(var(--terracotta))" size={36} />
+    <Avatar initial="M" color="rgb(var(--accent))" size={36} />
     <Avatar initial="R" color="rgb(var(--sage))" size={48} />
     <Avatar initial="D" color="rgb(var(--sky))" size={64} />
   </div>

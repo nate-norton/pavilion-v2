@@ -49,7 +49,7 @@ export function Chat() {
     <div
       data-screen-label="Chat"
       className="absolute inset-0 z-[78] flex flex-col animate-scpop"
-      style={{ background: 'rgb(var(--cream))' }}
+      style={{ background: 'rgb(var(--mist))' }}
     >
       <div className="flex items-center gap-[11px]" style={{ padding: '58px 18px 12px', borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
         <button
@@ -69,11 +69,11 @@ export function Chat() {
         <div className="flex-1 min-w-0">
           <p className="m-0 text-[14.5px] font-bold text-navy">
             {p.name}{' '}
-            <span className="font-semibold" style={{ color: 'rgb(var(--stonelight))' }}>
+            <span className="font-semibold" style={{ color: 'rgb(var(--slatelight))' }}>
               · {p.unit}
             </span>
           </p>
-          <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             {demo ? 'Neighbor · usually replies fast' : 'Neighbor'}
           </p>
         </div>
@@ -94,14 +94,14 @@ export function Chat() {
                   title="Delete message"
                   className="border-0 bg-transparent p-0.5 cursor-pointer opacity-30"
                 >
-                  <PhIcon name="ph-bold ph-x" size={10} color="rgb(var(--stone))" />
+                  <PhIcon name="ph-bold ph-x" size={10} color="rgb(var(--slate))" />
                 </button>
               )}
               <div
                 style={{
                   maxWidth: '80%',
                   background: m.me ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                  color: m.me ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
+                  color: m.me ? 'rgb(var(--mist))' : 'rgb(var(--navy))',
                   border: m.me ? 'none' : '1px solid rgb(var(--navy) / 0.08)',
                   borderRadius: m.me ? '18px 18px 6px 18px' : '18px 18px 18px 6px',
                   padding: '10px 13px',
@@ -113,7 +113,7 @@ export function Chat() {
                 ))}
               </div>
             </div>
-            <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--stone))' }}>
+            <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--slate))' }}>
               {m.time || ''}
             </span>
           </div>
@@ -143,7 +143,7 @@ export function Chat() {
           className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0"
           style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))' }}
         >
-          <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--stone))" />
+          <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--slate))" />
         </button>
         <input
           value={state.chatInput}
@@ -162,7 +162,7 @@ export function Chat() {
           onClick={sendChatMessage}
           className="w-11 h-11 border-none rounded-full bg-skydeep flex items-center justify-center cursor-pointer flex-shrink-0"
         >
-          <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--cream))" />
+          <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--mist))" />
         </button>
       </div>
     </div>

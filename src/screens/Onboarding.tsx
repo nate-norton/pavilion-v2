@@ -39,7 +39,7 @@ export function Onboarding() {
   return (
     <div
       data-screen-label="Onboarding"
-      className="absolute inset-0 z-[95] bg-cream flex flex-col"
+      className="absolute inset-0 z-[95] bg-mist flex flex-col"
       style={{ padding: '60px 24px 26px' }}
     >
       <div className="flex items-center justify-between mb-[26px]">
@@ -61,7 +61,7 @@ export function Onboarding() {
           type="button"
           onClick={close}
           className="border-none bg-transparent text-[13px] font-extrabold cursor-pointer font-sans p-1"
-          style={{ color: 'rgb(var(--stone))' }}
+          style={{ color: 'rgb(var(--slate))' }}
         >
           Skip
         </button>
@@ -72,20 +72,20 @@ export function Onboarding() {
           <div className="animate-fadeup">
             <p
               className="m-0 mb-2.5 text-[11px] font-bold uppercase"
-              style={{ letterSpacing: '0.14em', color: 'rgb(var(--terracotta))' }}
+              style={{ letterSpacing: '0.14em', color: 'rgb(var(--accent))' }}
             >
               Juniper Ridge · Est. 1994
             </p>
             <h1 className="m-0 mb-2.5 font-serif font-normal text-[36px] leading-[1.15]" style={{ color: 'rgb(var(--navy))' }}>
               Welcome home, Alex.
             </h1>
-            <p className="m-0 mb-6 text-[14.5px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+            <p className="m-0 mb-6 text-[14.5px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
               Let's set up your place — it takes about a minute, and you'll never fill out a paper form again.
             </p>
             <div className="flex items-center gap-[13px] p-4" style={CARD}>
               <div
                 className="w-[46px] h-[46px] rounded-[14px] flex items-center justify-center flex-shrink-0"
-                style={{ background: 'rgb(var(--sand))' }}
+                style={{ background: 'rgb(var(--skyborder))' }}
               >
                 <PhIcon name="ph-fill ph-house-line" size={23} color="rgb(var(--skydeep))" />
               </div>
@@ -93,7 +93,7 @@ export function Onboarding() {
                 <p className="m-0 mb-0.5 text-[14px] font-bold" style={{ color: 'rgb(var(--navy))' }}>
                   #27 Alder Way
                 </p>
-                <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+                <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                   Owner-occupied · deed verified
                 </p>
               </div>
@@ -107,7 +107,7 @@ export function Onboarding() {
             <h1 className="m-0 mb-2.5 font-serif font-normal text-[24px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
               Who's in the household?
             </h1>
-            <p className="m-0 mb-[22px] text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+            <p className="m-0 mb-[22px] text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
               Everyone gets their own login — votes and dues stay with the owner, events and circles are for everyone.
             </p>
             <div className="grid grid-cols-2 gap-2.5">
@@ -126,7 +126,7 @@ export function Onboarding() {
                     }}
                   >
                     <PhIcon name={h.icon} size={23} color={selected ? 'rgb(var(--peach))' : 'rgb(var(--navy))'} />
-                    <span className="text-[13px] font-extrabold" style={{ color: selected ? 'rgb(var(--cream))' : 'rgb(var(--navy))' }}>
+                    <span className="text-[13px] font-extrabold" style={{ color: selected ? 'rgb(var(--mist))' : 'rgb(var(--navy))' }}>
                       {h.label}
                     </span>
                   </button>
@@ -141,7 +141,7 @@ export function Onboarding() {
             <h1 className="m-0 mb-2.5 font-serif font-normal text-[24px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
               What are you into?
             </h1>
-            <p className="m-0 mb-[22px] text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+            <p className="m-0 mb-[22px] text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
               Pick a circle or two. They're run by neighbors, not the board — and you can leave anytime.
             </p>
             <div className="flex gap-[9px] flex-wrap">
@@ -156,7 +156,7 @@ export function Onboarding() {
                     style={{
                       border: selected ? '1.5px solid rgb(var(--navy))' : '1.5px solid rgb(var(--navy) / 0.12)',
                       background: selected ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                      color: selected ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
+                      color: selected ? 'rgb(var(--mist))' : 'rgb(var(--navy))',
                       padding: '11px 16px',
                     }}
                   >
@@ -174,16 +174,16 @@ export function Onboarding() {
             <h1 className="m-0 mb-2.5 font-serif font-normal text-[24px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
               Dues on autopilot?
             </h1>
-            <p className="m-0 mb-[22px] text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+            <p className="m-0 mb-[22px] text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
               Free ACH, receipt every month, and you'll see exactly where each dollar goes.
             </p>
             <div className="p-[18px]" style={CARD}>
               <div className="flex items-center justify-between gap-2.5 mb-3.5">
                 <div>
                   <p className="m-0 font-serif text-[24px]" style={{ color: 'rgb(var(--navy))' }}>
-                    $285<span className="text-[14px]" style={{ color: 'rgb(var(--stone))' }}>/mo</span>
+                    $285<span className="text-[14px]" style={{ color: 'rgb(var(--slate))' }}>/mo</span>
                   </p>
-                  <p className="m-0 text-[12px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+                  <p className="m-0 text-[12px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
                     Runs on the 3rd · cancel anytime
                   </p>
                 </div>
@@ -194,7 +194,7 @@ export function Onboarding() {
                 style={{ borderTop: '1px solid rgb(var(--navy) / 0.07)' }}
               >
                 <PhIcon name="ph-fill ph-bank" size={17} color="rgb(var(--skydeep))" />
-                <span className="text-[12.5px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
+                <span className="text-[12.5px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
                   Juniper Credit Union ····4821
                 </span>
               </div>
@@ -206,14 +206,14 @@ export function Onboarding() {
           <div className="animate-fadeup">
             <div
               className="w-[62px] h-[62px] rounded-full flex items-center justify-center mb-4"
-              style={{ background: 'linear-gradient(150deg,rgb(var(--emberdeep)),rgb(var(--embershade)))' }}
+              style={{ background: 'linear-gradient(150deg,rgb(var(--sunsetdeep)),rgb(var(--sunsetshade)))' }}
             >
               <PhIcon name="ph-fill ph-sparkle" size={28} color="rgb(var(--white))" />
             </div>
             <h1 className="m-0 mb-2.5 font-serif font-normal text-[24px] leading-[1.2]" style={{ color: 'rgb(var(--navy))' }}>
               Meet your AI assistant.
             </h1>
-            <p className="m-0 mb-5 text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+            <p className="m-0 mb-5 text-[14px] leading-[1.55] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
               It's read the CC&Rs so you don't have to. Every answer cites the actual document — no folklore, no
               guessing.
             </p>
@@ -227,13 +227,13 @@ export function Onboarding() {
               <span
                 className="inline-flex items-center gap-[5px] mt-2.5 rounded-lg"
                 style={{
-                  background: 'rgb(var(--cream))',
+                  background: 'rgb(var(--mist))',
                   border: '1px solid rgb(var(--navy) / 0.1)',
                   padding: '5px 9px',
                 }}
               >
-                <PhIcon name="ph-fill ph-file-text" size={12} color="rgb(var(--terracotta))" />
-                <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
+                <PhIcon name="ph-fill ph-file-text" size={12} color="rgb(var(--accent))" />
+                <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
                   CC&Rs §5.7 · Animals
                 </span>
               </span>
@@ -257,7 +257,7 @@ export function Onboarding() {
           type="button"
           onClick={next}
           className="flex-1 rounded-2xl text-[14px] font-extrabold cursor-pointer font-sans active:scale-[0.98]"
-          style={{ border: 'none', background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', padding: '16px 0' }}
+          style={{ border: 'none', background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))', padding: '16px 0' }}
         >
           {nextLabel}
         </button>

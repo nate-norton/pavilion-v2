@@ -13,12 +13,12 @@ import { PhIcon } from './PhIcon';
  * Collapsed by default so it costs an experienced user nothing.
  */
 /**
- * `onDark` is for the navy vote card: the trigger's default --stone reads at
+ * `onDark` is for the navy vote card: the trigger's default --slate reads at
  * 1.9:1 there, so the label and icon flip to cream.
  */
 export function Hint({ label, children, onDark }: { label: string; children: React.ReactNode; onDark?: boolean }) {
   const [open, setOpen] = useState(false);
-  const triggerColor = onDark ? 'rgb(var(--cream))' : 'rgb(var(--stone))';
+  const triggerColor = onDark ? 'rgb(var(--mist))' : 'rgb(var(--slate))';
   return (
     <div className="mt-1.5">
       <button
@@ -35,8 +35,8 @@ export function Hint({ label, children, onDark }: { label: string; children: Rea
         <p
           className="m-0 mt-1.5 text-[12px] font-semibold leading-[1.5] animate-fadeup"
           style={{
-            color: 'rgb(var(--bark))',
-            background: 'rgb(var(--parchment))',
+            color: 'rgb(var(--slatedark))',
+            background: 'rgb(var(--mistpale))',
             border: '1px solid rgb(var(--navy) / 0.08)',
             borderRadius: 11,
             padding: '9px 11px',

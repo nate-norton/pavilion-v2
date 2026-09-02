@@ -15,7 +15,7 @@ const ICON_OPTIONS = [
   { icon: 'ph-fill ph-plant', label: 'Garden' },
 ];
 
-const COLOR_OPTIONS = ['rgb(var(--navy))', 'rgb(var(--terracotta))', 'rgb(var(--sage))', 'rgb(var(--gold))', 'rgb(var(--sky))', 'rgb(var(--ember))', 'rgb(var(--sagelight))', 'rgb(var(--violet))'];
+const COLOR_OPTIONS = ['rgb(var(--navy))', 'rgb(var(--accent))', 'rgb(var(--sage))', 'rgb(var(--gold))', 'rgb(var(--sky))', 'rgb(var(--sunset))', 'rgb(var(--sagelight))', 'rgb(var(--violet))'];
 
 export function CreateGroupSheet() {
   const state = usePavStore();
@@ -47,11 +47,11 @@ export function CreateGroupSheet() {
       open={state.createGroupOpen} onClose={close} maxHeight="85%">
       <div style={{ padding: '22px 22px 32px' }}>
         <h2 className="m-0 mb-1 font-serif font-normal text-[19px] text-navy">Create a group</h2>
-        <p className="m-0 mb-5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+        <p className="m-0 mb-5 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
           Neighbors can discover and join your group.
         </p>
 
-        <label className="block text-[11px] font-bold uppercase text-stone mb-1.5" style={{ letterSpacing: '0.12em' }}>
+        <label className="block text-[11px] font-bold uppercase text-slate mb-1.5" style={{ letterSpacing: '0.12em' }}>
           Group name
         </label>
         <input
@@ -62,7 +62,7 @@ export function CreateGroupSheet() {
           style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))', padding: '12px 14px' }}
         />
 
-        <label className="block text-[11px] font-bold uppercase text-stone mb-1.5" style={{ letterSpacing: '0.12em' }}>
+        <label className="block text-[11px] font-bold uppercase text-slate mb-1.5" style={{ letterSpacing: '0.12em' }}>
           Description
         </label>
         <textarea
@@ -74,7 +74,7 @@ export function CreateGroupSheet() {
           style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--paper))', padding: '12px 14px' }}
         />
 
-        <label className="block text-[11px] font-bold uppercase text-stone mb-2" style={{ letterSpacing: '0.12em' }}>
+        <label className="block text-[11px] font-bold uppercase text-slate mb-2" style={{ letterSpacing: '0.12em' }}>
           Icon
         </label>
         <div className="flex flex-wrap gap-2 mb-4">
@@ -86,17 +86,17 @@ export function CreateGroupSheet() {
               className="flex items-center gap-1.5 rounded-full border-none px-3 py-2 text-[11.5px] font-bold cursor-pointer"
               style={
                 state.createGroupIcon === opt.icon
-                  ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }
+                  ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))' }
                   : { background: 'rgb(var(--navy) / 0.06)', color: 'rgb(var(--navy))' }
               }
             >
-              <PhIcon name={opt.icon} size={14} color={state.createGroupIcon === opt.icon ? 'rgb(var(--cream))' : 'rgb(var(--navy))'} />
+              <PhIcon name={opt.icon} size={14} color={state.createGroupIcon === opt.icon ? 'rgb(var(--mist))' : 'rgb(var(--navy))'} />
               {opt.label}
             </button>
           ))}
         </div>
 
-        <label className="block text-[11px] font-bold uppercase text-stone mb-2" style={{ letterSpacing: '0.12em' }}>
+        <label className="block text-[11px] font-bold uppercase text-slate mb-2" style={{ letterSpacing: '0.12em' }}>
           Color
         </label>
         <div className="flex gap-2.5 mb-6">
@@ -128,7 +128,7 @@ export function CreateGroupSheet() {
             <p className="m-0 text-sm font-bold text-navy">
               {state.createGroupName || 'Your Group'}
             </p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
               1 member · community group
             </p>
           </div>
@@ -140,8 +140,8 @@ export function CreateGroupSheet() {
           disabled={!canCreate}
           className="w-full border-none rounded-full py-3.5 text-sm font-extrabold cursor-pointer"
           style={{
-            background: canCreate ? 'rgb(var(--navy))' : 'rgb(var(--taupepale))',
-            color: canCreate ? 'rgb(var(--cream))' : 'rgb(var(--stonelight))',
+            background: canCreate ? 'rgb(var(--navy))' : 'rgb(var(--slatepale))',
+            color: canCreate ? 'rgb(var(--mist))' : 'rgb(var(--slatelight))',
           }}
         >
           {busy ? 'Creating…' : 'Create group'}

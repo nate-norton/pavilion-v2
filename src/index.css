@@ -36,30 +36,30 @@
    * 3.29:1 — so each has a darker twin, exactly as the warm system did.
    */
   --navy: 26 51 82;          /* brand "ink" — primary text + dark surfaces. NEVER #000 */
-  --cream: 238 246 255;      /* brand "mist" — the app background */
+  --mist: 238 246 255;      /* brand "mist" — the app background */
   --paper: 255 255 255;      /* card surfaces */
-  --sand: 212 232 248;       /* brand "sky-border" — borders, dividers */
-  --parchment: 244 249 255;  /* resting input bg */
+  --skyborder: 212 232 248;       /* brand "sky-border" — borders, dividers */
+  --mistpale: 244 249 255;  /* resting input bg */
 
   /*
    * Decorative vs. text-bearing accent — the rule that survives from the warm
-   * system, with new values. --ember is brand "sunset", a fill: status dots,
+   * system, with new values. --sunset is brand "sunset", a fill: status dots,
    * progress, gradients, large display type. Anything carrying text — a CTA
-   * background under white, or accent copy on a light bed — uses --emberdeep
+   * background under white, or accent copy on a light bed — uses --sunsetdeep
    * (white on it 5.81; it on every page surface >= 4.62). Swapping one for
    * the other reintroduces a WCAG 1.4.3 failure on every primary button.
    */
-  --ember: 249 123 75;
-  --emberdeep: 185 55 6;
+  --sunset: 249 123 75;
+  --sunsetdeep: 185 55 6;
   /*
    * Darker end for the sunset gradient. The brand gradient runs sunset ->
-   * deeper sunset, but white on --ember measures 2.64:1 and on --emberbright
+   * deeper sunset, but white on --sunset measures 2.64:1 and on --sunsetbright
    * 2.00:1, so any gradient carrying white text or icons runs
-   * --emberdeep -> --embershade instead (white 5.81 / 8.07).
+   * --sunsetdeep -> --sunsetshade instead (white 5.81 / 8.07).
    */
-  --embershade: 150 40 4;
+  --sunsetshade: 150 40 4;
   /*
-   * --terracotta is the *themed* text-bearing accent: brand themes remap it
+   * --accent is the *themed* text-bearing accent: brand themes remap it
    * per community (src/theme/themes.ts) and accent copy, status pills and
    * inline links resolve to it.
    *
@@ -69,8 +69,8 @@
    * fills appear ~130 times against 15 for sunset text. Clears 4.56 on every
    * page surface, 4.73 on its own blush, 5.73 white-on-it.
    */
-  --terracotta: 30 102 186;
-  --blush: 220 235 251;      /* accent bed — sky pale, matching --terracotta */
+  --accent: 30 102 186;
+  --accenttint: 220 235 251;      /* accent bed — sky pale, matching --accent */
   --peach: 255 222 175;      /* eyebrow on chrome: 4.52 on sky, 9.96 on navy */
 
   /* Success. --sage is a fill; --sagedark carries text (on mint 4.53, white 5.69). */
@@ -108,10 +108,10 @@
    * stepped down from there: stonelight 4.52, stone 5.31, taupe 6.19,
    * bark 7.54. Four distinguishable steps, all legal.
    */
-  --stonelight: 78 106 128;
-  --stone: 70 95 115;
-  --taupe: 62 85 102;
-  --bark: 53 72 87;
+  --slatelight: 78 106 128;
+  --slate: 70 95 115;
+  --slatedeep: 62 85 102;
+  --slatedark: 53 72 87;
 
   --red: 239 68 68;
 
@@ -120,18 +120,18 @@
    * exact values; re-derived onto the cool ground so surfaces keep the same
    * relative weight (borders slightly darker than beds, beds off-white).
    */
-  --sandpale: 196 220 240;
-  --sanddim: 186 214 238;
-  --taupepale: 190 206 220;
-  --taupedim: 175 194 212;
-  --claypale: 172 192 210;
-  --creamlight: 244 250 255;
-  --creamdim: 236 245 255;
-  --creamtint: 232 242 254;
-  --sandtint: 222 236 250;
-  --sanddeep: 208 228 246;
-  --blushpale: 255 248 244;
-  --blushdim: 255 232 222;
+  --skyrule: 196 220 240;
+  --skyline: 186 214 238;
+  --slatepale: 190 206 220;
+  --slatedim: 175 194 212;
+  --slatefaint: 172 192 210;
+  --mistlight: 244 250 255;
+  --mistdim: 236 245 255;
+  --misttint: 232 242 254;
+  --skywash: 222 236 250;
+  --skyedge: 208 228 246;
+  --sunsetpale: 255 248 244;
+  --sunsetdim: 255 232 222;
   /*
    * Sequential scale — reserve-funding forecast (Hoa.tsx FORECAST_BARS).
    * Six steps of one hue, lightest year to darkest, ending on --sage. Kept
@@ -147,7 +147,7 @@
   /* Surfaces, not scale steps. */
   --sagepale: 219 240 228;
   --sagebright: 111 211 156;
-  --emberbright: 255 160 110;
+  --sunsetbright: 255 160 110;
   --brown: 150 60 20;
   --reddeep: 205 18 18;
   --skytint: 212 232 248;
@@ -160,12 +160,12 @@
   --black: 0 0 0;
 
   /* Semantic aliases — prefer these in screens/components */
-  --color-bg: var(--cream);
+  --color-bg: var(--mist);
   --color-surface: var(--paper);
   --color-primary: var(--navy);
   --color-text: var(--navy);
-  --color-muted: var(--stone);
-  --color-accent: var(--terracotta);
+  --color-muted: var(--slate);
+  --color-accent: var(--accent);
   --color-danger: var(--red);
   --color-success: var(--sage);
 }
@@ -181,7 +181,7 @@
  * surfaces; chrome inverts it below.
  */
 :focus-visible {
-  outline: 2px solid rgb(var(--emberdeep));
+  outline: 2px solid rgb(var(--sunsetdeep));
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -193,7 +193,7 @@
 .bg-skydeep :focus-visible,
 .bg-navy :focus-visible,
 [data-on-navy] :focus-visible {
-  outline-color: rgb(var(--cream));
+  outline-color: rgb(var(--mist));
 }
 html, body { margin: 0; padding: 0; background: rgb(var(--color-bg)); }
 body { font-family: 'Nunito Sans', system-ui, sans-serif; }

@@ -44,10 +44,10 @@ export function EmptyState({ icon, title, body, actionLabel, onAction, status = 
         <div className="flex justify-center">
           {/* PhIcon renders nothing for a name outside its map — keep to
               icons the map actually carries. */}
-          <PhIcon name="ph-fill ph-warning" size={26} color="rgb(var(--claypale))" />
+          <PhIcon name="ph-fill ph-warning" size={26} color="rgb(var(--slatefaint))" />
         </div>
         <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">Couldn’t load this</p>
-        <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone leading-[1.5]">
+        <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-slate leading-[1.5]">
           Something went wrong on our side — this isn’t empty, we just couldn’t reach it.
         </p>
         <button
@@ -70,10 +70,10 @@ export function EmptyState({ icon, title, body, actionLabel, onAction, status = 
         left-aligned icon above centred text. The flex wrapper centres it.
       */}
       <div className="flex justify-center">
-        <PhIcon name={icon} size={26} color="rgb(var(--claypale))" />
+        <PhIcon name={icon} size={26} color="rgb(var(--slatefaint))" />
       </div>
       <p className="m-0 mt-2 text-[13.5px] font-bold text-navy">{title}</p>
-      <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-stone leading-[1.5]">{body}</p>
+      <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-slate leading-[1.5]">{body}</p>
       {actionLabel && onAction && (
         <button
           type="button"
@@ -108,9 +108,9 @@ function EmptyStateSkeleton() {
   return (
     <Shell>
       <div className="flex flex-col items-center animate-skeleton" aria-hidden="true">
-        <div className="rounded-full" style={{ width: 26, height: 26, background: 'rgb(var(--sand))' }} />
-        <div className="rounded-full mt-2.5" style={{ width: 132, height: 11, background: 'rgb(var(--sand))' }} />
-        <div className="rounded-full mt-2" style={{ width: 196, height: 9, background: 'rgb(var(--sandpale))' }} />
+        <div className="rounded-full" style={{ width: 26, height: 26, background: 'rgb(var(--skyborder))' }} />
+        <div className="rounded-full mt-2.5" style={{ width: 132, height: 11, background: 'rgb(var(--skyborder))' }} />
+        <div className="rounded-full mt-2" style={{ width: 196, height: 9, background: 'rgb(var(--skyrule))' }} />
       </div>
       <span className="sr-only">Loading…</span>
     </Shell>

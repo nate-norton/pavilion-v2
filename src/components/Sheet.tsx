@@ -71,7 +71,7 @@ export function Sheet({ open, onClose, children, maxHeight, label = 'Dialog' }: 
         role="dialog"
         aria-modal="true"
         aria-label={label}
-        className="absolute left-0 right-0 bottom-0 bg-parchment rounded-t-[28px] px-5 pt-3.5 pb-6 animate-sheetup overflow-y-auto"
+        className="absolute left-0 right-0 bottom-0 bg-mistpale rounded-t-[28px] px-5 pt-3.5 pb-6 animate-sheetup overflow-y-auto"
         style={{
           boxShadow: '0 -18px 50px rgb(var(--scrim) / 0.25)',
           maxHeight: maxHeight ?? '90%',

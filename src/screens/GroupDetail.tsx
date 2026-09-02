@@ -52,7 +52,7 @@ export function GroupDetail() {
     <div
       data-screen-label="Group Detail"
       className="absolute inset-0 z-[78] flex flex-col animate-scpop"
-      style={{ background: 'rgb(var(--cream))' }}
+      style={{ background: 'rgb(var(--mist))' }}
     >
       {/* Header */}
       <div style={{ padding: '58px 18px 0' }}>
@@ -66,7 +66,7 @@ export function GroupDetail() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="m-0 text-[14.5px] font-bold text-navy">{group.name}</p>
-            <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+            <p className="m-0 text-[11px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
               {group.memberCount} members{group.isGroupChat ? ' · group chat' : ' · community group'}
             </p>
           </div>
@@ -74,12 +74,12 @@ export function GroupDetail() {
             type="button"
             onClick={() => toggleGroupMute(group.key)}
             className="w-8 h-8 rounded-full border-none flex items-center justify-center cursor-pointer"
-            style={{ background: group.muted ? 'rgb(var(--blushpale))' : 'rgb(var(--navy) / 0.06)' }}
+            style={{ background: group.muted ? 'rgb(var(--sunsetpale))' : 'rgb(var(--navy) / 0.06)' }}
           >
             <PhIcon
               name={group.muted ? 'ph-fill ph-bell-slash' : 'ph-fill ph-bell'}
               size={15}
-              color={group.muted ? 'rgb(var(--terracotta))' : 'rgb(var(--stone))'}
+              color={group.muted ? 'rgb(var(--accent))' : 'rgb(var(--slate))'}
             />
           </button>
         </div>
@@ -93,7 +93,7 @@ export function GroupDetail() {
             <PhIcon name="ph-fill ph-push-pin" size={13} color="rgb(var(--gold))" className="mt-0.5 flex-shrink-0" />
             <div className="min-w-0">
               <p className="m-0 text-[12px] font-bold text-navy">{group.pins[0].text}</p>
-              <p className="m-0 text-[10.5px] font-semibold mt-0.5" style={{ color: 'rgb(var(--stonelight))' }}>
+              <p className="m-0 text-[10.5px] font-semibold mt-0.5" style={{ color: 'rgb(var(--slatelight))' }}>
                 Pinned by {group.pins[0].author} · {group.pins[0].time}
               </p>
             </div>
@@ -109,14 +109,14 @@ export function GroupDetail() {
               className="flex-1 flex items-center justify-center gap-1.5 border-none bg-transparent cursor-pointer pb-2.5 pt-1"
               style={{ borderBottom: tab === t.key ? '2px solid rgb(var(--navy))' : '2px solid transparent' }}
             >
-              <PhIcon name={t.icon} size={13} color={tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--stonelight))'} />
-              <span className="text-[11.5px] font-bold" style={{ color: tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--stonelight))' }}>
+              <PhIcon name={t.icon} size={13} color={tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--slatelight))'} />
+              <span className="text-[11.5px] font-bold" style={{ color: tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--slatelight))' }}>
                 {t.label}
               </span>
               {t.count && t.count > 0 ? (
                 <span
                   className="min-w-[16px] h-4 rounded-full flex items-center justify-center text-[10px] font-extrabold px-1"
-                  style={{ background: tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--taupepale))', color: tab === t.key ? 'rgb(var(--cream))' : 'rgb(var(--stone))' }}
+                  style={{ background: tab === t.key ? 'rgb(var(--navy))' : 'rgb(var(--slatepale))', color: tab === t.key ? 'rgb(var(--mist))' : 'rgb(var(--slate))' }}
                 >
                   {t.count}
                 </span>
@@ -133,11 +133,11 @@ export function GroupDetail() {
             <div className="flex-1 flex flex-col items-center justify-center px-6" style={{ gap: 12 }}>
               <PhIcon name={group.icon} size={40} color={group.color} />
               <p className="m-0 text-sm font-bold text-navy text-center">Join {group.name} to send messages</p>
-              <p className="m-0 text-[12.5px] font-semibold text-center" style={{ color: 'rgb(var(--stone))' }}>{group.description}</p>
+              <p className="m-0 text-[12.5px] font-semibold text-center" style={{ color: 'rgb(var(--slate))' }}>{group.description}</p>
               <button
                 onClick={() => toggleGroupJoin(group.key)}
                 className="border-none rounded-full px-5 py-2.5 text-sm font-extrabold cursor-pointer mt-1"
-                style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
+                style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))' }}
               >
                 Join group
               </button>
@@ -146,8 +146,8 @@ export function GroupDetail() {
             <>
               <div ref={listRef} className="pav-scroll flex-1 overflow-y-auto flex flex-col gap-2.5" style={{ padding: '16px 18px' }}>
                 {group.messages.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-10" style={{ color: 'rgb(var(--stonelight))' }}>
-                    <PhIcon name="ph ph-chat-circle-dots" size={32} color="rgb(var(--taupepale))" />
+                  <div className="flex flex-col items-center justify-center py-10" style={{ color: 'rgb(var(--slatelight))' }}>
+                    <PhIcon name="ph ph-chat-circle-dots" size={32} color="rgb(var(--slatepale))" />
                     <p className="m-0 mt-2 text-[13px] font-semibold">No messages yet — say something!</p>
                   </div>
                 ) : (
@@ -157,7 +157,7 @@ export function GroupDetail() {
                         style={{
                           maxWidth: '80%',
                           background: m.me ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                          color: m.me ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
+                          color: m.me ? 'rgb(var(--mist))' : 'rgb(var(--navy))',
                           border: m.me ? 'none' : '1px solid rgb(var(--navy) / 0.08)',
                           borderRadius: m.me ? '18px 18px 6px 18px' : '18px 18px 18px 6px',
                           padding: '10px 13px',
@@ -165,7 +165,7 @@ export function GroupDetail() {
                       >
                         <p className="m-0 text-[13.5px] leading-[1.45] font-semibold">{m.text}</p>
                       </div>
-                      <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--stone))' }}>
+                      <span className="text-[10.5px] font-bold" style={{ margin: '3px 4px 0', color: 'rgb(var(--slate))' }}>
                         {m.time || ''}
                       </span>
                     </div>
@@ -187,7 +187,7 @@ export function GroupDetail() {
                   onClick={sendGroupMessage}
                   className="w-11 h-11 border-none rounded-full bg-skydeep flex items-center justify-center cursor-pointer flex-shrink-0"
                 >
-                  <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--cream))" />
+                  <PhIcon name="ph-fill ph-paper-plane-right" size={17} color="rgb(var(--mist))" />
                 </button>
               </div>
             </>
@@ -215,7 +215,7 @@ export function GroupDetail() {
                   placeholder="Question"
                   autoFocus
                   className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                 />
                 {pollOpts.map((o, i) => (
                   <input
@@ -224,7 +224,7 @@ export function GroupDetail() {
                     onChange={(e) => setPollOpts(pollOpts.map((x, j) => (j === i ? e.target.value : x)))}
                     placeholder={`Option ${i + 1}`}
                     className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   />
                 ))}
                 {pollOpts.length < 5 && (
@@ -251,8 +251,8 @@ export function GroupDetail() {
                         .then(() => { setPollDraftOpen(false); setPollQ(''); setPollOpts(['', '']); })
                         .catch(reportedByDataLayer);
                     }}
-                    className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
-                    style={{ background: pollQ.trim() && pollOpts.filter((o) => o.trim()).length >= 2 ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                    className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-mist"
+                    style={{ background: pollQ.trim() && pollOpts.filter((o) => o.trim()).length >= 2 ? 'rgb(var(--navy))' : 'rgb(var(--skyrule))' }}
                   >
                     Start poll
                   </button>
@@ -261,8 +261,8 @@ export function GroupDetail() {
             )
           )}
           {group.polls.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10" style={{ color: 'rgb(var(--stonelight))' }}>
-              <PhIcon name="ph ph-chart-bar-horizontal" size={32} color="rgb(var(--taupepale))" />
+            <div className="flex flex-col items-center justify-center py-10" style={{ color: 'rgb(var(--slatelight))' }}>
+              <PhIcon name="ph ph-chart-bar-horizontal" size={32} color="rgb(var(--slatepale))" />
               <p className="m-0 mt-2 text-[13px] font-semibold">No polls yet</p>
             </div>
           ) : (
@@ -276,7 +276,7 @@ export function GroupDetail() {
                 >
                   <div className="px-4 pt-3.5 pb-1">
                     <p className="m-0 text-[13.5px] font-bold text-navy">{poll.question}</p>
-                    <p className="m-0 text-[11px] font-semibold mt-0.5 mb-2.5" style={{ color: 'rgb(var(--stonelight))' }}>
+                    <p className="m-0 text-[11px] font-semibold mt-0.5 mb-2.5" style={{ color: 'rgb(var(--slatelight))' }}>
                       {poll.author} · {poll.time} · {total} vote{total !== 1 ? 's' : ''}
                     </p>
                   </div>
@@ -308,7 +308,7 @@ export function GroupDetail() {
                               {opt}
                             </span>
                             {poll.myVote && (
-                              <span className="text-[12px] font-extrabold" style={{ color: 'rgb(var(--stone))' }}>{pct}%</span>
+                              <span className="text-[12px] font-extrabold" style={{ color: 'rgb(var(--slate))' }}>{pct}%</span>
                             )}
                           </div>
                         </button>
@@ -342,7 +342,7 @@ export function GroupDetail() {
                   placeholder="What — e.g. Saturday trail cleanup"
                   autoFocus
                   className="w-full rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none mb-2"
-                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                  style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                 />
                 <div className="flex gap-2 mb-2">
                   <input
@@ -350,14 +350,14 @@ export function GroupDetail() {
                     onChange={(e) => setEvWhen(e.target.value)}
                     placeholder="When"
                     className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   />
                   <input
                     value={evWhere}
                     onChange={(e) => setEvWhere(e.target.value)}
                     placeholder="Where"
                     className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--parchment))' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                   />
                 </div>
                 <div className="flex gap-2">
@@ -375,8 +375,8 @@ export function GroupDetail() {
                         .then(() => { setEvDraftOpen(false); setEvTitle(''); setEvWhen(''); setEvWhere(''); })
                         .catch(reportedByDataLayer);
                     }}
-                    className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-cream"
-                    style={{ background: evTitle.trim() ? 'rgb(var(--navy))' : 'rgb(var(--sandpale))' }}
+                    className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-mist"
+                    style={{ background: evTitle.trim() ? 'rgb(var(--navy))' : 'rgb(var(--skyrule))' }}
                   >
                     Plan it
                   </button>
@@ -385,15 +385,15 @@ export function GroupDetail() {
             )
           )}
           {group.events.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10" style={{ color: 'rgb(var(--stonelight))' }}>
-              <PhIcon name="ph ph-calendar-dots" size={32} color="rgb(var(--taupepale))" />
+            <div className="flex flex-col items-center justify-center py-10" style={{ color: 'rgb(var(--slatelight))' }}>
+              <PhIcon name="ph ph-calendar-dots" size={32} color="rgb(var(--slatepale))" />
               <p className="m-0 mt-2 text-[13px] font-semibold">No upcoming events</p>
             </div>
           ) : (
             group.events.map((evt) => (
               <div
                 key={evt.id}
-                className="bg-skydeep rounded-[18px] p-4 text-cream mb-3"
+                className="bg-skydeep rounded-[18px] p-4 text-mist mb-3"
               >
                 <div className="flex items-center justify-between gap-2.5">
                   <div className="min-w-0">
@@ -401,7 +401,7 @@ export function GroupDetail() {
                       {evt.when}
                     </p>
                     <p className="m-0 mb-[3px] font-serif text-base leading-[1.25]">{evt.title}</p>
-                    <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+                    <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
                       {evt.where} · {evt.going} going
                     </p>
                   </div>
@@ -459,7 +459,7 @@ export function GroupDetail() {
               </div>
             ))}
             {group.memberCount > group.members.length && (
-              <p className="m-0 text-center text-[12px] font-semibold mt-1" style={{ color: 'rgb(var(--stonelight))' }}>
+              <p className="m-0 text-center text-[12px] font-semibold mt-1" style={{ color: 'rgb(var(--slatelight))' }}>
                 +{group.memberCount - group.members.length} more member{group.memberCount - group.members.length !== 1 ? 's' : ''}
               </p>
             )}
@@ -470,7 +470,7 @@ export function GroupDetail() {
               type="button"
               onClick={() => toggleGroupJoin(group.key)}
               className="w-full mt-4 border-none rounded-xl py-3 text-[13px] font-extrabold cursor-pointer"
-              style={{ background: 'rgb(var(--blushpale))', color: 'rgb(var(--terracotta))' }}
+              style={{ background: 'rgb(var(--sunsetpale))', color: 'rgb(var(--accent))' }}
             >
               Leave group
             </button>
@@ -479,7 +479,7 @@ export function GroupDetail() {
             <button
               type="button"
               onClick={() => void repo.archiveGroup(group.key).then(() => set({ activeGroup: null })).catch(reportedByDataLayer)}
-              className="w-full mt-2 bg-transparent rounded-xl py-3 text-[13px] font-extrabold cursor-pointer text-stone"
+              className="w-full mt-2 bg-transparent rounded-xl py-3 text-[13px] font-extrabold cursor-pointer text-slate"
               style={{ border: '1.5px dashed rgb(var(--navy) / 0.2)' }}
               title="Only the creator or the board can archive"
             >
@@ -495,7 +495,7 @@ export function GroupDetail() {
           <button
             onClick={() => toggleGroupJoin(group.key)}
             className="flex-1 border-none rounded-full py-3 text-sm font-extrabold cursor-pointer"
-            style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
+            style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))' }}
           >
             Join {group.name}
           </button>

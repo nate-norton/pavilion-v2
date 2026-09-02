@@ -86,24 +86,24 @@ export function Reserve() {
         <div className="animate-fadeup">
           <button
             onClick={backToList}
-            className="border-none bg-transparent flex items-center gap-1.5 text-[13px] font-bold cursor-pointer p-0 mb-3.5 text-stone"
+            className="border-none bg-transparent flex items-center gap-1.5 text-[13px] font-bold cursor-pointer p-0 mb-3.5 text-slate"
             style={{}}
           >
             <PhIcon name="ph-bold ph-arrow-left" size={14} />
             All amenities
           </button>
           <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">{amen.name}</h1>
-          <p className="m-0 mb-2.5 text-[13px] text-taupe font-semibold">{demo ? `${amen.sub} · free for residents` : amen.sub}</p>
+          <p className="m-0 mb-2.5 text-[13px] text-slatedeep font-semibold">{demo ? `${amen.sub} · free for residents` : amen.sub}</p>
           <div
             className="bg-paper rounded-[13px] px-3.5 py-2.5 flex gap-2.5 items-start mb-[18px]"
             style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
           >
-            <PhIcon name="ph-fill ph-info" size={14} color="rgb(var(--stone))" className="mt-px flex-shrink-0" />
-            <p className="m-0 text-xs leading-[1.5] font-bold text-stone">{amen.rules}</p>
+            <PhIcon name="ph-fill ph-info" size={14} color="rgb(var(--slate))" className="mt-px flex-shrink-0" />
+            <p className="m-0 text-xs leading-[1.5] font-bold text-slate">{amen.rules}</p>
           </div>
 
           <p
-            className="m-0 mb-[9px] text-[11px] font-bold uppercase text-stone"
+            className="m-0 mb-[9px] text-[11px] font-bold uppercase text-slate"
             style={{ letterSpacing: '0.12em' }}
           >
             Pick a day
@@ -127,7 +127,7 @@ export function Reserve() {
                     width: 64,
                     border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',
                     background: on ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                    color: on ? 'rgb(var(--cream))' : 'rgb(var(--bark))',
+                    color: on ? 'rgb(var(--mist))' : 'rgb(var(--slatedark))',
                   }}
                 >
                   {d}
@@ -138,12 +138,12 @@ export function Reserve() {
 
           <div className="flex items-baseline justify-between mb-[9px]">
             <p
-              className="m-0 text-[11px] font-bold uppercase text-stone"
+              className="m-0 text-[11px] font-bold uppercase text-slate"
               style={{ letterSpacing: '0.12em' }}
             >
               Pick a time
             </p>
-            <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+            <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
               Taken? Tap to waitlist
             </span>
           </div>
@@ -164,8 +164,8 @@ export function Reserve() {
                       : taken && wl
                         ? '1px solid rgb(var(--sage) / 0.35)'
                         : '1px solid rgb(var(--navy) / 0.12)',
-                    background: taken ? (wl ? 'rgb(var(--mint))' : 'rgb(var(--sand))') : sel ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                    color: taken ? (wl ? 'rgb(var(--sagedark))' : 'rgb(var(--bark))') : sel ? 'rgb(var(--cream))' : 'rgb(var(--navy))',
+                    background: taken ? (wl ? 'rgb(var(--mint))' : 'rgb(var(--skyborder))') : sel ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
+                    color: taken ? (wl ? 'rgb(var(--sagedark))' : 'rgb(var(--slatedark))') : sel ? 'rgb(var(--mist))' : 'rgb(var(--navy))',
                     textDecoration: taken && !wl ? 'line-through' : 'none',
                   }}
                 >
@@ -176,7 +176,7 @@ export function Reserve() {
           </div>
 
           <p
-            className="m-0 mb-[9px] text-[11px] font-bold uppercase text-stone"
+            className="m-0 mb-[9px] text-[11px] font-bold uppercase text-slate"
             style={{ letterSpacing: '0.12em' }}
           >
             Length
@@ -192,7 +192,7 @@ export function Reserve() {
                   style={{
                     border: on ? '1px solid rgb(var(--navy))' : '1px solid rgb(var(--navy) / 0.12)',
                     background: on ? 'rgb(var(--navy))' : 'rgb(var(--paper))',
-                    color: on ? 'rgb(var(--cream))' : 'rgb(var(--bark))',
+                    color: on ? 'rgb(var(--mist))' : 'rgb(var(--slatedark))',
                   }}
                 >
                   {label}
@@ -206,8 +206,8 @@ export function Reserve() {
               onClick={book}
               className="w-full border-none rounded-2xl py-4 text-[14px] font-extrabold"
               style={{
-                background: canBook ? 'rgb(var(--emberdeep))' : 'rgb(var(--sandpale))',
-                color: canBook ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
+                background: canBook ? 'rgb(var(--sunsetdeep))' : 'rgb(var(--skyrule))',
+                color: canBook ? 'rgb(var(--white))' : 'rgb(var(--slatelight))',
                 cursor: canBook ? 'pointer' : 'default',
               }}
             >
@@ -265,7 +265,7 @@ export function Reserve() {
     >
       <div>
         <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Reserve</h1>
-        <p className="m-0 mb-3.5 text-[13.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+        <p className="m-0 mb-3.5 text-[13.5px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
           Amenities, booked in two taps. One active booking per household.
         </p>
         {repo.isDemo() && (
@@ -275,8 +275,8 @@ export function Reserve() {
 >
           <PhIcon name="ph-fill ph-qr-code" size={22} color="rgb(var(--peach))" className="flex-shrink-0" />
           <div className="flex-1">
-            <p className="m-0 mb-px text-[13.5px] font-bold text-cream">Expecting visitors?</p>
-            <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+            <p className="m-0 mb-px text-[13.5px] font-bold text-mist">Expecting visitors?</p>
+            <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
               Issue a gate &amp; parking pass in two taps
             </p>
           </div>
@@ -300,7 +300,7 @@ export function Reserve() {
             </div>
             <button
               onClick={cancelBooking}
-              className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer p-1 text-stone"
+              className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer p-1 text-slate"
               style={{}}
             >
               Cancel
@@ -341,12 +341,12 @@ export function Reserve() {
               className="w-full border-none font-sans text-left bg-paper rounded-[18px] px-4 py-[15px] flex items-center gap-3.5 cursor-pointer"
               style={{ border: '1px solid rgb(var(--navy) / 0.08)' }}
             >
-              <div className="w-11 h-11 rounded-[14px] flex items-center justify-center flex-shrink-0 bg-sand">
+              <div className="w-11 h-11 rounded-[14px] flex items-center justify-center flex-shrink-0 bg-skyborder">
                 <PhIcon name={a.icon} size={22} color="rgb(var(--skydeep))" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-0.5 text-[14px] font-bold text-navy">{a.name}</p>
-                <p className="m-0 mb-1 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+                <p className="m-0 mb-1 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                   {a.sub}
                 </p>
                 <p

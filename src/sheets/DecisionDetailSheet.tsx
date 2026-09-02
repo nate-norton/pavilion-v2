@@ -48,7 +48,7 @@ export function DecisionDetailSheet() {
   return (
     <Sheet open onClose={() => set({ decisionDetailIdx: null })}>
       <p className="m-0 font-serif text-[19px] text-navy mb-1">{d.text}</p>
-      <p className="m-0 text-[12.5px] font-bold mb-4" style={{ color: 'rgb(var(--stone))' }}>
+      <p className="m-0 text-[12.5px] font-bold mb-4" style={{ color: 'rgb(var(--slate))' }}>
         {d.date}
       </p>
 
@@ -56,8 +56,8 @@ export function DecisionDetailSheet() {
         <span
           className="rounded-full px-2.5 py-1 text-[11px] font-bold"
           style={{
-            background: d.passed ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
-            color: d.passed ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
+            background: d.passed ? 'rgb(var(--mint))' : 'rgb(var(--accenttint))',
+            color: d.passed ? 'rgb(var(--sagedark))' : 'rgb(var(--accent))',
           }}
         >
           {d.passed ? 'Passed' : 'Declined'}
@@ -68,26 +68,26 @@ export function DecisionDetailSheet() {
       </div>
 
       <div className="mb-5">
-        <ProgressBar pct={pct} color={d.passed ? 'rgb(var(--sage))' : 'rgb(var(--terracotta))'} />
+        <ProgressBar pct={pct} color={d.passed ? 'rgb(var(--sage))' : 'rgb(var(--accent))'} />
         <div className="flex justify-between mt-1.5">
           <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--sagedark))' }}>
             Yes {pct}%
           </span>
-          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--terracotta))' }}>
+          <span className="text-[11px] font-bold" style={{ color: 'rgb(var(--accent))' }}>
             No {100 - pct}%
           </span>
         </div>
       </div>
 
-      <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
+      <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3">
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--slatelight))' }}>
           Summary
         </p>
         <p className="m-0 text-[13.5px] font-semibold text-navy leading-relaxed">{d.detail}</p>
       </div>
 
-      <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
+      <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3">
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--slatelight))' }}>
           Board members present
         </p>
         {d.board.map((name) => (

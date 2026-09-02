@@ -50,12 +50,12 @@ export function ReportSheet() {
       {!state.reportSubmitted ? (
         <div>
           <p className="m-0 mb-0.5 font-serif text-xl text-navy">Report a problem</p>
-          <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             Goes only to the board &amp; manager — never the public feed.
           </p>
 
           <p
-            className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
+            className="m-0 mb-2 text-[11px] font-bold uppercase text-slate"
             style={{ letterSpacing: '0.12em' }}
           >
             Category
@@ -73,7 +73,7 @@ export function ReportSheet() {
           </div>
 
           <p
-            className="m-0 mb-2 text-[11px] font-bold uppercase text-stone"
+            className="m-0 mb-2 text-[11px] font-bold uppercase text-slate"
             style={{ letterSpacing: '0.12em' }}
           >
             What&apos;s going on?
@@ -89,7 +89,7 @@ export function ReportSheet() {
 
           {!demo && (
             <>
-              <p className="m-0 mb-2 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+              <p className="m-0 mb-2 text-[11px] font-bold uppercase text-slate" style={{ letterSpacing: '0.12em' }}>
                 How urgent?
               </p>
               <div className="flex gap-1.5 mb-3.5">
@@ -125,11 +125,11 @@ export function ReportSheet() {
               height: 70,
               border: (demo ? state.reportPhoto : photos.length > 0) ? '1.5px solid rgb(var(--sage) / 0.4)' : '1.5px dashed rgb(var(--navy) / 0.2)',
               borderRadius: 13,
-              background: (demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--creamdim)) 0 8px,rgb(var(--parchment)) 8px 16px)',
+              background: (demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--mint))' : 'repeating-linear-gradient(-45deg,rgb(var(--mistdim)) 0 8px,rgb(var(--mistpale)) 8px 16px)',
             }}
           >
-            <PhIcon name={(demo ? state.reportPhoto : photos.length > 0) ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={(demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
-            <span className="font-mono text-[10px]" style={{ color: (demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--sagedark))' : 'rgb(var(--stone))' }}>
+            <PhIcon name={(demo ? state.reportPhoto : photos.length > 0) ? 'ph-fill ph-check-circle' : 'ph ph-camera-plus'} size={18} color={(demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--sage))' : 'rgb(var(--slate))'} />
+            <span className="font-mono text-[10px]" style={{ color: (demo ? state.reportPhoto : photos.length > 0) ? 'rgb(var(--sagedark))' : 'rgb(var(--slate))' }}>
               {demo
                 ? (state.reportPhoto ? 'photo added ✓' : 'add a photo (optional)')
                 : (photos.length > 0 ? `${photos.length} photo${photos.length > 1 ? 's' : ''} added ✓ · tap for more` : 'add a photo (optional)')}
@@ -140,8 +140,8 @@ export function ReportSheet() {
             onClick={send}
             className="w-full border-none rounded-2xl py-[15px] text-[14.5px] font-extrabold font-sans"
             style={{
-              background: canReport ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
-              color: canReport ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
+              background: canReport ? 'rgb(var(--sunset))' : 'rgb(var(--skyrule))',
+              color: canReport ? 'rgb(var(--white))' : 'rgb(var(--slatelight))',
               cursor: canReport ? 'pointer' : 'default',
             }}
           >
@@ -152,7 +152,7 @@ export function ReportSheet() {
         <div className="text-center pt-1.5 pb-1 animate-fadeup">
           <PhIcon name="ph-fill ph-shield-check" size={48} color="rgb(var(--sage))" />
           <p className="m-0 mt-2.5 mb-[3px] font-serif text-xl text-navy">Sent — privately.</p>
-          <p className="m-0 mb-3.5 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-3.5 text-[13px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             {demo ? 'Ticket #M-89 · ' : ''}{state.reportType} · the board sees it, the feed never does
           </p>
           <div className="flex items-center justify-center gap-0 mb-4">
@@ -163,11 +163,11 @@ export function ReportSheet() {
               >
                 <PhIcon name="ph-bold ph-check" size={10} color="rgb(var(--white))" />
               </span>
-              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
+              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
                 Submitted
               </span>
             </div>
-            <div className="h-0.5" style={{ background: 'rgb(var(--sanddim))', width: 36, marginBottom: 16 }} />
+            <div className="h-0.5" style={{ background: 'rgb(var(--skyline))', width: 36, marginBottom: 16 }} />
             <div className="flex flex-col items-center gap-1" style={{ width: 80 }}>
               <span
                 className="w-5 h-5 rounded-full flex items-center justify-center"
@@ -175,29 +175,29 @@ export function ReportSheet() {
               >
                 <PhIcon name="ph-bold ph-hourglass" size={10} color="rgb(var(--white))" />
               </span>
-              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
+              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
                 Triage
               </span>
             </div>
-            <div className="h-0.5" style={{ background: 'rgb(var(--sanddim))', width: 36, marginBottom: 16 }} />
+            <div className="h-0.5" style={{ background: 'rgb(var(--skyline))', width: 36, marginBottom: 16 }} />
             <div className="flex flex-col items-center gap-1" style={{ width: 80 }}>
               <span
                 className="w-5 h-5 rounded-full flex items-center justify-center"
-                style={{ background: 'rgb(var(--sanddim))' }}
+                style={{ background: 'rgb(var(--skyline))' }}
               >
                 <PhIcon name="ph-bold ph-dots-three" size={10} color="rgb(var(--white))" />
               </span>
-              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--bark))' }}>
+              <span className="text-[10px] font-bold" style={{ color: 'rgb(var(--slatedark))' }}>
                 Fixed
               </span>
             </div>
           </div>
-          <p className="m-0 mb-3.5 text-xs font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mb-3.5 text-xs font-bold" style={{ color: 'rgb(var(--slate))' }}>
             Track it anytime in My Place → My requests
           </p>
           <button
             onClick={closeReport}
-            className="w-full border-none text-cream rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-skydeep"
+            className="w-full border-none text-mist rounded-2xl py-3.5 text-sm font-extrabold cursor-pointer bg-skydeep"
           >
             Done
           </button>

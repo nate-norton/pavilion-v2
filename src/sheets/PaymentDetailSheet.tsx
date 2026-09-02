@@ -6,9 +6,9 @@ import { useRepository } from '../data/repo';
 const DUES_LEGEND = [
   { label: 'Landscaping', amount: '$78', color: 'rgb(var(--sage))' },
   { label: 'Reserves', amount: '$71', color: 'rgb(var(--navy))' },
-  { label: 'Insurance', amount: '$54', color: 'rgb(var(--ember))' },
+  { label: 'Insurance', amount: '$54', color: 'rgb(var(--sunset))' },
   { label: 'Utilities', amount: '$48', color: 'rgb(var(--gold))' },
-  { label: 'Management', amount: '$34', color: 'rgb(var(--stonelight))' },
+  { label: 'Management', amount: '$34', color: 'rgb(var(--slatelight))' },
 ];
 
 interface PaymentRow {
@@ -35,7 +35,7 @@ const PAYMENTS: PaymentRow[] = [
     month: 'June 2026',
     amount: '$285',
     getStatus: ({ paid, showDelinquent }) => {
-      if (showDelinquent && !paid) return { label: 'Past due – 30 days', bg: 'rgb(var(--blush))', color: 'rgb(var(--terracotta))', isPaid: false };
+      if (showDelinquent && !paid) return { label: 'Past due – 30 days', bg: 'rgb(var(--accenttint))', color: 'rgb(var(--accent))', isPaid: false };
       return { label: 'Paid Jun 2', bg: 'rgb(var(--mint))', color: 'rgb(var(--sagedark))', isPaid: true, confirmation: '#P-2145' };
     },
   },
@@ -79,8 +79,8 @@ export function PaymentDetailSheet() {
       </div>
       <p className="m-0 text-[24px] font-bold text-navy mb-4">{row.amount}</p>
 
-      <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-2.5" style={{ color: 'rgb(var(--stonelight))' }}>
+      <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3">
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-2.5" style={{ color: 'rgb(var(--slatelight))' }}>
           Breakdown
         </p>
         {DUES_LEGEND.map((d) => (
@@ -94,8 +94,8 @@ export function PaymentDetailSheet() {
         ))}
       </div>
 
-      <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
+      <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3">
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--slatelight))' }}>
           Payment method
         </p>
         <div className="flex items-center gap-2.5">
@@ -105,8 +105,8 @@ export function PaymentDetailSheet() {
       </div>
 
       {status.confirmation && (
-        <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
+        <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3">
+          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--slatelight))' }}>
             Confirmation
           </p>
           <p className="m-0 text-[13.5px] font-bold text-navy">{status.confirmation}</p>
@@ -117,7 +117,7 @@ export function PaymentDetailSheet() {
         <button
           onClick={() => set({ paySheetOpen: true, paymentDetailIdx: null })}
           className="w-full rounded-2xl py-3.5 border-none text-[14px] font-extrabold cursor-pointer font-sans mt-1"
-          style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))' }}
+          style={{ background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))' }}
         >
           Pay now
         </button>

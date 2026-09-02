@@ -3,11 +3,11 @@ import { PhIcon } from '../components/PhIcon';
 import { usePavStore } from '../store/store';
 
 const AVATARS = [
-  { initial: 'R', bg: 'rgb(var(--terracotta))', color: 'rgb(var(--white))' },
+  { initial: 'R', bg: 'rgb(var(--accent))', color: 'rgb(var(--white))' },
   { initial: 'T', bg: 'rgb(var(--sky))', color: 'rgb(var(--white))' },
   { initial: 'P', bg: 'rgb(var(--sage))', color: 'rgb(var(--white))' },
-  { initial: 'A', bg: 'rgb(var(--navy))', color: 'rgb(var(--cream))' },
-  { initial: '+20', bg: 'rgb(var(--sand))', color: 'rgb(var(--stone))' },
+  { initial: 'A', bg: 'rgb(var(--navy))', color: 'rgb(var(--mist))' },
+  { initial: '+20', bg: 'rgb(var(--skyborder))', color: 'rgb(var(--slate))' },
 ];
 
 /** Garden Circle detail screen — ported from prototype lines 2043-2086. */
@@ -23,7 +23,7 @@ export function CircleDetail() {
     <div
       data-screen-label="Garden Circle"
       className="pav-scroll absolute inset-0 z-[76] overflow-y-auto animate-scpop"
-      style={{ background: 'rgb(var(--cream))', padding: '60px 18px 40px' }}
+      style={{ background: 'rgb(var(--mist))', padding: '60px 18px 40px' }}
     >
       <BackButton onClick={() => set({ circleOpen: false })} />
       <div
@@ -43,7 +43,7 @@ export function CircleDetail() {
           Joined ✓
         </span>
       </div>
-      <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+      <p className="m-0 mb-3 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
         24 members · run by Rosa M. · neighbor-led since 2019
       </p>
       <div className="flex items-center mb-4">
@@ -54,7 +54,7 @@ export function CircleDetail() {
             style={{
               background: a.bg,
               color: a.color,
-              border: '2px solid rgb(var(--cream))',
+              border: '2px solid rgb(var(--mist))',
               fontSize: a.initial.length > 1 ? 10 : 11,
               marginLeft: i > 0 ? -8 : 0,
             }}
@@ -64,14 +64,14 @@ export function CircleDetail() {
         ))}
       </div>
 
-      <div className="bg-skydeep rounded-[18px] p-4 text-cream mb-3.5">
+      <div className="bg-skydeep rounded-[18px] p-4 text-mist mb-3.5">
         <div className="flex items-center justify-between gap-2.5">
           <div className="min-w-0">
             <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
               Next meetup · Sat, 9 AM
             </p>
             <p className="m-0 mb-[3px] font-serif text-base leading-[1.25]">Work party — plot row 3</p>
-            <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+            <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
               {gardenGoing} going · gloves provided
             </p>
           </div>
@@ -107,7 +107,7 @@ export function CircleDetail() {
           <div key={post.id} style={{ background: 'rgb(var(--paper))', border: '1px solid rgb(var(--navy) / 0.08)', borderRadius: 16, padding: 15, marginBottom: 10 }}>
             <p className="m-0 mb-1.5 text-[12.5px] font-bold text-navy">{post.title}</p>
             <div className="flex items-center justify-between">
-              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+              <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                 {post.author} · {post.time}
               </p>
               <button
@@ -115,8 +115,8 @@ export function CircleDetail() {
                 onClick={() => set({ circlePostLiked: { ...state.circlePostLiked, [post.id]: !liked } })}
                 className="border-none bg-transparent flex items-center gap-1 cursor-pointer p-0"
               >
-                <PhIcon name={liked ? 'ph-fill ph-heart' : 'ph ph-heart'} size={14} color={liked ? 'rgb(var(--ember))' : 'rgb(var(--stonelight))'} className={liked ? 'animate-heartpop' : ''} />
-                <span className="text-[11.5px] font-bold" style={{ color: liked ? 'rgb(var(--ember))' : 'rgb(var(--stonelight))' }}>
+                <PhIcon name={liked ? 'ph-fill ph-heart' : 'ph ph-heart'} size={14} color={liked ? 'rgb(var(--sunset))' : 'rgb(var(--slatelight))'} className={liked ? 'animate-heartpop' : ''} />
+                <span className="text-[11.5px] font-bold" style={{ color: liked ? 'rgb(var(--sunset))' : 'rgb(var(--slatelight))' }}>
                   {post.likes + (liked ? 1 : 0)}
                 </span>
               </button>

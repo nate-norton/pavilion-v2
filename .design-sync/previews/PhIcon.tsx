@@ -25,7 +25,7 @@ export const Weights = () => (
 // Accent coloring — terracotta for emphasis, sage/gold/sky for status.
 export const Colors = () => (
   <div style={wrap}>
-    <PhIcon name="ph-fill ph-sparkle" size={26} color="rgb(var(--terracotta))" />
+    <PhIcon name="ph-fill ph-sparkle" size={26} color="rgb(var(--accent))" />
     <PhIcon name="ph-fill ph-heart" size={26} color="rgb(var(--sage))" />
     <PhIcon name="ph-fill ph-shield-check" size={26} color="rgb(var(--gold))" />
     <PhIcon name="ph-fill ph-map-trifold" size={26} color="rgb(var(--skydeep))" />

@@ -28,34 +28,34 @@ export function Meeting() {
     <div
       data-screen-label="Annual Meeting"
       className="pav-scroll absolute inset-0 z-[77] overflow-y-auto animate-scpop"
-      style={{ background: 'rgb(var(--cream))', padding: '60px 18px 40px' }}
+      style={{ background: 'rgb(var(--mist))', padding: '60px 18px 40px' }}
     >
       <BackButton onClick={() => set({ meetingOpen: false })} />
-      <p className="m-0 mb-1.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.14em', color: 'rgb(var(--terracotta))' }}>
+      <p className="m-0 mb-1.5 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.14em', color: 'rgb(var(--accent))' }}>
         Annual meeting · Tue Jul 15 · 7 PM
       </p>
       <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">Juniper Ridge, assembled</h1>
-      <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--taupe))' }}>
+      <p className="m-0 mb-4 text-[13px] font-semibold" style={{ color: 'rgb(var(--slatedeep))' }}>
         Clubhouse + Zoom · childcare at the clubhouse · minutes posted within 48h
       </p>
 
       {/* Quorum pledged */}
-      <div className="bg-skydeep rounded-[18px] p-4 text-cream mb-3.5">
+      <div className="bg-skydeep rounded-[18px] p-4 text-mist mb-3.5">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
+          <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>
             QUORUM PLEDGED
           </span>
-          <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--cream) / 0.9)' }}>
+          <span className="text-[11.5px] font-bold" style={{ color: 'rgb(var(--mist) / 0.9)' }}>
             {quorum.count} of 136 households
           </span>
         </div>
-        <div className="rounded-full overflow-hidden mb-2.5" style={{ height: 8, background: 'rgb(var(--cream) / 0.15)' }}>
+        <div className="rounded-full overflow-hidden mb-2.5" style={{ height: 8, background: 'rgb(var(--mist) / 0.15)' }}>
           <div
             className="h-full w-full rounded-full origin-left"
-            style={{ transform: `scaleX(${quorum.pct / 100})`, background: 'linear-gradient(90deg,rgb(var(--ember)),rgb(var(--emberbright)))', transition: 'transform 0.6s ease' }}
+            style={{ transform: `scaleX(${quorum.pct / 100})`, background: 'linear-gradient(90deg,rgb(var(--sunset)),rgb(var(--sunsetbright)))', transition: 'transform 0.6s ease' }}
           />
         </div>
-        <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+        <p className="m-0 text-xs font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
           34 attending remotely · proxies count toward quorum
         </p>
       </div>
@@ -75,7 +75,7 @@ export function Meeting() {
         <div className="flex flex-col gap-[9px]">
           {AGENDA.map((item, i) => (
             <div key={item} className="flex gap-2.5 items-baseline">
-              <span className="text-[11px] font-extrabold w-4" style={{ color: 'rgb(var(--terracotta))' }}>
+              <span className="text-[11px] font-extrabold w-4" style={{ color: 'rgb(var(--accent))' }}>
                 {i + 1}
               </span>
               <span className="text-[13px] font-bold text-navy">{item}</span>
@@ -113,7 +113,7 @@ export function Meeting() {
           <button type="button" onClick={() => set({ proxyOpen: !state.proxyOpen })} className="w-full flex items-center gap-[11px] cursor-pointer border-none bg-transparent text-left font-sans">
             <PhIcon name="ph-fill ph-user-switch" size={18} color="rgb(var(--skydeep))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[12.5px] font-bold text-navy">Can&apos;t make it? Assign your vote to a proxy</p>
-            <PhIcon name={state.proxyOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'} size={14} color="rgb(var(--stonelight))" />
+            <PhIcon name={state.proxyOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'} size={14} color="rgb(var(--slatelight))" />
           </button>
           {state.proxyOpen && (
             <div className="animate-fadeup">
@@ -124,13 +124,13 @@ export function Meeting() {
                     type="button"
                     onClick={() => set({ proxyPick: n })}
                     className="text-navy rounded-full text-[12.5px] font-extrabold cursor-pointer font-sans"
-                    style={{ border: '1px solid rgb(var(--navy) / 0.14)', background: 'rgb(var(--parchment))', padding: '9px 14px' }}
+                    style={{ border: '1px solid rgb(var(--navy) / 0.14)', background: 'rgb(var(--mistpale))', padding: '9px 14px' }}
                   >
                     {n}
                   </button>
                 ))}
               </div>
-              <p className="mt-[11px] mb-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--stone))' }}>
+              <p className="mt-[11px] mb-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--slate))' }}>
                 Your proxy counts toward quorum and votes on your behalf. Revoke anytime before the meeting.
               </p>
             </div>
@@ -149,7 +149,7 @@ export function Meeting() {
             type="button"
             onClick={() => set({ proxyPick: null, proxyOpen: false })}
             className="border-none bg-transparent text-xs font-extrabold cursor-pointer font-sans p-1"
-            style={{ color: 'rgb(var(--stone))' }}
+            style={{ color: 'rgb(var(--slate))' }}
           >
             Revoke
           </button>
