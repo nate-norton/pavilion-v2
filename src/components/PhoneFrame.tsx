@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { usePavStore } from '../store/store';
-import { usePageMode } from '../lib/pageMode';
+import { useScrollTopOnChange } from '../lib/pageMode';
 import { isLiveMode } from '../auth/AuthGate';
 import { AppToast } from './AppToast';
 import { ConfirmSheet } from './ConfirmSheet';
@@ -24,16 +24,9 @@ export function PhoneFrame() {
 
   const slideClass = goingRight ? 'animate-slideleft' : 'animate-slideright';
 
-  /*
-   * In frame mode each tab has its own scroller and the `key={tab}` remount
-   * discards its position, so a tab always opens at the top. Page mode scrolls
-   * the document instead, which the browser would happily leave halfway down
-   * the previous tab — so the same guarantee has to be restated here.
-   */
-  const pageMode = usePageMode();
-  useEffect(() => {
-    if (pageMode) window.scrollTo(0, 0);
-  }, [tab, pageMode]);
+  // Page mode scrolls the document, so a tab change has to put it back at the
+  // top itself (see useScrollTopOnChange).
+  useScrollTopOnChange(tab);
 
   /*
    * Desktop board mode. Residents stay phone-shaped everywhere — that is the

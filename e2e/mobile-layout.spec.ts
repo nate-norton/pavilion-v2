@@ -35,20 +35,33 @@ async function documentScrolls(page: Page) {
 }
 
 test.describe('mobile web layout', () => {
-  test('tab screens scroll the document, so the browser toolbar can collapse', async ({
-    page,
-  }, testInfo) => {
+  test('no scroll container sits above the document', async ({ page }, testInfo) => {
     await page.goto('/');
-    test.skip(!(await isPageMode(page)), 'frame layout — the document is not the scroller');
+    test.skip(!(await isPageMode(page)), 'frame layout — the frame owns the scroll by design');
 
+    // The mechanism, asserted directly: in page mode a tab's root must not be
+    // a scroller of its own. A nested scroller is exactly what kept the
+    // browser toolbar pinned open, and it would do so again whether or not
+    // this particular tab happens to have enough content to overflow.
     for (const tab of TABS) {
       await tabButton(page, tab).click();
-      await expect
-        .poll(() => documentScrolls(page), {
-          message: `${tab} must give the document something to scroll (${testInfo.project.name})`,
-        })
-        .toBe(true);
+      const nested = await page.evaluate(() =>
+        [...document.querySelectorAll('.pav-tabscroll')]
+          .filter((el) => (el as HTMLElement).offsetParent !== null || el.clientHeight > 0)
+          .filter((el) => el.scrollHeight > el.clientHeight + 1).length,
+      );
+      expect(nested, `${tab} still scrolls inside a box (${testInfo.project.name})`).toBe(0);
     }
+  });
+
+  test('a content-heavy tab gives the document something to scroll', async ({ page }) => {
+    await page.goto('/');
+    test.skip(!(await isPageMode(page)), 'frame layout');
+
+    // Today is the longest tab on every device in the matrix; if the document
+    // cannot scroll here, the toolbar has nothing to collapse in response to.
+    await tabButton(page, 'Today').click();
+    await expect.poll(() => documentScrolls(page)).toBe(true);
   });
 
   test('a tab opens at the top even though the document carries the scroll', async ({
@@ -116,15 +129,21 @@ test.describe('mobile web layout', () => {
     }
   });
 
-  test('an open sheet covers the whole viewport', async ({ page }) => {
+  test('an open sheet covers everything behind it', async ({ page }) => {
     await page.goto('/');
     await page.getByText(/review & pay/i).click();
     const scrim = page.locator('[data-testid="sheet-scrim"]');
     await expect(scrim).toBeVisible();
     const box = (await scrim.boundingBox())!;
-    const viewport = page.viewportSize()!;
-    expect(box.height).toBeGreaterThanOrEqual(viewport.height - 1);
-    expect(box.y).toBeLessThanOrEqual(1);
+
+    // Page mode measures the scrim against the viewport, because the sheet is
+    // fixed to it. Frame mode measures it against the frame, which is what the
+    // sheet is a layer over there — asserting the viewport would only be
+    // asserting that the frame fills the window, which it deliberately doesn't.
+    const target = (await isPageMode(page))
+      ? page.viewportSize()!.height
+      : (await page.locator('[data-testid="phone-frame"]').boundingBox())!.height;
+    expect(box.height).toBeGreaterThanOrEqual(target - 1);
   });
 
   test('form fields are at least 16px, so iOS does not zoom on focus', async ({ page }) => {

@@ -440,8 +440,41 @@ div[class*="cursor-pointer"] {
   html .pav-dock,
   html .pav-fixed { position: fixed; }
 
-  /* A sheet's own scroll must not chain into the page behind the scrim. */
+  /*
+   * A full-screen overlay keeps its own scroller, so a flick past its end must
+   * not chain into the document underneath and drag the tab out from behind
+   * it. The same applies to a sheet's panel.
+   */
+  html .pav-fixed,
   html .pav-sheet { overscroll-behavior: contain; }
+
+  /*
+   * A sheet's scrim is not a scroller, so a drag on it would scroll the
+   * nearest ancestor that is — the document — sliding the page behind a modal.
+   * The scrim's job is to absorb the touch and close on tap.
+   */
+  html .pav-scrim { touch-action: none; }
+
+  /*
+   * Overlay screens lay themselves out as a column with the composer last, so
+   * lifting the whole layer off the keyboard puts the composer directly above
+   * it. Sheets are excluded: their panel handles this itself, and doing both
+   * would double-count the inset.
+   */
+  html .pav-fixed:not(.pav-sheet-root) { bottom: var(--pav-keyboard); }
+
+  /*
+   * iOS Safari zooms the page whenever a focused field is under 16px, and
+   * every field in this app is 12-13.5px. The zoom pushes the nav dock and the
+   * right edge of every card off-screen and the user has to pinch back out —
+   * the most likely "it looks cut off" report from a pilot. The alternative
+   * fix, `maximum-scale=1`, suppresses pinch-zoom for everyone and fails WCAG
+   * 1.4.4, which PRODUCT.md commits to. So the field size gives way instead;
+   * `!important` because the size arrives as a Tailwind utility at each of the
+   * 76 call sites, and this is a platform constraint rather than a style
+   * preference for any one of them to argue with.
+   */
+  input, textarea, select { font-size: 16px !important; }
 }
 
 /* Landscape on a handset is the one case where the horizontal insets are
@@ -457,45 +490,4 @@ div[class*="cursor-pointer"] {
     left: calc(14px + var(--pav-safe-left));
     right: calc(14px + var(--pav-safe-right));
   }
-}
-
-/* Page-mode behaviours that belong to specific layers rather than to the
-   shell. Kept out of the block above so the reason for each is its own note. */
-@media (max-width: 500px), (pointer: coarse) and (max-height: 500px) {
-  /*
-   * A full-screen overlay keeps its own scroller, so a flick past its end
-   * must not chain into the document underneath and drag the tab out from
-   * behind it.
-   */
-  html .pav-fixed { overscroll-behavior: contain; }
-
-  /*
-   * A sheet's scrim is not a scroller, so a drag on it would scroll the
-   * nearest ancestor that is — the document — sliding the page behind a modal.
-   * The scrim's job is to absorb the touch and close on tap.
-   */
-  html .pav-scrim { touch-action: none; }
-
-  /*
-   * Overlay screens lay themselves out as a column with the composer last,
-   * so lifting the whole layer off the keyboard puts the composer directly
-   * above it. Sheets are excluded: their panel handles this itself, and
-   * doing both would double-count the inset.
-   */
-  html .pav-fixed:not(.pav-sheet-root) { bottom: var(--pav-keyboard); }
-}
-
-/*
- * iOS Safari zooms the page whenever a focused field is under 16px, and every
- * field in this app is 12-13.5px. The zoom pushes the nav dock and the right
- * edge of every card off-screen, and the user has to pinch back out — the most
- * likely "it looks cut off" report from a pilot. The alternative fix,
- * `maximum-scale=1`, suppresses pinch-zoom for everyone and fails WCAG 1.4.4,
- * which PRODUCT.md commits to. So fields get the platform's minimum instead;
- * `!important` is here because the size arrives as a Tailwind utility on each
- * of the 76 call sites, and this is a platform constraint rather than a style
- * preference for any one of them to argue with.
- */
-@media (max-width: 500px), (pointer: coarse) and (max-height: 500px) {
-  input, textarea, select { font-size: 16px !important; }
 }

@@ -31,6 +31,23 @@ export function usePageMode(): boolean {
   return on;
 }
 
+/**
+ * Put the document back at the top when `key` changes, in page mode only.
+ *
+ * In frame mode each screen has its own scroller and gets a fresh one when it
+ * mounts, so a new screen always opens at the top for free. Page mode scrolls
+ * the document, which the browser would happily leave halfway down whatever
+ * was on screen before — so the guarantee has to be restated wherever the
+ * rendered screen changes: a tab tap, or a drill-in that swaps a list for a
+ * detail without unmounting the tab.
+ */
+export function useScrollTopOnChange(key: unknown): void {
+  const pageMode = usePageMode();
+  useEffect(() => {
+    if (pageMode) window.scrollTo(0, 0);
+  }, [key, pageMode]);
+}
+
 /*
  * The software keyboard, published as `--pav-keyboard`.
  *
