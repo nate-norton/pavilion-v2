@@ -35,7 +35,7 @@ function getIssues(state: ReturnType<typeof usePavStore.getState>): Record<strin
     'pool-gate': {
       title: 'Pool gate latch',
       icon: 'ph-fill ph-wrench',
-      iconColor: 'rgb(var(--terracotta))',
+      iconColor: 'rgb(var(--accent))',
       location: 'Community pool, main entrance',
       reporters: 'Reported by 2 neighbors',
       vendor: state.gateScheduled ? 'AquaFix · scheduled Thu Jul 3' : undefined,
@@ -50,7 +50,7 @@ function getIssues(state: ReturnType<typeof usePavStore.getState>): Record<strin
     irrigation: {
       title: 'Irrigation valve',
       icon: 'ph-fill ph-check-circle',
-      iconColor: 'rgb(var(--stonelight))',
+      iconColor: 'rgb(var(--slatelight))',
       location: 'The Green, northeast corner',
       reporters: 'Reported by 1 neighbor',
       vendor: 'GreenScape Landscaping · completed',
@@ -105,20 +105,20 @@ export function IssueDetailSheet() {
         <StatusTimeline steps={issue.steps} />
       </div>
 
-      <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
+      <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3">
         <div className="flex items-center gap-2.5 mb-2">
-          <PhIcon name="ph-fill ph-map-trifold" size={14} color="rgb(var(--stone))" />
+          <PhIcon name="ph-fill ph-map-trifold" size={14} color="rgb(var(--slate))" />
           <p className="m-0 text-[13px] font-bold text-navy">{issue.location}</p>
         </div>
         <div className="flex items-center gap-2.5">
-          <PhIcon name="ph-fill ph-users" size={14} color="rgb(var(--stone))" />
+          <PhIcon name="ph-fill ph-users" size={14} color="rgb(var(--slate))" />
           <p className="m-0 text-[13px] font-bold text-navy">{issue.reporters}</p>
         </div>
       </div>
 
       {issue.vendor && (
-        <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3">
-          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
+        <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3">
+          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--slatelight))' }}>
             Vendor
           </p>
           <p className="m-0 text-[13.5px] font-bold text-navy">{issue.vendor}</p>

@@ -1,41 +1,37 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 import type { Config } from 'tailwindcss';
+
+
+// Every token defined on :root becomes a Tailwind colour of the same name.
+const ROOT_CSS = readFileSync(
+  resolve(dirname(fileURLToPath(import.meta.url)), 'src/index.css'),
+  'utf8',
+);
+const TOKEN_COLORS = Object.fromEntries(
+  [...ROOT_CSS.matchAll(/^\s*--([a-z0-9-]+):\s*[\d]+ [\d]+ [\d]+;/gm)].map(([, name]) => [
+    name,
+    `rgb(var(--${name}) / <alpha-value>)`,
+  ]),
+);
 
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      /*
+       * Generated from the :root block in src/index.css rather than listed by
+       * hand. The hand-written map drifted during the palette rename — its
+       * keys stayed warm while the values moved, so `text-mist` and
+       * `bg-sunsetdeep` silently did not exist and their elements fell back to
+       * black. Deriving the keys makes that class of bug impossible.
+       */
       colors: {
-        // Raw ramp — resolves to CSS vars in src/index.css so alpha modifiers
-        // (e.g. bg-navy/20) still work via <alpha-value>.
-        navy: 'rgb(var(--navy) / <alpha-value>)',
-        cream: 'rgb(var(--cream) / <alpha-value>)',
-        paper: 'rgb(var(--paper) / <alpha-value>)',
-        sand: 'rgb(var(--sand) / <alpha-value>)',
-        parchment: 'rgb(var(--parchment) / <alpha-value>)',
-        ember: 'rgb(var(--ember) / <alpha-value>)',
-        emberdeep: 'rgb(var(--emberdeep) / <alpha-value>)',
-        terracotta: 'rgb(var(--terracotta) / <alpha-value>)',
-        blush: 'rgb(var(--blush) / <alpha-value>)',
-        peach: 'rgb(var(--peach) / <alpha-value>)',
-        sage: 'rgb(var(--sage) / <alpha-value>)',
-        mint: 'rgb(var(--mint) / <alpha-value>)',
-        sagedark: 'rgb(var(--sagedark) / <alpha-value>)',
-        gold: 'rgb(var(--gold) / <alpha-value>)',
-        goldpale: 'rgb(var(--goldpale) / <alpha-value>)',
-        golddark: 'rgb(var(--golddark) / <alpha-value>)',
-        sky: 'rgb(var(--sky) / <alpha-value>)',
-        skydeep: 'rgb(var(--skydeep) / <alpha-value>)',
-        skypale: 'rgb(var(--skypale) / <alpha-value>)',
-        ink: 'rgb(var(--ink) / <alpha-value>)',
-        stone: 'rgb(var(--stone) / <alpha-value>)',
-        stonelight: 'rgb(var(--stonelight) / <alpha-value>)',
-        bark: 'rgb(var(--bark) / <alpha-value>)',
-        taupe: 'rgb(var(--taupe) / <alpha-value>)',
-        red: 'rgb(var(--red) / <alpha-value>)',
+        ...TOKEN_COLORS,
         // Semantic aliases — prefer these in new/redesigned UI.
         primary: 'rgb(var(--color-primary) / <alpha-value>)',
         surface: 'rgb(var(--color-surface) / <alpha-value>)',
-        accent: 'rgb(var(--color-accent) / <alpha-value>)',
         danger: 'rgb(var(--color-danger) / <alpha-value>)',
         success: 'rgb(var(--color-success) / <alpha-value>)',
       },

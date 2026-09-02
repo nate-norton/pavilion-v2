@@ -56,7 +56,7 @@ export function ComposeSheet() {
           <Confetti />
           <PhIcon name="ph-fill ph-check-circle" size={40} color="rgb(var(--sage))" />
           <p className="m-0 mt-3 font-serif text-[19px] text-navy">Posted!</p>
-          <p className="m-0 mt-1 text-[13px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+          <p className="m-0 mt-1 text-[13px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
             Your neighbors will see this in the feed.
           </p>
         </div>
@@ -71,7 +71,7 @@ export function ComposeSheet() {
                   onClick={() => setKind(k.key)}
                   className="rounded-full px-3 py-1.5 text-[11.5px] font-extrabold cursor-pointer"
                   style={kind === k.key
-                    ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--cream))', border: '1.5px solid rgb(var(--navy))' }
+                    ? { background: 'rgb(var(--skydeep))', color: 'rgb(var(--mist))', border: '1.5px solid rgb(var(--navy))' }
                     : { background: 'transparent', color: 'rgb(var(--navy))', border: '1.5px solid rgb(var(--navy) / 0.15)' }}
                 >
                   {k.label}
@@ -84,7 +84,7 @@ export function ComposeSheet() {
             onChange={(e) => setText(e.target.value)}
             placeholder="What's on your mind?"
             maxLength={2000}
-            className="w-full rounded-2xl border-none bg-cream px-4 py-3 text-[14px] font-semibold text-navy resize-none font-sans"
+            className="w-full rounded-2xl border-none bg-mist px-4 py-3 text-[14px] font-semibold text-navy resize-none font-sans"
             style={{ minHeight: 100, outline: 'none' }}
           />
           {/* A cap that silently stops accepting keystrokes reads as a broken
@@ -92,7 +92,7 @@ export function ComposeSheet() {
           {text.length > 1700 && (
             <p
               className="m-0 mt-1.5 text-right text-[11.5px] font-bold"
-              style={{ color: text.length >= 2000 ? 'rgb(var(--terracotta))' : 'rgb(var(--stone))' }}
+              style={{ color: text.length >= 2000 ? 'rgb(var(--accent))' : 'rgb(var(--slate))' }}
             >
               {text.length >= 2000
                 ? 'Character limit reached (2,000)'
@@ -112,16 +112,16 @@ export function ComposeSheet() {
                     <button
                       type="button"
                       onClick={() => set({ composePhoto: true })}
-                      className="w-9 h-9 rounded-full bg-cream flex items-center justify-center border-none cursor-pointer"
+                      className="w-9 h-9 rounded-full bg-mist flex items-center justify-center border-none cursor-pointer"
                     >
-                      <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--stone))" />
+                      <PhIcon name="ph-fill ph-camera" size={18} color="rgb(var(--slate))" />
                     </button>
                     <button
                       type="button"
                       onClick={() => set({ composePhoto: true })}
-                      className="w-9 h-9 rounded-full bg-cream flex items-center justify-center border-none cursor-pointer"
+                      className="w-9 h-9 rounded-full bg-mist flex items-center justify-center border-none cursor-pointer"
                     >
-                      <PhIcon name="ph-fill ph-image-square" size={18} color="rgb(var(--stone))" />
+                      <PhIcon name="ph-fill ph-image-square" size={18} color="rgb(var(--slate))" />
                     </button>
                   </>
                 )
@@ -138,9 +138,9 @@ export function ComposeSheet() {
                   <button
                     type="button"
                     onClick={() => fileRef.current?.click()}
-                    className="w-9 h-9 rounded-full bg-cream flex items-center justify-center border-none cursor-pointer"
+                    className="w-9 h-9 rounded-full bg-mist flex items-center justify-center border-none cursor-pointer"
                   >
-                    <PhIcon name="ph-fill ph-image-square" size={18} color={photos.length ? 'rgb(var(--sage))' : 'rgb(var(--stone))'} />
+                    <PhIcon name="ph-fill ph-image-square" size={18} color={photos.length ? 'rgb(var(--sage))' : 'rgb(var(--slate))'} />
                   </button>
                   {photos.length > 0 && (
                     <span className="text-[11.5px] font-bold text-sage flex items-center gap-1">
@@ -157,7 +157,7 @@ export function ComposeSheet() {
               className="rounded-2xl px-5 py-2.5 border-none text-[14px] font-extrabold cursor-pointer font-sans"
               style={{
                 background: text.trim() && !busy ? 'rgb(var(--navy))' : 'rgb(var(--navy) / 0.1)',
-                color: text.trim() && !busy ? 'rgb(var(--cream))' : 'rgb(var(--stonelight))',
+                color: text.trim() && !busy ? 'rgb(var(--mist))' : 'rgb(var(--slatelight))',
               }}
             >
               {busy ? 'Posting…' : 'Post'}

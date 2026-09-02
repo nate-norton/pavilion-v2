@@ -4,7 +4,7 @@ import type { CSSProperties, ReactNode } from 'react';
  * Map of design-token name (without the leading `--`) to a CSS value.
  * Values are normally space-separated RGB triplets to match the token
  * contract (e.g. `'30 58 95'`), but may also reference another token
- * (e.g. `'var(--ember)'`).
+ * (e.g. `'var(--sunset)'`).
  */
 export type ThemeTokens = Record<string, string>;
 

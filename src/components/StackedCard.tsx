@@ -19,20 +19,20 @@ import { PhIcon } from './PhIcon';
 
 /** Named washes → the surface plus the text colors that stay legible on it. */
 const TINTS = {
-  sage: { surface: 'rgb(var(--sagetint))', eyebrow: 'rgb(var(--sagedark))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--sagedark))' },
-  sand: { surface: 'rgb(var(--sandtint))', eyebrow: 'rgb(var(--bark))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--bark))' },
-  blush: { surface: 'rgb(var(--blushpale))', eyebrow: 'rgb(var(--terracotta))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--terracotta))' },
+  sage: { surface: 'rgb(var(--sagepale))', eyebrow: 'rgb(var(--sagedark))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--sagedark))' },
+  skywash: { surface: 'rgb(var(--skywash))', eyebrow: 'rgb(var(--slatedark))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--slatedark))' },
+  sunset: { surface: 'rgb(var(--sunsetpale))', eyebrow: 'rgb(var(--accent))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--accent))' },
   gold: { surface: 'rgb(var(--goldpale))', eyebrow: 'rgb(var(--golddark))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--golddark))' },
   sky: { surface: 'rgb(var(--skypale))', eyebrow: 'rgb(var(--skydeep))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--skydeep))' },
-  paper: { surface: 'rgb(var(--paper))', eyebrow: 'rgb(var(--stone))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--claypale))' },
+  paper: { surface: 'rgb(var(--paper))', eyebrow: 'rgb(var(--slate))', title: 'rgb(var(--navy))', body: 'rgb(var(--ink))', chevron: 'rgb(var(--slatefaint))' },
   /*
    * Chrome hero — the dark-surface variant. --sky is the brand primary, so a
    * hero card is sky rather than navy; navy stays available but is text-first
    * in this system. White clears 5.82 on skydeep, cream 5.34, and the
    * lightened peach eyebrow 4.52. (`sky` above is the *light* wash — distinct.)
    */
-  skydeep: { surface: 'rgb(var(--skydeep))', eyebrow: 'rgb(var(--peach))', title: 'rgb(var(--cream))', body: 'rgb(var(--cream) / 0.98)', chevron: 'rgb(var(--peach))' },
-  navy: { surface: 'rgb(var(--navy))', eyebrow: 'rgb(var(--peach))', title: 'rgb(var(--cream))', body: 'rgb(var(--cream) / 0.9)', chevron: 'rgb(var(--peach))' },
+  skydeep: { surface: 'rgb(var(--skydeep))', eyebrow: 'rgb(var(--peach))', title: 'rgb(var(--mist))', body: 'rgb(var(--mist) / 0.98)', chevron: 'rgb(var(--peach))' },
+  navy: { surface: 'rgb(var(--navy))', eyebrow: 'rgb(var(--peach))', title: 'rgb(var(--mist))', body: 'rgb(var(--mist) / 0.9)', chevron: 'rgb(var(--peach))' },
 } as const;
 
 export type StackedTint = keyof typeof TINTS;
@@ -107,7 +107,7 @@ export function StackedCard({
   eyebrow,
   title,
   body,
-  tint = 'sand',
+  tint = 'skywash',
   chevron,
   onClick,
   image,
@@ -115,7 +115,7 @@ export function StackedCard({
   imageAlt,
   children,
 }: StackedCardProps) {
-  const t = TINTS[tint] ?? TINTS.sand;
+  const t = TINTS[tint] ?? TINTS.skywash;
   const interactive = typeof onClick === 'function';
   const showChevron = chevron ?? interactive;
   const Tag = interactive ? 'button' : 'div';

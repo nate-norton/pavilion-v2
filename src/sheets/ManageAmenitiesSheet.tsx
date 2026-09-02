@@ -54,7 +54,7 @@ export function ManageAmenitiesSheet() {
   return (
     <Sheet open onClose={onClose} maxHeight="88%">
       <p className="m-0 mb-0.5 font-serif text-xl text-navy">Manage amenities</p>
-      <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--stone))' }}>
+      <p className="m-0 mb-4 text-[12.5px] font-bold" style={{ color: 'rgb(var(--slate))' }}>
         What neighbors can book on the Reserve tab.
       </p>
 
@@ -69,12 +69,12 @@ export function ManageAmenitiesSheet() {
               <PhIcon name={a.icon} size={17} color="rgb(var(--skydeep))" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="m-0 text-[13px] font-bold text-navy">{a.name}</p>
-                {a.sub && <p className="m-0 text-[11px] font-semibold text-stone">{a.sub}</p>}
+                {a.sub && <p className="m-0 text-[11px] font-semibold text-slate">{a.sub}</p>}
               </div>
               {a.id && (
                 <button
                   onClick={() => void repo.retireAmenity(a.id!)}
-                  className="border-none bg-transparent text-[11.5px] font-extrabold cursor-pointer p-1 text-stone"
+                  className="border-none bg-transparent text-[11.5px] font-extrabold cursor-pointer p-1 text-slate"
                 >
                   Retire
                 </button>
@@ -84,7 +84,7 @@ export function ManageAmenitiesSheet() {
         </div>
       )}
 
-      <p className="m-0 mb-2 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+      <p className="m-0 mb-2 text-[11px] font-bold uppercase text-slate" style={{ letterSpacing: '0.12em' }}>
         Add an amenity
       </p>
       <input
@@ -115,7 +115,7 @@ export function ManageAmenitiesSheet() {
       </div>
 
       {/* Booking configuration */}
-      <p className="m-0 mb-2 text-[11px] font-bold uppercase text-stone" style={{ letterSpacing: '0.12em' }}>
+      <p className="m-0 mb-2 text-[11px] font-bold uppercase text-slate" style={{ letterSpacing: '0.12em' }}>
         Booking hours & slots
       </p>
       <div className="flex gap-2 mb-2.5">
@@ -150,8 +150,8 @@ export function ManageAmenitiesSheet() {
         onClick={() => void add()}
         className="w-full border-none rounded-2xl py-[15px] text-[14.5px] font-extrabold font-sans"
         style={{
-          background: canAdd ? 'rgb(var(--ember))' : 'rgb(var(--sandpale))',
-          color: canAdd ? 'rgb(var(--white))' : 'rgb(var(--stonelight))',
+          background: canAdd ? 'rgb(var(--sunset))' : 'rgb(var(--skyrule))',
+          color: canAdd ? 'rgb(var(--white))' : 'rgb(var(--slatelight))',
           cursor: canAdd ? 'pointer' : 'default',
         }}
       >

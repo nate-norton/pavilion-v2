@@ -12,8 +12,8 @@ const ROW = 'w-full flex items-center gap-[13px] cursor-pointer border-none bg-t
 const ROW_PAD = { padding: '14px 0' } as const;
 const DOT = 'w-2 h-2 rounded-full flex-shrink-0';
 const ROW_TITLE = 'm-0 text-sm font-bold text-navy leading-[1.3]';
-const ROW_SUB = 'm-0 mt-px text-xs text-stone font-semibold';
-const CARET = <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--claypale))" className="flex-shrink-0" />;
+const ROW_SUB = 'm-0 mt-px text-xs text-slate font-semibold';
+const CARET = <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--slatefaint))" className="flex-shrink-0" />;
 
 /** Today screen — ported from prototype v10 lines 82-260. */
 export function Today() {
@@ -118,7 +118,7 @@ export function Today() {
         </div>
       )}
 
-      <p className="m-0 mb-1.5 text-[11px] font-bold uppercase text-stonelight" style={{ letterSpacing: '0.14em' }}>
+      <p className="m-0 mb-1.5 text-[11px] font-bold uppercase text-slatelight" style={{ letterSpacing: '0.14em' }}>
         {(() => {
           const dateLabel = demo
             ? 'Tuesday, July 1'
@@ -155,7 +155,7 @@ export function Today() {
             {hasNotifBadge && (
               <span
                 className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full"
-                style={{ background: 'rgb(var(--terracotta))', border: '2px solid rgb(var(--cream))' }}
+                style={{ background: 'rgb(var(--accent))', border: '2px solid rgb(var(--mist))' }}
               />
             )}
           </button>
@@ -163,13 +163,13 @@ export function Today() {
             onClick={() => set({ myPlaceOpen: true })}
             title="My Place"
             aria-label="My Place — profile and settings"
-            className="w-[34px] h-[34px] rounded-full border-none bg-skydeep flex items-center justify-center text-cream font-extrabold text-[13px] cursor-pointer ml-1.5"
+            className="w-[34px] h-[34px] rounded-full border-none bg-skydeep flex items-center justify-center text-mist font-extrabold text-[13px] cursor-pointer ml-1.5"
           >
             {member?.initial ?? 'A'}
           </button>
         </div>
       </div>
-      <p className="m-0 mb-5 text-sm text-taupe font-semibold">{attnSummary}</p>
+      <p className="m-0 mb-5 text-sm text-slatedeep font-semibold">{attnSummary}</p>
 
       {/* Board desk door. It already existed inside My Place, three taps deep
           behind a 34px avatar — which meant a first-time board member had no
@@ -184,12 +184,12 @@ export function Today() {
         >
           <PhIcon name="ph-fill ph-shield-star" size={19} color="rgb(var(--peach))" className="flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <p className="m-0 text-[13.5px] font-bold text-cream">Board desk</p>
-            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.92)' }}>
+            <p className="m-0 text-[13.5px] font-bold text-mist">Board desk</p>
+            <p className="m-0 text-[11.5px] font-semibold" style={{ color: 'rgb(var(--mist) / 0.92)' }}>
               Requests, compliance, money, and the roster
             </p>
           </div>
-          <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--cream) / 0.92)" className="flex-shrink-0" />
+          <PhIcon name="ph-bold ph-caret-right" size={13} color="rgb(var(--mist) / 0.92)" className="flex-shrink-0" />
         </button>
       )}
 
@@ -213,7 +213,7 @@ export function Today() {
 
         {isTenant && (
           <button type="button" onClick={() => set({ myPlaceOpen: true })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--claypale))' }} />
+            <span className={DOT} style={{ background: 'rgb(var(--slatefaint))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>Your lease &amp; amenities</p>
               <p className={ROW_SUB}>Rent goes to your landlord — Pavilion handles the rest</p>
@@ -224,7 +224,7 @@ export function Today() {
 
         {saCardShow && (
           <button type="button" onClick={() => set({ saSheetOpen: true })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
+            <span className={DOT} style={{ background: 'rgb(var(--accent))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{assessment?.title}</p>
               <p className={ROW_SUB}>{assessment?.sub}</p>
@@ -235,7 +235,7 @@ export function Today() {
 
         {showVoteCardRole && (
           <button type="button" onClick={() => set({ tab: 'hoa' })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
+            <span className={DOT} style={{ background: 'rgb(var(--accent))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{vote?.title ?? 'Open vote'}</p>
               <p className={ROW_SUB}>{voteCloses ? voteCloses + ' · ' : ''}quorum at {quorumPct}%</p>
@@ -246,12 +246,12 @@ export function Today() {
 
         {showPayCardRole && (
           <button type="button" onClick={() => (demo ? set({ paySheetOpen: true }) : set({ tab: 'hoa' }))} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--terracotta))' }} />
+            <span className={DOT} style={{ background: 'rgb(var(--accent))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{payCardTitle}</p>
               <p className={ROW_SUB}>{payCardSub}</p>
             </div>
-            <span className="rounded-full px-[10px] py-[5px] text-[12px] font-extrabold flex-shrink-0" style={{ background: 'rgb(var(--blush))', color: 'rgb(var(--terracotta))' }}>
+            <span className="rounded-full px-[10px] py-[5px] text-[12px] font-extrabold flex-shrink-0" style={{ background: 'rgb(var(--accenttint))', color: 'rgb(var(--accent))' }}>
               {payCardBtn}
             </span>
           </button>
@@ -280,7 +280,7 @@ export function Today() {
 
         {showArcCardRole && (
           <button type="button" onClick={() => set({ arcSeen: true, tab: 'hoa' })} className={ROW} style={ROW_PAD}>
-            <span className={DOT} style={{ background: 'rgb(var(--claypale))' }} />
+            <span className={DOT} style={{ background: 'rgb(var(--slatefaint))' }} />
             <div className="flex-1 min-w-0">
               <p className={ROW_TITLE}>{arc.unseenApproval?.title}</p>
               <p className={ROW_SUB}>{arc.unseenApproval?.sub}</p>
@@ -302,8 +302,8 @@ export function Today() {
       {/* AI nudge: one quiet line (scripted — demo only) */}
       {demo && showNudge && hasNeighborhood && (
         <div className="flex gap-[9px] items-start" style={{ padding: '14px 6px 0' }}>
-          <PhIcon name="ph-fill ph-sparkle" size={13} color="rgb(var(--terracotta))" className="mt-[3px] flex-shrink-0" />
-          <p className="m-0 flex-1 text-xs leading-[1.5] font-semibold text-stone">
+          <PhIcon name="ph-fill ph-sparkle" size={13} color="rgb(var(--accent))" className="mt-[3px] flex-shrink-0" />
+          <p className="m-0 flex-1 text-xs leading-[1.5] font-semibold text-slate">
             AI: fireworks aren&apos;t allowed in the Ridge (§5.9) — the east lot has the best view of Saturday&apos;s
             city show.
           </p>
@@ -311,7 +311,7 @@ export function Today() {
             onClick={() => set({ nudgeDismissed: true })}
             className="border-none bg-transparent cursor-pointer flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full"
           >
-            <PhIcon name="ph-bold ph-x" size={12} color="rgb(var(--claypale))" />
+            <PhIcon name="ph-bold ph-x" size={12} color="rgb(var(--slatefaint))" />
           </button>
         </div>
       )}
@@ -322,7 +322,7 @@ export function Today() {
         <h2 className="m-0 font-serif font-normal text-[19px] text-navy">Around the neighborhood</h2>
         <button
           onClick={() => set({ eventsOpen: true })}
-          className="border-none bg-transparent text-[12.5px] font-bold cursor-pointer px-1 py-1.5 text-stone"
+          className="border-none bg-transparent text-[12.5px] font-bold cursor-pointer px-1 py-1.5 text-slate"
           style={{ minHeight: 24 }}
         >
           Calendar
@@ -337,14 +337,14 @@ export function Today() {
        */}
       <StackedCards overlap={22}>
         {showFeatured && (
-        <StackedPanel tint="skydeep" className="!pt-4 text-cream">
+        <StackedPanel tint="skydeep" className="!pt-4 text-mist">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="m-0 mb-[3px] text-[11px] font-bold uppercase" style={{ letterSpacing: '0.12em', color: 'rgb(var(--peach))' }}>
               {featuredEvent?.whenLabel}
             </p>
             <p className="m-0 mb-[3px] font-serif text-[17px] leading-[1.2]">{featuredEvent?.title}</p>
-            <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--cream) / 0.95)' }}>
+            <p className="m-0 text-[12.5px] font-semibold" style={{ color: 'rgb(var(--mist) / 0.95)' }}>
               {tacoGoing} neighbors going
             </p>
           </div>
@@ -377,36 +377,36 @@ export function Today() {
           </button>
         ) : (
           <button type="button" onClick={() => set({ tab: 'reserve' })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
-            <PhIcon name="ph ph-swimming-pool" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
+            <PhIcon name="ph ph-swimming-pool" size={17} color="rgb(var(--slate))" className="flex-shrink-0" />
             <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
               {demo ? 'Pool cabana open today · 4 slots left' : 'Reserve an amenity'}
             </p>
-            <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
+            <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--slatefaint))" className="flex-shrink-0" />
           </button>
         )}
 
         <button type="button" onClick={() => set({ mapOpen: true })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
-          <PhIcon name="ph ph-map-trifold" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
+          <PhIcon name="ph ph-map-trifold" size={17} color="rgb(var(--slate))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">
             {demo ? 'Neighborhood map · 5 pins today' : 'Neighborhood map'}
           </p>
-          <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
+          <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--slatefaint))" className="flex-shrink-0" />
         </button>
 
         <button type="button" onClick={() => set({ reportOpen: true })} className="w-full flex items-center gap-3 cursor-pointer border-none bg-transparent text-left font-sans" style={ROW_PAD}>
-          <PhIcon name="ph ph-shield-check" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
+          <PhIcon name="ph ph-shield-check" size={17} color="rgb(var(--slate))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">See a problem? Report it privately</p>
-          <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--claypale))" className="flex-shrink-0" />
+          <PhIcon name="ph-bold ph-caret-right" size={12} color="rgb(var(--slatefaint))" className="flex-shrink-0" />
         </button>
 
         {demo && (
         <div className="flex items-center gap-3" style={ROW_PAD}>
-          <PhIcon name="ph ph-hand-waving" size={17} color="rgb(var(--stone))" className="flex-shrink-0" />
+          <PhIcon name="ph ph-hand-waving" size={17} color="rgb(var(--slate))" className="flex-shrink-0" />
           <p className="m-0 flex-1 text-[13.5px] font-bold text-navy">The Okafors moved into #42</p>
           <button
             onClick={() => set({ chatWith: 'okafor' })}
             className="border-none bg-transparent text-[12.5px] font-extrabold cursor-pointer flex-shrink-0"
-            style={{ color: 'rgb(var(--terracotta))', padding: '4px 6px', minHeight: 24 }}
+            style={{ color: 'rgb(var(--accent))', padding: '4px 6px', minHeight: 24 }}
           >
             Say hi
           </button>

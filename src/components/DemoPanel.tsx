@@ -50,7 +50,7 @@ export function DemoPanel() {
   return (
     <div className="hidden lg:flex flex-col gap-5 w-[260px] flex-shrink-0 select-none">
       <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-sm">
-        <p className="text-[11px] font-bold text-bark/50 uppercase tracking-wider mb-3">
+        <p className="text-[11px] font-bold text-slatedark/50 uppercase tracking-wider mb-3">
           Role
         </p>
         <div className="flex gap-1.5">
@@ -71,7 +71,7 @@ export function DemoPanel() {
       </div>
 
       <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-sm">
-        <p className="text-[11px] font-bold text-bark/50 uppercase tracking-wider mb-3">
+        <p className="text-[11px] font-bold text-slatedark/50 uppercase tracking-wider mb-3">
           Community brand
         </p>
         <div className="grid grid-cols-2 gap-1.5">
@@ -81,7 +81,7 @@ export function DemoPanel() {
               onClick={() => set({ brandTheme: t.key })}
               className="rounded-xl py-2 text-[12px] font-bold transition-colors"
               style={{
-                background: brandTheme === t.key ? 'rgb(var(--terracotta))' : 'rgb(var(--navy) / 0.06)',
+                background: brandTheme === t.key ? 'rgb(var(--accent))' : 'rgb(var(--navy) / 0.06)',
                 color: brandTheme === t.key ? 'rgb(var(--paper))' : 'rgb(var(--navy))',
               }}
             >
@@ -92,7 +92,7 @@ export function DemoPanel() {
       </div>
 
       <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-sm">
-        <p className="text-[11px] font-bold text-bark/50 uppercase tracking-wider mb-3">
+        <p className="text-[11px] font-bold text-slatedark/50 uppercase tracking-wider mb-3">
           Scenarios
         </p>
         <div className="flex flex-col gap-3">
@@ -111,7 +111,7 @@ export function DemoPanel() {
       </div>
 
       <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-sm">
-        <p className="text-[11px] font-bold text-bark/50 uppercase tracking-wider mb-3">
+        <p className="text-[11px] font-bold text-slatedark/50 uppercase tracking-wider mb-3">
           State
         </p>
         <div className="flex flex-wrap gap-1.5">
@@ -130,7 +130,7 @@ export function DemoPanel() {
         </button>
         <button
           onClick={reset}
-          className="w-full rounded-xl py-2.5 text-[13px] font-bold text-ember border-2 border-ember/20 hover:bg-ember/5 transition-colors"
+          className="w-full rounded-xl py-2.5 text-[13px] font-bold text-sunset border-2 border-sunset/20 hover:bg-sunset/5 transition-colors"
         >
           Reset demo
         </button>
@@ -145,7 +145,7 @@ function StatePill({ label, active }: { label: string; active: boolean }) {
       className="rounded-full px-2.5 py-1 text-[11px] font-bold"
       style={{
         background: active ? 'rgb(var(--sage) / 0.12)' : 'rgb(var(--navy) / 0.06)',
-        color: active ? 'rgb(var(--sage))' : 'rgb(var(--stonelight))',
+        color: active ? 'rgb(var(--sage))' : 'rgb(var(--slatelight))',
       }}
     >
       {label}

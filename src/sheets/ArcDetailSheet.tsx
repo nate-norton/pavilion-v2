@@ -65,15 +65,15 @@ export function ArcDetailSheet() {
         <span
           className="rounded-full px-2.5 py-1 text-[11px] font-bold flex-shrink-0"
           style={{
-            background: isApproved ? 'rgb(var(--mint))' : 'rgb(var(--blush))',
-            color: isApproved ? 'rgb(var(--sagedark))' : 'rgb(var(--terracotta))',
+            background: isApproved ? 'rgb(var(--mint))' : 'rgb(var(--accenttint))',
+            color: isApproved ? 'rgb(var(--sagedark))' : 'rgb(var(--accent))',
           }}
         >
           {item.status}
         </span>
       </div>
 
-      <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1" style={{ color: 'rgb(var(--stonelight))' }}>
+      <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1" style={{ color: 'rgb(var(--slatelight))' }}>
         Request #{item.id}
       </p>
 
@@ -81,8 +81,8 @@ export function ArcDetailSheet() {
         <StatusTimeline steps={item.steps} />
       </div>
 
-      <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3.5">
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
+      <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3.5">
+        <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--slatelight))' }}>
           Description
         </p>
         <p className="m-0 text-[13.5px] font-semibold text-navy leading-relaxed">
@@ -91,8 +91,8 @@ export function ArcDetailSheet() {
       </div>
 
       {item.conditions && (
-        <div className="bg-cream rounded-2xl px-4 py-3.5 mb-3.5">
-          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--stonelight))' }}>
+        <div className="bg-mist rounded-2xl px-4 py-3.5 mb-3.5">
+          <p className="m-0 text-[11px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgb(var(--slatelight))' }}>
             Conditions
           </p>
           <p className="m-0 text-[13.5px] font-semibold text-navy leading-relaxed">

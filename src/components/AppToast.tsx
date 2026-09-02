@@ -4,11 +4,11 @@ import { onAppToast, type AppToastMessage } from '../lib/errorBus';
 
 const TONES = {
   error: {
-    bg: 'rgb(var(--blush))',
-    border: 'rgb(var(--terracotta) / 0.35)',
+    bg: 'rgb(var(--accenttint))',
+    border: 'rgb(var(--accent) / 0.35)',
     fg: 'rgb(var(--brown))',
     icon: 'ph-fill ph-warning',
-    iconColor: 'rgb(var(--terracotta))',
+    iconColor: 'rgb(var(--accent))',
   },
   success: {
     bg: 'rgb(var(--mint))',

@@ -43,8 +43,8 @@ it('StatusTimeline segments turn green only when the next step is done', () => {
 
   const segments = screen.getAllByTestId('timeline-segment');
   expect(segments).toHaveLength(2);
-  expect(segments[0]).toHaveStyle({ background: 'rgb(var(--sanddim))' }); // grey (tokenized)
-  expect(segments[1]).toHaveStyle({ background: 'rgb(var(--sanddim))' }); // grey (tokenized)
+  expect(segments[0]).toHaveStyle({ background: 'rgb(var(--skyline))' }); // grey (tokenized)
+  expect(segments[1]).toHaveStyle({ background: 'rgb(var(--skyline))' }); // grey (tokenized)
 
   // Test with [done, done, done] - both segments should be green
   rerender(<StatusTimeline steps={[

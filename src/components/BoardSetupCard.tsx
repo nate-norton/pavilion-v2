@@ -99,7 +99,7 @@ export function BoardSetupCard() {
             <p className="m-0 font-serif text-[19px] text-navy leading-[1.25]">
               Get {member.communityName || 'your community'} running
             </p>
-            <p className="m-0 mt-1 text-[12.5px] font-semibold text-stone">
+            <p className="m-0 mt-1 text-[12.5px] font-semibold text-slate">
               {doneCount === 0
                 ? 'Four things, about ten minutes. Neighbors see the difference immediately.'
                 : `${doneCount} of ${steps.length} done — ${steps.length - doneCount} left.`}
@@ -111,7 +111,7 @@ export function BoardSetupCard() {
             onClick={() => set({ boardSetupDismissed: true })}
             className="border-none bg-transparent cursor-pointer p-1 flex-shrink-0 font-sans"
           >
-            <PhIcon name="ph-bold ph-x" size={13} color="rgb(var(--stonelight))" />
+            <PhIcon name="ph-bold ph-x" size={13} color="rgb(var(--slatelight))" />
           </button>
         </div>
 
@@ -159,14 +159,14 @@ export function BoardSetupCard() {
                 <p
                   className="m-0 text-[13.5px] font-bold leading-[1.3]"
                   style={{
-                    color: s.done ? 'rgb(var(--stone))' : 'rgb(var(--navy))',
+                    color: s.done ? 'rgb(var(--slate))' : 'rgb(var(--navy))',
                     textDecoration: s.done ? 'line-through' : 'none',
                   }}
                 >
                   {s.title}
                 </p>
                 {!s.done && (
-                  <p className="m-0 mt-0.5 text-[12px] font-semibold text-stone leading-[1.4]">{s.payoff}</p>
+                  <p className="m-0 mt-0.5 text-[12px] font-semibold text-slate leading-[1.4]">{s.payoff}</p>
                 )}
                 {isNext && (
                   // The Porch Light Rule: exactly one ember action in this card,
@@ -185,7 +185,7 @@ export function BoardSetupCard() {
                     type="button"
                     onClick={s.go}
                     className="mt-2 border-none bg-transparent p-0 text-[12px] font-extrabold cursor-pointer font-sans"
-                    style={{ color: 'rgb(var(--terracotta))' }}
+                    style={{ color: 'rgb(var(--accent))' }}
                   >
                     {s.cta} →
                   </button>

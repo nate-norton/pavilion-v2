@@ -20,7 +20,7 @@ const DEMO_EVENTS: CommunityEvent[] = [
   { id: 'movie', title: 'Movie on the lawn', whenLabel: 'Sat, Jul 5 · Dusk · The Green', whereLabel: 'The Green', going: 23, photoLabel: 'event photo — movie night', tagLabel: 'Social Committee', featured: false },
 ];
 const DEMO_FEED: FeedPost[] = [
-  { id: 'maria', authorName: 'Maria R.', authorInitial: 'M', authorColor: 'rgb(var(--terracotta))', unitLabel: '#7', timeLabel: '2h', kind: 'shoutout', tagLabel: 'Shoutout', body: 'Huge thanks to Tom at #18 for helping clear my gutters before Sunday’s storm.', photoLabel: 'photo — clean gutters, proud Tom' },
+  { id: 'maria', authorName: 'Maria R.', authorInitial: 'M', authorColor: 'rgb(var(--accent))', unitLabel: '#7', timeLabel: '2h', kind: 'shoutout', tagLabel: 'Shoutout', body: 'Huge thanks to Tom at #18 for helping clear my gutters before Sunday’s storm.', photoLabel: 'photo — clean gutters, proud Tom' },
   { id: 'dev', authorName: 'Dev P.', authorInitial: 'D', authorColor: 'rgb(var(--sky))', unitLabel: '#23', timeLabel: '5h', kind: 'borrow', tagLabel: 'Help & Borrow', body: 'Anyone have an 8-ft ladder I could borrow Sunday?', photoLabel: '' },
   { id: 'movie', authorName: 'Social Committee', authorInitial: 'S', authorColor: 'rgb(var(--navy))', unitLabel: '', timeLabel: '', kind: 'event', tagLabel: 'Social Committee', body: 'Movie on the lawn', photoLabel: 'event photo — movie night' },
 ];
@@ -151,15 +151,15 @@ export class MockRepository implements Repository, SnapshotReadable {
         tone: reportTicketed ? 'mint' : 'gold', resolved: false,
       },
       {
-        id: 'pool-gate', icon: 'ph-fill ph-wrench', iconColor: 'rgb(var(--terracotta))',
+        id: 'pool-gate', icon: 'ph-fill ph-wrench', iconColor: 'rgb(var(--accent))',
         title: 'Pool gate latch',
         statusLabel: gateScheduled ? 'AquaFix · Thu Jul 3' : 'Reported · 2×',
         tone: gateScheduled ? 'mint' : 'gold', resolved: false,
       },
       {
-        id: 'irrigation', icon: 'ph-fill ph-check-circle', iconColor: 'rgb(var(--stonelight))',
+        id: 'irrigation', icon: 'ph-fill ph-check-circle', iconColor: 'rgb(var(--slatelight))',
         title: 'Irrigation valve · the Green',
-        statusLabel: 'Fixed Jun 24', tone: 'sand', resolved: true,
+        statusLabel: 'Fixed Jun 24', tone: 'skyborder', resolved: true,
       },
     ];
     this.issuesCache = { sig, value };
