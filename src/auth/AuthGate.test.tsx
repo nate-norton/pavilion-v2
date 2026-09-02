@@ -192,8 +192,8 @@ it('accepting asks for a name and password, then joins in one step with no confi
   expect(screen.getByText('cade@example.com')).toBeInTheDocument();   // locked, from the invite
   const join = screen.getByText('Join Mountain Vista');
   expect(join).toBeDisabled();
-  fireEvent.change(screen.getByPlaceholderText('Full name'), { target: { value: 'Cade Norton' } });
-  fireEvent.change(screen.getByPlaceholderText('Choose a password'), { target: { value: 'porchlight1' } });
+  fireEvent.change(screen.getByLabelText('Full name'), { target: { value: 'Cade Norton' } });
+  fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'porchlight1' } });
   fireEvent.click(join);
   await waitFor(() => expect(state.invoke).toHaveBeenCalledWith('accept_invite', {
     body: { code: 'abc123', name: 'Cade Norton', password: 'porchlight1', phone: '' },

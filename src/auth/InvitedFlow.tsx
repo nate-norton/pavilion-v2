@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getSupabaseClient } from '../data/repo/supabaseClient';
-import { AuthShell, Eyebrow, AuthError, PrimaryButton, GhostButton, TextButton, IconBadge, FIELD, FIELD_STYLE } from './shell';
+import { AuthShell, Door, AuthError, PrimaryButton, GhostButton, TextButton, ShowPassword } from './shell';
+import { Field } from '../components/Field';
+import { Pill } from '../components/Pill';
 
 /** What peek_invite() hands back for a link. */
 export interface InvitePeek {
@@ -108,40 +110,32 @@ function Welcome({ peek, onAccept, onSignInInstead, onAbandon }: {
 }) {
   const who = peek.inviterName ? `${peek.inviterName} invited you` : 'Your HOA board invited you';
   return (
-    <AuthShell bed="chrome" width={380}>
-      <IconBadge icon="ph-fill ph-house-line" onChrome />
-      <Eyebrow onChrome>You’re invited</Eyebrow>
-      <h1 className="m-0 mb-2 font-serif text-[36px] leading-[1.1]" style={{ color: 'rgb(var(--mist))' }}>
-        {peek.communityName}
-      </h1>
-      <p className="m-0 mb-4 text-[14px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--mist) / 0.92)' }}>
-        {who} to join your community on Pavilion.
-      </p>
-      <div className="flex flex-wrap gap-1.5 mb-4">
-        <Chip>{roleLabel(peek.role)}</Chip>
-        {peek.unitLabel && <Chip>{peek.unitLabel}</Chip>}
-      </div>
-      <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--mist) / 0.92)' }}>
-        This invitation is for <span className="font-extrabold" style={{ color: 'rgb(var(--mist))' }}>{peek.email}</span>.
+    <Door
+      icon="ph-fill ph-house-line"
+      title={peek.communityName}
+      titleSize={36}
+      facts={
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          {peek.unitLabel && (
+            <p className="m-0 text-[17px] font-extrabold leading-[1.3]" style={{ color: 'rgb(var(--mist))' }}>{peek.unitLabel}</p>
+          )}
+          <Pill label={roleLabel(peek.role)} tone="chrome" size="md" />
+        </div>
+      }
+      lede={`${who} to join your community on Pavilion.`}
+    >
+      <p className="m-0 mb-4 text-[13.5px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
+        This invitation is for <span className="font-extrabold text-navy">{peek.email}</span>.
         If that’s you, you’re one step from home.
       </p>
-      <PrimaryButton label="Accept the invitation" onClick={onAccept} onChrome />
-      <div className="flex flex-col items-center gap-0.5 mt-3">
-        <TextButton label="I already have a Pavilion account" onClick={onSignInInstead} onChrome />
-        <TextButton label="Not you? Ask your board for a new link" onClick={onAbandon} onChrome />
+      <PrimaryButton label="Accept the invitation" onClick={onAccept} />
+      <div className="mt-2.5">
+        <GhostButton label="I already have a Pavilion account" onClick={onSignInInstead} />
       </div>
-    </AuthShell>
-  );
-}
-
-function Chip({ children }: { children: string }) {
-  return (
-    <span
-      className="inline-block rounded-full px-3 py-1 text-[12px] font-extrabold"
-      style={{ background: 'rgb(var(--mist) / 0.14)', color: 'rgb(var(--mist))' }}
-    >
-      {children}
-    </span>
+      <div className="flex justify-center mt-1">
+        <TextButton label="Not you? Ask your board for a new link" onClick={onAbandon} />
+      </div>
+    </Door>
   );
 }
 
@@ -158,6 +152,8 @@ function Introduce({ code, peek, onBack, onArrived, onSignInInstead }: {
   const [exists, setExists] = useState(false);
 
   const canSubmit = !!name.trim() && password.length >= MIN_PASSWORD;
+  const passwordRule = `At least ${MIN_PASSWORD} characters. That’s the only rule.`;
+  const passwordShort = password.length > 0 && password.length < MIN_PASSWORD;
 
   const submit = async () => {
     if (!canSubmit || busy) return;
@@ -184,80 +180,61 @@ function Introduce({ code, peek, onBack, onArrived, onSignInInstead }: {
 
   if (exists) {
     return (
-      <AuthShell width={380}>
-        <IconBadge icon="ph-fill ph-hand-waving" />
-        <Eyebrow>{peek.communityName}</Eyebrow>
-        <h1 className="m-0 mb-2 font-serif text-[24px] text-navy">Welcome back</h1>
-        <p className="m-0 mb-5 text-[13.5px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
-          <span className="text-navy">{peek.email}</span> already has a Pavilion account. Sign in with it and
-          we’ll add {peek.communityName} to it.
-        </p>
+      <Door
+        tint="sky"
+        icon="ph-fill ph-hand-waving"
+        title="Welcome back"
+        lede={<><span className="text-navy font-extrabold">{peek.email}</span> already has a Pavilion account. Sign in with it and we’ll add {peek.communityName} to it.</>}
+      >
         <PrimaryButton label="Sign in" onClick={onSignInInstead} />
-      </AuthShell>
+      </Door>
     );
   }
 
   return (
-    <AuthShell width={380}>
-      <Eyebrow>{peek.communityName}</Eyebrow>
-      <h1 className="m-0 mb-1 font-serif text-[24px] text-navy">Introduce yourself</h1>
-      <p className="m-0 mb-5 text-[13px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>
-        This is the name your neighbors see on votes, posts, and the directory. You can change it later in My Place.
-      </p>
-
-      <input
-        type="text"
-        autoComplete="name"
-        autoFocus
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Full name"
-        aria-label="Full name"
-        className={`${FIELD} mb-2.5`}
-        style={FIELD_STYLE}
-      />
-      <div className={`${FIELD} mb-2.5 flex items-center justify-between gap-2`} style={{ ...FIELD_STYLE, background: 'rgb(var(--skypale) / 0.5)' }} aria-label={`Email, from your invitation: ${peek.email}`}>
-        <span className="truncate">{peek.email}</span>
-        <span className="text-[10.5px] font-extrabold uppercase flex-shrink-0" style={{ letterSpacing: '0.1em', color: 'rgb(var(--slate))' }}>from invite</span>
-      </div>
-      <div className="relative mb-2">
-        <input
-          type={showPw ? 'text' : 'password'}
-          autoComplete="new-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Choose a password"
-          aria-label="Choose a password"
-          className={`${FIELD} pr-16`}
-          style={FIELD_STYLE}
+    <Door
+      icon="ph-fill ph-hand-waving"
+      title="Introduce yourself"
+      lede={`You’re joining ${peek.communityName}. This is the name your neighbors see on votes, posts, and the directory — you can change it later in My Place.`}
+    >
+      <div className="flex flex-col gap-3">
+        <Field
+          label="Full name"
+          type="text"
+          autoComplete="name"
+          autoFocus
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Jordan Rivera"
         />
-        <button
-          type="button"
-          onClick={() => setShowPw((v) => !v)}
-          aria-pressed={showPw}
-          className="absolute right-2 top-1/2 -translate-y-1/2 bg-transparent border-none px-2 py-1 text-[12px] font-extrabold cursor-pointer font-sans"
-          style={{ color: 'rgb(var(--accent))' }}
-        >
-          {showPw ? 'Hide' : 'Show'}
-        </button>
+        <LockedEmail email={peek.email} />
+        <div>
+          <Field
+            label="Password"
+            type={showPw ? 'text' : 'password'}
+            autoComplete="new-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder={`At least ${MIN_PASSWORD} characters`}
+            hint={passwordRule}
+            error={passwordShort ? passwordRule : null}
+          />
+          <div className="flex">
+            <ShowPassword shown={showPw} onToggle={() => setShowPw((v) => !v)} />
+          </div>
+        </div>
+        <Field
+          label="Phone (optional)"
+          type="tel"
+          autoComplete="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') void submit(); }}
+          placeholder="(303) 555-0142"
+          hint={`Only neighbors in ${peek.communityName} see it, and you can hide it in My Place.`}
+          className="mb-1"
+        />
       </div>
-      <p className="m-0 mb-3 text-[11.5px] font-semibold" style={{ color: password.length > 0 && password.length < MIN_PASSWORD ? 'rgb(var(--sunsetdeep))' : 'rgb(var(--slate))' }}>
-        At least {MIN_PASSWORD} characters. That’s the only rule.
-      </p>
-      <input
-        type="tel"
-        autoComplete="tel"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        onKeyDown={(e) => { if (e.key === 'Enter') void submit(); }}
-        placeholder="Phone (optional)"
-        aria-label="Phone number, optional"
-        className={`${FIELD} mb-2`}
-        style={FIELD_STYLE}
-      />
-      <p className="m-0 mb-4 text-[11.5px] font-semibold leading-[1.45]" style={{ color: 'rgb(var(--slate))' }}>
-        Your phone is only shown to neighbors in {peek.communityName}, and you can hide it in My Place.
-      </p>
 
       <AuthError message={error} />
       <PrimaryButton
@@ -267,10 +244,32 @@ function Introduce({ code, peek, onBack, onArrived, onSignInInstead }: {
         disabled={!canSubmit}
         onClick={() => void submit()}
       />
-      <div className="flex justify-center mt-2">
+      <div className="flex justify-center mt-1">
         <TextButton label="Back" onClick={onBack} />
       </div>
-    </AuthShell>
+    </Door>
+  );
+}
+
+/**
+ * The email is the invitation's, not the person's to change: the link
+ * already proved it. It sits in the form with the same label and bed as
+ * the fields around it so the column reads as one, but as text, not a
+ * disabled control.
+ */
+function LockedEmail({ email }: { email: string }) {
+  return (
+    <div>
+      <p className="m-0 mb-1.5 text-[12.5px] font-bold text-slatedark">Email</p>
+      <div
+        className="w-full min-h-[44px] rounded-[11px] px-3 py-2.5 flex items-center justify-between gap-2 text-[13px] font-bold text-navy"
+        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--skypale) / 0.5)' }}
+        aria-label={`Email, from your invitation: ${email}`}
+      >
+        <span className="truncate">{email}</span>
+        <span className="text-[12px] font-semibold flex-shrink-0" style={{ color: 'rgb(var(--slate))' }}>From your invitation</span>
+      </div>
+    </div>
   );
 }
 
@@ -306,12 +305,8 @@ function DeadInvite({ state, communityName, onSignIn }: {
     revoked: ['This invitation was withdrawn', `Ask the ${communityName} board if you think that’s a mistake.`],
   }[state];
   return (
-    <AuthShell width={380}>
-      <IconBadge icon="ph-fill ph-envelope-simple" />
-      {communityName && <Eyebrow>{communityName}</Eyebrow>}
-      <h1 className="m-0 mb-2 font-serif text-[24px] text-navy">{copy[0]}</h1>
-      <p className="m-0 mb-5 text-[13.5px] font-semibold leading-[1.5]" style={{ color: 'rgb(var(--slatedeep))' }}>{copy[1]}</p>
-      <GhostButton label="Go to sign in" onClick={onSignIn} />
-    </AuthShell>
+    <Door tint="sky" icon="ph-fill ph-envelope-simple" title={copy[0]} lede={copy[1]}>
+      <PrimaryButton label="Go to sign in" onClick={onSignIn} />
+    </Door>
   );
 }
