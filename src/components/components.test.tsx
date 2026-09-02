@@ -58,3 +58,17 @@ it('StatusTimeline segments turn green only when the next step is done', () => {
   expect(segmentsGreen[0]).toHaveStyle({ background: 'rgb(var(--sage))' }); // green (tokenized)
   expect(segmentsGreen[1]).toHaveStyle({ background: 'rgb(var(--sage))' }); // green (tokenized)
 });
+
+it('Sheet dismisses when the handle is dragged down past the threshold, and springs back otherwise', () => {
+  const onClose = vi.fn();
+  render(<Sheet open onClose={onClose}><p>Body</p></Sheet>);
+  const handle = screen.getByTestId('sheet-handle');
+  fireEvent.pointerDown(handle, { pointerId: 1, clientY: 100, button: 0, pointerType: 'touch' });
+  fireEvent.pointerMove(handle, { pointerId: 1, clientY: 130 });
+  fireEvent.pointerUp(handle, { pointerId: 1, clientY: 130 });
+  expect(onClose).not.toHaveBeenCalled();
+  fireEvent.pointerDown(handle, { pointerId: 2, clientY: 100, button: 0, pointerType: 'touch' });
+  fireEvent.pointerMove(handle, { pointerId: 2, clientY: 300 });
+  fireEvent.pointerUp(handle, { pointerId: 2, clientY: 300 });
+  expect(onClose).toHaveBeenCalledTimes(1);
+});
