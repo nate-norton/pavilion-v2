@@ -26,7 +26,8 @@ export function Hint({ label, children, onDark }: { label: string; children: Rea
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         className="inline-flex items-center gap-1 border-none bg-transparent px-0 py-1.5 cursor-pointer font-sans"
-        style={{ minHeight: 24 }}
+        // 44px target without moving the label: padding cancelled by margin.
+        style={{ minHeight: 44, paddingTop: 10, paddingBottom: 10, marginTop: -10, marginBottom: -10 }}
       >
         <PhIcon name="ph-fill ph-info" size={12} color={triggerColor} />
         <span className="text-[11.5px] font-bold" style={{ color: triggerColor }}>{label}</span>

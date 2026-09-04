@@ -7,6 +7,13 @@ interface ConfirmRequest {
   /** Names the action, never "OK" — the button should say what it does. */
   confirmLabel: string;
   onConfirm: () => void;
+  /**
+   * 'danger' (default) paints the button red: deletes, deactivations.
+   * 'commit' paints it skydeep: a milestone that deserves a beat but is not
+   * destruction, such as closing a ballot or publishing minutes. Painting
+   * every confirmation red taught volunteers to flinch at their own work.
+   */
+  tone?: 'danger' | 'commit';
 }
 
 let openConfirm: ((req: ConfirmRequest) => void) | null = null;
@@ -52,7 +59,7 @@ export function ConfirmSheet() {
             type="button"
             onClick={() => { req.onConfirm(); close(); }}
             className="w-full border-none rounded-2xl py-3.5 text-[14px] font-extrabold cursor-pointer font-sans text-white mb-2"
-            style={{ background: 'rgb(var(--red))' }}
+            style={{ background: req.tone === 'commit' ? 'rgb(var(--skydeep))' : 'rgb(var(--red))' }}
           >
             {req.confirmLabel}
           </button>

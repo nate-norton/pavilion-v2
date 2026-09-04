@@ -35,12 +35,24 @@ typography:
     fontWeight: 900
     letterSpacing: "-0.03em"
     lineHeight: 1.1
+  greeting:
+    fontFamily: "Nunito, system-ui, sans-serif"
+    fontSize: "28px"
+    fontWeight: 900
+    letterSpacing: "-0.03em"
+    lineHeight: 1.15
   headline:
     fontFamily: "Nunito, system-ui, sans-serif"
     fontSize: "24px"
     fontWeight: 900
     letterSpacing: "-0.03em"
     lineHeight: 1.2
+  card-title:
+    fontFamily: "Nunito, system-ui, sans-serif"
+    fontSize: "22px"
+    fontWeight: 900
+    letterSpacing: "-0.03em"
+    lineHeight: 1.18
   subtitle:
     fontFamily: "Nunito, system-ui, sans-serif"
     fontSize: "19px"
@@ -339,10 +351,17 @@ accumulate across the screens while each one looked locally defensible. Every
 size in the app is now one of the steps below, and a new step is added here
 first or not at all.
 
-- **Display** (400, 36px, 1.1): The morning greeting, the onboarding hero, and
-  the dollar amount on a dues sheet. One per screen at most.
+- **Display** (400, 36px, 1.1): The onboarding hero, the community name on the
+  invited welcome, and the dollar amount on a dues sheet. One per screen at
+  most.
+- **Greeting** (400, 28px, 1.15): The Today greeting only. It sits one step
+  under Display so the money line beneath it can lead the screen; the greeting
+  is the warmest thing on Today and never the most important.
 - **Headline** (400, 24px, 1.2): Every screen title — "The Commons",
   "Reserve", "The HOA, in the open", "Documents", "Messages".
+- **Card title** (400, 22px, 1.18): The `StackedCard` / `StackedPanel` hero
+  title — the needs-you sentence on Board Desk, the open vote, the featured
+  event. It is the display voice at card scale and belongs to that component.
 - **Subtitle** (400, 19px, 1.3): Sheet titles and confirmations — "Create a
   group", "Paid. Done in two taps."
 - **Title** (400, 17px, 1.3): Card and section headings, the open-vote title.
@@ -352,8 +371,10 @@ first or not at all.
   bold because it sits small on a warm background and needs the density.
 - **Secondary body** (600–700, 11.5/12/12.5px, 1.5): Sub-lines, metadata, and
   card descriptions in slate or slatedeep.
-- **Label** (700–800, 10/10.5/11px, 0.12em, uppercase): Section eyebrows,
-  status pills, nav labels. The wide tracking is the system's signature.
+- **Label** (700–800, 11px, 0.12em, uppercase): Chrome badges and the nav
+  labels. **Not section titles** — see the Eyebrow rule below. Nothing that
+  carries function is set below 12px any more; the 9.5 and 10.5px steps were
+  retired in the refinement pass.
 
 **Screen titles lost a level in this pass.** Primary tabs sat at 28px and
 secondary screens at 26px — a real two-step distinction that the token ramp has
@@ -369,6 +390,17 @@ constraint is still one weight, the weight is just now the heaviest one.
 
 **The Bold Floor Rule.** Sans text at or below 13px is never lighter than 600.
 Warm backgrounds eat thin type.
+
+**The No-Eyebrow Rule.** A section is introduced by a heading, not by an 11px
+uppercase label above one. The app carried 87 of those and they made a section
+holding a $570 delinquency look exactly like a section holding an empty log.
+Section titles are `SectionHeading` — 17px Nunito Black, with the count or
+context on a 13px meta line *after* the title, where it reads as information
+rather than as a label. Uppercase labels survive only as chrome badges
+("BOARD") and nav labels.
+
+**The 12px Floor.** Anything a person must read to act — a status, a date, an
+amount, a control label — is at least 12px. Decorative marks may go smaller.
 
 ## Layout
 
@@ -443,13 +475,28 @@ container again and undo the whole thing.
 
 ## Elevation & Depth
 
-The system is **flat with tonal layering**. Depth is communicated by stepping
-through the cool neutral ramp — mist page, paper card, mistpale inset — and
-by hairline borders at `rgb(26 51 82 / 0.06–0.14)`, not by shadow. Most
-surfaces in the app cast nothing at all.
+Depth carries meaning: **elevation says whether something wants a decision.**
+The ground is mist, surfaces are paper, and the `Card` primitive
+(`src/components/Card.tsx`) owns the two steps:
 
-Shadows are reserved for things that genuinely float above the page, plus one
-hover affordance.
+- **`flat`** — paper with the hairline at `rgb(26 51 82 / 0.08)`. Lists, logs,
+  archives: everything the reader scans but does not act on.
+- **`raised`** — the ink shadow `0 1px 2px rgb(var(--shadow) / 0.06),
+  0 8px 24px rgb(var(--shadow) / 0.10)`. Reserved for the surfaces that ask
+  for a tap or a decision: the triage report, the ARC queue, the dues panel,
+  the meetings card while a meeting is upcoming.
+
+Above both sits **chrome**: one `StackedPanel tint="skydeep"` hero per screen,
+carrying the same ink shadow and a peach eyebrow line. One per screen is the
+rule — the board's "needs you today", the open vote, the featured event.
+
+This replaced a flat-only system in which every card was paper behind an 8%
+hairline: a 1.06:1 edge between white and mist, which is why the app read as
+one sheet with pencil lines on it. **Raising everything puts the page back
+where it started**, so `raised` is spent, not sprinkled.
+
+Shadows are otherwise reserved for things that genuinely float, plus one hover
+affordance.
 
 ### Shadow Vocabulary
 - **Floating dock** (`0 18px 40px -14px rgb(26 51 82 / 0.55)`): The nav dock
@@ -463,9 +510,9 @@ hover affordance.
 
 ### Named Rules
 
-**The Floating-Only Rule.** If it doesn't float above the page or respond to a
-pointer, it casts no shadow. Card hierarchy is expressed in tone and border,
-never in elevation.
+**The Meaningful-Elevation Rule.** A shadow means "this asks something of
+you". A surface that only reports goes flat. If every card on a screen is
+raised, none of them is, and the screen is flat again by a different route.
 
 **The Tinted Shadow Rule.** Shadows are never neutral black. They carry
 `--shadow` (rgb 26 51 82, ink) or the scrim (`--scrim`, rgb 12 20 35), so shade
@@ -491,6 +538,12 @@ smallest radius in the system is 5px, and that is a progress-bar cap.
 ## Components
 
 ### Buttons
+**One rule for what a control means:** `--skydeep` under white commits (send,
+schedule, publish, confirm); `--sagedark` approves; a navy-hairline outline
+with `--reddeep` text declines, deactivates or deletes; `--peach` under navy is
+the warm control on sky chrome. Sunset backs no button anywhere — it measures
+2.21:1 on chrome and 2.64:1 under white.
+
 - **Shape:** Generously rounded (13px), or fully round for icon buttons
 - **Primary:** `--skydeep` background, paper text, ~14px vertical padding,
   extrabold 13–14px sans. Full-width in sheets.
@@ -513,18 +566,41 @@ smallest radius in the system is 5px, and that is a progress-bar cap.
 - **Active:** `--skydeep` background, mist text, no border
 
 ### Cards / Containers
-- **Corner Style:** 18px for major cards, 13px for inner rows, 20px for feature
-  cards
-- **Background:** Paper on the mist page; `--skydeep` for feature cards that
-  must dominate (the open vote, the taco-cart hero, the amenity pass banner)
-- **Shadow Strategy:** None at rest — see Elevation
-- **Border:** Hairline at 6–8% navy, or none when tone alone separates
-- **Internal Padding:** 14–18px
+Use `Card` (`src/components/Card.tsx`); do not hand-roll the surface.
+- **Corner Style:** 18px for cards, 13px for inner rows, 26px for `StackedCard`
+- **Elevation:** `flat` or `raised` — see Elevation. This is the prop that
+  carries meaning; everything else is trim
+- **Tints:** `paper`, `mistpale`, `skywash`, `skypale`, `mint`, `goldpale`,
+  `sunsetpale` — the pale beds from `:root`, each with its text colours solved.
+  Tint by meaning: mint for done, goldpale for needs-you, sunsetpale for money
+- **Background:** Paper on the mist page; `--skydeep` via `StackedPanel` for
+  the one hero that must dominate
+- **Internal Padding:** 14–18px (`sm` / `md` / `lg`)
+
+### Section headings
+`SectionHeading` (`src/components/SectionHeading.tsx`) — 17px Nunito Black
+title, optional 13px meta line beneath it carrying the count or context, and an
+optional right-hand action. It replaced the 11px uppercase eyebrow everywhere;
+see The No-Eyebrow Rule.
+
+### Status pills
+`Pill` with a `tone` from `src/components/pillTones.ts`: `success` (mint /
+sagedark), `info` (accenttint / accent), `warning` (goldpale / golddark),
+`danger` (sunsetdim / sunsetdeep), `neutral` (skywash / slatedark), `chrome`
+(peach / navy, for use on sky chrome). **One vocabulary for every status in the
+app** — "due" used to be sky on one screen and gold on the next, and declined
+shared a colour with in-review.
 
 ### Inputs / Fields
-- **Style:** Mistpale fill, hairline border at 14% navy, 13px radius,
-  12×16px padding, semibold navy text
-- **Placeholder:** Slate
+Use `Field` (`src/components/Field.tsx`); it carries the label, the hint, the
+error and the `aria-describedby`/`aria-invalid` wiring. 58 of the app's 79
+inputs were once named only by their placeholder, which disappears on the first
+keystroke.
+- **Style:** Mistpale fill, hairline border at 12% navy, 11px radius, 44px
+  minimum height, bold navy text
+- **Label:** Always present — visible above the control, or `hideLabel` when
+  the context supplies it (a chat composer named by its thread)
+- **Placeholder:** An example, never the name
 - **Focus:** A global `:focus-visible` ring (2px `--sunsetdeep`, 2px offset)
   applies everywhere and inverts to mist on chrome. Warm against a cool ground
   so it reads as a ring rather than as more sky; on `--skydeep` the sunset ring

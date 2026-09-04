@@ -48,7 +48,7 @@ export function Toggle({ on, onToggle, size = 'sm', label }: ToggleProps) {
           height: knob,
           boxShadow: '0 1px 3px rgb(var(--black) / 0.2)',
           transform: on ? `translateX(${travel}px)` : 'translateX(0)',
-          transition: 'transform 0.2s cubic-bezier(0.32,1.2,0.5,1)',
+          transition: 'transform 0.2s cubic-bezier(0.22,1,0.36,1)',
         }}
       />
     </div>

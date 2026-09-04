@@ -17,8 +17,7 @@ import type { Meeting, ThreadComment, TriageItem } from '../data/repo';
 
 const FLAT = { border: CARD_HAIRLINE } as const;
 /** One rule for Board Desk controls: skydeep commits, sage approves, red text declines. */
-const BTN_QUIET = 'rounded-full px-3 py-1.5 text-[12px] font-extrabold cursor-pointer bg-transparent text-navy flex-shrink-0';
-const BTN_DANGER = 'rounded-full px-3 py-1.5 text-[12px] font-extrabold cursor-pointer bg-transparent flex-shrink-0';
+const BTN_QUIET = 'rounded-full px-3 py-1.5 min-h-[44px] text-[12px] font-extrabold cursor-pointer bg-transparent text-navy flex-shrink-0';
 const DANGER_STYLE = { border: '1.5px solid rgb(var(--reddeep) / 0.35)', color: 'rgb(var(--reddeep))' } as const;
 const QUIET_STYLE = { border: '1.5px solid rgb(var(--navy) / 0.2)' } as const;
 
@@ -165,7 +164,7 @@ export function BoardDesk() {
       <div className="flex items-center justify-between gap-2.5 mb-2.5">
         <button
           onClick={exitBoard}
-          className="border-0 bg-transparent flex items-center gap-[5px] text-[13px] font-extrabold cursor-pointer p-0 text-slate"
+          className="border-0 bg-transparent flex items-center gap-[5px] text-[13px] font-extrabold cursor-pointer px-0 min-h-[44px] text-slate"
         >
           <PhIcon name="ph-bold ph-arrow-left" size={14} />
           Resident view
@@ -228,7 +227,8 @@ export function BoardDesk() {
             <div className="mb-3">
               <ProgressBar pct={quorum.pct} height={8} track="rgb(var(--mist) / 0.15)" gradient />
             </div>
-            {!state.reminderSent && nonVoters > 0 && (
+            {/* Reminders are a scripted demo beat: live has no notifications yet. */}
+            {demo && !state.reminderSent && nonVoters > 0 && (
               <button
                 onClick={sendReminder}
                 className="w-full border-0 rounded-xl py-[11px] px-3 text-[13px] font-extrabold cursor-pointer font-sans"
@@ -237,7 +237,7 @@ export function BoardDesk() {
                 Nudge {nonVoters} households who haven&apos;t voted
               </button>
             )}
-            {state.reminderSent && (
+            {demo && state.reminderSent && (
               <div className="rounded-xl px-3.5 py-[11px] flex items-center gap-[9px] animate-fadeup" style={{ background: 'rgb(var(--sage) / 0.18)', border: '1px solid rgb(var(--sage) / 0.4)' }}>
                 <PhIcon name="ph-fill ph-paper-plane-tilt" size={16} color="rgb(var(--sagebright))" />
                 <span className="text-[12.5px] font-bold text-mist">Reminder queued for tonight&apos;s digest — app, email &amp; SMS</span>
@@ -298,7 +298,7 @@ export function BoardDesk() {
                 {!state.reportTicketed && (
                   <button
                     onClick={createTicket}
-                    className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
+                    className="border-0 rounded-full px-[13px] py-2 min-h-[44px] text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                   >
                     Create ticket
                   </button>
@@ -329,7 +329,7 @@ export function BoardDesk() {
                   {!state.m89Assigned && (
                     <button
                       onClick={assignM89}
-                      className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
+                      className="border-0 rounded-full px-[13px] py-2 min-h-[44px] text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                     >
                       Assign vendor
                     </button>
@@ -411,7 +411,7 @@ export function BoardDesk() {
                 {!state.gateScheduled && (
                   <button
                     onClick={scheduleVendor}
-                    className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
+                    className="border-0 rounded-full px-[13px] py-2 min-h-[44px] text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                   >
                     Schedule
                   </button>
@@ -453,7 +453,7 @@ export function BoardDesk() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="m-0 text-[13px] font-bold text-navy">{name}</p>
-                        <p className="m-0 text-[11.5px] font-semibold text-slate truncate">
+                        <p className="m-0 text-[12px] font-semibold text-slate truncate">
                           {last ? `${last.me ? 'You' : last.authorName}: ${last.text}` : 'No messages yet'}
                         </p>
                       </div>
@@ -511,7 +511,7 @@ export function BoardDesk() {
                   className="w-full border-0 rounded-[11px] py-2.5 text-[12.5px] font-extrabold cursor-pointer"
                   style={{
                     background: invEmail.trim() && !invBusy ? 'rgb(var(--skydeep))' : 'rgb(var(--skyrule))',
-                    color: invEmail.trim() && !invBusy ? 'rgb(var(--white))' : 'rgb(var(--slatelight))',
+                    color: invEmail.trim() && !invBusy ? 'rgb(var(--white))' : 'rgb(var(--slatedeep))',
                   }}
                 >
                   {invBusy ? 'Inviting…' : 'Send invite'}
@@ -538,7 +538,7 @@ export function BoardDesk() {
                                 setTimeout(() => setCopiedInvite(null), 2000);
                               }}
                               className="border-none bg-transparent text-[11.5px] font-extrabold cursor-pointer p-1"
-                              style={{ color: copiedInvite === inv.id ? 'rgb(var(--sage))' : 'rgb(var(--accent))' }}
+                              style={{ color: copiedInvite === inv.id ? 'rgb(var(--sagedark))' : 'rgb(var(--accent))' }}
                             >
                               {copiedInvite === inv.id ? 'Copied ✓' : 'Copy link'}
                             </button>
@@ -616,6 +616,7 @@ export function BoardDesk() {
                                     ? 'They will see Board desk, private board chat, and every resident report, with the same powers you have.'
                                     : 'They will lose Board desk and board chat immediately. Their resident access stays.',
                                   confirmLabel: toBoard ? 'Make board' : 'Make resident',
+                                  tone: 'commit',
                                   onConfirm: () => { void repo.setMemberRole(m.membershipId, toBoard ? 'board' : 'resident').then(() => flash('roster', `${m.name} is now ${toBoard ? 'board' : 'a resident'}`)).catch(reportedByDataLayer); },
                                 });
                               }}
@@ -761,13 +762,29 @@ export function BoardDesk() {
                     <button
                       onClick={() => {
                         if (!violUnitId || !violTitle.trim()) return;
-                        void repo.createViolation({
-                          unitId: violUnitId, title: violTitle, description: violDesc,
-                          severity: violSeverity, fineCents: Math.round((parseFloat(violFine) || 0) * 100),
-                        }).then(() => {
-                          setViolDraftOpen(false); setViolTitle(''); setViolDesc(''); setViolUnitId(''); setViolFine(''); setViolSeverity('courtesy');
-                          flash('viol', 'Notice sent — the resident sees it on Today');
-                        }).catch(reportedByDataLayer);
+                        const unit = units.find((u) => u.id === violUnitId)?.label ?? 'the resident';
+                        const send = () => {
+                          void repo.createViolation({
+                            unitId: violUnitId, title: violTitle, description: violDesc,
+                            severity: violSeverity, fineCents: Math.round((parseFloat(violFine) || 0) * 100),
+                          }).then(() => {
+                            setViolDraftOpen(false); setViolTitle(''); setViolDesc(''); setViolUnitId(''); setViolFine(''); setViolSeverity('courtesy');
+                            flash('viol', 'Notice sent — the resident sees it on Today');
+                          }).catch(reportedByDataLayer);
+                        };
+                        // A courtesy note goes straight out. A warning or a fine is the
+                        // one board act that can end up in front of a lawyer, so it
+                        // reads its own consequence back before it leaves.
+                        if (violSeverity === 'courtesy') { send(); return; }
+                        confirmDestructive({
+                          title: violSeverity === 'fine' ? `Send a $${violFine || '0'} fine to ${unit}?` : `Send a warning to ${unit}?`,
+                          body: violSeverity === 'fine'
+                            ? 'They see the amount and the CC&R section on Today. A fine cannot be withdrawn from the app.'
+                            : 'They see a formal notice with a fix-by date. No fee. It cannot be withdrawn from the app.',
+                          confirmLabel: violSeverity === 'fine' ? 'Send the fine' : 'Send the warning',
+                          tone: violSeverity === 'fine' ? 'danger' : 'commit',
+                          onConfirm: send,
+                        });
                       }}
                       disabled={!violUnitId || !violTitle.trim()}
                       className="flex-1 border-0 rounded-full py-2.5 text-[12.5px] font-extrabold cursor-pointer text-mist"
@@ -915,7 +932,7 @@ export function BoardDesk() {
                               },
                             })}
                             className="flex-1 rounded-full py-2 text-[12px] font-extrabold cursor-pointer bg-transparent"
-                            style={arcNote.trim() ? DANGER_STYLE : { border: '1.5px solid rgb(var(--navy) / 0.12)', color: 'rgb(var(--slatelight))' }}
+                            style={arcNote.trim() ? DANGER_STYLE : { border: '1.5px solid rgb(var(--navy) / 0.12)', color: 'rgb(var(--slatedeep))' }}
                           >
                             Decline
                           </button>
@@ -927,7 +944,7 @@ export function BoardDesk() {
                                 .catch(reportedByDataLayer);
                             }}
                             className="flex-1 rounded-full py-2 text-[12px] font-extrabold cursor-pointer bg-transparent text-navy"
-                            style={arcNote.trim() ? QUIET_STYLE : { border: '1.5px solid rgb(var(--navy) / 0.12)', color: 'rgb(var(--slatelight))' }}
+                            style={arcNote.trim() ? QUIET_STYLE : { border: '1.5px solid rgb(var(--navy) / 0.12)', color: 'rgb(var(--slatedeep))' }}
                           >
                             Needs info
                           </button>
@@ -956,7 +973,7 @@ export function BoardDesk() {
                 </div>
                 <button
                   onClick={boardApproveArc}
-                  className="border-0 rounded-full px-3 py-[7px] text-[12px] font-extrabold cursor-pointer flex-shrink-0 text-white"
+                  className="border-0 rounded-full px-3 py-[7px] min-h-[44px] text-[12px] font-extrabold cursor-pointer flex-shrink-0 text-white"
                   style={{ background: 'rgb(var(--sagedark))' }}
                 >
                   Approve
@@ -1008,7 +1025,7 @@ export function BoardDesk() {
                   </button>
                 )}
                 {state.m89Assigned && (
-                  <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--sage))' }}>
+                  <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--sagedark))' }}>
                     GreenScape ✓
                   </span>
                 )}
@@ -1031,7 +1048,7 @@ export function BoardDesk() {
                 </button>
               )}
               {state.gateScheduled && (
-                <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--sage))' }}>
+                <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--sagedark))' }}>
                   AquaFix · Thu ✓
                 </span>
               )}
@@ -1040,7 +1057,7 @@ export function BoardDesk() {
               <div className="flex items-center gap-[11px] py-[11px]" style={{ borderBottom: '1px solid rgb(var(--navy) / 0.07)' }}>
                 <PhIcon name="ph-fill ph-lightbulb" size={17} color="rgb(var(--gold))" className="flex-shrink-0" />
                 <p className="m-0 flex-1 text-[13px] font-bold text-navy">#M-88 · Streetlight, Alder Way</p>
-                <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--sage))' }}>
+                <span className="text-[11px] font-bold flex-shrink-0" style={{ color: 'rgb(var(--sagedark))' }}>
                   BrightPath ✓
                 </span>
               </div>
@@ -1156,7 +1173,7 @@ export function BoardDesk() {
             {!state.courtesySent && (
               <button
                 onClick={sendCourtesy}
-                className="w-full rounded-xl py-[11px] text-[13px] font-extrabold cursor-pointer bg-transparent text-navy"
+                className="w-full rounded-xl py-[11px] px-3 text-[13px] font-extrabold cursor-pointer bg-transparent text-navy"
                 style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
               >
                 Send courtesy reminders — no fees, per §9
@@ -1177,7 +1194,7 @@ export function BoardDesk() {
             <div className="mb-3">
               <div className="flex justify-between mb-[5px]">
                 <span className="text-[12.5px] font-bold text-navy">Landscaping</span>
-                <span className="text-[11.5px] font-bold text-slate">
+                <span className="text-[12px] font-bold text-slate">
                   52% of $75.6K
                 </span>
               </div>
@@ -1186,7 +1203,7 @@ export function BoardDesk() {
             <div className="mb-3">
               <div className="flex justify-between mb-[5px]">
                 <span className="text-[12.5px] font-bold text-navy">Utilities</span>
-                <span className="text-[11.5px] font-bold text-slate">
+                <span className="text-[12px] font-bold text-slate">
                   48% of $46.7K
                 </span>
               </div>
@@ -1195,7 +1212,7 @@ export function BoardDesk() {
             <div className="mb-3">
               <div className="flex justify-between mb-[5px]">
                 <span className="text-[12.5px] font-bold text-navy">Insurance</span>
-                <span className="text-[11.5px] font-bold text-slate">
+                <span className="text-[12px] font-bold text-slate">
                   50% of $52.4K
                 </span>
               </div>
@@ -1238,7 +1255,7 @@ export function BoardDesk() {
               <div key={a.bucket} className="mb-[11px]">
                 <div className="flex justify-between items-baseline mb-[5px]">
                   <span className="text-[12.5px] font-bold text-navy">{a.bucket}</span>
-                  <span className="text-[11.5px] font-bold text-slate">
+                  <span className="text-[12px] font-bold text-slate">
                     {a.amt} · {a.n}
                   </span>
                 </div>
@@ -1247,7 +1264,7 @@ export function BoardDesk() {
             ))}
             <button
               onClick={openExport}
-              className="w-full rounded-xl py-3 text-[13px] font-extrabold cursor-pointer bg-transparent text-navy mt-1.5 flex items-center justify-center gap-2"
+              className="w-full rounded-xl py-3 px-3 text-[13px] font-extrabold cursor-pointer bg-transparent text-navy mt-1.5 flex items-center justify-center gap-2"
               style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
             >
               <PhIcon name="ph-fill ph-export" size={15} />
@@ -1263,14 +1280,14 @@ export function BoardDesk() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-px text-[13.5px] font-bold text-navy">AquaFix · $340.00</p>
-                <p className="m-0 text-[11.5px] font-semibold text-slate">
+                <p className="m-0 text-[12px] font-semibold text-slate">
                   Pool gate latch · needs 2 of 3 board signatures · 1 signed
                 </p>
               </div>
               {!state.invApproved && (
                 <button
                   onClick={approveInv}
-                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
+                  className="border-0 rounded-full px-[13px] py-2 min-h-[44px] text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                 >
                   Sign
                 </button>
@@ -1317,13 +1334,13 @@ export function BoardDesk() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="m-0 mb-px text-[13.5px] font-bold text-navy">Draft a community vote</p>
-                  <p className="m-0 text-[11.5px] font-semibold text-slate">
+                  <p className="m-0 text-[12px] font-semibold text-slate">
                     Yes/no or multiple choice — results tally live
                   </p>
                 </div>
                 <button
                   onClick={openVoteDraft}
-                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
+                  className="border-0 rounded-full px-[13px] py-2 min-h-[44px] text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                 >
                   New vote
                 </button>
@@ -1428,7 +1445,7 @@ export function BoardDesk() {
                     onClick={() => canPostVote && setVoteConfirm(true)}
                     disabled={!canPostVote}
                     className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                    style={{ background: canPostVote ? 'rgb(var(--skydeep))' : 'rgb(var(--skyrule))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--slatelight))' }}
+                    style={{ background: canPostVote ? 'rgb(var(--skydeep))' : 'rgb(var(--skyrule))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--slatedeep))' }}
                   >
                     Open the ballot
                   </button>
@@ -1490,10 +1507,11 @@ export function BoardDesk() {
                           title: 'Close this ballot?',
                           body: `${v.quorumCount} of ${v.quorumTotal} households have voted. Closing publishes the result to everyone and no more ballots can be cast.`,
                           confirmLabel: 'Close ballot',
+                          tone: 'commit',
                           onConfirm: () => { void repo.closeVote(v.id).then(() => flash('vote', `Closed — the result is posted on every resident's HOA tab`)).catch(reportedByDataLayer); },
                         })}
-                        className={BTN_DANGER}
-                        style={DANGER_STYLE}
+                        className={BTN_QUIET}
+                        style={QUIET_STYLE}
                       >
                         Close ballot
                       </button>
@@ -1556,16 +1574,18 @@ export function BoardDesk() {
           <div className="rounded-[18px] bg-paper p-4" style={FLAT}>
             {!state.broadcastSent && (
               <div>
-                <textarea
+                <Field
+                  as="textarea"
+                  label="Announcement"
+                  hideLabel
+                  rows={3}
                   value={state.bcText}
                   onChange={(e) => set({ bcText: e.target.value })}
                   placeholder="Announce something to every household…"
-                  className="w-full rounded-[13px] px-3.5 py-3 text-[13.5px] font-semibold text-navy outline-none resize-none"
-                  style={{ minHeight: 74, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
                 />
                 <div className="flex items-center gap-2 my-2.5 mb-3">
                   <PhIcon name="ph-fill ph-broadcast" size={14} color="rgb(var(--slate))" className="flex-shrink-0" />
-                  <p className="m-0 text-[11.5px] font-bold text-slate">
+                  <p className="m-0 text-[12px] font-bold text-slate">
                     Posts to the Commons + email digest — reaches all 136 households, including the 41% not on the app
                   </p>
                 </div>
@@ -1573,7 +1593,7 @@ export function BoardDesk() {
                   onClick={sendBroadcast}
                   disabled={!canBc}
                   className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold"
-                  style={{ background: canBc ? 'rgb(var(--skydeep))' : 'rgb(var(--skyrule))', color: canBc ? 'rgb(var(--white))' : 'rgb(var(--slatelight))', cursor: canBc ? 'pointer' : 'default' }}
+                  style={{ background: canBc ? 'rgb(var(--skydeep))' : 'rgb(var(--skyrule))', color: canBc ? 'rgb(var(--white))' : 'rgb(var(--slatedeep))', cursor: canBc ? 'pointer' : 'default' }}
                 >
                   Send to 136 households
                 </button>
@@ -1595,27 +1615,27 @@ export function BoardDesk() {
               <div>
                 {state.voteDraftOpen && (
                   <div className="animate-fadeup">
-                    <p className="m-0 mb-[7px] text-[11.5px] font-bold text-navy">Question</p>
-                    <textarea
+                    <Field
+                      as="textarea"
+                      label="Question"
+                      rows={2}
                       value={state.voteQ}
                       onChange={(e) => set({ voteQ: e.target.value })}
-                      placeholder="e.g. Should we add a second EV charger in Lot B?"
-                      className="w-full rounded-[13px] px-[13px] py-[11px] text-[13.5px] font-semibold text-navy outline-none resize-none mb-3"
-                      style={{ minHeight: 58, border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
+                      placeholder="Should we add a second EV charger in Lot B?"
+                      className="mb-3"
                     />
-                    <p className="m-0 mb-[7px] text-[11.5px] font-bold text-navy">Choices</p>
                     <div className="flex gap-2 mb-3">
-                      <input
+                      <Field
+                        label="Yes reads as"
                         value={state.voteOptA}
                         onChange={(e) => set({ voteOptA: e.target.value })}
-                        className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
+                        className="flex-1 min-w-0"
                       />
-                      <input
+                      <Field
+                        label="No reads as"
                         value={state.voteOptB}
                         onChange={(e) => set({ voteOptB: e.target.value })}
-                        className="flex-1 rounded-[11px] px-3 py-2.5 text-[13px] font-bold text-navy outline-none min-w-0"
-                        style={{ border: '1px solid rgb(var(--navy) / 0.12)', background: 'rgb(var(--mistpale))' }}
+                        className="flex-1 min-w-0"
                       />
                     </div>
                     <div className="rounded-xl px-[13px] py-[11px] mb-3" style={{ background: 'rgb(var(--mistpale))' }}>
@@ -1628,7 +1648,7 @@ export function BoardDesk() {
                     </div>
                     <div className="flex items-center gap-2 mb-3">
                       <PhIcon name="ph-fill ph-users-three" size={14} color="rgb(var(--slate))" className="flex-shrink-0" />
-                      <p className="m-0 text-[11.5px] font-bold text-slate">
+                      <p className="m-0 text-[12px] font-bold text-slate">
                         Opens to all 136 households · 7-day window · quorum 50%+1 · one ballot each
                       </p>
                     </div>
@@ -1637,7 +1657,7 @@ export function BoardDesk() {
                         onClick={() => canPostVote && setVoteConfirm(true)}
                         disabled={!canPostVote}
                         className="w-full border-0 rounded-[13px] py-[13px] text-sm font-extrabold cursor-pointer"
-                        style={{ background: canPostVote ? 'rgb(var(--skydeep))' : 'rgb(var(--skyrule))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--slatelight))' }}
+                        style={{ background: canPostVote ? 'rgb(var(--skydeep))' : 'rgb(var(--skyrule))', color: canPostVote ? 'rgb(var(--white))' : 'rgb(var(--slatedeep))' }}
                       >
                         Open the ballot
                       </button>
@@ -1668,13 +1688,13 @@ export function BoardDesk() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="m-0 mb-px text-[13.5px] font-bold text-navy">Draft a community vote</p>
-                      <p className="m-0 text-[11.5px] font-semibold text-slate">
+                      <p className="m-0 text-[12px] font-semibold text-slate">
                         Ask a yes/no or A/B question — results tally live
                       </p>
                     </div>
                     <button
                       onClick={openVoteDraft}
-                      className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
+                      className="border-0 rounded-full px-[13px] py-2 min-h-[44px] text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                     >
                       New vote
                     </button>
@@ -1721,13 +1741,13 @@ export function BoardDesk() {
             </div>
             <div className="flex items-center gap-2 mb-3">
               <PhIcon name="ph-fill ph-broadcast" size={13} color="rgb(var(--slate))" className="flex-shrink-0" />
-              <p className="m-0 text-[11.5px] font-bold text-slate">
+              <p className="m-0 text-[12px] font-bold text-slate">
                 Reaches all 136 households: 80 app · 44 email · 12 print
               </p>
             </div>
             <button
               onClick={() => set({ digestScheduled: true })}
-              className="w-full rounded-xl py-[11px] text-[13px] font-extrabold cursor-pointer bg-transparent text-navy"
+              className="w-full rounded-xl py-[11px] px-3 text-[13px] font-extrabold cursor-pointer bg-transparent text-navy"
               style={{
                 border: '1.5px solid rgb(var(--navy) / 0.15)',
                 ...(state.digestScheduled ? { background: 'rgb(var(--mint))', borderColor: 'rgb(var(--sage))', color: 'rgb(var(--sagedark))' } : {}),
@@ -1765,7 +1785,7 @@ export function BoardDesk() {
             </div>
             <button
               onClick={openMeeting}
-              className="w-full rounded-xl py-[11px] text-[13px] font-extrabold cursor-pointer bg-transparent text-navy"
+              className="w-full rounded-xl py-[11px] px-3 text-[13px] font-extrabold cursor-pointer bg-transparent text-navy"
               style={{ border: '1.5px solid rgb(var(--navy) / 0.15)' }}
             >
               Open meeting mode →
@@ -1780,14 +1800,14 @@ export function BoardDesk() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="m-0 mb-px text-[13.5px] font-bold text-navy">June 18 minutes — drafted by AI</p>
-                <p className="m-0 text-[11.5px] font-semibold text-slate">
+                <p className="m-0 text-[12px] font-semibold text-slate">
                   From the meeting recording · 4 pp · needs your review
                 </p>
               </div>
               {!state.minutesPublished && (
                 <button
                   onClick={publishMinutes}
-                  className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
+                  className="border-0 rounded-full px-[13px] py-2 min-h-[44px] text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
                 >
                   Publish
                 </button>
@@ -1864,7 +1884,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
         {t.status === 'open' && (
           <button
             onClick={() => void repo.setReportStatus(t.id, 'ticketed')}
-            className="border-0 rounded-full px-[13px] py-2 text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
+            className="border-0 rounded-full px-[13px] py-2 min-h-[44px] text-xs font-extrabold cursor-pointer flex-shrink-0 bg-skydeep text-mist"
           >
             Create ticket
           </button>
@@ -1894,7 +1914,7 @@ function TriageCard({ item: t }: { item: TriageItem }) {
             <div className="flex gap-2 mb-3 overflow-x-auto pav-scroll">
               {t.photoUrls.map((u) => (
                 <a key={u} href={u} target="_blank" rel="noreferrer" className="flex-shrink-0">
-                  <img src={u} alt="Attached photo" className="rounded-[11px] block" style={{ height: 84, width: 84, objectFit: 'cover' }} />
+                  <img loading="lazy" decoding="async" src={u} alt="Attached photo" className="rounded-[11px] block" style={{ height: 84, width: 84, objectFit: 'cover' }} />
                 </a>
               ))}
             </div>
@@ -2090,6 +2110,7 @@ function PublishMinutesButton({ meeting, onDone }: { meeting: Meeting; onDone: (
             title: `Publish minutes for ${meeting.title}?`,
             body: `${f.name} goes into Documents for every household and marks this meeting as held. This cannot be undone from the app.`,
             confirmLabel: 'Publish minutes',
+            tone: 'commit',
             onConfirm: () => {
               setBusy(true);
               void repo.publishMinutes(meeting.id, f).then(onDone).catch(reportedByDataLayer).finally(() => setBusy(false));

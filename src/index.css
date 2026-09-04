@@ -246,7 +246,7 @@ body { font-family: 'Nunito Sans', system-ui, sans-serif; }
 @keyframes scFadeUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 @keyframes heartPop { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
-@keyframes typingBounce { 0%,60%,100% { transform: translateY(0); opacity: 0.35; } 30% { transform: translateY(-4px); opacity: 1; } }
+@keyframes typingWave { 0%,60%,100% { transform: translateY(0); opacity: 0.35; } 30% { transform: translateY(-4px); opacity: 1; } }
 @keyframes confettiPop { 0% { transform: translate(-50%,-50%) rotate(0deg); opacity: 1; } 100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) rotate(var(--rot)); opacity: 0; } }
 @keyframes scrimFadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideLeft { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -337,7 +337,7 @@ div[class*="cursor-pointer"] {
   @keyframes slideRight { from { opacity: 0; } to { opacity: 1; } }
   @keyframes msgBubble { from { opacity: 0; } to { opacity: 1; } }
   @keyframes heartPop { from { opacity: 0.6; } to { opacity: 1; } }
-  @keyframes typingBounce { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+  @keyframes typingWave { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
 
   /* Purely decorative motion has no state to convey — remove it outright. */
   @keyframes confettiPop { from { opacity: 0; } to { opacity: 0; } }

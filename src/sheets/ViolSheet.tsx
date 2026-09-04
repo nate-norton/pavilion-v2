@@ -67,7 +67,7 @@ export function ViolSheet() {
     const photos = viol?.photoUrls ?? [];
     return (
       <Sheet
-      label="Courtesy notice"
+      label={copy.title}
       open={state.violSheetOpen} onClose={closeViol} maxHeight="86%">
         {!viol ? (
           <div className="text-center pt-1.5 pb-1">
@@ -116,7 +116,7 @@ export function ViolSheet() {
                   {photos.map((u, i) => (
                     <li key={u} className="flex-shrink-0">
                       <a href={u} target="_blank" rel="noreferrer" className="block no-underline">
-                        <img src={u} alt={`Photo ${i + 1} of ${photos.length} from the board`} className="rounded-[11px] block" style={{ height: 88, width: 88, objectFit: 'cover' }} />
+                        <img loading="lazy" decoding="async" src={u} alt={`Photo ${i + 1} of ${photos.length} from the board`} className="rounded-[11px] block" style={{ height: 88, width: 88, objectFit: 'cover' }} />
                         <span className="block mt-1 text-[12px] font-bold text-slate">
                           Board photo {i + 1}
                         </span>

@@ -39,7 +39,7 @@ export function StatusTimeline({ steps }: StatusTimelineProps) {
               >
                 <PhIcon name={step.icon ?? DEFAULT_ICON[step.state]} size={11} color="rgb(var(--white))" />
               </span>
-              <span className="text-[10.5px] font-bold text-slatedark text-center">
+              <span className="text-[12px] font-bold text-slatedark text-center">
                 {step.label.split('\n').map((line, j) => (
                   <span key={j}>
                     {j > 0 && <br />}

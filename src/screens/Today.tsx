@@ -103,7 +103,9 @@ export function Today() {
   // "Needs you" counter — data-driven off the repo domains (empty for a fresh
   // member). Dues + ARC are owner tasks; the open vote is owner/manager.
   const ownerTasks = isOwner ? (dues.current ? 1 : 0) + (arc.unseenApproval ? 1 : 0) : 0;
-  const n = (showVoteCardRole ? 1 : 0) + ownerTasks;
+  // Everything the list can show counts, so the summary never contradicts
+  // the rows under it (an open notice used to sit beneath "All caught up").
+  const n = (showVoteCardRole ? 1 : 0) + ownerTasks + (saCardShow ? 1 : 0) + (violPendingCard ? 1 : 0);
   const attnSummary =
     n === 0
       ? 'All caught up — enjoy the sunshine.'
@@ -155,7 +157,7 @@ export function Today() {
       className="pav-tabscroll absolute inset-0 overflow-y-auto pav-scroll"
       style={{ padding: 'calc(64px + var(--pav-chrome-top)) 20px var(--pav-screen-bottom)' }}
     >
-      {showAlert && (
+      {demo && showAlert && (
         <div className="rounded-2xl px-3.5 py-3 flex gap-2.5 items-start mb-[18px] text-white" style={{ background: 'rgb(var(--red))' }}>
           <PhIcon name="ph-fill ph-warning" size={17} className="mt-px flex-shrink-0" />
           <div className="flex-1">
@@ -392,21 +394,25 @@ export function Today() {
         </div>
       )}
 
-      {/* Around the neighborhood — ambient content; hidden for an empty community */}
-      {hasNeighborhood && (
+      {/*
+       * Around the neighborhood — ambient content. The list is always on: it
+       * holds the amenity, map and private-report doors, which a fresh
+       * community needs most. Only the featured hero and the Calendar action
+       * depend on there being events.
+       */}
       <div className="animate-fadeup" style={{ animationDelay: '80ms' }}>
       <SectionHeading
         level="subtitle"
         title="Around the neighborhood"
         className="mt-7 mb-3"
-        action={
+        action={hasNeighborhood ? (
           <button
             onClick={() => set({ eventsOpen: true })}
             className="border-none bg-transparent text-[13px] font-bold cursor-pointer px-2 min-h-[44px] -my-2.5 -mr-2 text-skydeep font-sans"
           >
             Calendar
           </button>
-        }
+        ) : undefined}
       />
 
       {/*
@@ -499,7 +505,6 @@ export function Today() {
         </Card>
       </StackedCards>
       </div>
-      )}
     </div>
   );
 }

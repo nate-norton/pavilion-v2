@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
+import { DUES_CATEGORIES } from '../lib/dues';
 import { Card } from '../components/Card';
 import { EmptyState } from '../components/EmptyState';
 import { Hint } from '../components/Hint';
@@ -20,13 +21,6 @@ import type { ArcRequest, KnownIssue, OpenVote } from '../data/repo';
  * its bar (Reserves was navy in one and skydeep in the other); the five
  * categories now share one list and none of them is the accent.
  */
-const DUES_LEGEND = [
-  { label: 'Landscaping', amount: '$78', pct: 27, color: 'rgb(var(--sage))' },
-  { label: 'Reserves', amount: '$71', pct: 25, color: 'rgb(var(--navy))' },
-  { label: 'Insurance', amount: '$54', pct: 19, color: 'rgb(var(--skydeep))' },
-  { label: 'Utilities', amount: '$48', pct: 17, color: 'rgb(var(--gold))' },
-  { label: 'Management', amount: '$34', pct: 12, color: 'rgb(var(--slatelight))' },
-];
 
 const FORECAST_BARS = [
   { year: "'26", height: 47, color: 'rgb(var(--sagemist))' },
@@ -166,7 +160,9 @@ export function Hoa() {
     <div className="pav-tabscroll absolute inset-0 overflow-y-auto pav-scroll" style={{ padding: 'calc(64px + var(--pav-chrome-top)) 18px var(--pav-screen-bottom)' }}>
       <h1 className="m-0 mb-1 font-serif font-normal text-[24px] text-navy">The HOA, in the open</h1>
       <p className="m-0 mb-[18px] text-[13.5px] font-semibold text-slatedeep">
-        Every dollar, vote, and decision — visible to every household.
+        {demo
+          ? 'Every dollar, vote, and decision — visible to every household.'
+          : 'Every vote and decision, visible to every household. Dues arrive here when your board publishes them.'}
       </p>
 
       {/*
@@ -319,12 +315,12 @@ export function Hoa() {
         <SectionHeading title="Your $285, itemized" meta="July 2026 · unchanged from June" />
         <Card padding="lg">
           <div className="flex h-3.5 rounded-full overflow-hidden mb-3.5">
-            {DUES_LEGEND.map((item) => (
+            {DUES_CATEGORIES.map((item) => (
               <div key={item.label} style={{ width: `${item.pct}%`, background: item.color }} />
             ))}
           </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-            {DUES_LEGEND.map((item) => (
+            {DUES_CATEGORIES.map((item) => (
               <div key={item.label} className="flex items-center gap-[7px]">
                 <span className="w-[9px] h-[9px] rounded-[3px] flex-shrink-0" style={{ background: item.color }} />
                 <span className="flex-1 text-[12.5px] font-bold text-slatedark">

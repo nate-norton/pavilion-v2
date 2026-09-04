@@ -353,7 +353,7 @@ export const dataDefaults: PavData = {
   createGroupName: '',
   createGroupDesc: '',
   createGroupIcon: 'ph-fill ph-users-three',
-  createGroupColor: '#1A3352',
+  createGroupColor: 'rgb(var(--navy))',
   // scenario flags
   showDelinquent: false,
   showSpecialAssessment: false,

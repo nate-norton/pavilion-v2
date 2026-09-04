@@ -293,7 +293,7 @@ export function BoardChat() {
                     </p>
                     {m.text && <p className="m-0 text-[13.5px] leading-[1.45] font-semibold text-navy break-words">{m.text}</p>}
                     {m.photoUrls.map((u) => (
-                      <img key={u} src={u} alt="Photo in message" className="mt-1.5 rounded-[13px] max-w-[220px] block" style={{ maxHeight: 240, objectFit: 'cover' }} />
+                      <img key={u} loading="lazy" decoding="async" src={u} alt="Photo in message" className="mt-1.5 rounded-[13px] max-w-[220px] block" style={{ maxHeight: 240, objectFit: 'cover' }} />
                     ))}
                   </div>
                   {m.me && (

@@ -66,7 +66,7 @@ export function BoardSetupCard() {
       {/* The next step, with what the community holds right now. */}
       <div className="mx-[18px] mt-3.5 rounded-2xl px-4 py-3.5" style={{ background: 'rgb(var(--mistpale))', border: '1px solid rgb(var(--navy) / 0.08)' }}>
         <p className="m-0 text-[11px] font-bold uppercase" style={{ letterSpacing: '0.1em', color: 'rgb(var(--accent))' }}>Up next</p>
-        <p className="m-0 mt-1 text-[15px] font-extrabold text-navy leading-[1.3]">{next.title}</p>
+        <p className="m-0 mt-1 text-[17px] font-extrabold text-navy leading-[1.3]">{next.title}</p>
         <p className="m-0 mt-0.5 text-[12.5px] font-semibold text-slate leading-[1.45]">{next.payoff}</p>
         <p className="m-0 mt-2 text-[12px] font-bold flex items-center gap-1.5" style={{ color: 'rgb(var(--slatedark))' }}>
           <span className="inline-block rounded-full" style={{ width: 7, height: 7, background: 'rgb(var(--gold))' }} aria-hidden="true" />

@@ -93,6 +93,12 @@ export interface StackedCardProps {
   image?: string;
   /** Bold caption overlaid on the bottom of the image, e.g. "EMMA SMITH". */
   imageCaption?: string;
+  /**
+   * Heading level for the title. Defaults to `h2`: these cards are the hero
+   * of a screen whose own title is the h1, so an h3 skipped a level in the
+   * heading outline everywhere the card was used.
+   */
+  level?: 'h2' | 'h3';
   /** Alt text for the image; falls back to the caption or empty. */
   imageAlt?: string;
   /** Slot rendered below the body (chips, meta rows, actions) before any image. */
@@ -113,12 +119,14 @@ export function StackedCard({
   image,
   imageCaption,
   imageAlt,
+  level = 'h2',
   children,
 }: StackedCardProps) {
   const t = TINTS[tint] ?? TINTS.skywash;
   const interactive = typeof onClick === 'function';
   const showChevron = chevron ?? interactive;
   const Tag = interactive ? 'button' : 'div';
+  const Heading = level;
 
   return (
     <Tag
@@ -135,12 +143,12 @@ export function StackedCard({
         )}
 
         <div className="flex items-start gap-2">
-          <h3
+          <Heading
             className="m-0 flex-1 font-serif text-[22px] font-normal leading-[1.18]"
             style={{ color: t.title }}
           >
             {title}
-          </h3>
+          </Heading>
           {showChevron && (
             <PhIcon name="ph-bold ph-caret-right" size={18} color={t.chevron} className="mt-1 flex-shrink-0" />
           )}
@@ -157,7 +165,7 @@ export function StackedCard({
 
       {image && (
         <div className="relative pb-[var(--stack-tuck,0px)]">
-          <img src={image} alt={imageAlt ?? imageCaption ?? ''} className="block h-[200px] w-full object-cover" />
+          <img loading="lazy" decoding="async" src={image} alt={imageAlt ?? imageCaption ?? ''} className="block h-[200px] w-full object-cover" />
           {imageCaption && (
             <>
               <div

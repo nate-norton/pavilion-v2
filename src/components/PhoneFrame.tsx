@@ -81,10 +81,17 @@ export function PhoneFrame() {
           </main>
         </div>
         <Overlays />
-        </div>
-        <NavDock />
+        {/*
+          Inside the zoom layer: the toast announces what happened and the
+          confirm sheet guards the destructive actions. Someone who turned
+          large type on needs those two most, and they used to opt out
+          silently by sitting outside this wrapper. The dock stays outside
+          on purpose — its geometry is the frame's, not the screen's.
+        */}
         <AppToast />
         <ConfirmSheet />
+        </div>
+        <NavDock />
       </ErrorBoundary>
     </div>
   );

@@ -109,8 +109,11 @@ empty states everywhere rather than sample content.
   community's actual documents and declines to guess rather than inventing a
   rule.
 - **Existing visual system is incumbent and binding** unless a redesign is
-  explicitly requested: warm earth tones (navy, cream, ember, sage, gold), a
-  serif display face against a sans body, and per-community accent theming.
+  explicitly requested: sky primary and sunset accent, ink text on a mist
+  ground, Nunito Black display over Nunito Sans body, and per-community accent
+  theming. (This line described the earlier warm-earth palette and its serif
+  display face long after both were replaced; DESIGN.md is the source of
+  truth for the tokens.)
 
 ## Evidence on Hand
 
