@@ -17,14 +17,25 @@ React 19 + TypeScript + Vite + Zustand + Tailwind SPA with a dual backend:
 https://app.pavilion.community) builds its Production deployment from
 `dev` automatically. Its mode comes from the project's Vercel environment
 variables, not from a file in the repo. `vercel.json`'s `ignoreCommand`
-skips builds for every branch except `dev` and `staging`, so feature-branch
-pushes do not spend deployments (the Hobby plan caps them per day).
+skips builds for every named branch except `dev` and `staging`, so
+feature-branch pushes do not spend deployments (the Hobby plan caps them per
+day). A deploy carrying **no** git ref — a manual `vercel --prod` or an
+upload — builds, because the condition that skipped it was silently
+swallowing exactly the demo release path.
 
-**The demo deploys by hand.** Vercel project `pavilion-v2-demo` (**the
-presenter demo**, demo mode → https://demo.pavilion.community) is
-**disconnected from Git** on purpose — since 2026-09-02 — so a `dev` merge
-never silently changes a rehearsed demo. To release the demo, from a
-checkout of the commit you want (normally `dev`):
+**The demo follows `dev` again.** Vercel project `pavilion-v2-demo` (**the
+presenter demo**, demo mode → https://demo.pavilion.community) was
+disconnected from Git between 2026-09-02 and 2026-09-04 so a `dev` merge
+could not silently change a rehearsed demo. It is **reconnected**: a push to
+`dev` now deploys the product and the demo together, and "the demo is stale"
+is no longer the resting state. If a rehearsal needs freezing again,
+disconnect the project rather than trying to hold `dev` back.
+
+Reconnecting does **not** replay the pushes it missed. After a relink, the
+project sits on whatever it last built until the next push; an empty commit
+on `dev` is the way to carry the backlog out.
+
+To release it by hand from a checkout of the commit you want:
 
 ```
 npm i -g vercel        # once
@@ -32,11 +43,10 @@ vercel login           # once
 vercel --prod --scope nate-nortons-projects   # pick pavilion-v2-demo when asked
 ```
 
-It builds on Vercel with the project's own env (demo mode). Agents without
-the CLI can use the Vercel MCP `deploy_to_vercel` tool with
-`name: "pavilion-v2-demo"`, `target: "production"` and the source tree —
-slow, since every file is sent inline, but it works. Either way, deploy the
-demo only when asked; "the demo is stale" is the intended resting state.
+The Vercel MCP `deploy_to_vercel` tool is **not** a working substitute at
+this size: it sends every file inline in one call, and `src/` alone is over
+1 MB, which does not fit in a context window. An agent without the CLI
+should push to `dev` (or ask for the command above) rather than attempt it.
 
 Anything live-only must be gated (`repo.isDemo()` / `isLiveMode`) so the demo
 stays byte-for-byte as rehearsed, and anything demo-only must never render
@@ -51,12 +61,15 @@ reach `staging`, cherry-pick it there rather than merging across.
 Only `dev` and `staging` build at all; only `dev` reaches
 app.pavilion.community. When checking whether the product is live, look for
 a deployment on project `pavilion-v2` with `target: production`, which will
-name `dev`. The demo's deployments carry no git ref, since they are uploads.
+name `dev`. The demo's deployments name `dev` too, now that it is relinked;
+older ones from the disconnected window carry no git ref, since they were
+uploads.
 
 Two things about that setup read backwards. Vercel's `ignoreCommand` inverts
 exit codes — exit **1** means *build*, exit **0** means *skip* — so the
 condition in `vercel.json` says the opposite of what it does, and is easy to
-invert while editing. And over the Hobby plan's daily cap Vercel **rejects**
+invert while editing. That inversion is what hid the ref-less case: "build
+only for dev or staging" quietly meant "skip every manual deploy". And over the Hobby plan's daily cap Vercel **rejects**
 deployments rather than queueing them: a merge landed while the quota is
 exhausted never builds at all. After the reset, redeploy the branch tip from
 the dashboard rather than pushing an empty commit to nudge it.
@@ -117,6 +130,11 @@ Other landmarks:
 - Demo roles: owner (default), tenant, manager. Live roles come from the
   `memberships` table: `resident` | `board`.
 - `docs/PRODUCTION_ROADMAP.md` — phased plan; Phase 2 write paths are current.
+- `docs/IMPECCABLE_CLOSEOUT.md` — **read this before design work.** The
+  2026-09-04 `/impeccable` pass: score deltas, the twelve defects it closed,
+  and the ranked list of what is still open with the command that owns each.
+  `docs/IMPECCABLE_STAGE0.md` is the baseline it was measured against and
+  `docs/IMPECCABLE_PLAN.md` the staged plan and check-in decisions.
 
 ## Agent delegation
 
@@ -143,6 +161,26 @@ taken at its word.
 - **Batch independent tool calls** in parallel to reduce round trips.
 
 ## Design System
+
+`DESIGN.md` is the source of truth and was rewritten from the shipped code on
+2026-09-04; read it before changing any surface. Five rules from that pass
+bind new work, and each replaced a habit that made the app read flat:
+
+1. **Use the primitives.** `Card` (elevation + tint), `SectionHeading`,
+   `Field`, `Pill` (+ `pillTones.ts`). Do not hand-roll a card, a section
+   title, an input or a status badge — that is what produced 96 inline
+   hairlines, 87 eyebrows and 58 placeholder-only inputs.
+2. **Elevation means "this asks something of you".** `flat` reports,
+   `raised` asks, one `StackedPanel tint="skydeep"` chrome hero per screen.
+   Raising everything is the same as raising nothing.
+3. **No eyebrows.** A section is introduced by a 17px heading with its count
+   on a meta line *after* it, never by an 11px uppercase label above it.
+   Uppercase survives only as chrome badges and nav labels.
+4. **One CTA colour rule.** `--skydeep` under white commits, `--sagedark`
+   approves, a navy outline with `--reddeep` text declines or deletes,
+   `--peach` under navy is the warm control on chrome. Sunset backs no
+   button.
+5. **A 12px floor** for anything a person must read to act, and 44px targets.
 
 The Pavilion brand system: **sky primary, sunset accent, ink text on a mist
 ground**, Nunito 900 display over Nunito Sans. `src/index.css` `:root` is the

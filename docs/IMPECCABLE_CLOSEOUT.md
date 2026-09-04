@@ -1,7 +1,15 @@
 # Impeccable pass: closeout
 
-Date: 2026-09-02. Baseline in `docs/IMPECCABLE_STAGE0.md`; snapshots in
-`.impeccable/critique/` (per machine, gitignored).
+**Start here for design work.** This is the record of the `/impeccable` pass
+run 2026-09-02 to 2026-09-04 across every surface of the app.
+
+- `docs/IMPECCABLE_STAGE0.md` — the baseline this was measured against.
+- `docs/IMPECCABLE_PLAN.md` — the staged plan and the five check-in decisions.
+- `DESIGN.md` — rewritten from the shipped code at the end of the pass; the
+  rules below are stated there normatively and summarised in `CLAUDE.md`.
+- `.impeccable/critique/` — per-run snapshots. **Gitignored and per-machine**,
+  so they do not survive a fresh checkout; everything that matters from them
+  is in this file and in the baseline.
 
 ## Score deltas
 
@@ -98,3 +106,50 @@ Untouched by this pass in the sense that matters: the demo project is
 disconnected from Git and deploys by hand. `dev` now carries all four
 stages, so releasing the demo is a deliberate `vercel --prod` from the
 commit you want. Nothing here has been pushed to demo.pavilion.community.
+
+
+## How this was run, and how to repeat it
+
+The method matters more than the numbers, because the numbers only mean
+something against the same method.
+
+Each surface was critiqued with `/impeccable critique <file>`, which the
+skill requires to run as **two isolated sub-agents**: Assessment A is a
+design review working only from source, and Assessment B is the deterministic
+detector plus browser evidence. They must not see each other's output — the
+detector's findings are deterministic and will anchor the subjective scoring
+if they arrive first. A run where both happen in one context is a degraded
+run and has to say so in a banner. `CLAUDE.md`'s "Agent delegation" section is
+the standing grant that allows those sub-agents to be spawned without asking.
+
+The whole-tree pass was `/impeccable audit src`, which is code-level and
+independent of the critiques.
+
+To re-measure after more work, run the same two commands on the same five
+targets — `BoardDesk`, `Meeting`, `Today`, `MyPlace`, `Hoa` — and compare
+against the table above. `/impeccable polish` reads the persisted snapshots
+in `.impeccable/critique/` as its backlog, so a fresh container should
+re-critique before polishing rather than polishing against nothing.
+
+Two things worth knowing before trusting a re-run:
+
+- **The static detector cannot see this class of problem.** At the baseline
+  it found six findings across the whole tree while the app was at its
+  flattest. Flatness broke no rule. The in-page detector (injected into a
+  running dev server) was the useful deterministic signal, and it went from
+  11 findings on Board Desk, 15 on My Place, 17 on HOA and 6 on Today to zero
+  on the first three of those surfaces.
+- **Sub-agents reported one failure honestly and one carelessly.** Reports
+  from parallel agents sharing a checkout attributed each other's in-flight
+  edits as test failures. Verify a surprising claim against the source before
+  acting on it; several claims in this pass were checked that way and two
+  turned out to be misreadings of a shared working tree.
+
+## What this pass did not touch
+
+- The `Repository` seam's contract, the Supabase schema beyond the one
+  migration named above, and every write path's behaviour.
+- Copy that states a fact. Instructional copy was rewritten in the brand
+  voice; claims, amounts, dates and names were not.
+- The demo's scripted beats, other than gating three of them (`Events`,
+  `SASheet`, the board's nudge) so they stop rendering in live.
